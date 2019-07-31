@@ -1,0 +1,1341 @@
+{
+    "specialfields": [
+        {
+            "type": "Characteristic", 
+            "name": "ASSfb9c038c3a49_char_energy_pos", 
+            "desc": "Which color is most associated with energy?"
+        }, 
+        {
+            "type": "Characteristic", 
+            "name": "ASSfb9c038c3a49_char_energy_neg", 
+            "desc": "which color is least associated with energy?"
+        }, 
+        {
+            "type": "Characteristic", 
+            "name": "ASSfb9c038c3a49_char_love_pos", 
+            "desc": "Which color is most associated with love?"
+        }, 
+        {
+            "type": "Characteristic", 
+            "name": "ASSfb9c038c3a49_char_love_neg", 
+            "desc": "Which color is least associated with love?"
+        }, 
+        {
+            "type": "Characteristic", 
+            "name": "ASSfb9c038c3a49_char_overallperf_pos", 
+            "desc": "Overall, which option performed better?"
+        }, 
+        {
+            "type": "Characteristic", 
+            "name": "ASSfb9c038c3a49_char_overallperf_neg", 
+            "desc": "Overall, which option performed worst?"
+        }, 
+        {
+            "type": "Performance", 
+            "name": "ASSfb9c038c3a49_perf_overallchar_1", 
+            "desc": "Overall, whichone is best A or what you usually use?"
+        }, 
+        {
+            "type": "Performance", 
+            "name": "ASSfb9c038c3a49_perf_overallchar_2", 
+            "desc": "Overall, whichone is best B or what you usually use?"
+        }, 
+        {
+            "type": "Performance", 
+            "name": "ASSfb9c038c3a49_perf_overallchar_3", 
+            "desc": "Overall, whichone is best C or what you usually use?"
+        }
+    ], 
+    "project": {
+        "project_tags": "colours,test", 
+        "project_name": "Test colours", 
+        "project_active": 1, 
+        "project_piemail": "desousa.kaue@gmail.com", 
+        "project_localvariety": 0, 
+        "project_pi": "Gosset", 
+        "project_lat": "62.319376", 
+        "project_dashboard": 1, 
+        "project_abstract": "Test 5 colours", 
+        "project_assstatus": 1, 
+        "project_cod": "colours", 
+        "project_regstatus": 2, 
+        "project_numobs": 10, 
+        "project_public": 0, 
+        "project_numcom": 3, 
+        "project_createcomb": 0, 
+        "project_createpkgs": 0, 
+        "user_name": "gosset", 
+        "project_creationdate": "2019-02-12 11:30:44", 
+        "project_lon": "11.236595"
+    }, 
+    "registry": {
+        "fields": [
+            {
+                "name": "surveyid", 
+                "multiSelectTable": null, 
+                "odktype": "", 
+                "rfield": null, 
+                "key": null, 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "Submission ID", 
+                "rlookup": null
+            }, 
+            {
+                "name": "originid", 
+                "multiSelectTable": null, 
+                "odktype": "", 
+                "rfield": null, 
+                "key": null, 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "Origin", 
+                "rlookup": null
+            }, 
+            {
+                "name": "clm_deviceimei", 
+                "multiSelectTable": null, 
+                "odktype": "deviceid", 
+                "rfield": null, 
+                "key": null, 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "Device IMEI", 
+                "rlookup": null
+            }, 
+            {
+                "name": "clm_start", 
+                "multiSelectTable": null, 
+                "odktype": "start", 
+                "rfield": null, 
+                "key": null, 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "Start of survey", 
+                "rlookup": null
+            }, 
+            {
+                "name": "clm_end", 
+                "multiSelectTable": null, 
+                "odktype": "end", 
+                "rfield": null, 
+                "key": null, 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "End of survey", 
+                "rlookup": null
+            }, 
+            {
+                "name": "qst162", 
+                "multiSelectTable": null, 
+                "odktype": "barcode", 
+                "rfield": null, 
+                "key": "true", 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "Package code", 
+                "rlookup": null
+            }, 
+            {
+                "name": "farmername", 
+                "multiSelectTable": null, 
+                "odktype": "text", 
+                "rfield": null, 
+                "key": null, 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "Farmer name", 
+                "rlookup": null
+            }, 
+            {
+                "name": "farmgoelocation", 
+                "multiSelectTable": null, 
+                "odktype": "geopoint", 
+                "rfield": null, 
+                "key": null, 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "Farm Geolocation", 
+                "rlookup": null
+            }, 
+            {
+                "name": "rowuuid", 
+                "multiSelectTable": null, 
+                "odktype": "", 
+                "rfield": null, 
+                "key": null, 
+                "rtable": null, 
+                "isMultiSelect": null, 
+                "desc": "Unique Row Identifier (UUID)", 
+                "rlookup": null
+            }
+        ], 
+        "lkptables": []
+    }, 
+    "importantfields": [
+        {
+            "field": "REG_QST162", 
+            "type": "PackageID", 
+            "desc": "Package ID"
+        }, 
+        {
+            "field": "REG_farmername", 
+            "type": "FarmerName", 
+            "desc": "Name of registered farmer"
+        }, 
+        {
+            "field": "ASSfb9c038c3a49_char_overallperf_pos", 
+            "type": "OverallCharPos", 
+            "desc": "Over all characteristic positive"
+        }, 
+        {
+            "field": "ASSfb9c038c3a49_char_overallperf_neg", 
+            "type": "OverallCharNeg", 
+            "desc": "Over all characteristic negative"
+        }, 
+        {
+            "field": "ASSfb9c038c3a49_perf_overallchar_1", 
+            "type": "OverallPerf1", 
+            "desc": "Over all performance of A against current"
+        }, 
+        {
+            "field": "ASSfb9c038c3a49_perf_overallchar_2", 
+            "type": "OverallPerf2", 
+            "desc": "Over all performance of B against current"
+        }, 
+        {
+            "field": "ASSfb9c038c3a49_perf_overallchar_3", 
+            "type": "OverallPerf3", 
+            "desc": "Over all performance of C against current"
+        }
+    ], 
+    "assessments": [
+        {
+            "fields": [
+                {
+                    "name": "surveyid", 
+                    "multiSelectTable": null, 
+                    "odktype": "", 
+                    "rfield": null, 
+                    "key": null, 
+                    "rtable": null, 
+                    "isMultiSelect": null, 
+                    "desc": "Submission ID", 
+                    "rlookup": null
+                }, 
+                {
+                    "name": "originid", 
+                    "multiSelectTable": null, 
+                    "odktype": "", 
+                    "rfield": null, 
+                    "key": null, 
+                    "rtable": null, 
+                    "isMultiSelect": null, 
+                    "desc": "Origin", 
+                    "rlookup": null
+                }, 
+                {
+                    "name": "clm_deviceimei", 
+                    "multiSelectTable": null, 
+                    "odktype": "deviceid", 
+                    "rfield": null, 
+                    "key": null, 
+                    "rtable": null, 
+                    "isMultiSelect": null, 
+                    "desc": "Device IMEI", 
+                    "rlookup": null
+                }, 
+                {
+                    "name": "clm_start", 
+                    "multiSelectTable": null, 
+                    "odktype": "start", 
+                    "rfield": null, 
+                    "key": null, 
+                    "rtable": null, 
+                    "isMultiSelect": null, 
+                    "desc": "Start of survey", 
+                    "rlookup": null
+                }, 
+                {
+                    "name": "clm_end", 
+                    "multiSelectTable": null, 
+                    "odktype": "end", 
+                    "rfield": null, 
+                    "key": null, 
+                    "rtable": null, 
+                    "isMultiSelect": null, 
+                    "desc": "End of survey", 
+                    "rlookup": null
+                }, 
+                {
+                    "name": "qst163", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one qst163_opts", 
+                    "rfield": "qst163_cod", 
+                    "key": "true", 
+                    "rtable": "ASSfb9c038c3a49_lkpqst163", 
+                    "isMultiSelect": null, 
+                    "desc": "Select the farmer", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "whocontrolstheincome", 
+                    "multiSelectTable": "ASSfb9c038c3a49_geninfo_msel_whocontrolstheincome", 
+                    "odktype": "", 
+                    "rfield": "whocontrolstheincome_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpwhocontrolstheincome", 
+                    "isMultiSelect": "true", 
+                    "desc": "Who controls the income", 
+                    "rlookup": null
+                }, 
+                {
+                    "name": "whocontrolstheincome_oth", 
+                    "multiSelectTable": null, 
+                    "odktype": "text", 
+                    "rfield": null, 
+                    "key": null, 
+                    "rtable": null, 
+                    "isMultiSelect": null, 
+                    "desc": "Other", 
+                    "rlookup": null
+                }, 
+                {
+                    "name": "farmgoelocation", 
+                    "multiSelectTable": null, 
+                    "odktype": "geopoint", 
+                    "rfield": null, 
+                    "key": null, 
+                    "rtable": null, 
+                    "isMultiSelect": null, 
+                    "desc": "Farm Geolocation", 
+                    "rlookup": null
+                }, 
+                {
+                    "name": "char_energy_pos", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one char_energy_pos_opts", 
+                    "rfield": "char_energy_pos_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpchar_energy_pos", 
+                    "isMultiSelect": null, 
+                    "desc": "Which color is most associated with energy?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "char_energy_neg", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one char_energy_neg_opts", 
+                    "rfield": "char_energy_pos_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpchar_energy_pos", 
+                    "isMultiSelect": null, 
+                    "desc": "which color is least associated with energy?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "char_love_pos", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one char_love_pos_opts", 
+                    "rfield": "char_energy_pos_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpchar_energy_pos", 
+                    "isMultiSelect": null, 
+                    "desc": "Which color is most associated with love?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "char_love_neg", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one char_love_neg_opts", 
+                    "rfield": "char_energy_pos_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpchar_energy_pos", 
+                    "isMultiSelect": null, 
+                    "desc": "Which color is least associated with love?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "char_overallperf_pos", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one char_overallperf_pos_opts", 
+                    "rfield": "char_energy_pos_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpchar_energy_pos", 
+                    "isMultiSelect": null, 
+                    "desc": "Overall, which option performed better?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "char_overallperf_neg", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one char_overallperf_neg_opts", 
+                    "rfield": "char_energy_pos_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpchar_energy_pos", 
+                    "isMultiSelect": null, 
+                    "desc": "Overall, which option performed worst?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "perf_overallchar_1", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one perf_overallchar_1_opts", 
+                    "rfield": "perf_overallchar_1_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpperf_overallchar_1", 
+                    "isMultiSelect": null, 
+                    "desc": "Overall, whichone is best A or what you usually use?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "perf_overallchar_2", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one perf_overallchar_2_opts", 
+                    "rfield": "perf_overallchar_1_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpperf_overallchar_1", 
+                    "isMultiSelect": null, 
+                    "desc": "Overall, whichone is best B or what you usually use?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "perf_overallchar_3", 
+                    "multiSelectTable": null, 
+                    "odktype": "select_one perf_overallchar_3_opts", 
+                    "rfield": "perf_overallchar_1_cod", 
+                    "key": null, 
+                    "rtable": "ASSfb9c038c3a49_lkpperf_overallchar_1", 
+                    "isMultiSelect": null, 
+                    "desc": "Overall, whichone is best C or what you usually use?", 
+                    "rlookup": "true"
+                }, 
+                {
+                    "name": "rowuuid", 
+                    "multiSelectTable": null, 
+                    "odktype": "", 
+                    "rfield": null, 
+                    "key": null, 
+                    "rtable": null, 
+                    "isMultiSelect": null, 
+                    "desc": "Unique Row Identifier (UUID)", 
+                    "rlookup": null
+                }
+            ], 
+            "code": "fb9c038c3a49", 
+            "lkptables": [
+                {
+                    "fields": [
+                        {
+                            "name": "char_energy_pos_cod", 
+                            "key": "true", 
+                            "desc": "Code"
+                        }, 
+                        {
+                            "name": "char_energy_pos_des", 
+                            "key": null, 
+                            "desc": "Description"
+                        }
+                    ], 
+                    "values": [
+                        {
+                            "char_energy_pos_cod": 1, 
+                            "char_energy_pos_des": "Option A"
+                        }, 
+                        {
+                            "char_energy_pos_cod": 2, 
+                            "char_energy_pos_des": "Option B"
+                        }, 
+                        {
+                            "char_energy_pos_cod": 3, 
+                            "char_energy_pos_des": "Option C"
+                        }
+                    ], 
+                    "name": "ASSfb9c038c3a49_lkpchar_energy_pos", 
+                    "desc": "Lookup table (Which color is most associated with energy?)"
+                }, 
+                {
+                    "fields": [
+                        {
+                            "name": "whocontrolstheincome_cod", 
+                            "key": "true", 
+                            "desc": "Code"
+                        }, 
+                        {
+                            "name": "whocontrolstheincome_des", 
+                            "key": null, 
+                            "desc": "Description"
+                        }
+                    ], 
+                    "values": [
+                        {
+                            "whocontrolstheincome_cod": -888, 
+                            "whocontrolstheincome_des": "Not applicable"
+                        }, 
+                        {
+                            "whocontrolstheincome_cod": -777, 
+                            "whocontrolstheincome_des": "Other"
+                        }, 
+                        {
+                            "whocontrolstheincome_cod": 1, 
+                            "whocontrolstheincome_des": "Male"
+                        }, 
+                        {
+                            "whocontrolstheincome_cod": 2, 
+                            "whocontrolstheincome_des": "Female"
+                        }, 
+                        {
+                            "whocontrolstheincome_cod": 3, 
+                            "whocontrolstheincome_des": "Joint"
+                        }, 
+                        {
+                            "whocontrolstheincome_cod": 4, 
+                            "whocontrolstheincome_des": "Youth"
+                        }
+                    ], 
+                    "name": "ASSfb9c038c3a49_lkpwhocontrolstheincome", 
+                    "desc": "Lookup table (Who controls the income)"
+                }, 
+                {
+                    "fields": [
+                        {
+                            "name": "perf_overallchar_1_cod", 
+                            "key": "true", 
+                            "desc": "Code"
+                        }, 
+                        {
+                            "name": "perf_overallchar_1_des", 
+                            "key": null, 
+                            "desc": "Description"
+                        }
+                    ], 
+                    "values": [
+                        {
+                            "perf_overallchar_1_cod": 1, 
+                            "perf_overallchar_1_des": "Better"
+                        }, 
+                        {
+                            "perf_overallchar_1_cod": 2, 
+                            "perf_overallchar_1_des": "Worst"
+                        }
+                    ], 
+                    "name": "ASSfb9c038c3a49_lkpperf_overallchar_1", 
+                    "desc": "Lookup table (Overall, whichone is best A or what you usually use?)"
+                }, 
+                {
+                    "fields": [
+                        {
+                            "name": "qst163_cod", 
+                            "key": "true", 
+                            "desc": "Code"
+                        }, 
+                        {
+                            "name": "qst163_des", 
+                            "key": null, 
+                            "desc": "Description"
+                        }
+                    ], 
+                    "values": [
+                        {
+                            "qst163_cod": 1, 
+                            "qst163_des": "F1"
+                        }, 
+                        {
+                            "qst163_cod": 2, 
+                            "qst163_des": "F2"
+                        }, 
+                        {
+                            "qst163_cod": 3, 
+                            "qst163_des": "F3"
+                        }, 
+                        {
+                            "qst163_cod": 4, 
+                            "qst163_des": "F5"
+                        }, 
+                        {
+                            "qst163_cod": 5, 
+                            "qst163_des": "F5"
+                        }, 
+                        {
+                            "qst163_cod": 6, 
+                            "qst163_des": "F6"
+                        }, 
+                        {
+                            "qst163_cod": 7, 
+                            "qst163_des": "F7"
+                        }, 
+                        {
+                            "qst163_cod": 8, 
+                            "qst163_des": "F6"
+                        }, 
+                        {
+                            "qst163_cod": 9, 
+                            "qst163_des": "F9"
+                        }, 
+                        {
+                            "qst163_cod": 10, 
+                            "qst163_des": "F10"
+                        }
+                    ], 
+                    "name": "ASSfb9c038c3a49_lkpqst163", 
+                    "desc": "Lookup table (Select the farmer)"
+                }
+            ], 
+            "desc": "Assessment1"
+        }
+    ], 
+    "packages": [
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 1, 
+            "farmername": "F1"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 2, 
+            "farmername": "F2"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 3, 
+            "farmername": "F3"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 4, 
+            "farmername": "F5"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 5, 
+            "farmername": "F5"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 6, 
+            "farmername": "F6"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 7, 
+            "farmername": "F7"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 8, 
+            "farmername": "F6"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Red"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Black"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 9, 
+            "farmername": "F9"
+        }, 
+        {
+            "comps": [
+                {
+                    "comb_order": 1, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "White"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 2, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }, 
+                {
+                    "comb_order": 3, 
+                    "technologies": [
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }, 
+                        {
+                            "tech_name": "Colors", 
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                }
+            ], 
+            "package_id": 10, 
+            "farmername": "F10"
+        }
+    ], 
+    "data": [
+        {
+            "REG_clm_end": "2019-02-12 13:15:59", 
+            "ASSfb9c038c3a49_char_energy_pos": 1, 
+            "REG_clm_start": "2019-02-12 13:15:33", 
+            "ASSfb9c038c3a49_farmgoelocation": "60.80022750215281 11.117808010664001 182.6131406029815 12.0", 
+            "ASSfb9c038c3a49_rowuuid": "5a27bd7d-9eb2-4339-bfea-c1cc749690ab", 
+            "REG_rowuuid": "972f1fa3-c0ab-4c45-ae85-4bd11334306f", 
+            "ASSfb9c038c3a49_surveyid": "21ed4eca-72a4-4f11-8df8-91153324cfb1", 
+            "ASSfb9c038c3a49_clm_start": "2019-02-12 15:01:06", 
+            "ASSfb9c038c3a49_perf_overallchar_1": 1, 
+            "ASSfb9c038c3a49_perf_overallchar_3": 1, 
+            "ASSfb9c038c3a49_perf_overallchar_2": 1, 
+            "REG_surveyid": "aadd4f2b-69b6-4096-8bf5-36a29dba7fda", 
+            "REG_qst162": "1", 
+            "ASSfb9c038c3a49_char_energy_neg": 2, 
+            "ASSfb9c038c3a49_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_clm_deviceimei": "358624090903126", 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.81873393078436 11.179963043445964 194.2174202782375 96.0", 
+            "ASSfb9c038c3a49_qst163": 1, 
+            "ASSfb9c038c3a49_char_love_neg": 3, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": 1, 
+            "ASSfb9c038c3a49_whocontrolstheincome": "1", 
+            "ASSfb9c038c3a49_char_overallperf_pos": 2, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F1", 
+            "ASSfb9c038c3a49_clm_end": "2019-02-12 15:02:16", 
+            "ASSfb9c038c3a49_char_overallperf_neg": 3
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:19:30", 
+            "ASSfb9c038c3a49_char_energy_pos": 2, 
+            "REG_clm_start": "2019-02-12 13:19:11", 
+            "ASSfb9c038c3a49_farmgoelocation": "60.79880341947011 11.10966589767207 241.04987452992833 32.0", 
+            "ASSfb9c038c3a49_rowuuid": "19b74336-d7e2-425d-83d2-79232227c21b", 
+            "REG_rowuuid": "ec38e48d-cbeb-4876-8e01-4ce223e9ad60", 
+            "ASSfb9c038c3a49_surveyid": "8fdd5dde-b97d-4b5d-ab54-ca4b10c3409f", 
+            "ASSfb9c038c3a49_clm_start": "2019-02-12 15:02:21", 
+            "ASSfb9c038c3a49_perf_overallchar_1": 1, 
+            "ASSfb9c038c3a49_perf_overallchar_3": 2, 
+            "ASSfb9c038c3a49_perf_overallchar_2": 2, 
+            "REG_surveyid": "48e1b854-d765-4c10-9867-36f88b7293c5", 
+            "REG_qst162": "10", 
+            "ASSfb9c038c3a49_char_energy_neg": 1, 
+            "ASSfb9c038c3a49_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_clm_deviceimei": "358624090903126", 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.819309066825056 11.179738546738584 273.49693098850565 6.0", 
+            "ASSfb9c038c3a49_qst163": 10, 
+            "ASSfb9c038c3a49_char_love_neg": 3, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": 1, 
+            "ASSfb9c038c3a49_whocontrolstheincome": "2", 
+            "ASSfb9c038c3a49_char_overallperf_pos": 3, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F10", 
+            "ASSfb9c038c3a49_clm_end": "2019-02-12 15:02:48", 
+            "ASSfb9c038c3a49_char_overallperf_neg": 1
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:16:25", 
+            "ASSfb9c038c3a49_char_energy_pos": 3, 
+            "REG_clm_start": "2019-02-12 13:16:03", 
+            "ASSfb9c038c3a49_farmgoelocation": "60.79687323410327 11.098758175479475 183.71191305453982 48.0", 
+            "ASSfb9c038c3a49_rowuuid": "55fa6525-92fe-4db1-bcf4-ec14a1af26ce", 
+            "REG_rowuuid": "ae5d2cd3-ad5c-4648-be1d-d4a2fdee07ec", 
+            "ASSfb9c038c3a49_surveyid": "2aafee6d-1c84-463e-8c7c-170b41a7c876", 
+            "ASSfb9c038c3a49_clm_start": "2019-02-12 15:03:17", 
+            "ASSfb9c038c3a49_perf_overallchar_1": 2, 
+            "ASSfb9c038c3a49_perf_overallchar_3": 2, 
+            "ASSfb9c038c3a49_perf_overallchar_2": 2, 
+            "REG_surveyid": "c8ee80fe-6afc-410b-bd41-c53d16906394", 
+            "REG_qst162": "2", 
+            "ASSfb9c038c3a49_char_energy_neg": 1, 
+            "ASSfb9c038c3a49_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_clm_deviceimei": "358624090903126", 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.81916878830271 11.179861850533978 250.8636822355911 96.0", 
+            "ASSfb9c038c3a49_qst163": 2, 
+            "ASSfb9c038c3a49_char_love_neg": 2, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": 1, 
+            "ASSfb9c038c3a49_whocontrolstheincome": "1", 
+            "ASSfb9c038c3a49_char_overallperf_pos": 1, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F2", 
+            "ASSfb9c038c3a49_clm_end": "2019-02-12 15:03:55", 
+            "ASSfb9c038c3a49_char_overallperf_neg": 2
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:16:48", 
+            "ASSfb9c038c3a49_char_energy_pos": 1, 
+            "REG_clm_start": "2019-02-12 13:16:28", 
+            "ASSfb9c038c3a49_farmgoelocation": "60.796416565403526 11.094908910600017 142.00598461938122 32.", 
+            "ASSfb9c038c3a49_rowuuid": "d41bfec8-2fdc-49f2-9838-ebb1d21790de", 
+            "REG_rowuuid": "80ebe7dd-02a5-4f49-b488-f1087b61d0f6", 
+            "ASSfb9c038c3a49_surveyid": "1da2b42b-c23f-49ed-99fa-8c1dbf54c893", 
+            "ASSfb9c038c3a49_clm_start": "2019-02-12 15:03:58", 
+            "ASSfb9c038c3a49_perf_overallchar_1": 2, 
+            "ASSfb9c038c3a49_perf_overallchar_3": 1, 
+            "ASSfb9c038c3a49_perf_overallchar_2": 2, 
+            "REG_surveyid": "4621c409-8c20-42a8-b4eb-cfe463340a12", 
+            "REG_qst162": "3", 
+            "ASSfb9c038c3a49_char_energy_neg": 2, 
+            "ASSfb9c038c3a49_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_clm_deviceimei": "358624090903126", 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.81917464293874 11.179776834950449 250.30580069683492 96.0", 
+            "ASSfb9c038c3a49_qst163": 3, 
+            "ASSfb9c038c3a49_char_love_neg": 2, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": 1, 
+            "ASSfb9c038c3a49_whocontrolstheincome": "1 4", 
+            "ASSfb9c038c3a49_char_overallperf_pos": 1, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F3", 
+            "ASSfb9c038c3a49_clm_end": "2019-02-12 15:04:26", 
+            "ASSfb9c038c3a49_char_overallperf_neg": 3
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:17:15", 
+            "ASSfb9c038c3a49_char_energy_pos": 2, 
+            "REG_clm_start": "2019-02-12 13:16:52", 
+            "ASSfb9c038c3a49_farmgoelocation": "60.79692832507874 11.08742786659881 180.93907144496575 48.0", 
+            "ASSfb9c038c3a49_rowuuid": "7069baf1-0890-4564-b188-621e6477878d", 
+            "REG_rowuuid": "731b5c87-3c58-496a-bddc-45f9213cd0ec", 
+            "ASSfb9c038c3a49_surveyid": "1d5b2326-5066-4d1d-b015-6fd6d12ae094", 
+            "ASSfb9c038c3a49_clm_start": "2019-02-12 15:04:32", 
+            "ASSfb9c038c3a49_perf_overallchar_1": 1, 
+            "ASSfb9c038c3a49_perf_overallchar_3": 2, 
+            "ASSfb9c038c3a49_perf_overallchar_2": 1, 
+            "REG_surveyid": "1b808438-69f9-4ef5-a249-c142e8eaefdb", 
+            "REG_qst162": "4", 
+            "ASSfb9c038c3a49_char_energy_neg": 3, 
+            "ASSfb9c038c3a49_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_clm_deviceimei": "358624090903126", 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.81917711172838 11.179687232719889 265.3079723129156 6.0", 
+            "ASSfb9c038c3a49_qst163": 4, 
+            "ASSfb9c038c3a49_char_love_neg": 2, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": 1, 
+            "ASSfb9c038c3a49_whocontrolstheincome": "1", 
+            "ASSfb9c038c3a49_char_overallperf_pos": 1, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F5", 
+            "ASSfb9c038c3a49_clm_end": "2019-02-12 15:05:31", 
+            "ASSfb9c038c3a49_char_overallperf_neg": 2
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:17:38", 
+            "ASSfb9c038c3a49_char_energy_pos": null, 
+            "REG_clm_start": "2019-02-12 13:17:19", 
+            "ASSfb9c038c3a49_farmgoelocation": null, 
+            "ASSfb9c038c3a49_rowuuid": null, 
+            "REG_rowuuid": "16ad1ad3-d15e-4863-97fa-5bd9e4431ee7", 
+            "ASSfb9c038c3a49_surveyid": null, 
+            "ASSfb9c038c3a49_clm_start": null, 
+            "ASSfb9c038c3a49_perf_overallchar_1": null, 
+            "ASSfb9c038c3a49_perf_overallchar_3": null, 
+            "ASSfb9c038c3a49_perf_overallchar_2": null, 
+            "REG_surveyid": "6966e2d7-2044-4de3-8b41-baf9cbf78492", 
+            "REG_qst162": "5", 
+            "ASSfb9c038c3a49_char_energy_neg": null, 
+            "ASSfb9c038c3a49_originid": null, 
+            "ASSfb9c038c3a49_clm_deviceimei": null, 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.81921523886676 11.179807816267346 263.51890564154684 6.0", 
+            "ASSfb9c038c3a49_qst163": null, 
+            "ASSfb9c038c3a49_char_love_neg": null, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": null, 
+            "ASSfb9c038c3a49_whocontrolstheincome": null, 
+            "ASSfb9c038c3a49_char_overallperf_pos": null, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F5", 
+            "ASSfb9c038c3a49_clm_end": null, 
+            "ASSfb9c038c3a49_char_overallperf_neg": null
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:18:00", 
+            "ASSfb9c038c3a49_char_energy_pos": null, 
+            "REG_clm_start": "2019-02-12 13:17:40", 
+            "ASSfb9c038c3a49_farmgoelocation": null, 
+            "ASSfb9c038c3a49_rowuuid": null, 
+            "REG_rowuuid": "b13f560b-04cc-4589-992d-60cb778d1169", 
+            "ASSfb9c038c3a49_surveyid": null, 
+            "ASSfb9c038c3a49_clm_start": null, 
+            "ASSfb9c038c3a49_perf_overallchar_1": null, 
+            "ASSfb9c038c3a49_perf_overallchar_3": null, 
+            "ASSfb9c038c3a49_perf_overallchar_2": null, 
+            "REG_surveyid": "1f4df54f-4422-4b07-b85a-878048ab1ab1", 
+            "REG_qst162": "6", 
+            "ASSfb9c038c3a49_char_energy_neg": null, 
+            "ASSfb9c038c3a49_originid": null, 
+            "ASSfb9c038c3a49_clm_deviceimei": null, 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.81926287302317 11.1797510746736 254.18121160994522 48.0", 
+            "ASSfb9c038c3a49_qst163": null, 
+            "ASSfb9c038c3a49_char_love_neg": null, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": null, 
+            "ASSfb9c038c3a49_whocontrolstheincome": null, 
+            "ASSfb9c038c3a49_char_overallperf_pos": null, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F6", 
+            "ASSfb9c038c3a49_clm_end": null, 
+            "ASSfb9c038c3a49_char_overallperf_neg": null
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:18:22", 
+            "ASSfb9c038c3a49_char_energy_pos": null, 
+            "REG_clm_start": "2019-02-12 13:18:04", 
+            "ASSfb9c038c3a49_farmgoelocation": null, 
+            "ASSfb9c038c3a49_rowuuid": null, 
+            "REG_rowuuid": "5572fe2c-e293-4f0d-a331-ea43f354468f", 
+            "ASSfb9c038c3a49_surveyid": null, 
+            "ASSfb9c038c3a49_clm_start": null, 
+            "ASSfb9c038c3a49_perf_overallchar_1": null, 
+            "ASSfb9c038c3a49_perf_overallchar_3": null, 
+            "ASSfb9c038c3a49_perf_overallchar_2": null, 
+            "REG_surveyid": "b29bf6e7-425b-4bda-a4fb-ae40e338fa4d", 
+            "REG_qst162": "7", 
+            "ASSfb9c038c3a49_char_energy_neg": null, 
+            "ASSfb9c038c3a49_originid": null, 
+            "ASSfb9c038c3a49_clm_deviceimei": null, 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.819255678164595 11.179786657131386 274.1910234551827 8.0", 
+            "ASSfb9c038c3a49_qst163": null, 
+            "ASSfb9c038c3a49_char_love_neg": null, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": null, 
+            "ASSfb9c038c3a49_whocontrolstheincome": null, 
+            "ASSfb9c038c3a49_char_overallperf_pos": null, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F7", 
+            "ASSfb9c038c3a49_clm_end": null, 
+            "ASSfb9c038c3a49_char_overallperf_neg": null
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:18:43", 
+            "ASSfb9c038c3a49_char_energy_pos": 1, 
+            "REG_clm_start": "2019-02-12 13:18:26", 
+            "ASSfb9c038c3a49_farmgoelocation": "60.81912017162143 11.17967265002299 233.90953751187772 96.0", 
+            "ASSfb9c038c3a49_rowuuid": "a5444e67-f433-4743-85e1-01cbc09e8717", 
+            "REG_rowuuid": "ba934353-ecb9-442b-86f5-eca3eae7afef", 
+            "ASSfb9c038c3a49_surveyid": "bc5f5146-e506-45c0-8f19-df53d8f6d921", 
+            "ASSfb9c038c3a49_clm_start": "2019-02-20 10:35:48", 
+            "ASSfb9c038c3a49_perf_overallchar_1": 1, 
+            "ASSfb9c038c3a49_perf_overallchar_3": 1, 
+            "ASSfb9c038c3a49_perf_overallchar_2": 1, 
+            "REG_surveyid": "bcd47279-5ff6-4d43-99a2-f51aa188b8ec", 
+            "REG_qst162": "8", 
+            "ASSfb9c038c3a49_char_energy_neg": 3, 
+            "ASSfb9c038c3a49_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_clm_deviceimei": "358624090903126", 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.819234941616756 11.179749729135612 259.34622528059487 48.", 
+            "ASSfb9c038c3a49_qst163": 8, 
+            "ASSfb9c038c3a49_char_love_neg": 1, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": 2, 
+            "ASSfb9c038c3a49_whocontrolstheincome": "4", 
+            "ASSfb9c038c3a49_char_overallperf_pos": 1, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F6", 
+            "ASSfb9c038c3a49_clm_end": "2019-02-20 10:36:20", 
+            "ASSfb9c038c3a49_char_overallperf_neg": 2
+        }, 
+        {
+            "REG_clm_end": "2019-02-12 13:19:08", 
+            "ASSfb9c038c3a49_char_energy_pos": 1, 
+            "REG_clm_start": "2019-02-12 13:18:46", 
+            "ASSfb9c038c3a49_farmgoelocation": "60.81905800371228 11.179652148451094 213.17182468008141 48.0", 
+            "ASSfb9c038c3a49_rowuuid": "5bb5ab14-2635-4a40-8046-be04e3e6002f", 
+            "REG_rowuuid": "7be8ff4e-5aa4-49c1-b24e-bd4a1656ee89", 
+            "ASSfb9c038c3a49_surveyid": "61039e49-f3ce-4f80-b5b6-9fdb6dbf546c", 
+            "ASSfb9c038c3a49_clm_start": "2019-02-20 10:34:47", 
+            "ASSfb9c038c3a49_perf_overallchar_1": 1, 
+            "ASSfb9c038c3a49_perf_overallchar_3": 2, 
+            "ASSfb9c038c3a49_perf_overallchar_2": 1, 
+            "REG_surveyid": "de823ac7-97cf-4bdc-b97f-03ec8d3c73f3", 
+            "REG_qst162": "9", 
+            "ASSfb9c038c3a49_char_energy_neg": 3, 
+            "ASSfb9c038c3a49_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_clm_deviceimei": "358624090903126", 
+            "ASSfb9c038c3a49_whocontrolstheincome_oth": null, 
+            "REG_farmgoelocation": "60.81924593398696 11.179803065328084 271.5706800732075 0.0", 
+            "ASSfb9c038c3a49_qst163": 9, 
+            "ASSfb9c038c3a49_char_love_neg": 2, 
+            "REG_originid": "ODKTOOLS", 
+            "ASSfb9c038c3a49_char_love_pos": 1, 
+            "ASSfb9c038c3a49_whocontrolstheincome": "1", 
+            "ASSfb9c038c3a49_char_overallperf_pos": 2, 
+            "REG_clm_deviceimei": "358624090903126", 
+            "REG_farmername": "F9", 
+            "ASSfb9c038c3a49_clm_end": "2019-02-20 10:35:44", 
+            "ASSfb9c038c3a49_char_overallperf_neg": 3
+        }
+    ]
+}
