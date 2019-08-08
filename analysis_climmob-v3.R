@@ -11,7 +11,7 @@
 #system("R-script, climmobv3_analysis.R info.json data.json r.json /output/ TRUE TRUE")
 # args <- c(
 #   "d39a3c66-5822-4930-a9d4-50e7da041e77",
-#   "chocolates",
+#   "breadwheat",
 #   "data.json",
 #   "r4.json",
 #   "output",
@@ -40,8 +40,8 @@ library("partykit")
 library("qvcalc")
 library("psychotools")
 library("PlackettLuce")
-library("gosset")
 library("ClimMobTools")
+library("gosset")
 
 # ................................................................
 # ................................................................
@@ -178,6 +178,14 @@ for(i in seq_along(nameschars)){
     x <- !any(x)
   })
   
+  # check for duplicates 
+  keep2 <- apply(rank_i, 1, function(x) {
+    d <- duplicated(x)
+    !any(d)
+  })
+  
+  keep <- keep & keep2
+  
   # keep checking for missing data when overall vs local is TRUE
   if(char_i == "Overall" & overallVSlocal){
     
@@ -212,11 +220,10 @@ for(i in seq_along(nameschars)){
   expvar_i <- expvar[keep, ]
   
   # convert this dataframe into a grouped_rankings object
-  myrank <- gosset::to_rankings(items = items_i,
-                                input = rank_i,
-                                type = "tricot",
-                                add.rank = local_rank, 
-                                all.data = TRUE)
+  myrank <- ClimMobTools::build_rankings(items = items_i,
+                                         input = rank_i,
+                                         additional.rank = local_rank,
+                                         full.output = TRUE)
   
   # Get the rankings
   R <- myrank[[1]]
@@ -232,7 +239,7 @@ for(i in seq_along(nameschars)){
   
   if (nrow(data)-nR > 0) {
     cat("\n",nrow(data)-nR, "observations removed due to incosistent rankings or missing values \n")
-    cat("Using", nR, "of", nrow(data), "observations \n" )
+    cat("Using", nR, "out of", nrow(data), "observations \n" )
   }
   
   # fit the model without explanatory variables 
@@ -258,10 +265,12 @@ for(i in seq_along(nameschars)){
   # first using modelparty from partykit
   # write it and keep the path 
   svg(filename = paste0(pathname, "/", char_i,"_tree.svg"),
-      width=6.5,
-      height=6.5,
-      pointsize=12)
-  par(mgp=c(2.2,0.45,0), tcl=-0.4, mar=c(0,0,0,0))
+      width = 6.5,
+      height = 6.5,
+      pointsize = 12)
+  par(mgp = c(2.2,0.45,0), 
+      tcl = -0.4, 
+      mar = c(0,0,0,0))
   partykit::plot.modelparty(tree) 
   dev.off()
   
