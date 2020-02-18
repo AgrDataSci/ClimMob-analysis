@@ -23,29 +23,24 @@ map1<- map.f(data = dt.fr,lon = "lon",lat="lat")
 mapshot(map1, file = "map1.png")
 }
 
-#Replace this with the updated function
-
 #Favourability Analysis Table
 df<-as.data.frame(dataset)
-# fav1<-favourability(a=df[,vars[1]],
-#                     b=df[,vars[2]],
-#                     c=df[,vars[3]],
-#                     best=df[,overall[1]],
-#                     worst=df[,overall[2]])
+
 fav1 <- summarise_favourite(data = df,
                             items = vars,
                             input = overall) 
 
 fav2 <- fav1
 
-fav2$best <- formattable::percent(fav2$best/100,1)
-fav2$worst <- formattable::percent(fav2$worst/100,1)
-fav2$wins <- formattable::percent(fav2$wins,1)
-fav2$fav_score<-round(fav2$fav_score,1)
+fav2$best <- formattable::percent(fav2$best / 100, 1)
+fav2$worst <- formattable::percent(fav2$worst / 100, 1)
+fav2$wins <- formattable::percent(fav2$wins, 1)
+fav2$fav_score <- round(fav2$fav_score, 1)
 
-colnames(fav2)<-c("Variety","N","% Top Ranked","% Bottom Ranked","% Contests Won","Net Favourability Score")
+colnames(fav2)<-c("Variety","N","% Top Ranked","% Bottom Ranked",
+                  "% Contests Won","Net Favourability Score")
 
-fav2 <- fav2[nrow(fav2):1,]
+fav2 <- fav2[nrow(fav2):1, ]
 
 # Contest Plots
 R <- rank_tricot(data = df,
@@ -60,19 +55,12 @@ plot(cont1)
 
 plot(cont2)
 
-# cont1 <- contests(a=df[,vars[1]],
-#                   b=df[,vars[2]],
-#                   c=df[,vars[3]],
-#                   best=df[,overall[1]],
-#                   worst=df[,overall[2]])
-# 
-# cont1
-
-#Trait agreement
+# Trait concordance
 
 # build rankings for the other characteristics
 for(i in seq_along(trait_short)) {
   
+  dat_i 
   
   
 }
@@ -91,25 +79,32 @@ agreement_table <-
          "Complete Ranking Agreement" = overall)
 
 
-strongest_link<-
-  agreement_traits[[1]]$data %>% filter(type=="% Agreement with\nOverall Ranking") %>% filter(agreement==max(agreement))
+strongest_link <-
+  agreement_traits[[1]]$data %>% 
+  filter(type=="% Agreement with\nOverall Ranking") %>% 
+  filter(agreement==max(agreement))
 
-weakest_link<-
-  agreement_traits[[1]]$data %>% filter(type=="% Agreement with\nOverall Ranking") %>% filter(agreement==min(agreement))
+weakest_link <- 
+  agreement_traits[[1]]$data %>% 
+  filter(type=="% Agreement with\nOverall Ranking") %>% 
+  filter(agreement==min(agreement))
+
+
 
 #PL Model
+
 #overall model
 
-dt_comp<-na.omit(dt.fr[,c(vars,overall)])
+dt_comp <- na.omit(dt.fr[,c(vars,overall)])
 
-R_overall <- to_rankings(dt_comp,
+R_overall <- rank_tricot(dt_comp,
                          items = 1:3,
-                         rankings = 4:5,
-                         type = "tricot")
+                         input = 4:5)
 
-mod_overall <- PlackettLuce(R_overall,  npseudo = 0, maxit = 20)
+mod_overall <- PlackettLuce(R_overall)
 
-model_summaries<-multcompPL(mod_overall,adjust = ci.adjust)
+model_summaries <- multcompPL(mod_overall, adjust = ci.adjust)
+
 fullanova<-anova.PL(mod_overall)
 
 worthscaled<-rev(sort(exp(coef(mod_overall))/sum(exp(coef(mod_overall)))))
@@ -123,6 +118,7 @@ summaries<-list()
 worths<-list()
 anovas<-list()
 contests_t<-list()
+
 for (i in 1:ntrait){
   
   
@@ -135,17 +131,17 @@ for (i in 1:ntrait){
                             best=df[,best],
                             worst=df[,worst])
   
-  df_t<-na.omit(data.frame(a=df[,vars[1]],
-                           b=df[,vars[2]],
-                           c=df[,vars[3]],
-                           best=df[,best],
-                           worst=df[,worst]))
+  df_t <- na.omit(data.frame(a=df[,vars[1]],
+                             b=df[,vars[2]],
+                             c=df[,vars[3]],
+                             best=df[,best],
+                             worst=df[,worst]))
   
-  n<-(2*i)-1
-  R_t <- to_rankings(df_t,
+  n <- (2*i)-1
+  
+  R_t <- rank_tricot(df_t,
                      items = 1:3,
-                     rankings = 4:5,
-                     type = "tricot")
+                     input = 4:5)
   
   mod_t <-tryCatch( PlackettLuce(R_t,  npseudo = 0, maxit =20,trace=FALSE),
                    error=function(cond) {
@@ -155,12 +151,13 @@ for (i in 1:ntrait){
                      return(NA)
                    })
   mods[[i]]<-mod_t
+  
   if(class(mod_t)=="PlackettLuce"){
   summaries[[i]]<-multcompPL(mod_t,adjust = ci.adjust)
   
   anovas[[i]]<-anova.PL(mod_t)
   
-  worths[[i]]<-rev(sort(exp(coef(mod_t))/sum(exp(coef(mod_t)))))
+  worths[[i]]<-rev(sort(coef(mod_t, log = F)))
   
   worths[[i]]<-data.frame(Variety=factor(names(worths[[i]]),
                                          (names(worths[[i]]))),worth=worths[[i]],
@@ -175,9 +172,8 @@ for (i in 1:ntrait){
 
 
 #PLS Analysis combining traits together
-
-
 coefs<-qvcalc(mod_overall)[[2]]$estimate
+
 for(i in 1:ntrait){
   if(class(mods[[i]])=="PlackettLuce"){
   coefs<-cbind(coefs,scale(qvcalc(mods[[i]])[[2]]$estimate))
@@ -260,11 +256,11 @@ for(i in covarlist2){
 covarlist3<-covarlist2[stoplist==0]
 
 
-R_overall <- to_rankings(dt.fr2,
+R_overall <- rank_tricot(dt.fr2,
                          items = vars,
-                         rankings = overall,
-                         type = "tricot")
-dt.fr2$G<-grouped_rankings(R_overall, index = seq_len(nrow(R_overall)))
+                         input = overall)
+
+dt.fr2$G<-group(R_overall, index = seq_len(nrow(R_overall)))
 
 
 dt.fr_t<-na.omit(dt.fr2[,c("G",colnames(dt.fr2)[covarlist3])])
