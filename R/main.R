@@ -1,27 +1,34 @@
 # ................................................................
 # ................................................................
-# Analyse the performance of agricultural technologies from 
-# crowdsourcing trials using Plackett-Luce model
+# Main script to call for the analysis and rendering the reports 
+# in ClimMob v3
 # ................................................................
 # ................................................................
 # Kaue de Sousa 
 # Updated 17Feb2020
 # ................................................................
 # ................................................................
-#system("R-script, climmobv3_analysis.R info.json data.json r.json /output/ TRUE TRUE")
 args <- c(
-  "data/data.json",
-  "data/info.json",
+  "dev/data/data.json",
+  "dev/data/info.json",
   "output",
-  TRUE
+  "TRUE",
+  "en",
+  "docx",
+  "participant",
+  "item"
 )
 
-# get the arguments
+# get the arguments from server's call
 # args <- commandArgs(trailingOnly = TRUE)
-infoname       <- args[1] # a json file with parameters for the analysis
-outputname     <- args[2] # a json file with the results
-pathname       <- args[3] # the path where results will be written
-infosheets     <- as.logical(args[5]) # logical() TRUE FALSE
+infoname    <- args[1] # a json file with parameters for the analysis
+outputname  <- args[2] # a json file with the results
+pathname    <- args[3] # the path where results will be written
+infosheets  <- as.logical(args[4]) # logical, if infosheets should be written TRUE FALSE
+language    <- args[5] # the language to write the report "en" for english and "es" for spanish
+extension   <- args[6] # report file format it can be "docx", "pdf", and "html"
+ranker      <- args[7] # how the system will refer to participants/farmers
+option      <- args[8] # how the system will refer to tested items
 
 # ................................................................
 # ................................................................
@@ -37,7 +44,7 @@ library("formattable")
 library("knitr")
 library("rmarkdown")
 library("pls")
-source("script/functions.R")
+source("R/functions.R")
 
 # ................................................................
 # ................................................................
@@ -50,27 +57,14 @@ cmdata <- jsonlite::fromJSON(outputname)
 class(cmdata) <- union("CM_list", class(cmdata))
 cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
 
-cmdata[1, c(28:32)] <- NA
+#cmdata[1, c(28:32)] <- NA
 
 # ................................................................
 # ................................................................
-# Set up main style parameters to fill up the report ####
-# the language to write the report "en" for english and "es" for spanish
-language <- "en"
+# Parameters obtained by the given cmdata ####
 
-# File format to use in rendering output. Only available options should be 
-# "docx", "pdf", and "html". Output format derived from extension
-extension <- "docx"
-
-# Set how the system will refer to each of the different options and 
-# to each of the different rankers. Defaults to "participant" and "item". 
-ranker <- "participant"
-option <- "item"
 Option <- ClimMobTools:::.title_case(option)
 
-# ................................................................
-# ................................................................
-# parameters obtained by the given cmdata ####
 # the project name
 projname <- which(grepl("project_name", names(cmdata)))
 projname <- cmdata[1, projname]
