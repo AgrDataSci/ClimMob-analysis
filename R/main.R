@@ -39,10 +39,11 @@ library("partykit")
 library("qvcalc")
 library("psychotools")
 library("jsonlite")
-library("formattable")
+library("multcompView")
 library("knitr")
 library("rmarkdown")
 library("pls")
+library("gtools")
 source("R/functions.R")
 
 # ................................................................
@@ -121,7 +122,7 @@ info_table_typeinfo <- "" #info.table.typeinfo <- "expert advice"
 # ................................................................
 # ................................................................
 # Run analysis ####
-source("script/analysis_climmob.R")
+source("R/analysis_climmob.R")
 
 
 
@@ -135,14 +136,12 @@ output_format <- ifelse(extension == "docx","word_document",
 
 #produce main report if output type is "summary" or "both"
 dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
-if(output != "participant"){
-  rmarkdown::render(paste0("report/main_report/",language,"/mainreport.Rmd"),
-                    output_dir = pathname,
-                    output_format = output_format,
-                    output_file = paste0(projname,"_report",".",extension))
-}
+rmarkdown::render(paste0("report/main_report/",language,"/mainreport.Rmd"),
+                  output_dir = pathname,
+                  output_format = output_format,
+                  output_file = paste0(projname,"_report",".",extension))
 
-#produce farmer reports if output type is "farmer" or "both"
-if(output!="summary"){
-  source("Farmer Reports/farmerreport.R")
-}
+# #produce farmer reports if output type is "farmer" or "both"
+# if (infosheets) {
+#   source("Farmer Reports/farmerreport.R")
+# }

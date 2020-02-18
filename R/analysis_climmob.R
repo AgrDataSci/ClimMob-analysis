@@ -179,6 +179,7 @@ cont2 <- summarise_victories(R)
 # this assess how the other traits agreed with the overall preference
 # build rankings for the other characteristics
 other_traits <- trait[-1]
+other_traits_full <- trait_full[-1]
 if (length(other_traits) > 0) {
   
   # filter cmdata so it matches the dims in all traits
@@ -209,7 +210,7 @@ if (length(other_traits) > 0) {
 
   agreement <- summarise_agreement(compare_to, 
                                    compare_with, 
-                                   labels = other_traits)
+                                   labels = other_traits_full)
   
   strongest_link <- agreement[[which.max(agreement$kendall), "labels"]]
   
@@ -341,7 +342,16 @@ nc <- which(adjCV == min(adjCV))
 # .......................................................
 # Analysis with explanatory variables ####
 # first for overall
-G <- group(R, 1:sum(overall$keep))
+if (overallVSlocal) {
+  G <- rank_tricot(cmdata[overall$keep2, ],
+                   items = itemnames,
+                   input = overall$input,
+                   additional.rank = cmdata[overall$keep2, overall$ovsl], 
+                   group = TRUE)
+} else {
+  G <- group(R, 1:sum(overall$keep))
+}
+
 Gdata <- as.data.frame(cmdata[overall$keep, expvar], stringsAsFactors = FALSE)
 names(Gdata) <- expvar
 Gdata <- cbind(G, Gdata)
@@ -352,105 +362,121 @@ tree_f <- pltree(G ~ .,
                  alpha = sig_level)
 
 
-if(length(tree_f)>1){
-  
-  coefs_t<-map_df(nodeids(tree_f,terminal = TRUE),
-                  function(x)data.frame(node=x,
-                                        rule=partykit:::.list.rules.party(tree_f, x),
-                                        multcompPL(tree_f[[ x ]]$node$info$object)))
-  
-  
-  ns<-map_df(nodeids(tree_f,terminal = TRUE),
-             function(x)data.frame(node=x,
-                                   rule=partykit:::.list.rules.party(tree_f, x),
-                                   n=tree_f[[ x ]]$node$info$nobs))
-  
-  coefs_t<-inner_join(coefs_t,ns)
-  
-  coefs_t$Label<-paste("Node",coefs_t$node,":",coefs_t$rule,"\n","n=",coefs_t$n)
-  
-  
-  coefs_t<-coefs_t %>% mutate(term=reorder(term,estimate,mean)) %>%
-    group_by(node) %>% mutate(m=mean(estimate),ctd=estimate-m) %>%data.frame()
-  
-  rules=unique(coefs_t$rule)
-  best_tree<-NULL
-  
-  for(i in 1:length(rules)){
-    tmp<-subset(coefs_t,rule==rules[i])
-    best_tree<-rbind(best_tree,c(tmp$n[1],paste(tmp$term[grep("a",tmp$.group)],collapse=", "),
-                                 paste(rev(tmp$term[grep(tmp$.group[nrow(tmp)],tmp$.group)]),collapse=", ")))
-    
-    
-  }
-  node_summary<-data.frame(rules,best_tree)
-  colnames(node_summary)<-c("Subgroup","Number of Respondents","Best Ranked Varieties","Worst Ranked Varieties")
-  
-}    
+# if(length(tree_f)>1){
+#   
+#   coefs_t<-purrr::map_df(nodeids(tree_f,terminal = TRUE),
+#                   function(x) data.frame(node=x,
+#                                         rule=partykit:::.list.rules.party(tree_f, x),
+#                                         multcompPL(tree_f[[ x ]]$node$info$object)))
+#   
+#   
+#   ns<-map_df(nodeids(tree_f,terminal = TRUE),
+#              function(x)data.frame(node=x,
+#                                    rule=partykit:::.list.rules.party(tree_f, x),
+#                                    n=tree_f[[ x ]]$node$info$nobs))
+#   
+#   coefs_t<-inner_join(coefs_t,ns)
+#   
+#   coefs_t$Label<-paste("Node",coefs_t$node,":",coefs_t$rule,"\n","n=",coefs_t$n)
+#   
+#   
+#   coefs_t<-coefs_t %>% mutate(term=reorder(term,estimate,mean)) %>%
+#     group_by(node) %>% mutate(m=mean(estimate),ctd=estimate-m) %>%data.frame()
+#   
+#   rules=unique(coefs_t$rule)
+#   best_tree<-NULL
+#   
+#   for(i in 1:length(rules)){
+#     tmp<-subset(coefs_t,rule==rules[i])
+#     best_tree<-rbind(best_tree,c(tmp$n[1],paste(tmp$term[grep("a",tmp$.group)],collapse=", "),
+#                                  paste(rev(tmp$term[grep(tmp$.group[nrow(tmp)],tmp$.group)]),collapse=", ")))
+#     
+#     
+#   }
+#   node_summary<-data.frame(rules,best_tree)
+#   colnames(node_summary)<-c("Subgroup","Number of Respondents","Best Ranked Varieties","Worst Ranked Varieties")
+#   
+# }    
 
 
-outtabs<-NULL
-for(j in 1:length(tree_f)){
-  xxx<-nodeapply(tree_f,j,function(n) info_node(n)$test)[[1]]
-  if(length(xxx)>0){
-    outtabs[[j]]<-data.frame(Node=j,t(nodeapply(tree_f,j,function(n) info_node(n)$test)[[1]]))
-    outtabs[[j]]$p<-format.pval(outtabs[[j]]$p.value)
+outtabs <- NULL
+for(j in seq_along(tree_f)){
+  
+  zzz <- nodeapply(tree_f, j, function(n){
+    info_node(n)$test
+    })[[1]]
+  
+  if (length(zzz) > 0) {
+    
+    outtabs[[j]] <- data.frame(Node = j,
+                               t(nodeapply(tree_f, j, function(n){
+                                 info_node(n)$test
+                                 })[[1]]))
+    
+    outtabs[[j]]$p <- format.pval(outtabs[[j]]$p.value)
   }
+  
   else{
-    outtabs[[j]]<-data.frame(Node=j,Message="No further splits possible",p.value=NA)
+    outtabs[[j]] <- data.frame(Node = j, 
+                               Message = "No further splits possible", 
+                               p.value = NA,
+                               stringsAsFactors = FALSE)
   }
 }
 
+# ....................................................................
+# ....................................................................
+# Build headline summaries ####
 
-##Build headline summaries
-
-siglist<-NULL
+siglist <- NULL
 for(i in 1:length(outtabs)){
-  if(ncol(outtabs[[i]])>3){
-    siglist<-c(siglist,rownames(outtabs[[i]])[outtabs[[i]]$p.value<0.05])
+  if (ncol(outtabs[[i]]) > 3) {
+    siglist <- c(siglist,
+                 rownames(outtabs[[i]])[outtabs[[i]]$p.value<0.05])
   }
 }
-siglist<-unique(siglist)
+siglist <- unique(siglist)
 
-ps<-fullanova[2,5]
-if(ps<0.05){
-  bests<-paste(model_summaries$term[grep("a",model_summaries$.group)],collapse=", ")
-  worsts<-paste(rev(model_summaries$term[grep(model_summaries$.group[nrow(model_summaries)],
-                                              model_summaries$.group)]),collapse=", ")
+ps <- fullanova[2, 5]
+if(ps < 0.05){
+  bests <- paste(model_summaries$term[grep("a", model_summaries$.group)], 
+                 collapse =", ")
+  
+  worsts <-paste(rev(model_summaries$term[grep(model_summaries$.group[nrow(model_summaries)],
+                                              model_summaries$.group)]),
+                 collapse=", ")
 }else{
-  bests<-worsts<-"No significant differences"
+  bests <- worsts <- "No significant differences"
 }
 
 for(i in 1:length(anovas)){
-  if(class(mods[[i]])=="PlackettLuce"){
-    ps<-c(ps,anovas[[i]][2,5])
+  
+  ps <- c(ps, anovas[[i]][2,5])
+  
     if(ps[i]<0.05){
       bests<-c(bests,paste(summaries[[i]]$term[grep("a",summaries[[i]]$.group)],collapse=", "))
       worsts<-c(worsts,paste(rev(summaries[[i]]$term[grep(summaries[[i]]$.group[nrow(summaries[[i]])],
                                                           summaries[[i]]$.group)]),collapse=", "))
-    }
-    
-    else{
+    }else{
       bests<-c(bests,"No significant differences")  
       worsts<-c(worsts,"No significant differences")  
-    }
-  }
-  else{
-    ps<-c(ps,NA)
-    bests<-c(bests,NA)
-    worsts<-c(worsts,NA)
   }
 }
-ptab<-data.frame(Ranking=c("Overall",trait_short),
-                 p.value=ps,"Best Ranked"=bests,
-                 "Worst Ranked"=worsts,check.names = FALSE)
 
-ptab$p.value<-paste(format.pval(ptab$p.value),stars.pval(ptab$p.value))
+ptab <- data.frame(Ranking = c("Overall", other_traits_full),
+                   p.value = ps,
+                   "Best Ranked" = bests,
+                   "Worst Ranked" = worsts,
+                   check.names = FALSE,
+                   stringsAsFactors = FALSE)
+
+ptab$p.value <- paste(format.pval(ptab$p.value),
+                      stars.pval(ptab$p.value))
 
 
-outtabs[[1]]$p.value<-as.numeric(outtabs[[1]]$p.value)
+outtabs[[1]]$p.value <- as.numeric(outtabs[[1]]$p.value)
 
-uni_sum<-outtabs[[1]]
-uni_sum$Variable<-rownames(outtabs[[1]])
-uni_sum$p<-paste(format.pval(outtabs[[1]]$p.value),stars.pval(outtabs[[1]]$p.value))
-rownames(uni_sum)<-NULL
+uni_sum <- outtabs[[1]]
+uni_sum$Variable <- rownames(outtabs[[1]])
+uni_sum$p <- paste(format.pval(outtabs[[1]]$p.value),stars.pval(outtabs[[1]]$p.value))
+rownames(uni_sum) <- NULL

@@ -35,7 +35,7 @@ library(ClimMobTools)
 #devtools::install_github("hrbrmstr/pluralize")
 #devtools::install_github("agrobioinfoservices/gosset")
 
-library(pluralize)
+#library(pluralize)
 library(gosset)
 
 
