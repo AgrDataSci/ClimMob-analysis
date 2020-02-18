@@ -59,25 +59,53 @@ for(i in seq_along(trait)){
     
     result[["keep2"]] <- keep2
     result[["ovsl"]] <- ovsl
+    
   }
   
   result[["keep"]] <- keep
   result[["input"]] <- trait_i
+  result[["fullname"]] <- trait_full[i]
 
   trait_list[[trait[i]]] <- result
     
 }
 
+trait <- names(trait_list)
 
 # Now look for the explanatory variables
-expvar <- forcesplit
 
+# if no variable provided than add a pseudo variable that will be used in pltree
+# this is to fit the model with the intercept only
+if (any(expvar == "xinterceptx")) {
+  cmdata$xinterceptx <- rep(0, nranker)
+}
+
+if (all(expvar != "xinterceptx")) {
+  
+  # check for the full names
+  for(i in seq_along(expvar)) {
+    expvar[i] <- names(cmdata[which(grepl(expvar[i], names(cmdata)))])
+  }
+  
+  # check for missing data
+  # here we prioritize the rankings, so if a explanatory variable is 
+  # missing in any point it is dropped entirely
+  drop <- apply(cmdata[expvar], 2, function(x) any(is.na(x)))
+
+  expvar <- expvar[!drop]
+  
+  # if no explanatory variable put a pseudo variable
+  if(length(expvar) == 0) {
+    expvar <- "xinterceptx"
+    cmdata$xinterceptx <- rep(0, nranker)
+  }
+  
+}
 
 # .......................................................
 # .......................................................
 # This is Table 01 #
 # Create a table with frequencies where each item was evaluated
-
 itemdata <- cmdata[, grepl("package_item", names(cmdata))]
 
 itemtable <- data.frame(table(unlist(itemdata)))
@@ -88,8 +116,7 @@ itemtable$x <- with(itemtable,
 itemtable$x <- with(itemtable,
                     paste0(x, "%"))
 
-names(itemtable) <- c(ClimMobTools:::.title_case(option),
-                      "Freq", "Relative freq")
+names(itemtable) <- c(Option, "Freq", "Relative freq")
 
 # check if gender is provided so it can be added to the itemtable
 gender <- which(grepl("gender", names(cmdata)))
@@ -121,17 +148,11 @@ if (length(gender) == 1) {
 # do this for overall performance
 
 # find the index for overall evaluation
+overall <- trait_list[[1]]
 
-overall_i <- which(grepl("overall", pars$chars$char))
-overall_i <- overall_i[length(overall_i)]
-overall   <- as.character(pars$chars[overall_i, paste0("quest_", seq_len(nquest))])
-for(i in seq_along(overall)) {
-  overall[i] <- names(cmdata[which(grepl(overall[i], names(cmdata)))])
-}
-
-fav1 <- summarise_favourite(data  = cmdata,
+fav1 <- summarise_favourite(data  = cmdata[overall$keep, ],
                             items = itemnames,
-                            input = overall) 
+                            input = overall$input) 
 
 fav2 <- fav1
 
@@ -144,9 +165,9 @@ names(fav2) <- c("Variety","N","Top Ranked","Bottom Ranked",
                  "Contests Won","Net Favourability Score")
 
 # Contest Plots
-R <- rank_tricot(data  = cmdata,
+R <- rank_tricot(data  = cmdata[overall$keep, ],
                  items = itemnames,
-                 input = overall) 
+                 input = overall$input) 
 
 cont1 <- summarise_dominance(R)
 
@@ -154,75 +175,85 @@ cont2 <- summarise_victories(R)
 
 # .......................................................
 # .......................................................
-# Trait concordance
+# Trait concordance ####
 # this assess how the other traits agreed with the overall preference
 # build rankings for the other characteristics
-traits <- pars$chars$char[-overall_i]
-for (i in seq_along(trait_short)) {
+other_traits <- trait[-1]
+if (length(other_traits) > 0) {
   
-  overall_i <- overall_i[length(overall_i)]
-  overall   <- as.character(pars$chars[overall_i, paste0("quest_", seq_len(nquest))])
-  for(i in seq_along(overall)) {
-    overall[i] <- names(cmdata[which(grepl(overall[i], names(cmdata)))])
+  # filter cmdata so it matches the dims in all traits
+  keep <- NULL
+  for(i in seq_along(trait_list)) {
+    keep <- cbind(keep, trait_list[[i]]$keep)
   }
+  keep <- rowSums(keep)
+  keep <- keep == length(trait_list)
+  
+  compare_to <- rank_tricot(cmdata[keep, ], 
+                            items = itemnames,
+                            input = overall$input)
+  
+  compare_with <- list()
+  for (i in seq_along(other_traits)) {
+    
+    ot <- trait_list[[other_traits[i]]]
+  
+    otr <- rank_tricot(cmdata[keep, ],
+                       items = itemnames,
+                       input = ot$input)  
+  
+    compare_with[[i]] <- otr
+      
+  }
+  
+
+  agreement <- summarise_agreement(compare_to, 
+                                   compare_with, 
+                                   labels = other_traits)
+  
+  strongest_link <- agreement[[which.max(agreement$kendall), "labels"]]
+  
+  weakest_link   <- agreement[[which.min(agreement$kendall), "labels"]]
+  
+  agreement_table <- agreement[, c("labels", "first", "last", "kendall")]
+  
+  names(agreement_table) <- c(Option, 
+                              "Agreement with Overall Best", 
+                              "Agreement with Overall Worst",
+                              "Complete Ranking Agreement")
+
   
 }
 
-agreement_traits<-concordance(overall_best = df[,metadat$num[which(metadat$type=="overall"&metadat$bw=="best")]],
-                              overall_worst = df[,metadat$num[which(metadat$type=="overall"&metadat$bw=="worst")]],
-                              bests = df[,metadat$num[which(metadat$type!="overall"&metadat$bw=="best")]],
-                              worsts = df[,metadat$num[which(metadat$type!="overall"&metadat$bw=="worst")]],
-                              names = trait_short)
-
-agreement_table <-
-  agreement_traits[[2]] %>% 
-  select(trait,overall,best,worst) %>%
-  rename("Agreement with Overall Best" = best,
-         "Agreement with Overall Worst" = worst,
-         "Complete Ranking Agreement" = overall)
-
-
-strongest_link <-
-  agreement_traits[[1]]$data %>% 
-  filter(type=="% Agreement with\nOverall Ranking") %>% 
-  filter(agreement==max(agreement))
-
-weakest_link <- 
-  agreement_traits[[1]]$data %>% 
-  filter(type=="% Agreement with\nOverall Ranking") %>% 
-  filter(agreement==min(agreement))
-
-
-
-#PL Model
+# .......................................................
+# .......................................................
+# PL Model ####
 
 #overall model
+mod_overall <- PlackettLuce(R)
 
-dt_comp <- na.omit(dt.fr[,c(vars,overall)])
+model_summaries <- multcompPL(mod_overall, adjust = ci_adjust)
 
-R_overall <- rank_tricot(dt_comp,
-                         items = 1:3,
-                         input = 4:5)
+fullanova <- anova.PL(mod_overall)
 
-mod_overall <- PlackettLuce(R_overall)
+worthscaled <- rev(sort(exp(coef(mod_overall))/sum(exp(coef(mod_overall)))))
 
-model_summaries <- multcompPL(mod_overall, adjust = ci.adjust)
+worthscaled <- data.frame(label = factor(names(worthscaled),
+                                         (names(worthscaled))),
+                          worth = worthscaled,
+                          prob = paste0(round(worthscaled * 100, 1), "%"), 
+                          check.names = FALSE)
 
-fullanova<-anova.PL(mod_overall)
+names(worthscaled) <- c(Option, c("Worth","Win probability"))
 
-worthscaled<-rev(sort(exp(coef(mod_overall))/sum(exp(coef(mod_overall)))))
-worthscaled<-data.frame(Variety=factor(names(worthscaled),
-                                       (names(worthscaled))),worth=worthscaled,
-                        "% Probability"=percent(worthscaled),check.names = FALSE)
+# Run over the other traits
+mods <- list()
+summaries <- list()
+worths <- list()
+anovas <- list()
+contests_t <- list()
 
-
-mods<-list()
-summaries<-list()
-worths<-list()
-anovas<-list()
-contests_t<-list()
-
-for (i in 1:ntrait){
+for (i in seq_along(other_traits)){
   
   
   best<-subset(metadat,trait==trait_names[i]&bw=="best")$num

@@ -51,24 +51,12 @@ class(cmdata) <- union("CM_list", class(cmdata))
 cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
 
 cmdata[1, c(28:32)] <- NA
-cmdata[3,c(24:25)] <- NA
+
 # ................................................................
 # ................................................................
 # Set up main style parameters to fill up the report ####
-
 # the language to write the report "en" for english and "es" for spanish
 language <- "en"
-
-# the project name
-projname <- which(grepl("project_name", names(cmdata)))
-projname <- cmdata[1, projname]
-
-# variables to produce split of results into multiple groups.
-forcesplit <- pars$expl$vars
-
-# Outputs requested. should be "summary" for summary report only; 
-# "participant" for participant report only or "both" for both sets of reports
-output <- "both"
 
 # File format to use in rendering output. Only available options should be 
 # "docx", "pdf", and "html". Output format derived from extension
@@ -78,7 +66,19 @@ extension <- "docx"
 # to each of the different rankers. Defaults to "participant" and "item". 
 ranker <- "participant"
 option <- "item"
+Option <- ClimMobTools:::.title_case(option)
 
+# ................................................................
+# ................................................................
+# parameters obtained by the given cmdata ####
+# the project name
+projname <- which(grepl("project_name", names(cmdata)))
+projname <- cmdata[1, projname]
+
+# variables to produce split of results into multiple groups.
+expvar <- pars$expl$vars
+
+# number of rankers
 nranker <- nrow(cmdata)
 
 itemnames <- cmdata[, grepl("package_item", names(cmdata))]
