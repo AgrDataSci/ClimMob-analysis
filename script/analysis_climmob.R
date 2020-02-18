@@ -7,7 +7,74 @@
 # Kaue de Sousa 
 # Updated 17Feb2020
 
+# .......................................................
+# .......................................................
+# Organise the rankings and check for missing data ####
+trait <- pars$chars$char
+trait_full <- pars$chars$char_full
+overallVSlocal <- !is.null(pars$perf)
 
+# check if overall is the first component
+# it should be the first as sorted in ClimMobTools:::.decode_pars()
+of <- which(grepl("overall", trait))[1] ==  1
+if(!of) {
+  warning("Overall comparison is missing\n")
+}
+
+trait_list <- list()
+
+# run over traits to filter NAs and prepare for PlackettLuce rankings
+for(i in seq_along(trait)){
+  result <- list()
+  # get the question full name
+  trait_i <- as.character(pars$chars[i, paste0("quest_", seq_len(nquest))])
+  # look for it with cmdata
+  for(j in seq_along(trait_i)) {
+    trait_i[j] <- names(cmdata[which(grepl(trait_i[j], names(cmdata)))])
+  }
+  
+  # check for NAs in this trait
+  keep <- apply(cmdata[trait_i], 1, is.na)
+  keep <- as.vector(colSums(keep) == 0)
+  
+  # check if proportion of missing data is larger than the threshold
+  dropit <- (sum(keep) / nranker) < missper
+  
+  if (dropit) next
+  
+  # add comparison with local item
+  if (i == 1 & overallVSlocal) {
+    ovsl <- as.vector(pars$perf[, paste0("quest_", seq_len(pars$perf$n_quest))])
+    for (k in seq_along(ovsl)) {
+      ovsl[k] <- names(cmdata[which(grepl(ovsl[k], names(cmdata)))])
+    }
+    ovsl <- as.character(ovsl)
+    
+    keep2 <- apply(cmdata[ovsl], 1, is.na)
+    keep2 <- as.vector(colSums(keep2) == 0)
+    
+    dropit2 <- (sum(keep2) / nranker) < missper
+    
+    if (dropit2) next
+    
+    result[["keep2"]] <- keep2
+    result[["ovsl"]] <- ovsl
+  }
+  
+  result[["keep"]] <- keep
+  result[["input"]] <- trait_i
+
+  trait_list[[trait[i]]] <- result
+    
+}
+
+
+# Now look for the explanatory variables
+expvar <- forcesplit
+
+
+# .......................................................
+# .......................................................
 # This is Table 01 #
 # Create a table with frequencies where each item was evaluated
 
@@ -21,8 +88,8 @@ itemtable$x <- with(itemtable,
 itemtable$x <- with(itemtable,
                     paste0(x, "%"))
 
-colnames(itemtable) <- c(gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", option, perl = TRUE),
-                        "Freq", "Relative freq")
+names(itemtable) <- c(ClimMobTools:::.title_case(option),
+                      "Freq", "Relative freq")
 
 # check if gender is provided so it can be added to the itemtable
 gender <- which(grepl("gender", names(cmdata)))
@@ -48,46 +115,56 @@ if (length(gender) == 1) {
     
 }
 
+# .......................................................
+# .......................................................
+# Favourability Analysis Table ####
+# do this for overall performance
 
-#Favourability Analysis Table
-df <- as.data.frame(dataset)
+# find the index for overall evaluation
 
-fav1 <- summarise_favourite(data = df,
-                            items = vars,
+overall_i <- which(grepl("overall", pars$chars$char))
+overall_i <- overall_i[length(overall_i)]
+overall   <- as.character(pars$chars[overall_i, paste0("quest_", seq_len(nquest))])
+for(i in seq_along(overall)) {
+  overall[i] <- names(cmdata[which(grepl(overall[i], names(cmdata)))])
+}
+
+fav1 <- summarise_favourite(data  = cmdata,
+                            items = itemnames,
                             input = overall) 
 
 fav2 <- fav1
 
-fav2$best <- formattable::percent(fav2$best / 100, 1)
-fav2$worst <- formattable::percent(fav2$worst / 100, 1)
-fav2$wins <- formattable::percent(fav2$wins, 1)
+fav2$best <- paste0(round(fav2$best, 1), "%")
+fav2$worst <- paste0(round(fav2$worst, 1), "%")
+fav2$wins <- paste0(round(fav2$wins * 100, 1), "%")
 fav2$fav_score <- round(fav2$fav_score, 1)
 
-colnames(fav2)<-c("Variety","N","% Top Ranked","% Bottom Ranked",
-                  "% Contests Won","Net Favourability Score")
-
-fav2 <- fav2[nrow(fav2):1, ]
+names(fav2) <- c("Variety","N","Top Ranked","Bottom Ranked",
+                 "Contests Won","Net Favourability Score")
 
 # Contest Plots
-R <- rank_tricot(data = df,
-                 items = vars,
+R <- rank_tricot(data  = cmdata,
+                 items = itemnames,
                  input = overall) 
 
 cont1 <- summarise_dominance(R)
 
 cont2 <- summarise_victories(R)
 
-plot(cont1)
-
-plot(cont2)
-
+# .......................................................
+# .......................................................
 # Trait concordance
-
+# this assess how the other traits agreed with the overall preference
 # build rankings for the other characteristics
-for(i in seq_along(trait_short)) {
+traits <- pars$chars$char[-overall_i]
+for (i in seq_along(trait_short)) {
   
-  dat_i 
-  
+  overall_i <- overall_i[length(overall_i)]
+  overall   <- as.character(pars$chars[overall_i, paste0("quest_", seq_len(nquest))])
+  for(i in seq_along(overall)) {
+    overall[i] <- names(cmdata[which(grepl(overall[i], names(cmdata)))])
+  }
   
 }
 
@@ -197,7 +274,7 @@ for (i in 1:ntrait){
 }
 
 
-#PLS Analysis combining traits together
+# PLS Analysis combining traits together
 coefs<-qvcalc(mod_overall)[[2]]$estimate
 
 for(i in 1:ntrait){

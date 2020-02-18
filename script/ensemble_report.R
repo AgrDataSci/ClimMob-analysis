@@ -13,7 +13,6 @@ args <- c(
   "data/data.json",
   "data/info.json",
   "output",
-  TRUE ,
   TRUE
 )
 
@@ -22,7 +21,6 @@ args <- c(
 infoname       <- args[1] # a json file with parameters for the analysis
 outputname     <- args[2] # a json file with the results
 pathname       <- args[3] # the path where results will be written
-overallVSlocal <- as.logical(args[4]) # logical() TRUE FALSE
 infosheets     <- as.logical(args[5]) # logical() TRUE FALSE
 
 # ................................................................
@@ -52,6 +50,8 @@ cmdata <- jsonlite::fromJSON(outputname)
 class(cmdata) <- union("CM_list", class(cmdata))
 cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
 
+cmdata[1, c(28:32)] <- NA
+cmdata[3,c(24:25)] <- NA
 # ................................................................
 # ................................................................
 # Set up main style parameters to fill up the report ####
@@ -77,19 +77,24 @@ extension <- "docx"
 # Set how the system will refer to each of the different options and 
 # to each of the different rankers. Defaults to "participant" and "item". 
 ranker <- "participant"
-nranker <- nrow(cmdata)
-
 option <- "item"
 
-items <- cmdata[, grepl("package_item", names(cmdata))]
+nranker <- nrow(cmdata)
 
-ncomp <- ncol(items)
+itemnames <- cmdata[, grepl("package_item", names(cmdata))]
 
-items <- unique(sort(unlist(items)))
+ncomp <- ncol(itemnames)
+
+items <- unique(sort(unlist(itemnames)))
 
 nitems <- length(items)
 
 ntrait <- nrow(pars$chars)
+
+itemnames <- names(itemnames)
+
+# number of questions
+nquest <- pars$chars$n_quest[1]
 
 # Statistics parameters
 sig_level <- 0.05
@@ -119,10 +124,6 @@ minsplit <- ceiling(nrow(cmdata) * 0.1)
 info_table_items <- c() #info.table.items <- c("variety 1", "variety 2", "variety 3")
 info_table_info <- c() #info.table.info <- c("plant it early", "good in high altitude", "")
 info_table_typeinfo <- "" #info.table.typeinfo <- "expert advice"
-
-#list of participants ids for which we want to produce the feedback form. 
-# Should be determined based on user selecting from list of ids
-ranker_ids <- c(1,2,5,7)
 
 # ................................................................
 # ................................................................
