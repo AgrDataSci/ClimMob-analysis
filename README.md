@@ -11,9 +11,3 @@
 
 This repository contains the code used in the workflow to analyse and
 create reports from the [ClimMob](https://climmob.net/blog/) platform.
-
-## Code of Conduct
-
-Please note that this project is released with a [Contributor Code of
-Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
-to abide by its terms.

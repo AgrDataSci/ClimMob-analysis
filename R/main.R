@@ -153,6 +153,3 @@ if(output != "participant"){
 if(output!="summary"){
   source("Farmer Reports/farmerreport.R")
 }
-
-
-
