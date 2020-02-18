@@ -143,7 +143,7 @@ output_format <- ifelse(extension == "docx","word_document",
 #produce main report if output type is "summary" or "both"
 dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
 if(output != "participant"){
-  rmarkdown::render(paste0("main_report/",language,"/mainreport.Rmd"),
+  rmarkdown::render(paste0("report/main_report/",language,"/mainreport.Rmd"),
                     output_dir = pathname,
                     output_format = output_format,
                     output_file = paste0(projname,"_report",".",extension))
