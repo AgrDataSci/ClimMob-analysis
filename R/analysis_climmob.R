@@ -227,16 +227,20 @@ if (length(other_traits) > 0) {
 
 # .......................................................
 # .......................................................
-# PL Model ####
+# PlackettLuce Model ####
 
-#overall model
+# overall model
+if (overallVSlocal) {
+  
+}
+
 mod_overall <- PlackettLuce(R)
 
 model_summaries <- multcompPL(mod_overall, adjust = ci_adjust)
 
 fullanova <- anova.PL(mod_overall)
 
-worthscaled <- rev(sort(exp(coef(mod_overall))/sum(exp(coef(mod_overall)))))
+worthscaled <- rev(sort(exp(coef(mod_overall)) / sum(exp(coef(mod_overall)))))
 
 worthscaled <- data.frame(label = factor(names(worthscaled),
                                          (names(worthscaled))),
@@ -254,158 +258,98 @@ anovas <- list()
 contests_t <- list()
 
 for (i in seq_along(other_traits)){
+  ot <- other_traits[i]
+  ot <- trait_list[[ot]]
   
+  Rot <- rank_tricot(data  = cmdata[ot$keep, ],
+                     items = itemnames,
+                     input = ot$input) 
   
-  best<-subset(metadat,trait==trait_names[i]&bw=="best")$num
-  worst<-subset(metadat,trait==trait_names[i]&bw=="worst")$num
+  contests <- list()
+  contests[[1]] <- summarise_dominance(Rot)
+  contests[[2]] <- summarise_victories(Rot)
   
-  contests_t[[i]]<-contests(a=df[,vars[1]],
-                            b=df[,vars[2]],
-                            c=df[,vars[3]],
-                            best=df[,best],
-                            worst=df[,worst])
+  contests_t[[i]] <- contests
   
-  df_t <- na.omit(data.frame(a=df[,vars[1]],
-                             b=df[,vars[2]],
-                             c=df[,vars[3]],
-                             best=df[,best],
-                             worst=df[,worst]))
+  mod_t <- PlackettLuce(Rot)
   
-  n <- (2*i)-1
+  mods[[i]] <- mod_t
   
-  R_t <- rank_tricot(df_t,
-                     items = 1:3,
-                     input = 4:5)
+  summaries[[i]] <- multcompPL(mod_t, adjust = ci_adjust)
   
-  mod_t <-tryCatch( PlackettLuce(R_t,  npseudo = 0, maxit =20,trace=FALSE),
-                    error=function(cond) {
-                      message("Here's the original error message:")
-                      message(cond)
-                      # Choose a return value in case of error
-                      return(NA)
-                    })
-  mods[[i]]<-mod_t
+  anovas[[i]] <- anova.PL(mod_t)
   
-  if(class(mod_t)=="PlackettLuce"){
-    summaries[[i]]<-multcompPL(mod_t,adjust = ci.adjust)
-    
-    anovas[[i]]<-anova.PL(mod_t)
-    
-    worths[[i]]<-rev(sort(coef(mod_t, log = F)))
-    
-    worths[[i]]<-data.frame(Variety=factor(names(worths[[i]]),
-                                           (names(worths[[i]]))),worth=worths[[i]],
-                            "Probability"=percent(worths[[i]]))
-  }
-  if(class(mod_t)!="PlackettLuce"){
-    anovas[[i]]<-NA
-    worths[[i]]<-NA
-  }  
+  worths_i <- rev(sort(coef(mod_t, log = FALSE)))
   
+  worths_i <- data.frame(label = factor(names(worths_i),
+                                        (names(worths_i))),
+                         worth = worths_i,
+                         prob = paste0(round(worths_i * 100, 1), "%"), 
+                         check.names = FALSE)
+  
+  names(worths_i) <- c(Option, c("Worth","Win probability"))
+  
+  worths[[i]] <- worths_i
+}
+
+# .......................................................
+# .......................................................
+# PlackettLuce combining traits together ####
+coefs <- qvcalc(mod_overall)[[2]]$estimate
+
+for(i in seq_along(other_traits)){
+  coefs <- cbind(coefs, 
+                 scale(qvcalc(mods[[i]])[[2]]$estimate))
+}
+
+coefs <- as.data.frame(coefs)
+# add item names as rows
+rownames(coefs) <- rownames(qvcalc(mod_overall)[[2]])
+# set col names with title case traits
+names(coefs) <- c("Overall", ClimMobTools:::.title_case(other_traits))
+
+# compute partial least squares
+fml <- paste("Overall ~ ", paste(ClimMobTools:::.title_case(other_traits), collapse = " + "))
+fml <- as.formula(fml)
+
+m2 <- plsr(fml,
+           data = coefs,
+           validation = "LOO", 
+           jackknife = TRUE)
+
+arrows <- NULL
+scores <- NULL
+if (ncol(m2$projection) > 1 ) {
+  arrows <- data.frame((m2$projection)[,1:2],
+                       trait = other_traits,
+                       x0 = 0, 
+                       y0 = 0, 
+                       stringsAsFactors = FALSE)
+  scores <- data.frame((m2$scores)[,1:2],
+                       var = rownames(m2$scores))
 }
 
 
-# PLS Analysis combining traits together
-coefs<-qvcalc(mod_overall)[[2]]$estimate
-
-for(i in 1:ntrait){
-  if(class(mods[[i]])=="PlackettLuce"){
-    coefs<-cbind(coefs,scale(qvcalc(mods[[i]])[[2]]$estimate))
-  }
-}
-
-
-rownames(coefs)<-rownames(qvcalc(mod_overall)[[2]])
-colnames(coefs)<-c("Overall",trait_short[unlist(lapply(mods,class))=="PlackettLuce"])
-
-coefs<-data.frame(coefs)
-
-library(pls)
-
-m2 <- plsr(as.formula(paste("Overall~",paste(trait_short[unlist(lapply(mods,class))=="PlackettLuce"],collapse="+"))),
-           data=coefs, validation = "LOO", jackknife = TRUE)
-arrows<-NULL
-scores<-NULL
-if(ncol(m2$projection)>1){
-  arrows<-data.frame((m2$projection)[,1:2],trait=trait_short,x0=0,y0=0)
-  scores<-data.frame((m2$scores)[,1:2],var=rownames(m2$scores))
-}
-
-
-yve <- drop(R2(m2, estimate = "train",
+yve <- drop(R2(m2, 
+               estimate = "train",
                intercept = FALSE)$val)
 
-adjCV<-m2$validation$adj
-nc<-which(adjCV==min(adjCV))
+adjCV <- m2$validation$adj
+nc <- which(adjCV == min(adjCV))
 
-#Analysis with covariates
+# .......................................................
+# .......................................................
+# Analysis with explanatory variables ####
+# first for overall
+G <- group(R, 1:sum(overall$keep))
+Gdata <- as.data.frame(cmdata[overall$keep, expvar], stringsAsFactors = FALSE)
+names(Gdata) <- expvar
+Gdata <- cbind(G, Gdata)
 
-dt.fr2<-dt.fr
-
-covarlist2=c(covars,coords)
-
-lev1<-unique(c(dt.fr2$variety_a,dt.fr2$variety_b,dt.fr2$variety_c))
-dt.fr2$variety_a<-factor(dt.fr2$variety_a,levels=lev1)
-dt.fr2$variety_b<-factor(dt.fr2$variety_b,levels=lev1)
-dt.fr2$variety_c<-factor(dt.fr2$variety_c,levels=lev1)
-
-#first format the covariates and exclude those likely to cause problems
-pout<-NULL
-stoplist<-NULL
-for(i in covarlist2){
-  stop<-0
-  
-  if(class(dt.fr2[,i])=="character"){
-    dt.fr2[,i]<-factor(dt.fr2[,i])
-  }
-  if(class(dt.fr2[,i])=="factor"){
-    # dt.fr2[,i]<-as.factor(replace_na(as.character(dt.fr2[,i]),"missing"))
-    
-    t1<-table(dt.fr2[,i],dt.fr2$variety_a)
-    t2<-table(dt.fr2[,i],dt.fr2$variety_b)
-    t3<-table(dt.fr2[,i],dt.fr2$variety_c)
-    
-    tt<-t1+t2+t3
-    if(any(tt==0)){
-      stop<-1
-    }
-    
-  }
-  if(length(unique(dt.fr2[,i]))<2){
-    stop<-2
-  }
-  
-  if(class(dt.fr2[,i])!="factor"&class(dt.fr2[,i])!="character"&class(dt.fr2[,i])!="numeric"
-     &class(dt.fr2[,i])!="integer"&class(dt.fr2[,i])!="Date"){
-    stop<-3
-  }
-  if(mean(is.na(dt.fr2[,i]))>missper){
-    stop<-4
-  }
-  
-  
-  stoplist<-c(stoplist,stop)
-}
-
-covarlist3<-covarlist2[stoplist==0]
-
-
-R_overall <- rank_tricot(dt.fr2,
-                         items = vars,
-                         input = overall)
-
-dt.fr2$G<-group(R_overall, index = seq_len(nrow(R_overall)))
-
-
-dt.fr_t<-na.omit(dt.fr2[,c("G",colnames(dt.fr2)[covarlist3])])
-
-fullmodel<-as.formula(paste("G~",paste(colnames(dt.fr)[covarlist3],collapse="+")))
-
-
-
-
-tree_f <- pltree(formula=fullmodel,
-                 data = dt.fr_t, minsize = 50, alpha = 0.05)
+tree_f <- pltree(G ~ .,
+                 data = Gdata, 
+                 minsize = minsplit, 
+                 alpha = sig_level)
 
 
 if(length(tree_f)>1){
