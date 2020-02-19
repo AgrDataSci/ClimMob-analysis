@@ -213,12 +213,12 @@ knitr::kable(fav2,
 
 This shows the percentage of `r rankers` who assessed the `r options` as their most preferred of the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their least preferred, the percentage of 'head to head contests' for which the `r option` won and the net favourability score. A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the variety lost all contests. 
 
-*Figure 2.1*
-```{r fav_plot}
+```{r fav_plot, fig.width=7,fig.height=7, fig.cap="Figure 2.1. Net favourability score for overall performance."}
 plot(fav1) + 
-  ggtitle("Net Favourability Score for Overall Performance") + 
   xlab(Option)
+```
 
+```{r favsentence}
 favsentence_i <- which(fav1$fav_score < max(fav1$fav_score) & fav1$fav_score >= 50)
 
 favsentence <- ifelse(length(favsentence_i) > 0, 
@@ -263,10 +263,8 @@ Appendix B contains the full data for each pairwise comparison of the varieties,
 
 Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the trial. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the panelled `r option` was ranked above the `r options` shown as bars. The most preferred `r option` is shown in the top left panel and the least preferred is shown in the bottom right panel
 
-*Figure 2.3*
-```{r contests bars,fig.height=12,fig.width=10}
+```{r contests_bars,fig.height=12,fig.width=10, fig.cap="Figure 2.3. Head to head performance of all items using overall trait preference."}
 plot(contests[[2]]) +
-  ggtitle("Head to Head Performance of All Varieties Using Overall Trait Preference") +
   ylab("Contests Preferred (%)")
 
 ```
@@ -275,7 +273,7 @@ plot(contests[[2]]) +
 
 Results from the pairwise contests of the other individual traits assessed are shown below. 
 
-```{r, pairsplots}
+```{r pairsplots}
 trait_pairs1 = NULL
 if(length(other_traits_list) > 0) {
   for(i in seq_along(other_traits_list)){
@@ -295,7 +293,7 @@ cat(paste(trait_pairs1, collapse = '\n'))
 
 Table 2.5 shows the relationship between the individual trait rankings and the overall rankings. Complete agreement represents the percentage of respondents for which the ranking of the `r ncomp` `r options` in respect to the trait is an exact match to the overall ranking. Best and worst agreement represents the percentage for which the best and worst `r option` for the trait matched the overall best and worst. Complete ranking agreement shows the proportion of correlation on the full ranking with the overall performance as baseline using the Kendall correlation coefficient [@Kendall1938].
 
-```{r}
+```{r agreement_table}
 kable(agreement_table,
       caption = "Table 2.5: Relationship between individual trait assessment and overall assessment")
 ```
@@ -311,7 +309,7 @@ Overall the trait which had the strongest relationship with the overall ranking 
 # Section 3: Data Summary & Exploratory Analysis of Explanatory Variables  
 
 
-```{r exp-var-table}
+```{r expvar_table}
 kable(data.frame("Short name" = expvar_list$expvar, 
                  "Question" = expvar_list$expvar_full, 
                  check.names = FALSE))
@@ -333,7 +331,7 @@ kable(x1,
       caption = "Table 4.1: Likelihood ratio test results from overall model")
 ```
 
-```{r,pval_sentence}
+```{r pval_sentence}
 if (p < 0.001) {
   message1 <- paste0("p=", format.pval(p), 
                     ". This suggests that there is strong evidence of ",
