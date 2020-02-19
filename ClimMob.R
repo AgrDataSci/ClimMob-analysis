@@ -4,22 +4,14 @@
 # in ClimMob v3
 # ................................................................
 # Kaue de Sousa 
-# Updated 17Feb2020
+# Updated 19Feb2020
 # ................................................................
 # ................................................................
-# args <- c(
-#   "dev/data/data.json",
-#   "dev/data/info.json",
-#   "output",
-#   "TRUE",
-#   "en",
-#   "docx",
-#   "participant",
-#   "item"
-# )
+# args <- c("dev/data/data.json", "dev/data/info.json", "output",
+#            "TRUE","en","docx", "participant","item")
 
 # get the arguments from server's call
-# args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
 pathname    <- args[3] # the path where results will be written
@@ -32,19 +24,107 @@ option      <- args[8] # how the system will refer to tested items
 # ................................................................
 # ................................................................
 ## Packages ####
-library("ClimMobTools")
-library("gosset")
-library("PlackettLuce")
-library("partykit")
-library("qvcalc")
-library("psychotools")
-library("jsonlite")
-library("multcompView")
-library("knitr")
-library("rmarkdown")
-library("pls")
-library("gtools")
-library("ggplot2")
+if (!require("devtools")){
+  install.packages("devtools")
+  library("devtools")
+}else{
+  library("devtools")
+}
+
+if (!require("ClimMobTools")){
+  devtools::install_github("agrobioinfoservices/ClimMobTools",
+                           upgrade = "never")
+  library("ClimMobTools")
+}else{
+  library("ClimMobTools")
+}
+
+if (!require("gosset"))
+{
+  devtools::install_github("agrobioinfoservices/gosset",
+                           upgrade = "never")
+  library("gosset")
+}else{
+  library("gosset")
+}
+
+if (!require("PlackettLuce")){
+  install.packages("PlackettLuce")
+  library("PlackettLuce")
+}else{
+  library("PlackettLuce")
+}
+
+if (!require("partykit")){
+  install.packages("partykit")
+  library("partykit")
+}else{
+  library("partykit")
+}
+
+if (!require("qvcalc")){
+  install.packages("qvcalc")
+  library("qvcalc")
+}else{
+  library("qvcalc")
+}
+
+if (!require("psychotools")){
+  install.packages("psychotools")
+  library("psychotools")
+}else{
+  library("psychotools")
+}
+
+if (!require("jsonlite")){
+  install.packages("jsonlite")
+  library("jsonlite")
+}else{
+  library("jsonlite")
+}
+
+if (!require("multcompView")){
+  install.packages("multcompView")
+  library("multcompView")
+}else{
+  library("multcompView")
+}
+
+if (!require("knitr")){
+  install.packages("knitr")
+  library("knitr")
+}else{
+  library("knitr")
+}
+
+if (!require("rmarkdown")){
+  install.packages("rmarkdown")
+  library("rmarkdown")
+}else{
+  library("rmarkdown")
+}
+
+if (!require("pls")){
+  install.packages("pls")
+  library("pls")
+}else{
+  library("pls")
+}
+
+if (!require("gtools")){
+  install.packages("gtools")
+  library("gtools")
+}else{
+  library("gtools")
+}
+
+if (!require("ggplot2")){
+  install.packages("ggplot2")
+  library("ggplot2")
+}else{
+  library("ggplot2")
+}
+
 source("R/functions.R")
 
 # ................................................................
