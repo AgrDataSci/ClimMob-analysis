@@ -109,6 +109,7 @@ if (all(expvar != "xinterceptx")) {
   
   expvar <- expvar[!dropit]
   expvar_full <- expvar_full[!dropit]
+  expvar_dropped <- expvar_full[dropit]
   
   # if no explanatory variable left out put a pseudo variable
   if(length(expvar) == 0) {
@@ -183,7 +184,7 @@ fav2$worst <- paste0(round(fav2$worst, 1), "%")
 fav2$wins <- paste0(round(fav2$wins * 100, 1), "%")
 fav2$fav_score <- round(fav2$fav_score, 1)
 
-names(fav2) <- c("Variety","N","Top Ranked","Bottom Ranked",
+names(fav2) <- c(Option,"N","Top Ranked","Bottom Ranked",
                  "Contests Won","Net Favourability Score")
 
 # Contest Plots
@@ -234,16 +235,25 @@ if (length(other_traits) > 0) {
                                    compare_with, 
                                    labels = other_traits_full)
   
-  strongest_link <- agreement[[which.max(agreement$kendall), "labels"]]
+  strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
+                      round(max(agreement$kendall), 0))
   
-  weakest_link   <- agreement[[which.min(agreement$kendall), "labels"]]
   
-  agreement_table <- agreement[, c("labels", "first", "last", "kendall")]
+  weakest_link   <- c(agreement[[which.min(agreement$kendall), "labels"]],
+                      round(min(agreement$kendall), 0))
+  
+  
+  agreement_table <- agreement
+  
+  agreement_table[,c(2:4)] <- lapply(agreement_table[,c(2:4)], function(x){
+    x <- round(x, 1)
+    x <- paste0(x,"%")
+  })
   
   names(agreement_table) <- c(Option, 
+                              "Complete Ranking Agreement",
                               "Agreement with Overall Best", 
-                              "Agreement with Overall Worst",
-                              "Complete Ranking Agreement")
+                              "Agreement with Overall Worst")
 
   
 }
@@ -253,9 +263,9 @@ if (length(other_traits) > 0) {
 # PlackettLuce Model ####
 
 # overall model
-if (overallVSlocal) {
-  warning("This process is not implemented yet\n")
-}
+# if (overallVSlocal) {
+#   warning("This process is not implemented yet\n")
+# }
 
 mod_overall <- PlackettLuce(R)
 
@@ -393,12 +403,6 @@ tree_f <- pltree(G ~ .,
                  alpha = sig_level)
 
 
-example("beans", package = "PlackettLuce")
-Z <- grouped_rankings(R, rep(seq_len(nrow(beans)), 4))
-d <- cbind(Z, beans)
-
-tree_f <- pltree(Z ~ maxTN, data = d)
-
 # if the tree has splits, extract coeffs from nodes
 if (length(tree_f)>1) { 
 
@@ -515,14 +519,15 @@ for(i in 1:length(anovas)){
 }
 
 ptab <- data.frame(Ranking = c("Overall", other_traits_full),
-                   p.value = ps,
                    "Best Ranked" = bests,
                    "Worst Ranked" = worsts,
+                   p.value = ps,
                    check.names = FALSE,
                    stringsAsFactors = FALSE)
 
-ptab$p.value <- paste(format.pval(ptab$p.value),
-                      stars.pval(ptab$p.value))
+ptab$sig <- stars.pval(ptab$p.value)
+
+ptab$p.value <- round(ptab$p.value, 5)
 
 
 outtabs[[1]]$p.value <- as.numeric(outtabs[[1]]$p.value)

@@ -44,6 +44,7 @@ library("knitr")
 library("rmarkdown")
 library("pls")
 library("gtools")
+library("ggplot2")
 source("R/functions.R")
 
 # ................................................................
@@ -57,8 +58,6 @@ cmdata <- jsonlite::fromJSON(outputname)
 class(cmdata) <- union("CM_list", class(cmdata))
 cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
 
-cmdata[1, c(28:32)] <- NA
-
 # ................................................................
 # ................................................................
 # Dataset parameters ####
@@ -70,7 +69,6 @@ projname <- cmdata[1, projname]
 
 # variables to produce split of results into multiple groups.
 expvar <- pars$expl$vars
-#expvar <- c(expvar, "REG_vivienda")
 expvar_full <- pars$expl$name
 
 # number of rankers
@@ -138,6 +136,9 @@ source("R/analysis_climmob.R")
 # ................................................................
 # ................................................................
 # Write outputs ####
+rankers <- ClimMobTools:::.pluralize(ranker)
+options <- ClimMobTools:::.pluralize(option)
+nothertraits <- ntrait - 1
 
 #determine format based on extensions
 output_format <- ifelse(extension == "docx","word_document", 
