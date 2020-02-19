@@ -422,4 +422,93 @@ if (length(other_traits_list) > 0) {
 cat(paste(model_traits, collapse = '\n'))
 ```
 
+
+# Section 6: Plackett-Luce models with explatory variables  
+
+## Overall ranking  
+
+A recursive partitioning method [@Strobl2009] was used to determine which of the explanatory variables, if any, had significant relationships with the rankings. This approach identifies sub-groups in the data for which the rankings of the different varieties are significantly different to each other. Table 4.1 shows the p-values for each of the covariates tested, one-by-one, showing whether or not the covariate could be used to define sub-groups with significantly different rankings. 
+
+```{r univar_pval}
+kable(uni_sum[,c(5,4)],
+      caption = paste0("Table 6.1: Univariate p-values for first split in ",
+                       "Plackett-Luce tree model for the overall ranking"))
+```
+
+
+Figure 6.1 shows the partitioning of the rankings based on the most significantly different sub-groups which could be identified from the data using a `sig_level*100`% significance level. At the top of the tree is the full dataset, then working down through the different levels of the tree shows the combinations of variables which define each subgroup. The model parameters are shown for the final subgroups ("terminal nodes") in the plots at the bottoms of the tree. 
+
+
+```{r pltree, asis=TRUE,fig.height=8,fig.width=10, fig.cap="Figure 6.1 - Overall ranking of Plackett-Luce tree."}
+if (length(tree_f)==1) {
+  nofig1 <- "No significant explanatory variables identified."
+}else{
+  nofig1 <- ""
+}
+
+plot(tree_f)
+```
+`r nofig1`
+
+The highest and lowest performing `r option` within each sub-group is identified within Table 6.2.
+
+```{r node_summary}
+if (length(siglist) > 0) {
+  kable(node_summary,
+        caption = "Table 6.2 - Summary of performance in each tree node.")
+}
+```
+
+The model coefficient estimates, along with `r ci_level*100`% confidence intervals are provided in Figure 6.2. This will help identification of which `r options` were better suited to particular sub-groups identified by the analysis.
+
+```{r,fig.width=8,fig.height=8, fig.cap="Figure 6.2 - Coefficient estimates within each identified terminal node\n"}
+if(length(tree_f)>1){
+ggplot(data = coefs_t, 
+       aes(x = term, 
+           y = ctd,
+           ymax = ctd+1.40*quasiSE,
+           ymin = ctd-1.40*quasiSE,
+           col = Label)) +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_errorbar(position = position_dodge(width = 0.3), width = 0) +
+  coord_flip() +
+  scale_color_discrete() +
+  geom_text(aes(label=.group),
+            size = 3,
+            fontface = 2,
+            nudge_x = rep(c(-0.3,0.5), each = nlevels(coefs_t$term))) +
+  ylab("") +
+  xlab(Option) +
+  ggtitle(paste("Terminal node parameter estimates for",
+                "overall rankings."))
+}
+
+```
+`r nofig1`
+
+Table 6.3 outlines the p-values for each covariate at each of the nodes in the tree, outlining whether an additional significant split could be determined from within the existing sub-group at that node.
+
+```{r}
+z<-NULL
+for(i in 1:length(outtabs)){
+  if (ncol(outtabs[[i]]) > 3) {
+    ot <- data.frame(Variable = rownames(outtabs[[i]]),
+                     outtabs[[i]])
+    z <- rbind(z, ot)
+  }
+}
+if (length(z) > 0) {
+  nodemessage <- ""
+  kable(z[,c(1:3,5)],
+        caption="Table 6.3: p-values for effect of each covariate at each node",
+        row.names = FALSE)
+}
+if (length(z)==0) {
+  nodemessage<-"No covariates were able to be assessed statistically."
+}
+
+```
+`r nodemessage`
+
+
 # References

@@ -404,7 +404,7 @@ tree_f <- pltree(G ~ .,
 
 
 # if the tree has splits, extract coeffs from nodes
-if (length(tree_f)>1) { 
+if (length(tree_f) > 1) { 
 
   node_ids <- nodeids(tree_f,terminal = TRUE)
   

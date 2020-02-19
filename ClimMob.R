@@ -7,16 +7,16 @@
 # Updated 17Feb2020
 # ................................................................
 # ................................................................
-args <- c(
-  "dev/data/data.json",
-  "dev/data/info.json",
-  "output",
-  "TRUE",
-  "en",
-  "docx",
-  "participant",
-  "item"
-)
+# args <- c(
+#   "dev/data/data.json",
+#   "dev/data/info.json",
+#   "output",
+#   "TRUE",
+#   "en",
+#   "docx",
+#   "participant",
+#   "item"
+# )
 
 # get the arguments from server's call
 # args <- commandArgs(trailingOnly = TRUE)
@@ -144,7 +144,7 @@ nothertraits <- ntrait - 1
 output_format <- ifelse(extension == "docx","word_document", 
                         paste0(extension,"_document"))
 
-#produce main report if output type is "summary" or "both"
+# produce main report if output type is "summary" or "both"
 dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
 rmarkdown::render(paste0("report/",language,"/mainreport/mainreport.Rmd"),
                   output_dir = pathname,
