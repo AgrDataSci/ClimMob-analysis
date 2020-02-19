@@ -6,7 +6,6 @@
 # ................................................................
 # Kaue de Sousa 
 # Updated 17Feb2020
-
 # .......................................................
 # .......................................................
 # Organise the rankings and check for missing data ####
@@ -15,7 +14,7 @@ trait_full <- pars$chars$char_full
 overallVSlocal <- !is.null(pars$perf)
 
 # check if overall is the first component
-# it should be the first as sorted in ClimMobTools:::.decode_pars()
+# it should always be the first as sorted in ClimMobTools:::.decode_pars()
 of <- which(grepl("overall", trait))[1] ==  1
 if(!of) {
   warning("Overall comparison is missing\n")
@@ -73,31 +72,54 @@ for(i in seq_along(trait)){
 trait <- names(trait_list)
 
 # Now look for the explanatory variables
-
 # if no variable provided than add a pseudo variable that will be used in pltree
 # this is to fit the model with the intercept only
+expvar_list <- list()
 if (any(expvar == "xinterceptx")) {
   cmdata$xinterceptx <- rep(0, nranker)
+  expvar_list[["expvar"]] <- "xinterceptx"
+  expvar_list[["expvar_full"]] <- "Intercept"
+  expvar_list[["keep"]] <- rep(TRUE, nranker)
 }
 
 if (all(expvar != "xinterceptx")) {
   
   # check for the full names
-  for(i in seq_along(expvar)) {
+  for(i in seq_along(expvar)){
     expvar[i] <- names(cmdata[which(grepl(expvar[i], names(cmdata)))])
   }
   
   # check for missing data
-  # here we prioritize the rankings, so if a explanatory variable is 
-  # missing in any point it is dropped entirely
-  drop <- apply(cmdata[expvar], 2, function(x) any(is.na(x)))
-
-  expvar <- expvar[!drop]
+  keep <- NULL
+  for(i in seq_along(expvar)){
+    
+    k <- !is.na(cmdata[, expvar[i]])
+    keep <- cbind(keep, k)
+  }
   
-  # if no explanatory variable put a pseudo variable
+  # find those that are bellow the threshold of missexp
+  dropit <- (colSums(keep) / nranker) < missexp
+  
+  # drop those bellow threshold
+  keep <- as.data.frame(keep[, !dropit])
+  
+  # create a single vector that will be used to filter cmdata
+  keep <- rowSums(keep)
+  keep <- keep == max(keep)
+  
+  expvar <- expvar[!dropit]
+  expvar_full <- expvar_full[!dropit]
+  
+  # if no explanatory variable left out put a pseudo variable
   if(length(expvar) == 0) {
-    expvar <- "xinterceptx"
     cmdata$xinterceptx <- rep(0, nranker)
+    expvar_list[["expvar"]] <- "xinterceptx"
+    expvar_list[["expvar_full"]] <- "Intercept"
+    expvar_list[["keep"]] <- rep(TRUE, nranker)
+  }else{
+    expvar_list[["expvar"]] <- expvar
+    expvar_list[["expvar_full"]] <- expvar_full
+    expvar_list[["keep"]] <- keep
   }
   
 }
@@ -232,7 +254,7 @@ if (length(other_traits) > 0) {
 
 # overall model
 if (overallVSlocal) {
-  
+  warning("This process is not implemented yet\n")
 }
 
 mod_overall <- PlackettLuce(R)
@@ -341,19 +363,28 @@ nc <- which(adjCV == min(adjCV))
 # .......................................................
 # .......................................................
 # Analysis with explanatory variables ####
-# first for overall
 if (overallVSlocal) {
-  G <- rank_tricot(cmdata[overall$keep2, ],
+  # apply filter over missing data in evaluation and explanatory variables
+  keep <- overall$keep2 & expvar_list$keep
+  
+  G <- rank_tricot(cmdata[keep, ],
                    items = itemnames,
                    input = overall$input,
-                   additional.rank = cmdata[overall$keep2, overall$ovsl], 
+                   additional.rank = cmdata[keep, overall$ovsl], 
                    group = TRUE)
 } else {
-  G <- group(R, 1:sum(overall$keep))
+  
+  keep <- overall$keep & expvar_list$keep
+  
+  G <- rank_tricot(cmdata[keep, ],
+                   items = itemnames,
+                   input = overall$input, 
+                   group = TRUE)
 }
 
-Gdata <- as.data.frame(cmdata[overall$keep, expvar], stringsAsFactors = FALSE)
-names(Gdata) <- expvar
+# data frame of explanatory variables
+Gdata <- as.data.frame(cmdata[keep, expvar_list$expvar], stringsAsFactors = FALSE)
+names(Gdata) <- expvar_list$expvar_full
 Gdata <- cbind(G, Gdata)
 
 tree_f <- pltree(G ~ .,
@@ -362,41 +393,61 @@ tree_f <- pltree(G ~ .,
                  alpha = sig_level)
 
 
-# if(length(tree_f)>1){
-#   
-#   coefs_t<-purrr::map_df(nodeids(tree_f,terminal = TRUE),
-#                   function(x) data.frame(node=x,
-#                                         rule=partykit:::.list.rules.party(tree_f, x),
-#                                         multcompPL(tree_f[[ x ]]$node$info$object)))
-#   
-#   
-#   ns<-map_df(nodeids(tree_f,terminal = TRUE),
-#              function(x)data.frame(node=x,
-#                                    rule=partykit:::.list.rules.party(tree_f, x),
-#                                    n=tree_f[[ x ]]$node$info$nobs))
-#   
-#   coefs_t<-inner_join(coefs_t,ns)
-#   
-#   coefs_t$Label<-paste("Node",coefs_t$node,":",coefs_t$rule,"\n","n=",coefs_t$n)
-#   
-#   
-#   coefs_t<-coefs_t %>% mutate(term=reorder(term,estimate,mean)) %>%
-#     group_by(node) %>% mutate(m=mean(estimate),ctd=estimate-m) %>%data.frame()
-#   
-#   rules=unique(coefs_t$rule)
-#   best_tree<-NULL
-#   
-#   for(i in 1:length(rules)){
-#     tmp<-subset(coefs_t,rule==rules[i])
-#     best_tree<-rbind(best_tree,c(tmp$n[1],paste(tmp$term[grep("a",tmp$.group)],collapse=", "),
-#                                  paste(rev(tmp$term[grep(tmp$.group[nrow(tmp)],tmp$.group)]),collapse=", ")))
-#     
-#     
-#   }
-#   node_summary<-data.frame(rules,best_tree)
-#   colnames(node_summary)<-c("Subgroup","Number of Respondents","Best Ranked Varieties","Worst Ranked Varieties")
-#   
-# }    
+example("beans", package = "PlackettLuce")
+Z <- grouped_rankings(R, rep(seq_len(nrow(beans)), 4))
+d <- cbind(Z, beans)
+
+tree_f <- pltree(Z ~ maxTN, data = d)
+
+# if the tree has splits, extract coeffs from nodes
+if (length(tree_f)>1) { 
+
+  node_ids <- nodeids(tree_f,terminal = TRUE)
+  
+  coefs_t <- NULL
+  for(i in seq_along(node_ids)) {
+    
+    coef_i <- data.frame(node = node_ids[i],
+                         rule = partykit:::.list.rules.party(tree_f, node_ids[i]),
+                         multcompPL(tree_f[[ node_ids[i] ]]$node$info$object),
+                         n = tree_f[[ node_ids[i] ]]$node$info$nobs,
+                         stringsAsFactors = FALSE)
+    
+    coefs_t <- rbind(coefs_t, coef_i)
+    
+  }
+  
+  coefs_t$Label <- paste("Node", coefs_t$node, ":", coefs_t$rule,"\n","n=",coefs_t$n)
+  
+  coefs_t <- split(coefs_t, coefs_t$node)
+  
+  coefs_t <- lapply(coefs_t, function(x){
+    x$m <- mean(x$estimate)
+    x$ctd <- x$estimate - x$m
+    x
+  })
+  
+  coefs_t <- do.call(rbind, coefs_t)
+
+  rules <- unique(coefs_t$rule)
+  best_tree <- NULL
+  for(i in seq_along(rules)){
+    
+    tmp <- subset(coefs_t, rule==rules[i])
+    
+    best_tree <- rbind(best_tree,
+                       c(tmp$n[1], 
+                         paste(tmp$term[grepl("a", tmp$.group)], collapse=", "),
+                         paste(rev(tmp$term[grepl(tmp$.group[nrow(tmp)], tmp$.group)]), collapse=", ")))
+  }
+  
+  node_summary <- data.frame(rules, 
+                             best_tree, 
+                             stringsAsFactors = FALSE)
+  
+  names(node_summary) <- c("Split","Number of Respondents","Best Ranked","Worst Ranked")
+
+}
 
 
 outtabs <- NULL

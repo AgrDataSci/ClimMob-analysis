@@ -57,12 +57,11 @@ cmdata <- jsonlite::fromJSON(outputname)
 class(cmdata) <- union("CM_list", class(cmdata))
 cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
 
-#cmdata[1, c(28:32)] <- NA
+cmdata[1, c(28:32)] <- NA
 
 # ................................................................
 # ................................................................
-# Parameters obtained by the given cmdata ####
-
+# Dataset parameters ####
 Option <- ClimMobTools:::.title_case(option)
 
 # the project name
@@ -71,26 +70,46 @@ projname <- cmdata[1, projname]
 
 # variables to produce split of results into multiple groups.
 expvar <- pars$expl$vars
+#expvar <- c(expvar, "REG_vivienda")
+expvar_full <- pars$expl$name
 
 # number of rankers
 nranker <- nrow(cmdata)
 
 itemnames <- cmdata[, grepl("package_item", names(cmdata))]
 
+# Number of items each participant evaluates
 ncomp <- ncol(itemnames)
 
+# Name of items tested
 items <- unique(sort(unlist(itemnames)))
 
+# Number o items tested
 nitems <- length(items)
 
+# Number of characteristics (traits) avaluated
 ntrait <- nrow(pars$chars)
 
+# Colnames where items are placed within cmdata
 itemnames <- names(itemnames)
 
 # number of questions
 nquest <- pars$chars$n_quest[1]
 
-# Statistics parameters
+# ................................................................
+# ................................................................
+# Statistic parameters ####
+# Set maximum proportion of missing data allowed in a characteristic evaluation
+# before it is excluded. 
+missper <- 0.5
+
+# Set minimum proportion of valid observations in explanatory variables
+missexp <- 0.8
+
+# Set minimum split size for tree models.
+minsplit <- ceiling(nrow(cmdata) * 0.1)
+
+# Set alpha
 sig_level <- 0.05
 
 # method for adjustments for confidence intervals and setting widths for comparison. 
@@ -103,16 +122,6 @@ ci_adjust <- "BH"
 # intervals (e.g. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC524673/)
 # should probably allow alternatives to be 0.9, 0.95 or 0.99
 ci_level <- 0.84
-
-# set maximum proportion of missing data allowed in a variable before it is
-# excluded. 20% seems to work reasonably - probably should restrict the maximum
-# value to something like 30 or 40%.
-missper <- 0.2
-
-# Set minimum split size for tree models. Probably should be tied cleverly into
-# the number of varieties being compared, but can allow user to push this back or
-# forth if they want
-minsplit <- ceiling(nrow(cmdata) * 0.1)
 
 # participant report params 
 info_table_items <- c() #info.table.items <- c("variety 1", "variety 2", "variety 3")
