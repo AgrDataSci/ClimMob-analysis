@@ -7,11 +7,11 @@
 # Updated 19Feb2020
 # ................................................................
 # ................................................................
- args <- c("dev/data/data.json", "dev/data/info.json", "output",
-            "TRUE","en","docx", "participant","item")
+# args <- c("dev/data/data.json", "dev/data/info.json", "output",
+#            "TRUE","en","docx", "participant","item")
 
 # get the arguments from server's call
-#args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
 pathname    <- args[3] # the path where results will be written
@@ -20,6 +20,7 @@ language    <- args[5] # the language to write the report "en" for english and "
 extension   <- args[6] # report file format it can be "docx", "pdf", and "html"
 ranker      <- args[7] # how the system will refer to participants/farmers
 option      <- args[8] # how the system will refer to tested items
+fullpath    <- args[9] # this is backward path
 
 # ................................................................
 # ................................................................
@@ -125,7 +126,7 @@ if (!require("ggplot2")){
   library("ggplot2")
 }
 
-source("R/functions.R")
+source(paste0(fullpath, "/R/functions.R"))
 
 # ................................................................
 # ................................................................
@@ -209,9 +210,7 @@ info_table_typeinfo <- "" #info.table.typeinfo <- "expert advice"
 # ................................................................
 # ................................................................
 # Run analysis ####
-source("R/analysis_climmob.R")
-
-
+source(paste0(fullpath, "/R/analysis_climmob.R"))
 
 # ................................................................
 # ................................................................
@@ -226,7 +225,7 @@ output_format <- ifelse(extension == "docx","word_document",
 
 # produce main report if output type is "summary" or "both"
 dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
-rmarkdown::render(paste0("report/",language,"/mainreport/mainreport.Rmd"),
+rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport.Rmd"),
                   output_dir = pathname,
                   output_format = output_format,
                   output_file = paste0(projname,"_report",".",extension))
