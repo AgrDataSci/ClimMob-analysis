@@ -7,12 +7,12 @@
 # Updated 19Feb2020
 # ................................................................
 # ................................................................
-args <- c("dev/data/run_fine/data.json", "dev/data/run_fine/info.json", 
-          "output/run_fine/", "TRUE","en","docx", 
-          "participant","item", getwd())
+# args <- c("dev/data/gosset/data.json", "dev/data/gosset/info.json", 
+#           "output/gosset/", "TRUE","en","docx", 
+#           "participant","chocolate", getwd())
 
 # get the arguments from server's call
-# args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
 pathname    <- args[3] # the path where results will be written
@@ -175,6 +175,15 @@ itemnames <- names(itemnames)
 
 # number of questions
 nquest <- pars$chars$n_quest[1]
+
+# define which function should be called to build the rankings
+if (ncomp == 3) {
+  callfor <- "rank_tricot"
+}
+
+if (ncomp > 3) {
+  callfor <- "rank_numeric"
+}
 
 # ................................................................
 # ................................................................

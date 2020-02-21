@@ -177,7 +177,7 @@ if (isTRUE(gender)) {
 overall <- trait_list[[1]]
 
 if (isTRUE(overallVSlocal)) {
-  if (ncomp == 3){
+  if (ncomp == 3) {
     keep <- overall$keep2 & overall$keep
     
     R <- rank_tricot(cmdata[keep, ],
@@ -204,7 +204,7 @@ if (isFALSE(overallVSlocal)) {
                      input = overall$input)
   }
   
-  if (ncomp == 3){
+  if (ncomp > 3){
     R <- rank_numeric(cmdata[keep, ],
                       items = itemnames,
                       input = overall$input)
