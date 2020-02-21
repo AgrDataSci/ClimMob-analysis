@@ -1,10 +1,20 @@
 **`r other_traits_list[[i]]$fullname`**
 
 ```{r}
+if (ncomp == 3) {
+  RR <- rank_tricot(data = cmdata[other_traits_list[[i]]$keep, ],
+                    items = itemnames,
+                    input = other_traits_list[[i]]$input)
+}
 
-RR <- rank_tricot(data = cmdata[other_traits_list[[i]]$keep, ],
-                              items = itemnames,
-                              input = other_traits_list[[i]]$input)
+if (ncomp > 3) {
+  RR <- rank_numeric(data = cmdata[other_traits_list[[i]]$keep, ],
+                     items = itemnames,
+                     input = other_traits_list[[i]]$input)
+}
+
+
+
 
 cont_t <- summarise_victories(RR)
 ```
