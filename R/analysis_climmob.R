@@ -11,12 +11,12 @@
 # Organise the rankings and check for missing data ####
 trait <- pars$chars$char
 trait_full <- pars$chars$char_full
-overallVSlocal <- !is.null(pars$perf)
+overallVSlocal <- length(pars$perf) > 0
 
 # check if overall is the first component
 # it should always be the first as sorted in ClimMobTools:::.decode_pars()
 of <- which(grepl("overall", trait))[1] ==  1
-if(!of) {
+if(isFALSE(of)) {
   warning("Overall comparison is missing\n")
 }
 
@@ -142,16 +142,19 @@ itemtable$x <- with(itemtable,
 names(itemtable) <- c(Option, "Freq", "Relative freq")
 
 # check if gender is provided so it can be added to the itemtable
-gender <- which(grepl("gender", names(cmdata)))
+gender <- any(grepl("REG_gender", names(cmdata)))
 
-if (length(gender) == 1) {
+if (isTRUE(gender)) {
   
   dt <- unlist(itemdata)
   
-  nMan <- sum(gender == "Man", na.rm = TRUE)
-  nWom <- sum(gender == "Woman", na.rm = TRUE)
+  gender_i <- which(grepl("REG_gender", names(cmdata)))
+  gender_i <- cmdata[, gender_i]
   
-  dt <- suppressWarnings(cbind(dt, rep(gender, ncomp)))
+  nMan <- sum(gender_i == "Man", na.rm = TRUE)
+  nWom <- sum(gender_i == "Woman", na.rm = TRUE)
+  
+  dt <- suppressWarnings(cbind(dt, rep(gender_i, ncomp)))
   
   dt <- table(dt[, 1], dt[, 2])
   
@@ -173,25 +176,57 @@ if (length(gender) == 1) {
 # find the index for overall evaluation
 overall <- trait_list[[1]]
 
-fav1 <- summarise_favourite(data  = cmdata[overall$keep, ],
-                            items = itemnames,
-                            input = overall$input) 
+if (isTRUE(overallVSlocal)) {
+  if (ncomp == 3){
+    keep <- overall$keep2 & overall$keep
+    
+    R <- rank_tricot(cmdata[keep, ],
+                     items = itemnames,
+                     input = overall$input,
+                     additional.rank = cmdata[keep, overall$ovsl])
+  }
+  
+  if (ncomp > 3) {
+    keep <- overall$keep
+    
+    R <- rank_numeric(cmdata[keep, ],
+                      items = itemnames,
+                      input = overall$input)
+  }
+}
+
+if (isFALSE(overallVSlocal)) {
+  keep <- overall$keep
+  
+  if (ncomp == 3){
+    R <- rank_tricot(cmdata[keep, ],
+                     items = itemnames,
+                     input = overall$input)
+  }
+  
+  if (ncomp == 3){
+    R <- rank_numeric(cmdata[keep, ],
+                      items = itemnames,
+                      input = overall$input)
+  }
+  
+}
+
+
+fav1 <- summarise_favourite(R) 
 
 fav2 <- fav1
 
 fav2$best <- paste0(round(fav2$best, 1), "%")
 fav2$worst <- paste0(round(fav2$worst, 1), "%")
-fav2$wins <- paste0(round(fav2$wins * 100, 1), "%")
 fav2$fav_score <- round(fav2$fav_score, 1)
 
+fav2 <- fav2[,-which(grepl("wins", names(fav2)))]
+
 names(fav2) <- c(Option,"N","Top Ranked","Bottom Ranked",
-                 "Contests Won","Net Favourability Score")
+                 "Net Favourability Score")
 
 # Contest Plots
-R <- rank_tricot(data  = cmdata[overall$keep, ],
-                 items = itemnames,
-                 input = overall$input) 
-
 cont1 <- summarise_dominance(R)
 
 cont2 <- summarise_victories(R)
@@ -213,21 +248,42 @@ if (length(other_traits) > 0) {
   keep <- rowSums(keep)
   keep <- keep == length(trait_list)
   
-  compare_to <- rank_tricot(cmdata[keep, ], 
-                            items = itemnames,
-                            input = overall$input)
+  if (ncomp == 3) {
+    compare_to <- rank_tricot(cmdata[keep, ], 
+                              items = itemnames,
+                              input = overall$input)
+  }
+  
+  if (ncomp > 3) {
+    compare_to <- rank_numeric(cmdata[keep, ], 
+                               items = itemnames,
+                               input = overall$input)
+  }
+
   
   compare_with <- list()
-  for (i in seq_along(other_traits)) {
-    
-    ot <- trait_list[[other_traits[i]]]
-  
-    otr <- rank_tricot(cmdata[keep, ],
-                       items = itemnames,
-                       input = ot$input)  
-  
-    compare_with[[i]] <- otr
+  if (ncomp == 3) {
+    for (i in seq_along(other_traits)) {
       
+      ot <- trait_list[[other_traits[i]]]
+      
+      otr <- rank_tricot(cmdata[keep, ],
+                         items = itemnames,
+                         input = ot$input)  
+      compare_with[[i]] <- otr
+    }
+  }
+  
+  if (ncomp > 3) {
+    for (i in seq_along(other_traits)) {
+      
+      ot <- trait_list[[other_traits[i]]]
+      
+      otr <- rank_numeric(cmdata[keep, ],
+                          items = itemnames,
+                          input = ot$input)  
+      compare_with[[i]] <- otr
+    }
   }
   
 
@@ -261,12 +317,6 @@ if (length(other_traits) > 0) {
 # .......................................................
 # .......................................................
 # PlackettLuce Model ####
-
-# overall model
-# if (overallVSlocal) {
-#   warning("This process is not implemented yet\n")
-# }
-
 mod_overall <- PlackettLuce(R)
 
 model_summaries <- multcompPL(mod_overall, adjust = ci_adjust)
@@ -294,9 +344,42 @@ for (i in seq_along(other_traits)){
   ot <- other_traits[i]
   ot <- trait_list[[ot]]
   
-  Rot <- rank_tricot(data  = cmdata[ot$keep, ],
-                     items = itemnames,
-                     input = ot$input) 
+  if (isTRUE(overallVSlocal)) {
+    if (ncomp == 3) {
+      keep <- overall$keep2 & ot$keep
+      
+      Rot <- rank_tricot(cmdata[keep, ],
+                         items = itemnames,
+                         input = ot$input,
+                         additional.rank = cmdata[keep, overall$ovsl])
+    }
+    
+    if (ncomp > 3) {
+      keep <- overall$keep2 & ot$keep
+      
+      Rot <- rank_numeric(cmdata[keep, ],
+                          items = itemnames,
+                          input = ot$input)
+    }
+  }
+  
+  if (isFALSE(overallVSlocal)) {
+    keep <- ot$keep
+    if (ncomp == 3){
+      Rot <- rank_tricot(data  = cmdata[keep, ],
+                         items = itemnames,
+                         input = ot$input) 
+    }
+    
+    if (ncomp > 3) {
+      Rot <- rank_numeric(data  = cmdata[keep, ],
+                          items = itemnames,
+                          input = ot$input) 
+    }
+    
+  }
+  
+ 
   
   contests <- list()
   contests[[1]] <- summarise_dominance(Rot)
@@ -373,23 +456,44 @@ nc <- which(adjCV == min(adjCV))
 # .......................................................
 # .......................................................
 # Analysis with explanatory variables ####
-if (overallVSlocal) {
-  # apply filter over missing data in evaluation and explanatory variables
-  keep <- overall$keep2 & expvar_list$keep
+if (isTRUE(overallVSlocal)) {
+  if (ncomp == 3) {
+    keep <- overall$keep2 & expvar_list$keep
+    
+    G <- rank_tricot(cmdata[keep, ],
+                     items = itemnames,
+                     input = overall$input,
+                     additional.rank = cmdata[keep, overall$ovsl], 
+                     group = TRUE)
+  }
   
-  G <- rank_tricot(cmdata[keep, ],
-                   items = itemnames,
-                   input = overall$input,
-                   additional.rank = cmdata[keep, overall$ovsl], 
-                   group = TRUE)
-} else {
+  if (ncomp > 3) {
+    keep <- overall$keep2 & expvar_list$keep
+    
+    G <- rank_numeric(cmdata[keep, ],
+                      items = itemnames,
+                      input = overall$input,
+                      group = TRUE)
+  }
   
+} 
+
+if (isFALSE(overallVSlocal)) {
   keep <- overall$keep & expvar_list$keep
+  if (ncomp == 3) {
+    G <- rank_tricot(cmdata[keep, ],
+                     items = itemnames,
+                     input = overall$input, 
+                     group = TRUE)
+  }
   
-  G <- rank_tricot(cmdata[keep, ],
-                   items = itemnames,
-                   input = overall$input, 
-                   group = TRUE)
+  if (ncomp > 3) {
+    G <- rank_numeric(cmdata[keep, ],
+                      items = itemnames,
+                      input = overall$input, 
+                      group = TRUE)
+  }
+  
 }
 
 # data frame of explanatory variables

@@ -42,9 +42,9 @@ If you publish any results generated with ClimMob, you should cite a number of a
 
 # Section 1: Headline Results
 
-Overall there were `r nranker` '`r rankers` participating in this study. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of their overall preference. In addition they also provided rankings for `r nothertraits` additional traits: 
+Overall there were `r nranker` '`r rankers` participating in this study. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of their overall preference. In addition they also provided rankings for `r nothertraits` additional characteristics: 
 
-```{r traits}
+```{r characteristics}
 
 kable(data.frame("Short name" = pars$chars$char,
                  "Question"   = pars$chars$char_full,
@@ -86,7 +86,7 @@ if (is.na(ps[1])) {
 }
 
 if (any(na.omit(ps[2:length(ps)]) < sig_level)){
-  line1 <- paste(line1,". Statistically significant differences were also found in the trait(s)",
+  line1 <- paste(line1,". Statistically significant differences were also found in the characteristic(s)",
                  paste(trait_full[ps[2:length(ps)] < sig_level], collapse=", "))
 }
 
@@ -94,11 +94,11 @@ if (any(na.omit(ps[2:length(ps)]) < sig_level)){
 
 `r  paste(line1, collapse='\n')`
 
-A summary of the p-values testing the hypothesis that there exist differences in the rankings within each of the Plackett-Luce models fitted for each of the assessed traits, and the list of `r options` which were significantly highest and lowest ranked overall, are summarised in Table 1.1.
+A summary of the p-values testing the hypothesis that there exist differences in the rankings within each of the Plackett-Luce models fitted for each of the assessed characteristics, and the list of `r options` which were significantly highest and lowest ranked overall, are summarised in Table 1.1.
 
 ```{r}
 kable(ptab, 
-      caption = paste0("Table 1.1: Summary of differences found in ",options," by trait"))
+      caption = paste0("Table 1.1: Summary of differences found in ",options," by characteristic"))
 ```
 
 See Section 3 for further details.
@@ -176,25 +176,25 @@ if(length(siglist)>0){
 
 See Section 4 for further details.
 
-## Relationships between traits
+## Relationships between characteristics
 
-Table 1.3 shows, for each trait in the study, the frequency with which the rankings matched with the overall ranking.
+Table 1.3 shows, for each characteristic in the study, the frequency with which the rankings matched with the overall ranking.
 
-The trait which had the strongest relationship with the overall ranking was `r  strongest_link[1]`. Overall the rankings for `r  strongest_link[1]` matched the rankings for the overall ranking `r strongest_link[2]`% of the time.
+The characteristic which had the strongest relationship with the overall ranking was `r  strongest_link[1]`. Overall the rankings for `r  strongest_link[1]` matched the rankings for the overall ranking `r strongest_link[2]`% of the time.
 
-The trait which had the weakest relationship with the overall ranking was `r  weakest_link[1]`. Overall the rankings for `r  weakest_link[1]` matched the rankings for the overall ranking only `r  weakest_link[2]`% of the time.
+The characteristic which had the weakest relationship with the overall ranking was `r  weakest_link[1]`. Overall the rankings for `r  weakest_link[1]` matched the rankings for the overall ranking only `r  weakest_link[2]`% of the time.
 
 
 
 ```{r agree-table}
 knitr::kable(agreement_table[,1:2],
-             caption="Table 1.3: Relationship between individual trait assessment and overall assesment")
+             caption="Table 1.3: Relationship between individual characteristic assessment and overall assesment")
 ```
 
 See Section 5 for further details.
 
 
-# Section 2: Data Summary and Exploratory Analysis of Traits
+# Section 2: Data Summary and Exploratory Analysis of characteristics
 
 ## Assessment of `r options` 
 
@@ -231,11 +231,11 @@ The `r option` `r fav1[[1,1]]` was the most preferred `r option` overall being r
 
 `r favsentence`
 
-### Other Traits  
+### Other characteristics  
 
-Net favourability scores are shown below for the other traits assessed in this study.
+Net favourability scores are shown below for the other characteristics assessed in this study.
 
-```{r, traitsplots}
+```{r, characteristicsplots}
 trait_summaries = NULL
 
 other_traits_list <- trait_list[other_traits]
@@ -243,7 +243,8 @@ other_traits_list <- trait_list[other_traits]
 if(length(other_traits_list) > 0) {
   for(i in seq_along(other_traits_list)){
     trait_summaries<-c(trait_summaries,
-                       knitr::knit_child("trait_analysis.Rmd", 
+                       knitr::knit_child(paste0(fullpath, "/report/",
+                                                language, "/mainreport/trait_analysis.Rmd"), 
                                          quiet=TRUE))
 }  
 }
@@ -263,22 +264,23 @@ Appendix B contains the full data for each pairwise comparison of the varieties,
 
 Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the trial. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the panelled `r option` was ranked above the `r options` shown as bars. The most preferred `r option` is shown in the top left panel and the least preferred is shown in the bottom right panel
 
-```{r contests_bars,fig.height=12,fig.width=10, fig.cap="Figure 2.3. Head to head performance of all items using overall trait preference."}
+```{r contests_bars,fig.height=12,fig.width=10, fig.cap="Figure 2.3. Head to head performance of all items using overall characteristic preference."}
 plot(contests[[2]]) +
   ylab("Contests Preferred (%)")
 
 ```
 
-### Other Traits 
+### Other characteristics 
 
-Results from the pairwise contests of the other individual traits assessed are shown below. 
+Results from the pairwise contests of the other individual characteristics assessed are shown below. 
 
 ```{r pairsplots}
 trait_pairs1 = NULL
 if(length(other_traits_list) > 0) {
   for(i in seq_along(other_traits_list)){
     trait_pairs1 <- c(trait_pairs1,
-                      knitr::knit_child("trait_pairs.Rmd", 
+                      knitr::knit_child(paste0(fullpath, "/report/", 
+                                               language, "/mainreport/trait_pairs.Rmd"), 
                                         quiet=TRUE))
 }
 }
@@ -289,13 +291,13 @@ cat(paste(trait_pairs1, collapse = '\n'))
 ```
 
 
-## Relationship between traits  
+## Relationship between characteristics  
 
-Table 2.5 shows the relationship between the individual trait rankings and the overall rankings. Complete agreement represents the percentage of respondents for which the ranking of the `r ncomp` `r options` in respect to the trait is an exact match to the overall ranking. Best and worst agreement represents the percentage for which the best and worst `r option` for the trait matched the overall best and worst. Complete ranking agreement shows the proportion of correlation on the full ranking with the overall performance as baseline using the Kendall correlation coefficient [@Kendall1938].
+Table 2.5 shows the relationship between the individual characteristic rankings and the overall rankings. Complete agreement represents the percentage of respondents for which the ranking of the `r ncomp` `r options` in respect to the characteristic is an exact match to the overall ranking. Best and worst agreement represents the percentage for which the best and worst `r option` for the characteristic matched the overall best and worst. Complete ranking agreement shows the proportion of correlation on the full ranking with the overall performance as baseline using the Kendall correlation coefficient [@Kendall1938].
 
 ```{r agreement_table}
 kable(agreement_table,
-      caption = "Table 2.5: Relationship between individual trait assessment and overall assessment")
+      caption = "Table 2.5: Relationship between individual characteristic assessment and overall assessment")
 ```
 
 *Figure 2.5*
@@ -303,7 +305,7 @@ kable(agreement_table,
 plot(agreement)
 ```
 
-Overall the trait which had the strongest relationship with the overall ranking was `r agreement[[which.max(agreement$kendall), "labels"]]`, with identical rankings being given as the overall ranking `r paste0(round(max(agreement$kendall), 2),"%")` of the time.
+Overall the characteristic which had the strongest relationship with the overall ranking was `r agreement[[which.max(agreement$kendall), "labels"]]`, with identical rankings being given as the overall ranking `r paste0(round(max(agreement$kendall), 2),"%")` of the time.
 
 
 # Section 3: Data Summary & Exploratory Analysis of Explanatory Variables  
@@ -402,21 +404,23 @@ ggplot(data=worthscaled, aes(y = Worth, fill = Worth, group = worthscaled[,1], x
   scale_size_continuous(range=c(0.5,10),limits = c(0,1))
 ```
 
-# Section 5: Plackett-Luce Models of Other Traits
+# Section 5: Plackett-Luce Models of Other characteristics
 
-```{r, traitmodels}
+```{r, characteristicmodels}
 model_traits <- NULL
 if (length(other_traits_list) > 0) {
   for (i in seq_along(other_traits_list)){
     model_traits<-c(model_traits,
-                    knitr::knit_child("trait_models.Rmd", quiet=TRUE))
+                    knitr::knit_child(paste0(fullpath, "/report/", 
+                                             language, "/mainreport/trait_models.Rmd"), 
+                                      quiet=TRUE))
 }
 }
 
 ```
 
 
-```{r traitmodinclude, echo=FALSE, results="asis", message=FALSE, warning=FALSE}
+```{r characteristicmodinclude, echo=FALSE, results="asis", message=FALSE, warning=FALSE}
 cat(paste(model_traits, collapse = '\n'))
 ```
 

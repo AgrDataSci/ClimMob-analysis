@@ -7,8 +7,9 @@
 # Updated 19Feb2020
 # ................................................................
 # ................................................................
-args <- c("dev/data/data.json", "dev/data/info.json", "output",
-          "TRUE","en","docx", "participant","item", getwd())
+args <- c("dev/data/run_fine/data.json", "dev/data/run_fine/info.json", 
+          "output/run_fine/", "TRUE","en","docx", 
+          "participant","item", getwd())
 
 # get the arguments from server's call
 # args <- commandArgs(trailingOnly = TRUE)

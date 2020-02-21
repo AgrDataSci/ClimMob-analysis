@@ -56,7 +56,7 @@
     ],
     "Explanatory": [
         {
-            "name": "¿Utiliza Whatsapp?",
+            "name": "¿Utiliza Whatsapp con ' ?",
             "id": 1051,
             "vars": "REG_p3p"
         }

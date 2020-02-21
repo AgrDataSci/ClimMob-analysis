@@ -1,0 +1,2094 @@
+{
+    "project": {
+        "user_name": "jacobvanetten",
+        "project_cod": "WL2019",
+        "project_name": "Women Leaders 2019",
+        "project_abstract": "Exercise to guess the age of women leaders",
+        "project_tags": "course,exercise,women,leaders,age",
+        "project_pi": "Jacob van Etten",
+        "project_piemail": "jacobvanetten@gmail.com",
+        "project_active": 1,
+        "project_public": 0,
+        "project_dashboard": 1,
+        "project_regstatus": 2,
+        "project_assstatus": 1,
+        "project_createcomb": 0,
+        "project_createpkgs": 0,
+        "project_numobs": 30,
+        "project_numcom": 3,
+        "project_lat": "43.644607",
+        "project_lon": "3.9636467",
+        "project_creationdate": "2019-06-16 03:42:17",
+        "project_localvariety": 0,
+        "extra": null
+    },
+    "registry": {
+        "lkptables": [
+            {
+                "name": "REG_lkpgender",
+                "desc": "Lookup table (What is the gender ?)",
+                "fields": [
+                    {
+                        "name": "gender_cod",
+                        "desc": "Code",
+                        "key": "true"
+                    },
+                    {
+                        "name": "gender_des",
+                        "desc": "Description",
+                        "key": null
+                    }
+                ],
+                "values": [
+                    {
+                        "gender_cod": 1,
+                        "gender_des": "Male"
+                    },
+                    {
+                        "gender_cod": 2,
+                        "gender_des": "Female"
+                    }
+                ]
+            }
+        ],
+        "fields": [
+            {
+                "name": "surveyid",
+                "odktype": "",
+                "desc": "Submission ID",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "originid",
+                "odktype": "",
+                "desc": "Origin",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_deviceimei",
+                "odktype": "deviceid",
+                "desc": "Device IMEI",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_start",
+                "odktype": "start",
+                "desc": "Start of survey",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_end",
+                "odktype": "end",
+                "desc": "End of survey",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "qst162",
+                "odktype": "barcode",
+                "desc": "Package code",
+                "key": "true",
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "farmername",
+                "odktype": "text",
+                "desc": "Farmer name",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "age",
+                "odktype": "integer",
+                "desc": "How old are you?",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "gender",
+                "odktype": "select_one gender_opts",
+                "desc": "What is the gender ?",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": "true",
+                "rtable": "REG_lkpgender",
+                "rfield": "gender_cod"
+            },
+            {
+                "name": "rowuuid",
+                "odktype": "",
+                "desc": "Unique Row Identifier (UUID)",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            }
+        ]
+    },
+    "assessments": [
+        {
+            "code": "0dfe2b4467a3",
+            "desc": "Evaluation",
+            "lkptables": [
+                {
+                    "name": "ASS0dfe2b4467a3_lkpqst163",
+                    "desc": "Lookup table (Select the farmer)",
+                    "fields": [
+                        {
+                            "name": "qst163_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "qst163_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "qst163_cod": 1,
+                            "qst163_des": "P:1-Carrey"
+                        },
+                        {
+                            "qst163_cod": 2,
+                            "qst163_des": "P:2-Bela Teeken"
+                        },
+                        {
+                            "qst163_cod": 3,
+                            "qst163_des": "P:3-Henerico Kulembeka"
+                        },
+                        {
+                            "qst163_cod": 4,
+                            "qst163_des": "P:4-Mukani Moyo"
+                        },
+                        {
+                            "qst163_cod": 5,
+                            "qst163_des": "P:5-Margaret"
+                        },
+                        {
+                            "qst163_cod": 6,
+                            "qst163_des": "P:6-Lora Forsythe"
+                        },
+                        {
+                            "qst163_cod": 7,
+                            "qst163_des": "P:7-Noel"
+                        },
+                        {
+                            "qst163_cod": 8,
+                            "qst163_des": "P:8-Stephen"
+                        },
+                        {
+                            "qst163_cod": 9,
+                            "qst163_des": "P:9-Farmer"
+                        },
+                        {
+                            "qst163_cod": 10,
+                            "qst163_des": "P:10-Reuben"
+                        },
+                        {
+                            "qst163_cod": 11,
+                            "qst163_des": "P:11-Michael"
+                        },
+                        {
+                            "qst163_cod": 12,
+                            "qst163_des": "P:12-Thiago mendez"
+                        },
+                        {
+                            "qst163_cod": 13,
+                            "qst163_des": "P:13-Elizabeth"
+                        },
+                        {
+                            "qst163_cod": 14,
+                            "qst163_des": "P:14-Tom"
+                        },
+                        {
+                            "qst163_cod": 15,
+                            "qst163_des": "P:15-Marie-Angelique"
+                        },
+                        {
+                            "qst163_cod": 16,
+                            "qst163_des": "P:16-Lukas"
+                        },
+                        {
+                            "qst163_cod": 17,
+                            "qst163_des": "P:17-Bryan"
+                        },
+                        {
+                            "qst163_cod": 18,
+                            "qst163_des": "P:18-Richard"
+                        },
+                        {
+                            "qst163_cod": 19,
+                            "qst163_des": "P:19-Asrat"
+                        },
+                        {
+                            "qst163_cod": 20,
+                            "qst163_des": "P:20-Tawanda"
+                        },
+                        {
+                            "qst163_cod": 21,
+                            "qst163_des": "P:21-Kenneth"
+                        },
+                        {
+                            "qst163_cod": 22,
+                            "qst163_des": "P:22-Peter Kulakow"
+                        },
+                        {
+                            "qst163_cod": 23,
+                            "qst163_des": "P:23-Carlos"
+                        },
+                        {
+                            "qst163_cod": 24,
+                            "qst163_des": "P:24-Jacob"
+                        },
+                        {
+                            "qst163_cod": 29,
+                            "qst163_des": "P:29-Priscilla Marimo"
+                        }
+                    ]
+                },
+                {
+                    "name": "ASS0dfe2b4467a3_lkpperf_overallchar_1",
+                    "desc": "Lookup table (Overall, whichone is best A or what you usually use?)",
+                    "fields": [
+                        {
+                            "name": "perf_overallchar_1_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "perf_overallchar_1_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "perf_overallchar_1_cod": 1,
+                            "perf_overallchar_1_des": "Better"
+                        },
+                        {
+                            "perf_overallchar_1_cod": 2,
+                            "perf_overallchar_1_des": "Worst"
+                        }
+                    ]
+                },
+                {
+                    "name": "ASS0dfe2b4467a3_lkpchar_agecompare_pos",
+                    "desc": "Lookup table (Which is the oldest?)",
+                    "fields": [
+                        {
+                            "name": "char_agecompare_pos_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "char_agecompare_pos_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "char_agecompare_pos_cod": 1,
+                            "char_agecompare_pos_des": "Option A"
+                        },
+                        {
+                            "char_agecompare_pos_cod": 2,
+                            "char_agecompare_pos_des": "Option B"
+                        },
+                        {
+                            "char_agecompare_pos_cod": 3,
+                            "char_agecompare_pos_des": "Option C"
+                        }
+                    ]
+                }
+            ],
+            "fields": [
+                {
+                    "name": "surveyid",
+                    "odktype": "",
+                    "desc": "Submission ID",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "originid",
+                    "odktype": "",
+                    "desc": "Origin",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_deviceimei",
+                    "odktype": "deviceid",
+                    "desc": "Device IMEI",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_start",
+                    "odktype": "start",
+                    "desc": "Start of survey",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_end",
+                    "odktype": "end",
+                    "desc": "End of survey",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "qst163",
+                    "odktype": "select_one qst163_opts",
+                    "desc": "Select the farmer",
+                    "key": "true",
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS0dfe2b4467a3_lkpqst163",
+                    "rfield": "qst163_cod"
+                },
+                {
+                    "name": "perf_overallchar_1",
+                    "odktype": "select_one perf_overallchar_1_opts",
+                    "desc": "Overall, whichone is best A or what you usually use?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS0dfe2b4467a3_lkpperf_overallchar_1",
+                    "rfield": "perf_overallchar_1_cod"
+                },
+                {
+                    "name": "perf_overallchar_2",
+                    "odktype": "select_one perf_overallchar_2_opts",
+                    "desc": "Overall, whichone is best B or what you usually use?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS0dfe2b4467a3_lkpperf_overallchar_1",
+                    "rfield": "perf_overallchar_1_cod"
+                },
+                {
+                    "name": "perf_overallchar_3",
+                    "odktype": "select_one perf_overallchar_3_opts",
+                    "desc": "Overall, whichone is best C or what you usually use?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS0dfe2b4467a3_lkpperf_overallchar_1",
+                    "rfield": "perf_overallchar_1_cod"
+                },
+                {
+                    "name": "char_agecompare_pos",
+                    "odktype": "select_one char_agecompare_pos_opts",
+                    "desc": "Which is the oldest?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS0dfe2b4467a3_lkpchar_agecompare_pos",
+                    "rfield": "char_agecompare_pos_cod"
+                },
+                {
+                    "name": "char_agecompare_neg",
+                    "odktype": "select_one char_agecompare_neg_opts",
+                    "desc": "Which is the youngest?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS0dfe2b4467a3_lkpchar_agecompare_pos",
+                    "rfield": "char_agecompare_pos_cod"
+                },
+                {
+                    "name": "farmgoelocation",
+                    "odktype": "geopoint",
+                    "desc": "Farm Geolocation",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "char_overallperf_pos",
+                    "odktype": "select_one char_overallperf_pos_opts",
+                    "desc": "Overall, which option performed better?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS0dfe2b4467a3_lkpchar_agecompare_pos",
+                    "rfield": "char_agecompare_pos_cod"
+                },
+                {
+                    "name": "char_overallperf_neg",
+                    "odktype": "select_one char_overallperf_neg_opts",
+                    "desc": "Overall, which option performed worst?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS0dfe2b4467a3_lkpchar_agecompare_pos",
+                    "rfield": "char_agecompare_pos_cod"
+                },
+                {
+                    "name": "rowuuid",
+                    "odktype": "",
+                    "desc": "Unique Row Identifier (UUID)",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                }
+            ]
+        }
+    ],
+    "packages": [
+        {
+            "package_id": 1,
+            "farmername": "Carrey",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 2,
+            "farmername": "Bela Teeken",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 3,
+            "farmername": "Henerico Kulembeka",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 4,
+            "farmername": "Mukani Moyo",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 5,
+            "farmername": "Margaret",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 6,
+            "farmername": "Lora Forsythe",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 7,
+            "farmername": "Noel",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 8,
+            "farmername": "Stephen",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 9,
+            "farmername": "Farmer",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 10,
+            "farmername": "Reuben",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 11,
+            "farmername": "Michael",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 12,
+            "farmername": "Thiago mendez",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 13,
+            "farmername": "Elizabeth ",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 14,
+            "farmername": "Tom",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 15,
+            "farmername": "Marie-Angelique",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 16,
+            "farmername": "Lukas",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 17,
+            "farmername": "Bryan ",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 18,
+            "farmername": "Richard",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 19,
+            "farmername": "Asrat",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 20,
+            "farmername": "Tawanda",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 21,
+            "farmername": "Kenneth",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 22,
+            "farmername": "Peter Kulakow",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 23,
+            "farmername": "Carlos",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Haley"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 24,
+            "farmername": "Jacob",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "May"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Ardern"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 29,
+            "farmername": "Priscilla Marimo",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Caputova"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Merkel"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Leading women",
+                            "alias_name": "Zewde"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "specialfields": [
+        {
+            "type": "Performance",
+            "name": "ASS0dfe2b4467a3_perf_overallchar_1",
+            "desc": "Overall, whichone is best A or what you usually use?"
+        },
+        {
+            "type": "Performance",
+            "name": "ASS0dfe2b4467a3_perf_overallchar_2",
+            "desc": "Overall, whichone is best B or what you usually use?"
+        },
+        {
+            "type": "Performance",
+            "name": "ASS0dfe2b4467a3_perf_overallchar_3",
+            "desc": "Overall, whichone is best C or what you usually use?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASS0dfe2b4467a3_char_agecompare_pos",
+            "desc": "Which is the oldest?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASS0dfe2b4467a3_char_agecompare_neg",
+            "desc": "Which is the youngest?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASS0dfe2b4467a3_char_overallperf_pos",
+            "desc": "Overall, which option performed better?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASS0dfe2b4467a3_char_overallperf_neg",
+            "desc": "Overall, which option performed worst?"
+        }
+    ],
+    "data": [
+        {
+            "REG_surveyid": "488f6b99-718f-4d01-b0e1-d1dd31e655ca",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "861957033866129",
+            "REG_clm_start": "2019-06-18 09:35:14",
+            "REG_clm_end": "2019-06-18 09:35:42",
+            "REG_qst162": "1",
+            "REG_farmername": "Carrey",
+            "REG_age": 65,
+            "REG_gender": 1,
+            "REG_rowuuid": "1e21fffb-fe2e-42d2-b2c7-89db26d5cc47",
+            "ASS0dfe2b4467a3_surveyid": "aa5f1566-17c6-464a-8c8a-bf2c8729216a",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "861957033866129",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:47:52",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:52:45",
+            "ASS0dfe2b4467a3_qst163": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 1,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 3,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.606488586203156 3.8810081682564634 135.4968028074719 96.0",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 1,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 3,
+            "ASS0dfe2b4467a3_rowuuid": "3821065b-7d83-4a78-8ed1-f7d6122018e7"
+        },
+        {
+            "REG_surveyid": "84356c7c-7b5e-43f7-9318-769c9fc0f6a1",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "861957033866129",
+            "REG_clm_start": "2019-06-18 09:38:47",
+            "REG_clm_end": "2019-06-18 09:39:19",
+            "REG_qst162": "10",
+            "REG_farmername": "Reuben",
+            "REG_age": 41,
+            "REG_gender": 1,
+            "REG_rowuuid": "52dfc206-1f3d-421b-94e1-a6e0459fae1a",
+            "ASS0dfe2b4467a3_surveyid": "6dcb46dd-07c9-4540-b3a9-bd3e011e4642",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 10:06:06",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:06:46",
+            "ASS0dfe2b4467a3_qst163": 10,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067352 3.8810387 0.0 18.899",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 2,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 3,
+            "ASS0dfe2b4467a3_rowuuid": "d393835b-3d8e-43c2-b446-573a3a8ef391"
+        },
+        {
+            "REG_surveyid": "ac7beafa-3bb4-4f16-af3e-6b094b9ddf38",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "861957033866129",
+            "REG_clm_start": "2019-06-18 09:36:27",
+            "REG_clm_end": "2019-06-18 09:37:28",
+            "REG_qst162": "11",
+            "REG_farmername": "Michael",
+            "REG_age": 61,
+            "REG_gender": 1,
+            "REG_rowuuid": "187f12a8-6b66-4c4e-8bbb-49a6252f4987",
+            "ASS0dfe2b4467a3_surveyid": "29471107-f845-4132-9480-8fca658d18af",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "861957033866129",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:59:46",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:02:56",
+            "ASS0dfe2b4467a3_qst163": 11,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 3,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.607214116991784 3.8811717739649163 -297.7800703599582 8.0",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 2,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "4632143e-0247-4482-bfd0-8a5a81a650e2"
+        },
+        {
+            "REG_surveyid": "78091e24-c7b8-49e4-bb2b-5aa2b70f437c",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "861957033866129",
+            "REG_clm_start": "2019-06-18 09:35:45",
+            "REG_clm_end": "2019-06-18 09:36:23",
+            "REG_qst162": "12",
+            "REG_farmername": "Thiago mendez",
+            "REG_age": 36,
+            "REG_gender": 1,
+            "REG_rowuuid": "80867459-c28a-4e8e-8828-46af86f0c64d",
+            "ASS0dfe2b4467a3_surveyid": "988546ac-b3d1-4e17-86d5-0c87e0702caf",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "861957033866129",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:55:30",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:57:07",
+            "ASS0dfe2b4467a3_qst163": 12,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 1,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 2,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60725193601845 3.881681991949548 -144.49872687640976 96.0",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "e1f0aa7e-2f20-4de2-bcef-d90b1c64a655"
+        },
+        {
+            "REG_surveyid": "09d2f154-3b73-4cc6-ba3d-50186f3f4a28",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:08:51",
+            "REG_clm_end": "2019-06-18 09:34:12",
+            "REG_qst162": "13",
+            "REG_farmername": "Elizabeth ",
+            "REG_age": 60,
+            "REG_gender": 2,
+            "REG_rowuuid": "1a347211-aa43-433e-b886-f478f8894cac",
+            "ASS0dfe2b4467a3_surveyid": "c30db3c4-6bf3-42e5-ae3e-0a310cb7c1ac",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:47:43",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:48:49",
+            "ASS0dfe2b4467a3_qst163": 13,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 3,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 2,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067038 3.8810524 0.0 17.559",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "39339546-1237-456a-a0fa-f8fafe76d5e0"
+        },
+        {
+            "REG_surveyid": "5c242a82-53fa-4c3b-8741-bf87eb88a8e3",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:34:22",
+            "REG_clm_end": "2019-06-18 09:34:38",
+            "REG_qst162": "14",
+            "REG_farmername": "Tom",
+            "REG_age": 60,
+            "REG_gender": 1,
+            "REG_rowuuid": "9d620e8a-7db3-416b-af98-e2ab8d7c54dd",
+            "ASS0dfe2b4467a3_surveyid": "cccf039e-fe96-4690-bcda-f9bcd729ffc0",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:48:57",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:50:09",
+            "ASS0dfe2b4467a3_qst163": 14,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067034 3.8810533 0.0 17.442",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 1,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "2087451f-f204-4596-8445-416ab0619557"
+        },
+        {
+            "REG_surveyid": "afd87196-3286-4830-b498-9c63f7e0fc7f",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:34:48",
+            "REG_clm_end": "2019-06-18 09:35:20",
+            "REG_qst162": "15",
+            "REG_farmername": "Marie-Angelique",
+            "REG_age": 35,
+            "REG_gender": 2,
+            "REG_rowuuid": "465e5096-2569-4f49-95e1-f1c80d9d95d7",
+            "ASS0dfe2b4467a3_surveyid": "871048bc-a128-4552-b201-785bda5db88e",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:50:13",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:50:53",
+            "ASS0dfe2b4467a3_qst163": 15,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 1,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 3,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067063 3.8810536 0.0 17.472",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 1,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "2289d678-9b4e-40e7-a93f-f5d05cdf6c03"
+        },
+        {
+            "REG_surveyid": "844a9a01-21bd-47be-b396-b0bc523c3d9a",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:35:28",
+            "REG_clm_end": "2019-06-18 09:35:52",
+            "REG_qst162": "16",
+            "REG_farmername": "Lukas",
+            "REG_age": 52,
+            "REG_gender": 1,
+            "REG_rowuuid": "343e2ce9-d9a5-4634-ae2d-8e84c070a5f0",
+            "ASS0dfe2b4467a3_surveyid": "b80b39b6-9c40-4731-adf9-56b75b8944eb",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:50:59",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:51:42",
+            "ASS0dfe2b4467a3_qst163": 16,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 1,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 3,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067183 3.8810487 0.0 17.367",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "0c5f26ab-3b3a-4ce3-8982-8bf313fbd1b8"
+        },
+        {
+            "REG_surveyid": "7647ad25-007e-4a60-b488-eec666897a02",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:36:13",
+            "REG_clm_end": "2019-06-18 09:36:39",
+            "REG_qst162": "17",
+            "REG_farmername": "Bryan ",
+            "REG_age": 1700,
+            "REG_gender": 1,
+            "REG_rowuuid": "ad32948d-82e0-43e5-81a0-7df1f4725ed7",
+            "ASS0dfe2b4467a3_surveyid": "395822da-8e17-4176-8f01-90734eba120a",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:52:04",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:52:44",
+            "ASS0dfe2b4467a3_qst163": 17,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067117 3.8810579 0.0 17.985",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 2,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "0f0081c0-929d-4591-9ab2-9ac3835b9fd4"
+        },
+        {
+            "REG_surveyid": "94c1d2dc-d02e-421c-b0d7-c89816cc2fde",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:36:50",
+            "REG_clm_end": "2019-06-18 09:37:07",
+            "REG_qst162": "18",
+            "REG_farmername": "Richard",
+            "REG_age": 49,
+            "REG_gender": 1,
+            "REG_rowuuid": "a544467a-6c43-42fe-b8bc-5b95e7abe0bc",
+            "ASS0dfe2b4467a3_surveyid": "da4dcef6-5576-44e6-9562-bfd0ae23c1cc",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "861957033866129",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:52:55",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:55:27",
+            "ASS0dfe2b4467a3_qst163": 18,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 3,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60712802 3.881197691 52.48563629 16.0",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 1,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "03e7fb90-7d8c-4049-917b-593fb5631ef4"
+        },
+        {
+            "REG_surveyid": "004da381-3bcf-423d-a442-72a3d45cd8cb",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:37:17",
+            "REG_clm_end": "2019-06-18 09:37:34",
+            "REG_qst162": "19",
+            "REG_farmername": "Asrat",
+            "REG_age": 45,
+            "REG_gender": 1,
+            "REG_rowuuid": "66a1eab5-426f-4694-ab02-d4594e2a8855",
+            "ASS0dfe2b4467a3_surveyid": "11c6bc0a-3f89-4894-8c17-a1784eb19306",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:55:48",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:56:43",
+            "ASS0dfe2b4467a3_qst163": 19,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 3,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067123 3.8810379 0.0 18.071",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 1,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 3,
+            "ASS0dfe2b4467a3_rowuuid": "e596f92f-143c-47d0-979d-0878ba7bb65f"
+        },
+        {
+            "REG_surveyid": "f74d8230-bf14-4caa-b045-0bc654243b41",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "351856086395761",
+            "REG_clm_start": "2019-06-18 09:36:45",
+            "REG_clm_end": "2019-06-18 09:37:10",
+            "REG_qst162": "2",
+            "REG_farmername": "Bela Teeken",
+            "REG_age": 40,
+            "REG_gender": 1,
+            "REG_rowuuid": "cdb10eef-429f-46a3-8f10-3dd52c2ddec2",
+            "ASS0dfe2b4467a3_surveyid": "0967b532-a041-4542-8df2-caba38f7fb26",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "351856086395761",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:54:57",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:57:25",
+            "ASS0dfe2b4467a3_qst163": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 2,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 1,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 3,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60678426 3.88130645 89.0 4.288",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "2445e061-5fa2-4bfa-bcef-f3db0d324e5c"
+        },
+        {
+            "REG_surveyid": "fc650be1-607f-4474-990f-b1380a398560",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:37:43",
+            "REG_clm_end": "2019-06-18 09:38:07",
+            "REG_qst162": "20",
+            "REG_farmername": "Tawanda",
+            "REG_age": 42,
+            "REG_gender": 1,
+            "REG_rowuuid": "64d1dbdb-84c8-4d51-a047-c363e6ddb747",
+            "ASS0dfe2b4467a3_surveyid": "0a63fa4c-dec1-4724-823c-12302a7707d2",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:57:22",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:57:59",
+            "ASS0dfe2b4467a3_qst163": 20,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 3,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 2,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067118 3.8810352 0.0 19.306",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "eb8edc44-e9e8-40f4-98a9-038b7668f68b"
+        },
+        {
+            "REG_surveyid": "0622ebbb-cacd-46be-bfd7-5bba4fdae72f",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:38:18",
+            "REG_clm_end": "2019-06-18 09:38:33",
+            "REG_qst162": "21",
+            "REG_farmername": "Kenneth",
+            "REG_age": 42,
+            "REG_gender": 1,
+            "REG_rowuuid": "352c6c33-b17d-4a00-9f2d-17190c4fb551",
+            "ASS0dfe2b4467a3_surveyid": "c97e7056-33de-4d65-be69-67f0cd4eb066",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "351856086395761",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 10:06:33",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:07:26",
+            "ASS0dfe2b4467a3_qst163": 21,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 2,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 3,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 2,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60669676 3.88122666 88.0 6.432",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 2,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "beadfa37-501f-4bbd-a5c8-c58100846423"
+        },
+        {
+            "REG_surveyid": "a62c1c47-dc3b-4dec-ab77-e53546b41f13",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "351856086395761",
+            "REG_clm_start": "2019-06-18 09:39:07",
+            "REG_clm_end": "2019-06-18 09:39:27",
+            "REG_qst162": "22",
+            "REG_farmername": "Peter Kulakow",
+            "REG_age": 40,
+            "REG_gender": 1,
+            "REG_rowuuid": "60d13407-cb36-4f16-aedb-c34e702cf304",
+            "ASS0dfe2b4467a3_surveyid": "52a9e0fe-b607-457d-add4-4915bbf4283e",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "351856086395761",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:49:42",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:54:21",
+            "ASS0dfe2b4467a3_qst163": 22,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 2,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60668698 3.88112638 90.0 4.288",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 2,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 3,
+            "ASS0dfe2b4467a3_rowuuid": "fc0755cd-6464-46d7-80ce-191cd60179b0"
+        },
+        {
+            "REG_surveyid": "664c4019-6aee-4b29-bd4f-2d905329f0cf",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "861957033866129",
+            "REG_clm_start": "2019-06-18 09:40:24",
+            "REG_clm_end": "2019-06-18 09:40:37",
+            "REG_qst162": "23",
+            "REG_farmername": "Carlos",
+            "REG_age": 41,
+            "REG_gender": 1,
+            "REG_rowuuid": "8b285d67-a36e-4436-bc2a-ea1621d73309",
+            "ASS0dfe2b4467a3_surveyid": "b63b5a0c-6168-450a-abbf-7aa192e1a0aa",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "861957033866129",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 10:40:32",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:41:19",
+            "ASS0dfe2b4467a3_qst163": 23,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 2,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60679489079215 3.8810653802134634 80.87684523824322 128.0",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 1,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "744ecca1-5a5d-4071-a75d-442d4a24e37c"
+        },
+        {
+            "REG_surveyid": "9047aa0e-193c-44bb-a05c-be51b5bc5b73",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "867599042464449",
+            "REG_clm_start": "2019-06-18 09:40:24",
+            "REG_clm_end": "2019-06-18 09:40:38",
+            "REG_qst162": "24",
+            "REG_farmername": "Jacob",
+            "REG_age": 41,
+            "REG_gender": 1,
+            "REG_rowuuid": "f7595cbd-0158-44b6-964e-c73c9f2c11a5",
+            "ASS0dfe2b4467a3_surveyid": "6e4d32fc-04f0-4ec9-b338-6a8e46e7b7c8",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "861957033866129",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 10:42:45",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:45:22",
+            "ASS0dfe2b4467a3_qst163": 24,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 3,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60648856588999 3.8796904716962493 188.4825066862474 128.0",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 1,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "ba49c01a-4db6-4e5c-bc9e-355176dae930"
+        },
+        {
+            "REG_surveyid": "7069c25e-f794-4bef-bd03-56c56efa537b",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "351856086395761",
+            "REG_clm_start": "2019-06-18 09:38:02",
+            "REG_clm_end": "2019-06-18 09:38:40",
+            "REG_qst162": "29",
+            "REG_farmername": "Priscilla Marimo",
+            "REG_age": 40,
+            "REG_gender": 1,
+            "REG_rowuuid": "a92bef4b-b641-409d-b0ce-d6010e00a0f3",
+            "ASS0dfe2b4467a3_surveyid": "9c037557-8f1f-4aaa-bc03-32b466948e31",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:58:09",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:01:18",
+            "ASS0dfe2b4467a3_qst163": 29,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067393 3.8810521 0.0 18.157",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 2,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "a2a2fe2f-a11c-48b0-a106-bc465dbe4c2e"
+        },
+        {
+            "REG_surveyid": "4dcef33d-9ffb-419b-a303-30fdd0302f47",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "351856086395761",
+            "REG_clm_start": "2019-06-18 09:03:36",
+            "REG_clm_end": "2019-06-18 09:35:01",
+            "REG_qst162": "3",
+            "REG_farmername": "Henerico Kulembeka",
+            "REG_age": 40,
+            "REG_gender": 1,
+            "REG_rowuuid": "4c4c5dc6-e858-4648-b0db-3b28c2afad5e",
+            "ASS0dfe2b4467a3_surveyid": "7103cc5f-e8db-4e19-90cb-fca483d943b0",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "861957033866129",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:58:35",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:59:35",
+            "ASS0dfe2b4467a3_qst163": 3,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 3,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 2,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.606651406366375 3.881306782180653 97.71438217786714 96.0",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "fb2ab16a-ca2e-4f58-a03c-f53595780067"
+        },
+        {
+            "REG_surveyid": "656389a9-5dae-4bcb-a78e-93e79cc2f5c7",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "351856086395761",
+            "REG_clm_start": "2019-06-18 09:35:16",
+            "REG_clm_end": "2019-06-18 09:35:48",
+            "REG_qst162": "4",
+            "REG_farmername": "Mukani Moyo",
+            "REG_age": 40,
+            "REG_gender": 1,
+            "REG_rowuuid": "be3b1767-130f-4134-ab02-a75349703406",
+            "ASS0dfe2b4467a3_surveyid": "07b55fba-0d43-45ec-bcb6-4a3db2dbcd5a",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "861957033866129",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:57:12",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 09:58:26",
+            "ASS0dfe2b4467a3_qst163": 4,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 3,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 2,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.607159533647035 3.8812283391470945 -199.34334050649795 3.",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "6e950c80-e372-4946-ba46-75ddf3dcc6f4"
+        },
+        {
+            "REG_surveyid": "c45eb645-aa9a-4eaa-844c-3064f64d5fce",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "352062080826724",
+            "REG_clm_start": "2019-06-18 09:36:20",
+            "REG_clm_end": "2019-06-18 09:37:35",
+            "REG_qst162": "5",
+            "REG_farmername": "Margaret",
+            "REG_age": 61,
+            "REG_gender": 2,
+            "REG_rowuuid": "1b2990f3-a692-4186-9e69-f334577a5323",
+            "ASS0dfe2b4467a3_surveyid": "7f71fecc-bec7-4109-aabb-b2c67c943cdb",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "351856086395761",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 10:00:59",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:02:11",
+            "ASS0dfe2b4467a3_qst163": 5,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60670343 3.88122425 87.0 4.288",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "ae99c29e-f90b-4b41-8741-5fff8855b323"
+        },
+        {
+            "REG_surveyid": "ddf9b5bb-0b9c-46a2-a271-1a0047d40574",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "351856086395761",
+            "REG_clm_start": "2019-06-18 09:36:00",
+            "REG_clm_end": "2019-06-18 09:36:38",
+            "REG_qst162": "6",
+            "REG_farmername": "Lora Forsythe",
+            "REG_age": 40,
+            "REG_gender": 1,
+            "REG_rowuuid": "1c5eddac-0656-418f-af6c-6eafe079c398",
+            "ASS0dfe2b4467a3_surveyid": "4f255371-46aa-49a9-be27-38cf5b85d483",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "351856086395761",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 09:57:30",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:00:49",
+            "ASS0dfe2b4467a3_qst163": 6,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 2,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 2,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60670662 3.88118455 84.0 4.288",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 3,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "79482885-655a-488a-9871-9a4606846cac"
+        },
+        {
+            "REG_surveyid": "247662b1-35fc-44b3-838e-b7bf2fcefaab",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "861957033866129",
+            "REG_clm_start": "2019-06-18 09:37:32",
+            "REG_clm_end": "2019-06-18 09:37:56",
+            "REG_qst162": "7",
+            "REG_farmername": "Noel",
+            "REG_age": 36,
+            "REG_gender": 1,
+            "REG_rowuuid": "2f55a99a-17a4-492c-a6db-1493dc668a12",
+            "ASS0dfe2b4467a3_surveyid": "26f11b34-526a-4e57-a9a1-eee8807da35e",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "867599042464449",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 10:07:29",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:08:05",
+            "ASS0dfe2b4467a3_qst163": 7,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 1,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 3,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.6067297 3.8810437 0.0 18.792",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 1,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 2,
+            "ASS0dfe2b4467a3_rowuuid": "5f2b5963-88bf-40cf-b6c0-bd3a4dfc0644"
+        },
+        {
+            "REG_surveyid": "89681144-b149-498e-992c-a198eafc2943",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "352062080826724",
+            "REG_clm_start": "2019-06-18 09:34:07",
+            "REG_clm_end": "2019-06-18 09:39:28",
+            "REG_qst162": "8",
+            "REG_farmername": "Stephen",
+            "REG_age": 36,
+            "REG_gender": 1,
+            "REG_rowuuid": "86d9ddd2-fc62-44c3-a61e-4a510f5b68d0",
+            "ASS0dfe2b4467a3_surveyid": "29138f30-ecf8-42de-b680-6cccca227add",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "351856086395761",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 10:04:13",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:05:23",
+            "ASS0dfe2b4467a3_qst163": 8,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 3,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 1,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60670066 3.88123269 89.0 4.288",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 2,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 1,
+            "ASS0dfe2b4467a3_rowuuid": "5e5fc642-1325-4826-b089-a234ca13da86"
+        },
+        {
+            "REG_surveyid": "cdf0dc5a-e5cb-47c3-8720-ef2ffe2f93b8",
+            "REG_originid": "ODKTOOLS",
+            "REG_clm_deviceimei": "861957033866129",
+            "REG_clm_start": "2019-06-18 09:38:05",
+            "REG_clm_end": "2019-06-18 09:38:36",
+            "REG_qst162": "9",
+            "REG_farmername": "Farmer",
+            "REG_age": 43,
+            "REG_gender": 1,
+            "REG_rowuuid": "87e5282f-4fb6-4749-9175-807057a9b8f2",
+            "ASS0dfe2b4467a3_surveyid": "907826f3-a944-443e-911e-f648c7bf051c",
+            "ASS0dfe2b4467a3_originid": "ODKTOOLS",
+            "ASS0dfe2b4467a3_clm_deviceimei": "351856086395761",
+            "ASS0dfe2b4467a3_clm_start": "2019-06-18 10:02:49",
+            "ASS0dfe2b4467a3_clm_end": "2019-06-18 10:04:06",
+            "ASS0dfe2b4467a3_qst163": 9,
+            "ASS0dfe2b4467a3_perf_overallchar_1": 1,
+            "ASS0dfe2b4467a3_perf_overallchar_2": 2,
+            "ASS0dfe2b4467a3_perf_overallchar_3": 1,
+            "ASS0dfe2b4467a3_char_agecompare_pos": 1,
+            "ASS0dfe2b4467a3_char_agecompare_neg": 2,
+            "ASS0dfe2b4467a3_farmgoelocation": "43.60669415 3.88122964 89.0 4.288",
+            "ASS0dfe2b4467a3_char_overallperf_pos": 2,
+            "ASS0dfe2b4467a3_char_overallperf_neg": 3,
+            "ASS0dfe2b4467a3_rowuuid": "ccd12dfa-9f63-44ce-95c9-f6b4cc81ab74"
+        }
+    ],
+    "importantfields": [
+        {
+            "type": "PackageID",
+            "field": "REG_QST162",
+            "desc": "Package ID"
+        },
+        {
+            "type": "FarmerName",
+            "field": "REG_farmername",
+            "desc": "Name of registered farmer"
+        },
+        {
+            "type": "OverallCharPos",
+            "field": "ASS0dfe2b4467a3_char_overallperf_pos",
+            "desc": "Over all characteristic positive"
+        },
+        {
+            "type": "OverallCharNeg",
+            "field": "ASS0dfe2b4467a3_char_overallperf_neg",
+            "desc": "Over all characteristic negative"
+        },
+        {
+            "type": "OverallPerf1",
+            "field": "ASS0dfe2b4467a3_perf_overallchar_1",
+            "desc": "Over all performance of A against current"
+        },
+        {
+            "type": "OverallPerf2",
+            "field": "ASS0dfe2b4467a3_perf_overallchar_2",
+            "desc": "Over all performance of B against current"
+        },
+        {
+            "type": "OverallPerf3",
+            "field": "ASS0dfe2b4467a3_perf_overallchar_3",
+            "desc": "Over all performance of C against current"
+        }
+    ]
+}
