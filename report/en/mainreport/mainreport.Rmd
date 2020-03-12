@@ -33,16 +33,16 @@ The primary goal of ClimMob is to help farmers adapt to variable and changing cl
  
 ClimMob software assigns a limited number of items (typically 3 crop varieties or agricultural practices) to each farmer, who will compare their performance. Each farmer gets a different combination of items drawn from a much larger set of items. Comparisons of this kind are thought to be a very reliable way to obtain data from human observers. Once the results of the microtasks have been collected, ClimMob builds an image of the whole set of assigned objects, combining all observations. ClimMob not only reconstructs the overall ordering of items, but also takes into account differences and similarities between observers and the conditions under which they observe. It assigns similar observers to groups that each corresponds to a different preference profile. Groups are created on the basis of whichever variables which have been collected, that are found to be significantly linked to the preferences.
  
-ClimMob uses Plackett-Luce models to analyze ranking data [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant. 
+ClimMob uses Plackett-Luce models to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'ggplot2' [@ggplot2], 'igraph' [@igraph] and 'pls' [@pls].
  
 
 ## How to cite
 
-If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. Van Etten [-@vanEtten2019tricot] introduced the crowdsourcing philosophy behind ClimMob. It is important to mention that ClimMob is implemented in `R`, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the tree results, you should mentioned that ClimMob applies the Plackett-Luce model published by Turner et al. [-@Turner2020]. To cite ClimMob itself, mention van Etten et al. [-@climmob].
+If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. Van Etten et al. [-@vanEtten2019tricot] introduced the crowdsourcing philosophy behind ClimMob. It is important to mention that ClimMob is implemented in R, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the tree results, you should mentioned that ClimMob applies the Plackett-Luce model published by Turner et al. [-@Turner2020]. To cite ClimMob itself, mention van Etten et al.[-@climmob].
 
 # Section 1: Headline Results
 
-Overall there were `r nranker` '`r rankers` participating in this study. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of their overall preference. In addition they also provided rankings for `r nothertraits` additional characteristics: 
+Overall there were `r nranker` `r rankers` participating in this study. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of their overall preference. In addition they also provided rankings for `r nothertraits` additional characteristics: 
 
 ```{r characteristics}
 
@@ -53,6 +53,8 @@ kable(data.frame("Short name" = pars$chars$char,
 
 ```
 
+\
+\
 
 Table 1 provides a list of the `r options` assessed within this trial, with the frequency and percentage of `r rankers` who assessed each `r option`.
 
@@ -61,6 +63,19 @@ kable(itemtable,
       caption = paste0("Table 1: Frequency of ", options," assessed"),
       align = "l")
 ```
+
+\
+\
+
+This is how the different `r options` were connected.
+
+```{r network, fig.width=7,fig.height=7, fig.cap="Figure 1. Network representation of ranked options."}
+igraph::plot.igraph(net,
+                    edge.arrow.size = 0.5) 
+```
+
+\
+\
 
 ## Overall Differences in Rankings
 
@@ -95,6 +110,7 @@ if (any(na.omit(ps[2:length(ps)]) < sig_level)){
 `r  paste(line1, collapse='\n')`
 
 A summary of the p-values testing the hypothesis that there exist differences in the rankings within each of the Plackett-Luce models fitted for each of the assessed characteristics, and the list of `r options` which were significantly highest and lowest ranked overall, are summarised in Table 1.1.
+\
 
 ```{r}
 kable(ptab, 
@@ -102,6 +118,8 @@ kable(ptab,
 ```
 
 See Section 3 for further details.
+
+\
 
 ## Effect of covariates
 
@@ -136,6 +154,8 @@ kable(uni_sum[,c(5,4)],
 
 
 ```
+
+\
 
 ```{r no-expvar-used}
 if (length(expvar_dropped) > 0) {
@@ -176,6 +196,8 @@ if(length(siglist)>0){
 
 See Section 4 for further details.
 
+\
+
 ## Relationships between characteristics
 
 Table 1.3 shows, for each characteristic in the study, the frequency with which the rankings matched with the overall ranking.
@@ -184,7 +206,7 @@ The characteristic which had the strongest relationship with the overall ranking
 
 The characteristic which had the weakest relationship with the overall ranking was `r  weakest_link[1]`. Overall the rankings for `r  weakest_link[1]` matched the rankings for the overall ranking only `r  weakest_link[2]`% of the time.
 
-
+\
 
 ```{r agree-table}
 knitr::kable(agreement_table[,1:2],
@@ -203,6 +225,8 @@ Exploratory analysis within the following section summarises results from the da
 ### Overall  
 
 Overall performance of each of the `r options` is summarised in Table 2.1. 
+
+\
 
 ```{r fav_table}
 knitr::kable(fav2,
@@ -227,6 +251,8 @@ favsentence <- ifelse(length(favsentence_i) > 0,
                       "")
 ```
 
+\
+
 The `r option` `r fav1[[1,1]]` was the most preferred `r option` overall being ranked highest by `r fav1[[1,3]]` of the `r fav1[[1,2]]` `r rankers` who assessed this `r option`. 
 
 `r favsentence`
@@ -234,6 +260,8 @@ The `r option` `r fav1[[1,1]]` was the most preferred `r option` overall being r
 ### Other characteristics  
 
 Net favourability scores are shown below for the other characteristics assessed in this study.
+
+\
 
 ```{r, characteristicsplots}
 trait_summaries = NULL
@@ -259,6 +287,8 @@ cat(paste(trait_summaries, collapse = '\n'))
 ## Pairwise Contests 
 
 Appendix B contains the full data for each pairwise comparison of the varieties, which is summarised in the plots below.
+
+\
 
 ### Overall 
 
@@ -290,18 +320,20 @@ if(length(other_traits_list) > 0) {
 cat(paste(trait_pairs1, collapse = '\n'))
 ```
 
-
 ## Relationship between characteristics  
 
 Table 2.5 shows the relationship between the individual characteristic rankings and the overall rankings. Complete agreement represents the percentage of respondents for which the ranking of the `r ncomp` `r options` in respect to the characteristic is an exact match to the overall ranking. Best and worst agreement represents the percentage for which the best and worst `r option` for the characteristic matched the overall best and worst. Complete ranking agreement shows the proportion of correlation on the full ranking with the overall performance as baseline using the Kendall correlation coefficient [@Kendall1938].
+
+\
 
 ```{r agreement_table}
 kable(agreement_table,
       caption = "Table 2.5: Relationship between individual characteristic assessment and overall assessment")
 ```
 
-*Figure 2.5*
-```{r correspondence, fig.width=9, fig.height=6}
+\
+
+```{r correspondence, fig.width=9, fig.height=6, fig.cap="Figure 2.4. Agreement between individual characteristic assessment and overall assessment."}
 plot(agreement)
 ```
 

@@ -4,12 +4,13 @@
 # in ClimMob v3
 # ................................................................
 # Kaue de Sousa 
-# Updated 19Feb2020
+# Updated 12Mar2020
 # ................................................................
 # ................................................................
-# args <- c("dev/data/gosset/data.json", "dev/data/gosset/info.json", 
-#           "output/gosset/", "TRUE","en","docx", 
-#           "participant","chocolate", getwd())
+# tag <- "techapp"
+# args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
+#           paste0("dev/output/",tag,"/"), "TRUE","en","docx",
+#           "participant","item", getwd())
 
 # get the arguments from server's call
 args <- commandArgs(trailingOnly = TRUE)
@@ -41,8 +42,7 @@ if (!require("ClimMobTools")){
   library("ClimMobTools")
 }
 
-if (!require("gosset"))
-{
+if (!require("gosset")) {
   devtools::install_github("agrobioinfoservices/gosset",
                            upgrade = "never")
   library("gosset")
@@ -50,82 +50,90 @@ if (!require("gosset"))
   library("gosset")
 }
 
-if (!require("PlackettLuce")){
+if (!require("PlackettLuce")) {
   install.packages("PlackettLuce")
   library("PlackettLuce")
 }else{
   library("PlackettLuce")
 }
 
-if (!require("partykit")){
+if (!require("partykit")) {
   install.packages("partykit")
   library("partykit")
 }else{
   library("partykit")
 }
 
-if (!require("qvcalc")){
+if (!require("qvcalc")) {
   install.packages("qvcalc")
   library("qvcalc")
 }else{
   library("qvcalc")
 }
 
-if (!require("psychotools")){
+if (!require("psychotools")) {
   install.packages("psychotools")
   library("psychotools")
 }else{
   library("psychotools")
 }
 
-if (!require("jsonlite")){
+if (!require("jsonlite")) {
   install.packages("jsonlite")
   library("jsonlite")
 }else{
   library("jsonlite")
 }
 
-if (!require("multcompView")){
+if (!require("multcompView")) {
   install.packages("multcompView")
   library("multcompView")
 }else{
   library("multcompView")
 }
 
-if (!require("knitr")){
+if (!require("knitr")) {
   install.packages("knitr")
   library("knitr")
 }else{
   library("knitr")
 }
 
-if (!require("rmarkdown")){
+if (!require("rmarkdown")) {
   install.packages("rmarkdown")
   library("rmarkdown")
 }else{
   library("rmarkdown")
 }
 
-if (!require("pls")){
+if (!require("pls")) {
   install.packages("pls")
   library("pls")
 }else{
   library("pls")
 }
 
-if (!require("gtools")){
+if (!require("gtools")) {
   install.packages("gtools")
   library("gtools")
 }else{
   library("gtools")
 }
 
-if (!require("ggplot2")){
+if (!require("ggplot2")) {
   install.packages("ggplot2")
   library("ggplot2")
 }else{
   library("ggplot2")
 }
+
+if (!require("igraph")) {
+  install.packages("igraph")
+  library("igraph")
+}else{
+  library("igraph")
+}
+
 
 source(paste0(fullpath, "/R/functions.R"))
 
@@ -178,11 +186,11 @@ nquest <- pars$chars$n_quest[1]
 
 # define which function should be called to build the rankings
 if (ncomp == 3) {
-  callfor <- "rank_tricot"
+  rankwith <- "rank_tricot"
 }
 
 if (ncomp > 3) {
-  callfor <- "rank_numeric"
+  rankwith <- "rank_numeric"
 }
 
 # ................................................................
@@ -197,7 +205,7 @@ missexp <- 0.8
 
 # Set minimum split size for tree models.
 minsplit <- ceiling(nrow(cmdata) * 0.1)
-
+if (minsplit < 10) {minsplit <- 10}
 # Set alpha
 sig_level <- 0.05
 
