@@ -1,0 +1,52 @@
+{
+    "Characteristics": [
+        {
+            "name": "About intelligence",
+            "id": 242,
+            "vars": [
+                {
+                    "name": "ASSa835e1bb425d_char_intelligence_pos"
+                },
+                {
+                    "name": "ASSa835e1bb425d_char_intelligence_neg"
+                }
+            ]
+        },
+        {
+            "name": "Overall Characteristic",
+            "id": 204,
+            "vars": [
+                {
+                    "name": "ASSbb39cf90c91c_char_overallperf_pos"
+                },
+                {
+                    "name": "ASSbb39cf90c91c_char_overallperf_neg"
+                }
+            ]
+        }
+    ],
+    "Performance": [
+        {
+            "name": "Overall performace",
+            "id": 205,
+            "vars": [
+                {
+                    "name": "ASSbb39cf90c91c_perf_overallchar_1"
+                },
+                {
+                    "name": "ASSbb39cf90c91c_perf_overallchar_2"
+                },
+                {
+                    "name": "ASSbb39cf90c91c_perf_overallchar_3"
+                }
+            ]
+        }
+    ],
+    "Explanatory": [
+        {
+            "name": "What is the gender ?",
+            "id": 237,
+            "vars": "REG_gender"
+        }
+    ]
+}

@@ -5,7 +5,7 @@
 # ................................................................
 # ................................................................
 # Kaue de Sousa 
-# Updated 17Feb2020
+# Updated 12Mar2020
 # .......................................................
 # .......................................................
 # Organise the rankings and check for missing data ####
@@ -39,6 +39,7 @@ for(i in seq_along(trait)){
   # check if proportion of missing data is larger than the threshold
   dropit <- (sum(keep) / nranker) < missper
   
+  # if larger than it will be dropped
   if (dropit) next
   
   # add comparison with local item
@@ -64,9 +65,9 @@ for(i in seq_along(trait)){
   result[["keep"]] <- keep
   result[["input"]] <- trait_i
   result[["fullname"]] <- trait_full[i]
-
+  
   trait_list[[trait[i]]] <- result
-    
+  
 }
 
 trait <- names(trait_list)
@@ -145,7 +146,6 @@ names(itemtable) <- c(Option, "Freq", "Relative freq")
 gender <- any(grepl("REG_gender", names(cmdata)))
 
 if (isTRUE(gender)) {
-  
   dt <- unlist(itemdata)
   
   gender_i <- which(grepl("REG_gender", names(cmdata)))
@@ -154,18 +154,17 @@ if (isTRUE(gender)) {
   nMan <- sum(gender_i == "Man", na.rm = TRUE)
   nWom <- sum(gender_i == "Woman", na.rm = TRUE)
   
-  dt <- suppressWarnings(cbind(dt, rep(gender_i, ncomp)))
+  dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Man")), 
+              tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Woman"))) 
   
-  dt <- table(dt[, 1], dt[, 2])
+  itemtable$m <- dt[, 1]
   
-  itemtable$m <- dt[, "Man"]
-  
-  itemtable$w <- dt[, "Woman"]
+  itemtable$w <- dt[, 2]
   
   names(itemtable)[4:5] <- paste0(c("Man (n=","Woman (n="), c(nMan, nWom), ")")
   
   rm(dt)
-    
+  
 }
 
 # .......................................................
@@ -212,6 +211,7 @@ if (isFALSE(overallVSlocal)) {
   
 }
 
+net <- network(R)
 
 fav1 <- summarise_favourite(R) 
 
@@ -497,7 +497,7 @@ if (isFALSE(overallVSlocal)) {
 }
 
 # data frame of explanatory variables
-Gdata <- as.data.frame(cmdata[keep, expvar_list$expvar], stringsAsFactors = FALSE)
+Gdata <- as.data.frame(cmdata[keep, expvar_list$expvar], stringsAsFactors = TRUE)
 names(Gdata) <- expvar_list$expvar_full
 Gdata <- cbind(G, Gdata)
 
