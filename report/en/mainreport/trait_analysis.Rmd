@@ -42,7 +42,6 @@ knitr::kable(fav2[nrow(fav2):1,],
                            tolower(other_traits_list[[i]]$fullname),"'"))
 ```
 
-*Figure `r paste("2.2.",i,sep="")`*
 ```{r}
 p2
 ```
