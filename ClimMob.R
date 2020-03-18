@@ -5,13 +5,13 @@
 # # ................................................................
 # # ................................................................
 
-tag <- "colors"
-args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-         paste0("dev/output/",tag,"/"), "TRUE","en","docx",
-         "participant","item", getwd())
+# tag <- "techapp"
+# args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
+#          paste0("dev/output/",tag,"/"), "TRUE","en","docx",
+#          "participant","item", getwd())
 
 # get the arguments from server's call
-# args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
 pathname    <- args[3] # the path where results will be written
