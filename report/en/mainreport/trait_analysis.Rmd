@@ -30,7 +30,6 @@ names(fav2) <- c(Option,"N","Top Ranked","Bottom Ranked",
 
 p2 <- 
   plot(fav1) +
-  ggtitle(other_traits_list[[i]]$fullname) +
   xlab(Option)
 
 ```
@@ -42,7 +41,7 @@ knitr::kable(fav2[nrow(fav2):1,],
                            tolower(other_traits_list[[i]]$fullname),"'"))
 ```
 
-```{r}
+```{r, fig.width=7, fig.height=7, fig.cap= paste0("Figure 2.2.",i, ". Net favourability score for '",tolower(other_traits_list[[i]]$fullname),"'.")}
 p2
 ```
 

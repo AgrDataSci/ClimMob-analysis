@@ -20,6 +20,7 @@ ClimMob-analysis (2020-03-12)
 
 ### Improvements
 
+* Figure with items network is added
 * References to R packages used for report production are added
 * Figure labels are added bellow the figures instead of Figure titles
 

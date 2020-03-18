@@ -123,16 +123,23 @@ multcompPL<-function(mod,terms=NULL,threshold=0.05,Letters=letters,adjust="none"
 # simple ggplot function to plot output from multcompPL with error bars
 plot.multcompPL<-function(x,level=0.95,xlab="",ylab="", ...){
   
-  x$term <- gosset:::.reduce(x$term, ...)
+  x$term <- gosset:::.reduce(as.character(x$term), ...)
   
-  p1<- ggplot(data=x,aes(y=estimate,x=term,label=.group,ymax=estimate+qnorm(1-(1-level)/2)*quasiSE,
-                         ymin=estimate-qnorm(1-(1-level)/2)*quasiSE))+
-    geom_point()+
-    geom_errorbar(width=0.1)+
-    coord_flip()+
-    geom_text(vjust=1.2)+
-    xlab(xlab)+ylab(ylab)
+  p1<- ggplot(data = x,
+              aes(y = estimate, 
+                  x = term,
+                  label = .group, 
+                  ymax = estimate + qnorm(1-(1-level)/2) * quasiSE,
+                  ymin = estimate - qnorm(1-(1-level)/2) * quasiSE)) +
+    geom_point() +
+    geom_errorbar(width=0.1) +
+    coord_flip() +
+    geom_text(vjust = 1.2) +
+    xlab(xlab) + 
+    ylab(ylab)
+  
   return(p1)
+
 }
 
 anova.PL<-function(model){
