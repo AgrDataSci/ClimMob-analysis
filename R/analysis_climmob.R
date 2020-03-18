@@ -167,6 +167,10 @@ if (isTRUE(gender)) {
   
 }
 
+itemtable$Abbreviation <- gosset:::.reduce(as.character(itemtable$Item))
+
+itemtable <- itemtable[union(c("Item","Abbreviation"), names(itemtable))]
+
 # .......................................................
 # .......................................................
 # Favourability Analysis Table ####

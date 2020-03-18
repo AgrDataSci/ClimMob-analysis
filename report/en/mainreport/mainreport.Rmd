@@ -1,5 +1,5 @@
 ---
-title: "`r paste('Analysis Report of ClimMob project ', projname)`"
+title: "`r paste('Analysis of ClimMob project ', projname)`"
 author: "Automated Report by ClimMob"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -10,6 +10,7 @@ output:
   pdf_document:
     toc: true
 bibliography: ["climmob.bib"]
+csl: citation_style.csl
 ---
 
 ```{r setup_opts, include=FALSE}
@@ -31,18 +32,20 @@ Citizen science is based on the cooperation of citizen scientist or observers (p
 
 The primary goal of ClimMob is to help farmers adapt to variable and changing climates. ClimMob was created as part of Bioversity International's research in the CGIAR Research Programme on Climate Change, Agriculture, and Food Security (CCAFS). It serves to prepare and analyze citizen science experiments in which a large number of farmers observe and compare different technological options under a wide range environmental conditions [@vanEtten2019tricot]. 
  
-ClimMob software assigns a limited number of items (typically 3 crop varieties or agricultural practices) to each farmer, who will compare their performance. Each farmer gets a different combination of items drawn from a much larger set of items. Comparisons of this kind are thought to be a very reliable way to obtain data from human observers. Once the results of the microtasks have been collected, ClimMob builds an image of the whole set of assigned objects, combining all observations. ClimMob not only reconstructs the overall ordering of items, but also takes into account differences and similarities between observers and the conditions under which they observe. It assigns similar observers to groups that each corresponds to a different preference profile. Groups are created on the basis of whichever variables which have been collected, that are found to be significantly linked to the preferences.
+ClimMob software assigns a limited number of items (typically 3 crop varieties or agricultural practices) to each participant, who will compare their performance. Each participant gets a different combination of items drawn from a much larger set of items. Comparisons of this kind are thought to be a very reliable way to obtain data. Once the results of the microtasks have been collected, ClimMob builds an image of the whole set of assigned objects, combining all observations. ClimMob not only reconstructs the overall ordering of items, but also takes into account differences and similarities between participants and the conditions under which they observe (e.g. socio-economic and plot environmental characteristics). It assigns similar participants to groups that each corresponds among different group profiles. Groups are created on the basis of whichever items which have been collected, that are found to be significantly linked to the observed rankings.
  
 ClimMob uses Plackett-Luce models to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'ggplot2' [@ggplot2], 'igraph' [@igraph] and 'pls' [@pls].
  
 
 ## How to cite
 
-If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. Van Etten et al. [-@vanEtten2019tricot] introduced the crowdsourcing philosophy behind ClimMob. It is important to mention that ClimMob is implemented in R, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the tree results, you should mentioned that ClimMob applies the Plackett-Luce model published by Turner et al. [-@Turner2020]. To cite ClimMob itself, mention van Etten et al.[-@climmob].
+If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. Van Etten et al. (2019) [@vanEtten2019tricot] introduced the crowdsourcing philosophy behind ClimMob. It is important to mention that ClimMob is implemented in R, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the Plackett-Luce tree results, you should mentioned that ClimMob applies the Plackett-Luce model published by Turner et al. 2020 [@Turner2020]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob].
 
-# Section 1: Headline Results
+\pagebreak
 
-Overall there were `r nranker` `r rankers` participating in this study. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of their overall preference. In addition they also provided rankings for `r nothertraits` additional characteristics: 
+# Section 1: Headline results
+
+Overall there were `r nranker` `r rankers` contributing to this project. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of its overall performace. In addition they also provided rankings for `r nothertraits` additional characteristics: 
 
 ```{r characteristics}
 
@@ -54,43 +57,40 @@ kable(data.frame("Short name" = pars$chars$char,
 ```
 
 \
-\
 
-Table 1 provides a list of the `r options` assessed within this trial, with the frequency and percentage of `r rankers` who assessed each `r option`.
+Table 1 shows the `r options` assessed within this project, with the frequency and percentage of `r rankers` who assessed each `r option`. If the `r options` has large names (> 10 characters) an abbreviation was applied across the figures in this report.
 
 ```{r itemtable}
 kable(itemtable, 
-      caption = paste0("Table 1: Frequency of ", options," assessed"),
+      caption = paste0("Table 1. Frequency of ", options," assessed."),
       align = "l")
 ```
 
 \
-\
 
 This is how the different `r options` were connected.
 
-```{r network, fig.width=7,fig.height=7, fig.cap="Figure 1. Network representation of ranked options."}
+```{r network, fig.width=7,fig.height=7, fig.cap=paste0("Figure 1. Network representation of ", options, " tested in this project."), dpi=dpi}
 igraph::plot.igraph(net,
                     edge.arrow.size = 0.5) 
 ```
 
-\
-\
+\pagebreak
 
-## Overall Differences in Rankings
+## Overall differences in rankings
 
 ```{r statistical-diff}
 if (!is.na(ps[1])) {
   
   if (ps[1] < sig_level) {
-    line1 <- paste0("Overall there were statistically significant differences found",
-                    " in the rankings of ", options ," in the overall ranking (p=",ptab$p.value[1],
+    line1 <- paste0("There were statistically significant differences found",
+                    " in the rankings of ", options ," in the overall performance (p=",ptab$p.value[1],
                     "). The best ranked ", options ," overall were ",ptab$`Best Ranked`[1])
   }
   
   if (ps[1] >= sig_level) {
-    line1 <- paste0("Overall there were no statistically significant differences found",
-                    " in the rankings of ", options ," in the overall ranking (p=",
+    line1 <- paste0("There were no statistically significant differences found",
+                    " in the rankings of ", options ," in the overall performance (p=",
                     ptab$p.value[1],")")
   }
   
@@ -110,16 +110,14 @@ if (any(na.omit(ps[2:length(ps)]) < sig_level)){
 `r  paste(line1, collapse='\n')`
 
 A summary of the p-values testing the hypothesis that there exist differences in the rankings within each of the Plackett-Luce models fitted for each of the assessed characteristics, and the list of `r options` which were significantly highest and lowest ranked overall, are summarised in Table 1.1.
+
 \
 
 ```{r}
 kable(ptab, 
-      caption = paste0("Table 1.1: Summary of differences found in ",options," by characteristic"))
+      caption = paste0("Table 1.1. Summary of differences found in ",options," by characteristic."))
 ```
 
-See Section 3 for further details.
-
-\
 
 ## Effect of covariates
 
@@ -127,13 +125,13 @@ See Section 3 for further details.
 if (length(na.omit(outtabs[[1]]$p.value)) > 0) {
   if (any(na.omit(outtabs[[1]]$p.value) < sig_level)) {
     line2 <- paste0(length(siglist), " of the variables tested were found to have a statistically",
-                   " significant relationship to the overall ranking. These variable(s) were:",  
+                   " significant relationship to the overall performance. These variable(s) were:",  
                    paste(paste0(siglist," (p=",outtabs[[1]][siglist,"p"],")"),collapse=", "))
     
   }
   if( !any(na.omit(outtabs[[1]]$p.value) < sig_level)) {
     line2 <- paste0("None of the variables tested were found to have a statistically significant",
-                    " relationship to the overall ranking at the ", sig_level*100, 
+                    " relationship to the overall performance at the ", sig_level*100, 
                     "% significance level.")
   }
 }
@@ -149,8 +147,8 @@ A summary of the univariate signifance levels for all covariates that were able 
 ```{r summary-univariate}
 
 kable(uni_sum[,c(5,4)],
-      caption = paste0("Table 1.2.1: Summary of univariate p-values for first split in ",
-                       "Plackett-Luce tree model for the overall ranking"))
+      caption = paste0("Table 1.2.1. Summary of univariate p-values for first split in ",
+                       "Plackett-Luce tree model for the 'overall performance'."))
 
 
 ```
@@ -176,7 +174,7 @@ if (length(expvar_dropped) == 0) {
 if (length(siglist) > 0) {
   line3 <- paste0("Table 1.2.2 shows which ",options,
                   " where identified as the best and worst ranked in the subgroups identified by",
-                  " including explanatory variables into the overall rankings.")
+                  " including explanatory variables into the 'overall performance'.")
 }
 if (length(siglist) == 0) {
   line3<-""
@@ -188,58 +186,55 @@ if (length(siglist) == 0) {
 ```{r subgroups-found}
 if(length(siglist)>0){
   kable(node_summary, 
-        caption = paste0("Table 1.2.2: Summary of different subgroups identified",
-                         " by multivariate Plackett-Luce tree model"))
+        caption = paste0("Table 1.2.2. Summary of different subgroups identified",
+                         " by multivariate Plackett-Luce tree model."))
 }
 
 ```
 
-See Section 4 for further details.
-
-\
 
 ## Relationships between characteristics
 
-Table 1.3 shows, for each characteristic in the study, the frequency with which the rankings matched with the overall ranking.
+Table 1.3 shows, for each characteristic in the project, the frequency with which the rankings matched with the overall performance.
 
-The characteristic which had the strongest relationship with the overall ranking was `r  strongest_link[1]`. Overall the rankings for `r  strongest_link[1]` matched the rankings for the overall ranking `r strongest_link[2]`% of the time.
+The characteristic which had the strongest relationship with the overall performance was `r  strongest_link[1]`. Overall the rankings for `r  strongest_link[1]` matched the rankings for the overall performance `r strongest_link[2]`% of the time.
 
-The characteristic which had the weakest relationship with the overall ranking was `r  weakest_link[1]`. Overall the rankings for `r  weakest_link[1]` matched the rankings for the overall ranking only `r  weakest_link[2]`% of the time.
+The characteristic which had the weakest relationship with the overall performance was `r  weakest_link[1]`. Overall the rankings for `r  weakest_link[1]` matched the rankings for the overall performance only `r  weakest_link[2]`% of the time.
 
-\
 
 ```{r agree-table}
 knitr::kable(agreement_table[,1:2],
-             caption="Table 1.3: Relationship between individual characteristic assessment and overall assesment")
+             caption="Table 1.3. Relationship between individual characteristics and 'overall performance'.")
 ```
 
-See Section 5 for further details.
 
+\pagebreak
 
-# Section 2: Data Summary and Exploratory Analysis of characteristics
+# Section 2: Data summary and exploratory analysis of characteristics
 
 ## Assessment of `r options` 
 
-Exploratory analysis within the following section summarises results from the data directly. Given the structure of a ClimMob trail, where each `r ranker` only assesses `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomisation process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance.
+Exploratory analysis within the following section summarises results from the data directly. Given the structure of a ClimMob trail, where each `r ranker` only assessed `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomisation process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance.
 
-### Overall  
+### Overall performance 
 
 Overall performance of each of the `r options` is summarised in Table 2.1. 
 
-\
 
 ```{r fav_table}
 knitr::kable(fav2,
              row.names = FALSE,
-             caption = "Table 2.1 - Summary of overall performance")
+             caption = "Table 2.1. Summary of overall performance.")
 ```
 
+\
 
-This shows the percentage of `r rankers` who assessed the `r options` as their most preferred of the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their least preferred, the percentage of 'head to head contests' for which the `r option` won and the net favourability score. A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the variety lost all contests. 
+This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head to head contests' for which the `r option` won and the net favourability score. A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
 
-```{r fav_plot, fig.width=7,fig.height=7, fig.cap="Figure 2.1. Net favourability score for overall performance."}
+```{r fav_plot, dpi=dpi, fig.width=7,fig.height=7, fig.cap="Figure 2.1. Net favourability score for 'overall performance'."}
 plot(fav1) + 
-  xlab(Option)
+  xlab(Option) +
+  theme_bw()
 ```
 
 ```{r favsentence}
@@ -253,18 +248,17 @@ favsentence <- ifelse(length(favsentence_i) > 0,
 
 \
 
-The `r option` `r fav1[[1,1]]` was the most preferred `r option` overall being ranked highest by `r fav1[[1,3]]` of the `r fav1[[1,2]]` `r rankers` who assessed this `r option`. 
+The `r option` `r fav1[[1,1]]` was the 'best' `r option` overall being ranked highest by `r round(fav1[[1,3]], 1)`% of the `r fav1[[1,2]]` `r rankers` who assessed this `r option`. 
 
 `r favsentence`
 
 ### Other characteristics  
 
-Net favourability scores are shown below for the other characteristics assessed in this study.
+Net favourability scores are shown below for the other characteristics assessed in this project.
 
-\
 
 ```{r, characteristicsplots}
-trait_summaries = NULL
+trait_summaries <- NULL
 
 other_traits_list <- trait_list[other_traits]
 
@@ -283,20 +277,20 @@ if(length(other_traits_list) > 0) {
 cat(paste(trait_summaries, collapse = '\n'))
 ```
 
+\pagebreak
 
-## Pairwise Contests 
-
-Appendix B contains the full data for each pairwise comparison of the varieties, which is summarised in the plots below.
+## Pairwise contests 
 
 \
 
-### Overall 
+### Overall performance
 
-Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the trial. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the panelled `r option` was ranked above the `r options` shown as bars. The most preferred `r option` is shown in the top left panel and the least preferred is shown in the bottom right panel
+Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the panelled `r option` was ranked above the other `r options` shown as bars. The most winner `r option` is shown in the top left panel and the least winner is shown in the bottom right panel.
 
-```{r contests_bars,fig.height=12,fig.width=10, fig.cap="Figure 2.3. Head to head performance of all items using overall characteristic preference."}
+```{r contests_bars, dpi=dpi, fig.height=12, fig.width=10, fig.cap="Figure 2.3. Head to head performance for 'overall performance'."}
 plot(contests[[2]]) +
-  ylab("Contests Preferred (%)")
+  ylab("Contests Preferred (%)") +
+  theme_bw()
 
 ```
 
@@ -305,7 +299,7 @@ plot(contests[[2]]) +
 Results from the pairwise contests of the other individual characteristics assessed are shown below. 
 
 ```{r pairsplots}
-trait_pairs1 = NULL
+trait_pairs1 <- NULL
 if(length(other_traits_list) > 0) {
   for(i in seq_along(other_traits_list)){
     trait_pairs1 <- c(trait_pairs1,
@@ -322,36 +316,42 @@ cat(paste(trait_pairs1, collapse = '\n'))
 
 ## Relationship between characteristics  
 
-Table 2.5 shows the relationship between the individual characteristic rankings and the overall rankings. Complete agreement represents the percentage of respondents for which the ranking of the `r ncomp` `r options` in respect to the characteristic is an exact match to the overall ranking. Best and worst agreement represents the percentage for which the best and worst `r option` for the characteristic matched the overall best and worst. Complete ranking agreement shows the proportion of correlation on the full ranking with the overall performance as baseline using the Kendall correlation coefficient [@Kendall1938].
+Table 2.5 shows the relationship between the individual characteristic rankings and the overall performance. Complete agreement represents the percentage of `r rankers` for which the ranking of the `r ncomp` `r options` in respect to the characteristic is an exact match to the overall performance. Best and worst agreement represents the percentage for which the best and worst `r option` for the characteristic matched the overall best and worst. Complete ranking agreement shows the proportion of correlation on the full ranking with the overall performance as baseline using the Kendall correlation coefficient [@Kendall1938].
 
 \
 
 ```{r agreement_table}
 kable(agreement_table,
-      caption = "Table 2.5: Relationship between individual characteristic assessment and overall assessment")
+      caption = "Table 2.5. Relationship between individual characteristic and 'overall performance'.")
 ```
 
 \
 
-```{r correspondence, fig.width=9, fig.height=6, fig.cap="Figure 2.4. Agreement between individual characteristic assessment and overall assessment."}
-plot(agreement)
+```{r correspondence, dpi=dpi, fig.width=9, fig.height=6, fig.cap="Figure 2.4. Agreement between individual characteristic and 'overall performance'."}
+plot(agreement) +
+  theme_bw()
 ```
 
-Overall the characteristic which had the strongest relationship with the overall ranking was `r agreement[[which.max(agreement$kendall), "labels"]]`, with identical rankings being given as the overall ranking `r paste0(round(max(agreement$kendall), 2),"%")` of the time.
+\
+
+The characteristic which had the strongest relationship with the overall performance was `r agreement[[which.max(agreement$kendall), "labels"]]`, with identical rankings being given as the overall performance `r paste0(round(max(agreement$kendall), 2),"%")` of the time.
 
 
-# Section 3: Data Summary & Exploratory Analysis of Explanatory Variables  
+# Section 3: Data summary and exploratory analysis of covariates  
 
 
 ```{r expvar_table}
 kable(data.frame("Short name" = expvar_list$expvar, 
                  "Question" = expvar_list$expvar_full, 
-                 check.names = FALSE))
+                 check.names = FALSE),
+      caption = "Table 3.1. Covariates used in this project.")
 ```
 
-## Overall Ranking
+\
 
-Table 4.1 shows the results from the likelihood ratio test from the Plackett-Luce model for overall rankings of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
+## Overall performance
+
+Table 3.2 shows the results from the likelihood ratio test from the Plackett-Luce model for overall performance of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
 
 ```{r, aov1}
 x1 <- anova.PL(mod_overall)
@@ -362,8 +362,9 @@ names(x1)[6] <- ""
 x1[2, "model"] <- "Overall"
 
 kable(x1, 
-      caption = "Table 4.1: Likelihood ratio test results from overall model")
+      caption = "Table 3.2. Likelihood ratio test results from fitted Plackett-Luce model with rankings from 'overall performance'.")
 ```
+
 
 ```{r pval_sentence}
 if (p < 0.001) {
@@ -386,57 +387,68 @@ if (p>0.01 & p <0.05) {
 if (p>0.05) {
   message1 <- paste0("p=", format.pval(p),
                     ". This suggests that there is not enough evidence to conclude that",
-                    " there are differences between",
+                    " there are differences between ",
                     options)  
 }
 ```
 
+
 `r message1`
 
-Figure 4.1 shows the estimates of the model coefficients with `r ci_level*100`% confidence intervals. The purpose of this graph is to be able to best distinguish between the relative strength of each of the `r options` assessed. As such the coefficient estimates themselves are not directly interpretable, but it can be concluded that a higher value for the coefficient indicates that a variety has been more preferred. The `r ci_level*100`% confidence width is chosen so that non-overlapping confidence intervals could be interpreted as indicating significant differences at the `r sig_level*100`% significance level. This may not match exactly with the mean separation groupings, as these groupings also take into account multiple testing through the Benjamini and Hochberg adjustment.
+\
 
-Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others: when `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order of preference at the `r sig_level*100`% significance level. 
+Figure 3.1 shows the estimates of the model coefficients with `r ci_level*100`% confidence intervals. The purpose of this graph is to be able to best distinguish between the relative strength of each of the `r options` assessed. As such the coefficient estimates themselves are not directly interpretable, but it can be concluded that a higher value for the coefficient indicates that a `r option` has been ranked as best more often. The `r ci_level*100`% confidence width is chosen so that non-overlapping confidence intervals could be interpreted as indicating significant differences at the `r sig_level*100`% significance level. This may not match exactly with the mean separation groupings, as these groupings also take into account multiple testing through the Benjamini and Hochberg adjustment.
 
-```{r est_plot, fig.width=7,fig.height=7, fig.cap="Figure 4.1 - Overall ranking: model coefficients and mean separation.\n"}
-plot.multcompPL(model_summaries, level = ci_level) +
-  ggtitle(paste0("Overall preference estimates with ", 
-                 ci_level*100, "% confidence intervals"))
+Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others; when `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the `r sig_level*100`% significance level. 
+
+```{r est_plot, dpi=dpi, fig.width=7,fig.height=7, fig.cap=paste0("Figure 3.1. Model coefficients and mean separation of Plackett-Luce model for 'overall performance' with ", ci_level*100, "% confidence intervals.")}
+plot.multcompPL(model_summaries, level = ci_level)
 ```
 
-The same information as Figure 4.1 is shown in Table 4.2 below
+\
 
+The same information as Figure 3.1 is shown in Table 3.3 below.
+
+\
 
 ```{r est_table}
 ms <- model_summaries[, c("estimate","quasiSE",".group")]
 names(ms) <- c("Estimate","quasiSE","Group")
 
 kable(ms, digits = 2,
-      caption = paste0("Table 4.2 - Model coefficients and mean separation of ",
-                       options," at ",
-                       100*sig_level,"% level with ",ci_adjust," adjustment"))
+      caption = paste0("Table 3.3. Model coefficients and mean separation of ",
+                       options," with ",
+                       100*sig_level,"% level with ",ci_adjust," adjustment."))
 ```
 
+\
 
-Table 4.3 and Figure 4.2 use the coefficients from the model to estimate the probability of each `r option` being considered to be the top ranked `r option` in a direct comparison between all of the possible `r options`
+Table 3.4 and Figure 3.2 use the coefficients from the Plackett-Luce model to estimate the probability of each `r option` being considered to be the top ranked `r option` in a direct comparison between all of the possible `r options`.
+
+\
 
 ```{r}
 kable(worthscaled[, -2],
-      caption = "Table 4.3: Percentage probability of being the highest ranked overall.")
+      row.names = FALSE,
+      caption = "Table 3.4. Percentage probability of being the best ranked for 'overall performance'.")
 ```
 
-```{r rankedfirst, fig.cap="Figure 4.2 - Overall Ranking: Probability of Being The Highest Ranked Overall.\n"}
+\
+
+```{r rankedfirst, dpi=dpi, fig.cap="Figure 3.2. Probability of being the best ranked for 'overall performance'."}
 ggplot(data=worthscaled, aes(y = Worth, fill = Worth, group = worthscaled[,1], x = 1)) +
   geom_bar(stat="identity",col="black", show.legend = FALSE) +
   theme_void() +
   geom_text(aes(y=cumsum(rev(Worth))-rev(Worth)/2, size=rev(Worth),
                 label=rev(paste0(worthscaled[,1],": ", round(Worth*100, 2),"%"))),
             show.legend = FALSE,fontface=2) +
-  ggtitle(paste("Probability that",option,"is the\nhighest ranked overall")) +
-  scale_fill_gradient2(low= "white", high = "forestgreen", midpoint= 1/nrow(worthscaled))  +
+  scale_fill_gradient2(low= "#ffffff", high = "#2ca25f", midpoint= 1/nrow(worthscaled))  +
   scale_size_continuous(range=c(0.5,10),limits = c(0,1))
 ```
 
-# Section 5: Plackett-Luce Models of Other characteristics
+\
+
+# Section 4: Plackett-Luce models of other characteristics
 
 ```{r, characteristicmodels}
 model_traits <- NULL
@@ -457,23 +469,26 @@ cat(paste(model_traits, collapse = '\n'))
 ```
 
 
-# Section 6: Plackett-Luce models with explatory variables  
+# Section 5: Plackett-Luce models with covariates  
 
-## Overall ranking  
+## Overall performance  
 
-A recursive partitioning method [@Strobl2009] was used to determine which of the explanatory variables, if any, had significant relationships with the rankings. This approach identifies sub-groups in the data for which the rankings of the different varieties are significantly different to each other. Table 4.1 shows the p-values for each of the covariates tested, one-by-one, showing whether or not the covariate could be used to define sub-groups with significantly different rankings. 
+A model-based recursive partitioning method [@Strobl2009] was used to determine which of the explanatory variables, if any, had significant relationships with the rankings. This approach identifies sub-groups in the data for which the rankings of the different varieties are significantly different to each other. Table 5.1 shows the p-values for each of the covariates tested, one-by-one, showing whether or not the covariate could be used to define sub-groups with significantly different rankings. 
+
+\
 
 ```{r univar_pval}
 kable(uni_sum[,c(5,4)],
-      caption = paste0("Table 6.1: Univariate p-values for first split in ",
-                       "Plackett-Luce tree model for the overall ranking"))
+      caption = paste0("Table 5.1. Univariate p-values for first split in ",
+                       "Plackett-Luce tree model for the overall ranking."))
 ```
 
+\
 
-Figure 6.1 shows the partitioning of the rankings based on the most significantly different sub-groups which could be identified from the data using a `sig_level*100`% significance level. At the top of the tree is the full dataset, then working down through the different levels of the tree shows the combinations of variables which define each subgroup. The model parameters are shown for the final subgroups ("terminal nodes") in the plots at the bottoms of the tree. 
+Figure 5.1 shows the partitioning of the rankings based on the most significantly different sub-groups which could be identified from the data using a `sig_level*100`% significance level. At the top of the tree is the full dataset, then working down through the different levels of the tree shows the combinations of variables which define each subgroup. The model parameters are shown for the final subgroups ("terminal nodes") in the plots at the bottoms of the tree. 
 
 
-```{r pltree, asis=TRUE,fig.height=8,fig.width=10, fig.cap="Figure 6.1 - Overall ranking of Plackett-Luce tree."}
+```{r pltree, dpi=dpi, asis=TRUE,fig.height=8,fig.width=10, fig.cap="Figure 5.1. Plackett-Luce tree for the overall performance."}
 if (length(tree_f)==1) {
   nofig1 <- "No significant explanatory variables identified."
 }else{
@@ -484,18 +499,18 @@ plot(tree_f)
 ```
 `r nofig1`
 
-The highest and lowest performing `r option` within each sub-group is identified within Table 6.2.
+The highest and lowest performing `r option` within each sub-group is identified within Table 5.2.
 
 ```{r node_summary}
 if (length(siglist) > 0) {
   kable(node_summary,
-        caption = "Table 6.2 - Summary of performance in each tree node.")
+        caption = "Table 5.2. Summary of performance in each tree node.")
 }
 ```
 
-The model coefficient estimates, along with `r ci_level*100`% confidence intervals are provided in Figure 6.2. This will help identification of which `r options` were better suited to particular sub-groups identified by the analysis.
+The model coefficient estimates, along with `r ci_level*100`% confidence intervals are provided in Figure 5.2. This will help identification of which `r options` were better suited to particular sub-groups identified by the analysis.
 
-```{r,fig.width=8,fig.height=8, fig.cap="Figure 6.2 - Coefficient estimates within each identified terminal node\n"}
+```{r,dpi=dpi, fig.width=8,fig.height=8, fig.cap="Figure 5.2. Coefficient estimates within each identified terminal node."}
 if(length(tree_f)>1){
 ggplot(data = coefs_t, 
        aes(x = term, 
@@ -512,15 +527,13 @@ ggplot(data = coefs_t,
             fontface = 2,
             nudge_x = rep(c(-0.3,0.5), each = nlevels(coefs_t$term))) +
   ylab("") +
-  xlab(Option) +
-  ggtitle(paste("Terminal node parameter estimates for",
-                "overall rankings."))
+  xlab(Option)
 }
 
 ```
 `r nofig1`
 
-Table 6.3 outlines the p-values for each covariate at each of the nodes in the tree, outlining whether an additional significant split could be determined from within the existing sub-group at that node.
+Table 5.3 outlines the p-values for each covariate at each of the nodes in the tree, outlining whether an additional significant split could be determined from within the existing sub-group at that node.
 
 ```{r}
 z<-NULL
@@ -534,11 +547,11 @@ for(i in 1:length(outtabs)){
 if (length(z) > 0) {
   nodemessage <- ""
   kable(z[,c(1:3,5)],
-        caption="Table 6.3: p-values for effect of each covariate at each node",
+        caption="Table 5.3: p-values for effect of each covariate at each node.",
         row.names = FALSE)
 }
 if (length(z)==0) {
-  nodemessage<-"No covariates were able to be assessed statistically."
+  nodemessage <- "No covariates were able to be assessed statistically."
 }
 
 ```

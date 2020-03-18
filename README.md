@@ -9,8 +9,7 @@
 
 ## Overview
 
-This repository contains the code used in the workflow to analyse and
-create reports from the [ClimMob](https://climmob.net/blog/) platform.
+This repository contains the code used in the workflow to analyse and create reports from the [ClimMob](https://climmob.net/blog/) platform. Read the latest enhancements in this algorithm [here](NEWS.md).
 
 ## Repository organisation
 
