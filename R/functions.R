@@ -52,9 +52,6 @@ byfac<-function(model,split){
 }
 
 
-
-
-
 win_plot<-function(x){
   p1<- ggplot(data=x,aes(y=wins,fill=wins,x=var))+
     geom_bar(stat="identity",col="black")+
@@ -123,9 +120,11 @@ multcompPL<-function(mod,terms=NULL,threshold=0.05,Letters=letters,adjust="none"
   
 }
 
-#simple ggplot function to plot output from multcompPL with error bars
-plot.multcompPL<-function(x,level=0.95,xlab="",ylab=""){
-  require(ggplot2)
+# simple ggplot function to plot output from multcompPL with error bars
+plot.multcompPL<-function(x,level=0.95,xlab="",ylab="", ...){
+  
+  x$term <- gosset:::.reduce(x$term, ...)
+  
   p1<- ggplot(data=x,aes(y=estimate,x=term,label=.group,ymax=estimate+qnorm(1-(1-level)/2)*quasiSE,
                          ymin=estimate-qnorm(1-(1-level)/2)*quasiSE))+
     geom_point()+
@@ -947,5 +946,17 @@ summary.btdata <- function(object, ...){
   }
 }
 
-
-
+# Check if library has the latest version
+.latest_version <- function(pkg, repo_path){
+  
+  desc <- readLines(repo_path)
+  
+  vers <- desc[grepl("Version", desc)]
+  
+  locvers <- as.character(packageVersion(pkg))
+  
+  latest <- grepl(locvers, vers)
+  
+  isTRUE(latest)
+  
+}

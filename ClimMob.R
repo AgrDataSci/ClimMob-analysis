@@ -1,19 +1,17 @@
-# ................................................................
-# ................................................................
-# Main script to call for the analysis and rendering the reports 
-# in ClimMob v3
-# ................................................................
-# Kaue de Sousa 
-# Updated 12Mar2020
-# ................................................................
-# ................................................................
-# tag <- "techapp"
-# args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-#           paste0("dev/output/",tag,"/"), "TRUE","en","docx",
-#           "participant","item", getwd())
+# # ................................................................
+# # ................................................................
+# # Main script to call for the analysis and rendering the reports 
+# # in ClimMob v3
+# # ................................................................
+# # ................................................................
+
+tag <- "chocolate_ghana"
+args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
+         paste0("dev/output/",tag,"/"), "TRUE","en","docx",
+         "participant","item", getwd())
 
 # get the arguments from server's call
-args <- commandArgs(trailingOnly = TRUE)
+# args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
 pathname    <- args[3] # the path where results will be written
@@ -27,6 +25,8 @@ fullpath    <- args[9] # this is backward path
 # ................................................................
 # ................................................................
 ## Packages ####
+source(paste0(fullpath, "/R/functions.R"))
+
 if (!require("devtools")){
   install.packages("devtools")
   library("devtools")
@@ -34,12 +34,26 @@ if (!require("devtools")){
   library("devtools")
 }
 
-if (!require("ClimMobTools")){
+if (!require("ClimMobTools")) {
   devtools::install_github("agrobioinfoservices/ClimMobTools",
                            upgrade = "never")
   library("ClimMobTools")
 }else{
-  library("ClimMobTools")
+  # check if library has the latest pkg version
+  latest <- .latest_version("ClimMobTools",
+                            "https://raw.githubusercontent.com/agrobioinfoservices/ClimMobTools/master/DESCRIPTION")
+  
+  if (isTRUE(latest)) {
+    
+    library("ClimMobTools")
+  
+    }else{
+    
+    devtools::install_github("agrobioinfoservices/ClimMobTools",
+                             upgrade = "never")
+    library("ClimMobTools")
+  
+  }
 }
 
 if (!require("gosset")) {
@@ -47,7 +61,21 @@ if (!require("gosset")) {
                            upgrade = "never")
   library("gosset")
 }else{
-  library("gosset")
+  # check if library has the latest pkg version
+  latest <- .latest_version("gosset",
+                            "https://raw.githubusercontent.com/agrobioinfoservices/gosset/master/DESCRIPTION")
+  
+  if (isTRUE(latest)) {
+    
+    library("gosset")
+    
+  }else{
+    
+    devtools::install_github("agrobioinfoservices/gosset",
+                             upgrade = "never")
+    library("gosset")
+    
+  }
 }
 
 if (!require("PlackettLuce")) {
@@ -133,9 +161,6 @@ if (!require("igraph")) {
 }else{
   library("igraph")
 }
-
-
-source(paste0(fullpath, "/R/functions.R"))
 
 # ................................................................
 # ................................................................

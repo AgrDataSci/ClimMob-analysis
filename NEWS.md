@@ -1,0 +1,29 @@
+ClimMob-analysis (2020-03-18)
+=========================
+
+### Improvements
+
+* A check for the latest version of 'ClimMobTools' and 'gosset' is added. The internal function `.latest_version()` check if the server's library has the latest version of core packages and force the algorith to use the latest version in GitHub. To prevent problems when these packages are under unstable version, all development will be moved to 'devel' branch of its respective repos. 
+
+* Figures uses new implementations of 'gosset' to abbreviate large item names. 
+
+
+
+ClimMob-analysis (2020-03-12)
+=========================
+
+### Fixed issues
+
+* Very small sample size in minsplit for `pltree()` particulary in 'toy' demonstration of package automation
+* Table of gender disaggregation now works when only one gender are find accross the data
+
+
+### Improvements
+
+* References to R packages used for report production are added
+* Figure labels are added bellow the figures instead of Figure titles
+
+ClimMob-analysis (2020-02-21)
+=========================
+
+First release of new report
