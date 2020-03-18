@@ -5,7 +5,7 @@
 # # ................................................................
 # # ................................................................
 
-tag <- "chocolate_ghana"
+tag <- "colors"
 args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
          paste0("dev/output/",tag,"/"), "TRUE","en","docx",
          "participant","item", getwd())
@@ -244,6 +244,10 @@ ci_adjust <- "BH"
 # intervals (e.g. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC524673/)
 # should probably allow alternatives to be 0.9, 0.95 or 0.99
 ci_level <- 0.84
+
+# resolution of display items
+dpi <- 200
+
 
 # participant report params 
 info_table_items <- c() #info.table.items <- c("variety 1", "variety 2", "variety 3")

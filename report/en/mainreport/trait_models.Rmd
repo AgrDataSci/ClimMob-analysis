@@ -12,10 +12,12 @@ if (length(x_tmp)>1) {
   x_tmp[2, "model"] <- other_traits_list[[i]]$fullname
 
   kable(x_tmp,
-        caption = paste0("Table 5.",i,".1"))
+        caption = paste0("Table 4.",i,".1. Likelihood ratio test results from fitted Plackett-Luce model with rankings from '", tolower(other_traits_list[[i]]$fullname), "'."))
 }
 
 ```
+
+\
 
 ```{r}
 message_tmp=""
@@ -45,21 +47,22 @@ if (p_tmp > 0.05) {
 }
 }
 if(length(x_tmp) == 1){
-  message_tmp <- "No statistical analysis was able to be conducted on this trait."
+  message_tmp <- "No statistical analysis was able to be conducted on this characteristic."
 }
 ```
 
 `r message_tmp`
 
-```{r,fig.width=7,fig.height=7}
+\
+
+```{r,dpi=dpi, fig.width=7,fig.height=7, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals.")}
 
 if(length(x_tmp)>1){
-
-  plot.multcompPL(summaries[[i]], level = ci_level) +
-    ggtitle(paste0("Preference estimates for ", tolower(other_traits_list[[i]]$fullname),
-                   " with ", ci_level*100, "% confidence intervals"))
+  plot.multcompPL(summaries[[i]], level = ci_level)
 }
 ```
+
+\
 
 ```{r}
 if (length(x_tmp) > 1) {
@@ -68,19 +71,26 @@ if (length(x_tmp) > 1) {
   names(ms_i) <- c("Estimate","quasiSE","Group")
   
   kable(ms_i, digits = 2,
-        caption = paste0(paste("Table 5.",i,".2 ",
-                               other_traits_list[[i]]$fullname," model parameter estimates")))
+        caption = paste0("Table 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '",
+                         tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals."))
 }
 ```
+
+\
 
 ```{r}
 if (length(x_tmp) > 1) {
 
 
 kable(worths[[i]][,-2],
-      caption = paste0("Table 5.",i,".3 ","Probability of being highest ranked: ",
-                      other_traits_list[[i]]$fullname))
+      caption = paste0("Table 4.",i,".3 ","Percetage probability of being highest ranked for '",
+                      tolower(other_traits_list[[i]]$fullname), "'."))
+}
+```
 
+\
+
+```{r, dpi=dpi, fig.width=7,fig.height=7, fig.cap=paste0("Figure 4.",i,".2. Prabability of being the best ranked for '", tolower(other_traits_list[[i]]$fullname),"'.")}
 dt_i <- worths[[i]]
 
 ggplot(data=dt_i, aes(y = Worth, fill = Worth, group = dt_i[,1], x = 1)) +
@@ -89,10 +99,7 @@ ggplot(data=dt_i, aes(y = Worth, fill = Worth, group = dt_i[,1], x = 1)) +
   geom_text(aes(y=cumsum(rev(Worth))-rev(Worth)/2, size=rev(Worth),
                 label=rev(paste0(dt_i[,1],": ", round(Worth*100, 2),"%"))),
             show.legend = FALSE,fontface=2) +
-  ggtitle(paste("Probability that",option,"is the\nhighest ranked for", 
-                tolower(other_traits_list[[i]]$fullname))) +
-  scale_fill_gradient2(low= "white", high = "forestgreen", midpoint= 1/nrow(worthscaled))  +
+  scale_fill_gradient2(low= "#ffffff", high = "#2ca25f", midpoint= 1/nrow(worthscaled))  +
   scale_size_continuous(range=c(0.5,10),limits = c(0,1))
-
-}
 ```
+

@@ -19,9 +19,10 @@ if (ncomp > 3) {
 cont_t <- summarise_victories(RR)
 ```
 
-```{r,fig.height=11,fig.width=9, fig.cap=paste0("2.4.",i, ". Head to head performance for '",tolower(other_traits_list[[i]]$fullname),"'.")}
+```{r,dpi=dpi, fig.height=11,fig.width=9, fig.cap=paste0("2.4.",i, ". Head to head performance for '",tolower(other_traits_list[[i]]$fullname),"'.")}
 plot(cont_t) +
   ylab("Contests victories (%)") +
-  xlab(Option)
+  xlab(Option) +
+  theme_bw()
 
 ```

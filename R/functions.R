@@ -136,7 +136,8 @@ plot.multcompPL<-function(x,level=0.95,xlab="",ylab="", ...){
     coord_flip() +
     geom_text(vjust = 1.2) +
     xlab(xlab) + 
-    ylab(ylab)
+    ylab(ylab) +
+    theme_bw()
   
   return(p1)
 
