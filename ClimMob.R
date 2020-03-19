@@ -25,142 +25,23 @@ fullpath    <- args[9] # this is backward path
 # ................................................................
 # ................................................................
 ## Packages ####
+library("ClimMobTools")
+library("gosset")
+library("PlackettLuce")
+library("partykit")
+library("qvcalc")
+library("psychotools")
+library("jsonlite")
+library("multcompView")
+library("knitr")
+library("rmarkdown")
+library("pls")
+library("gtools")
+library("ggplot2")
+library("igraph")
+
 source(paste0(fullpath, "/R/functions.R"))
 
-if (!require("devtools")){
-  install.packages("devtools")
-  library("devtools")
-}else{
-  library("devtools")
-}
-
-if (!require("ClimMobTools")) {
-  devtools::install_github("agrobioinfoservices/ClimMobTools",
-                           upgrade = "never")
-  library("ClimMobTools")
-}else{
-  # check if library has the latest pkg version
-  latest <- .latest_version("ClimMobTools",
-                            "https://raw.githubusercontent.com/agrobioinfoservices/ClimMobTools/master/DESCRIPTION")
-  
-  if (isTRUE(latest)) {
-    
-    library("ClimMobTools")
-  
-    }else{
-    
-    devtools::install_github("agrobioinfoservices/ClimMobTools",
-                             upgrade = "never")
-    library("ClimMobTools")
-  
-  }
-}
-
-if (!require("gosset")) {
-  devtools::install_github("agrobioinfoservices/gosset",
-                           upgrade = "never")
-  library("gosset")
-}else{
-  # check if library has the latest pkg version
-  latest <- .latest_version("gosset",
-                            "https://raw.githubusercontent.com/agrobioinfoservices/gosset/master/DESCRIPTION")
-  
-  if (isTRUE(latest)) {
-    
-    library("gosset")
-    
-  }else{
-    
-    devtools::install_github("agrobioinfoservices/gosset",
-                             upgrade = "never")
-    library("gosset")
-    
-  }
-}
-
-if (!require("PlackettLuce")) {
-  install.packages("PlackettLuce")
-  library("PlackettLuce")
-}else{
-  library("PlackettLuce")
-}
-
-if (!require("partykit")) {
-  install.packages("partykit")
-  library("partykit")
-}else{
-  library("partykit")
-}
-
-if (!require("qvcalc")) {
-  install.packages("qvcalc")
-  library("qvcalc")
-}else{
-  library("qvcalc")
-}
-
-if (!require("psychotools")) {
-  install.packages("psychotools")
-  library("psychotools")
-}else{
-  library("psychotools")
-}
-
-if (!require("jsonlite")) {
-  install.packages("jsonlite")
-  library("jsonlite")
-}else{
-  library("jsonlite")
-}
-
-if (!require("multcompView")) {
-  install.packages("multcompView")
-  library("multcompView")
-}else{
-  library("multcompView")
-}
-
-if (!require("knitr")) {
-  install.packages("knitr")
-  library("knitr")
-}else{
-  library("knitr")
-}
-
-if (!require("rmarkdown")) {
-  install.packages("rmarkdown")
-  library("rmarkdown")
-}else{
-  library("rmarkdown")
-}
-
-if (!require("pls")) {
-  install.packages("pls")
-  library("pls")
-}else{
-  library("pls")
-}
-
-if (!require("gtools")) {
-  install.packages("gtools")
-  library("gtools")
-}else{
-  library("gtools")
-}
-
-if (!require("ggplot2")) {
-  install.packages("ggplot2")
-  library("ggplot2")
-}else{
-  library("ggplot2")
-}
-
-if (!require("igraph")) {
-  install.packages("igraph")
-  library("igraph")
-}else{
-  library("igraph")
-}
 
 # ................................................................
 # ................................................................
@@ -246,7 +127,8 @@ ci_adjust <- "BH"
 ci_level <- 0.84
 
 # resolution of display items
-dpi <- 200
+dpi <- 250
+out_width <- "100%"
 
 
 # participant report params 
