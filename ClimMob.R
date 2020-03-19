@@ -5,7 +5,7 @@
 # # ................................................................
 # # ................................................................
 
-# tag <- "chocolate"
+# tag <- "techapp"
 # args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
 #          paste0("dev/output/",tag,"/"), "TRUE","en","docx",
 #          "participant","item", getwd())
@@ -127,7 +127,7 @@ ci_adjust <- "BH"
 ci_level <- 0.84
 
 # resolution of display items
-dpi <- 200
+dpi <- 250
 out_width <- "100%"
 
 

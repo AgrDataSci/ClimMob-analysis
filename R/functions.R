@@ -974,6 +974,7 @@ summary.btdata <- function(object, ...){
 # @param value an integer for index in object for the column with values to plot
 # @param group an integer for index in object to the colunm with values to group with
 plot_worth_bar <- function(object, value, group, palette = NULL){
+  
   if(is.null(palette)) {
     palette <- "YlGnBu"
   }
@@ -982,7 +983,7 @@ plot_worth_bar <- function(object, value, group, palette = NULL){
   names(object) <- c("group", "value")
   
   object$group <- as.character(object$group)
-
+  
   object$group <- gosset:::.reduce(object$group)
   
   object <- object[rev(order(object$value)), ] 
@@ -1005,7 +1006,7 @@ plot_worth_bar <- function(object, value, group, palette = NULL){
                                fill = group)) +
     ggplot2::geom_bar(stat = "identity", 
                       position = "dodge",
-                      show.legend = TRUE,
+                      show.legend = FALSE,
                       width = 1, 
                       color = "#ffffff") + 
     ggplot2::scale_fill_brewer(direction = 1,
@@ -1017,9 +1018,11 @@ plot_worth_bar <- function(object, value, group, palette = NULL){
     theme_minimal() +
     ggplot2::theme(legend.position="bottom",
                    legend.text = element_text(size = 9),
-                   panel.grid.major = element_blank()) +
+                   panel.grid.major = element_blank(),
+                   axis.text.x = element_text(color = "#000000")) +
     labs(y = "",
-         x = "")
+         x = "") + 
+    geom_text(aes(label = group), position = position_dodge(width = 1), hjust = -.1)
   
 }
 
