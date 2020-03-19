@@ -30,8 +30,12 @@ names(fav2) <- c(Option,"N","Top Ranked","Bottom Ranked",
 
 p2 <- 
   plot(fav1) +
-  xlab(Option) +
-  theme_bw()
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
 
 ```
 
@@ -42,7 +46,9 @@ knitr::kable(fav2[nrow(fav2):1,],
                            tolower(other_traits_list[[i]]$fullname),"'"))
 ```
 
-```{r, dpi=dpi, fig.width=7, fig.height=7, fig.cap= paste0("Figure 2.2.",i, ". Net favourability score for '",tolower(other_traits_list[[i]]$fullname),"'.")}
+\
+
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.2.",i, ". Net favourability score for '",tolower(other_traits_list[[i]]$fullname),"'.")}
 p2
 ```
 

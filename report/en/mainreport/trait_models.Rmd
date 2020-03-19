@@ -26,24 +26,24 @@ if (p_tmp < 0.001) {
   message1 <- paste0("p=", format.pval(p_tmp), 
                     ". This suggests that there is strong evidence of ",
                     "a difference in the rankings between ",
-                    options)
+                    options,".")
 }
 
 if (p_tmp < 0.01 & p_tmp > 0.001) {
   message1 <- paste0("p=", format.pval(p_tmp), 
                      ". This suggests that there is evidence of a difference between ",
-                     options)
+                     options,".")
 }
 if (p_tmp > 0.01 & p_tmp < 0.05) {
   message1 <- paste0("p=", format.pval(p_tmp), 
                     ". This suggests that there is some evidence of a difference between ",
-                    options)  
+                    options,".")  
 }
 if (p_tmp > 0.05) {
   message1 <- paste0("p=", format.pval(p_tmp),
                     ". This suggests that there is not enough evidence to conclude that",
                     " there are differences between",
-                    options)  
+                    options,".")  
 }
 }
 if(length(x_tmp) == 1){
@@ -55,10 +55,13 @@ if(length(x_tmp) == 1){
 
 \
 
-```{r,dpi=dpi, fig.width=7,fig.height=7, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals.")}
+```{r dpi=dpi, fig.height=multcomp_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals.")}
 
 if(length(x_tmp)>1){
-  plot.multcompPL(summaries[[i]], level = ci_level)
+  plot.multcompPL(summaries[[i]], level = ci_level) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000")) 
 }
 ```
 
@@ -71,6 +74,7 @@ if (length(x_tmp) > 1) {
   names(ms_i) <- c("Estimate","quasiSE","Group")
   
   kable(ms_i, digits = 2,
+        row.names = FALSE,
         caption = paste0("Table 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '",
                          tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals."))
 }
@@ -83,6 +87,7 @@ if (length(x_tmp) > 1) {
 
 
 kable(worths[[i]][,-2],
+      row.names = FALSE,
       caption = paste0("Table 4.",i,".3 ","Percetage probability of being highest ranked for '",
                       tolower(other_traits_list[[i]]$fullname), "'."))
 }
@@ -90,16 +95,8 @@ kable(worths[[i]][,-2],
 
 \
 
-```{r, dpi=dpi, fig.width=7,fig.height=7, fig.cap=paste0("Figure 4.",i,".2. Prabability of being the best ranked for '", tolower(other_traits_list[[i]]$fullname),"'.")}
-dt_i <- worths[[i]]
-
-ggplot(data=dt_i, aes(y = Worth, fill = Worth, group = dt_i[,1], x = 1)) +
-  geom_bar(stat="identity",col="black", show.legend = FALSE) +
-  theme_void() +
-  geom_text(aes(y=cumsum(rev(Worth))-rev(Worth)/2, size=rev(Worth),
-                label=rev(paste0(dt_i[,1],": ", round(Worth*100, 2),"%"))),
-            show.legend = FALSE,fontface=2) +
-  scale_fill_gradient2(low= "#ffffff", high = "#2ca25f", midpoint= 1/nrow(worthscaled))  +
-  scale_size_continuous(range=c(0.5,10),limits = c(0,1))
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".2. Prabability of being the best ranked for '", tolower(other_traits_list[[i]]$fullname),"'.")}
+x <- worths[[i]]
+plot_worth_bar(x, value = 2, group = 1)
 ```
 

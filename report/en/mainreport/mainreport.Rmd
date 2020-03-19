@@ -70,7 +70,7 @@ kable(itemtable,
 
 This is how the different `r options` were connected.
 
-```{r network, fig.width=7,fig.height=7, fig.cap=paste0("Figure 1. Network representation of ", options, " tested in this project."), dpi=dpi}
+```{r network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1. Network representation of ", options, " tested in this project.")}
 igraph::plot.igraph(net,
                     edge.arrow.size = 0.5) 
 ```
@@ -231,10 +231,14 @@ knitr::kable(fav2,
 
 This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head to head contests' for which the `r option` won and the net favourability score. A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
 
-```{r fav_plot, dpi=dpi, fig.width=7,fig.height=7, fig.cap="Figure 2.1. Net favourability score for 'overall performance'."}
+```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap="Figure 2.1. Net favourability score for 'overall performance'."}
 plot(fav1) + 
-  xlab(Option) +
-  theme_bw()
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
 ```
 
 ```{r favsentence}
@@ -287,10 +291,15 @@ cat(paste(trait_summaries, collapse = '\n'))
 
 Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the panelled `r option` was ranked above the other `r options` shown as bars. The most winner `r option` is shown in the top left panel and the least winner is shown in the bottom right panel.
 
-```{r contests_bars, dpi=dpi, fig.height=12, fig.width=10, fig.cap="Figure 2.3. Head to head performance for 'overall performance'."}
-plot(contests[[2]]) +
-  ylab("Contests Preferred (%)") +
-  theme_bw()
+```{r contests_bars, dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap="Figure 2.3. Head to head performance for 'overall performance'."}
+plot(contests[[2]]) + 
+  labs(y = "", x = "") + 
+  theme_minimal() +  
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000"),
+        strip.text.x = element_text(size = 11, color = "#000000", face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
 
 ```
 
@@ -327,9 +336,15 @@ kable(agreement_table,
 
 \
 
-```{r correspondence, dpi=dpi, fig.width=9, fig.height=6, fig.cap="Figure 2.4. Agreement between individual characteristic and 'overall performance'."}
+```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=9, fig.cap="Figure 2.4. Agreement between individual characteristic and 'overall performance'."}
 plot(agreement) +
-  theme_bw()
+  theme_minimal() +  
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000"),
+        strip.text.x = element_text(size = 11, color = "#000000", face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  scale_fill_manual(values = c('#66c2a5','#fc8d62','#8da0cb'))
 ```
 
 \
@@ -401,8 +416,11 @@ Figure 3.1 shows the estimates of the model coefficients with `r ci_level*100`% 
 
 Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others; when `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the `r sig_level*100`% significance level. 
 
-```{r est_plot, dpi=dpi, fig.width=7,fig.height=7, fig.cap=paste0("Figure 3.1. Model coefficients and mean separation of Plackett-Luce model for 'overall performance' with ", ci_level*100, "% confidence intervals.")}
-plot.multcompPL(model_summaries, level = ci_level)
+```{r est_plot, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.1. Model coefficients and mean separation of Plackett-Luce model for 'overall performance' with ", ci_level*100, "% confidence intervals.")}
+plot.multcompPL(model_summaries, level = ci_level) + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000")) 
 ```
 
 \
@@ -435,15 +453,8 @@ kable(worthscaled[, -2],
 
 \
 
-```{r rankedfirst, dpi=dpi, fig.cap="Figure 3.2. Probability of being the best ranked for 'overall performance'."}
-ggplot(data=worthscaled, aes(y = Worth, fill = Worth, group = worthscaled[,1], x = 1)) +
-  geom_bar(stat="identity",col="black", show.legend = FALSE) +
-  theme_void() +
-  geom_text(aes(y=cumsum(rev(Worth))-rev(Worth)/2, size=rev(Worth),
-                label=rev(paste0(worthscaled[,1],": ", round(Worth*100, 2),"%"))),
-            show.legend = FALSE,fontface=2) +
-  scale_fill_gradient2(low= "#ffffff", high = "#2ca25f", midpoint= 1/nrow(worthscaled))  +
-  scale_size_continuous(range=c(0.5,10),limits = c(0,1))
+```{r rankedfirst, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap="Figure 3.2. Probability of being the best ranked for 'overall performance'."}
+plot_worth_bar(worthscaled, value = 2, group = 1)
 ```
 
 \
@@ -527,7 +538,8 @@ ggplot(data = coefs_t,
             fontface = 2,
             nudge_x = rep(c(-0.3,0.5), each = nlevels(coefs_t$term))) +
   ylab("") +
-  xlab(Option)
+  xlab(Option) + 
+    theme_minimal()
 }
 
 ```

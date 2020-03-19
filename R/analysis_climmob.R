@@ -644,3 +644,10 @@ uni_sum <- outtabs[[1]]
 uni_sum$Variable <- rownames(outtabs[[1]])
 uni_sum$p <- paste(format.pval(outtabs[[1]]$p.value),stars.pval(outtabs[[1]]$p.value))
 rownames(uni_sum) <- NULL
+
+
+# define height of plots based on items
+favplot_h <- nitems * 0.6
+contest_h <- nitems * 0.6 * 2
+agreem_h <- ntrait * 1.3
+multcomp_h <- nitems * 0.8 

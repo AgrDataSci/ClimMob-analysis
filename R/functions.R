@@ -968,3 +968,59 @@ summary.btdata <- function(object, ...){
   isTRUE(latest)
   
 }
+
+# Plot a pie chart
+# @param object a data.frame with worth parameters
+# @param value an integer for index in object for the column with values to plot
+# @param group an integer for index in object to the colunm with values to group with
+plot_worth_bar <- function(object, value, group, palette = NULL){
+  if(is.null(palette)) {
+    palette <- "YlGnBu"
+  }
+  
+  object <- object[,c(group, value)]
+  names(object) <- c("group", "value")
+  
+  object$group <- as.character(object$group)
+
+  object$group <- gosset:::.reduce(object$group)
+  
+  object <- object[rev(order(object$value)), ] 
+  
+  object$value <- round(object$value * 100, 0)
+  
+  # get order of players based on their performance
+  player_levels <- rev(gosset:::.player_order(object, "group", "value"))
+  
+  object$group <- factor(object$group, levels = player_levels)
+  
+  value <- object$value
+  group <- object$group
+  
+  maxv <- round(max(value) + 10, -1)
+  
+  ggplot2::ggplot(data = object, 
+                  ggplot2::aes(x = value,
+                               y = "", 
+                               fill = group)) +
+    ggplot2::geom_bar(stat = "identity", 
+                      position = "dodge",
+                      show.legend = TRUE,
+                      width = 1, 
+                      color = "#ffffff") + 
+    ggplot2::scale_fill_brewer(direction = 1,
+                               palette = palette,
+                               name = "") + 
+    ggplot2::scale_x_continuous(labels = paste0(seq(0, maxv, by = 10), "%"),
+                                breaks = seq(0, maxv, by = 10),
+                                limits = c(0, maxv)) +
+    theme_minimal() +
+    ggplot2::theme(legend.position="bottom",
+                   legend.text = element_text(size = 9),
+                   panel.grid.major = element_blank()) +
+    labs(y = "",
+         x = "")
+  
+}
+
+

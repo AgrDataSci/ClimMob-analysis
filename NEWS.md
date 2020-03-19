@@ -1,11 +1,11 @@
-ClimMob-analysis (2020-03-18)
+ClimMob-analysis (2020-03-19)
 =========================
 
 ### Improvements
 
-* A check for the latest version of 'ClimMobTools' and 'gosset' is added. The internal function `.latest_version()` check if the server's library has the latest version of core packages and force the algorith to use the latest version from GitHub. To prevent problems when these packages are under unstable version, all development will be moved to 'devel' branch of its respective repos. 
+* Add a script to check for packages updates **R/check_packages.R**. 
 * Figures uses new implementations of 'gosset' to abbreviate large item names. 
-* Figures now has better resolution with `dpi` argument. The default value is set to dpi=200, but can be adjusted in the main script `ClimMob.R`.
+* Figures now has better resolution with `dpi` argument. The default value is set to dpi=200, but can be adjusted in the main script **ClimMob.R**.
 * Text revision, and checks for figure and tables titles for consistency.
 * Use numbers for references to make a cleaner document and improve readability.
 
