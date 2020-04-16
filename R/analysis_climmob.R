@@ -16,7 +16,7 @@ overallVSlocal <- length(pars$perf) > 0
 # check if overall is the first component
 # it should always be the first as sorted in ClimMobTools:::.decode_pars()
 of <- which(grepl("overall", trait))[1] ==  1
-if(isFALSE(of)) {
+if (isFALSE(of)) {
   warning("Overall comparison is missing\n")
 }
 
@@ -316,6 +316,20 @@ if (length(other_traits) > 0) {
                               "Agreement with Overall Worst")
 
   
+} 
+
+if (length(other_traits) == 0) {
+  strongest_link <- character()
+  weakest_link <- character()
+  agreement_table <- data.frame(Option = "Only Overall Performance was used",
+                                X = "",
+                                Y = "",
+                                Z = "")
+  names(agreement_table)<-c(" ","","  ","   ")
+  agreement <- data.frame(labels = "",
+                          kendall = 0,
+                          first = 0,
+                          last = 0)
 }
 
 # .......................................................
@@ -428,34 +442,39 @@ rownames(coefs) <- rownames(qvcalc(mod_overall)[[2]])
 # set col names with title case traits
 names(coefs) <- c("Overall", ClimMobTools:::.title_case(other_traits))
 
-# compute partial least squares
-fml <- paste("Overall ~ ", paste(ClimMobTools:::.title_case(other_traits), collapse = " + "))
-fml <- as.formula(fml)
+# .......................................................
+# .......................................................
+# Compute partial least squares ####
 
-m2 <- plsr(fml,
-           data = coefs,
-           validation = "LOO", 
-           jackknife = TRUE)
-
-arrows <- NULL
-scores <- NULL
-if (ncol(m2$projection) > 1 ) {
-  arrows <- data.frame((m2$projection)[,1:2],
-                       trait = other_traits,
-                       x0 = 0, 
-                       y0 = 0, 
-                       stringsAsFactors = FALSE)
-  scores <- data.frame((m2$scores)[,1:2],
-                       var = rownames(m2$scores))
+if (length(other_traits) > 0) {
+  fml <- paste("Overall ~ ", paste(ClimMobTools:::.title_case(other_traits), collapse = " + "))
+  fml <- as.formula(fml)
+  
+  m2 <- plsr(fml,
+             data = coefs,
+             validation = "LOO", 
+             jackknife = TRUE)
+  
+  arrows <- NULL
+  scores <- NULL
+  if (ncol(m2$projection) > 1 ) {
+    arrows <- data.frame((m2$projection)[,1:2],
+                         trait = other_traits,
+                         x0 = 0, 
+                         y0 = 0, 
+                         stringsAsFactors = FALSE)
+    scores <- data.frame((m2$scores)[,1:2],
+                         var = rownames(m2$scores))
+  }
+  
+  
+  yve <- drop(R2(m2, 
+                 estimate = "train",
+                 intercept = FALSE)$val)
+  
+  adjCV <- m2$validation$adj
+  nc <- which(adjCV == min(adjCV))
 }
-
-
-yve <- drop(R2(m2, 
-               estimate = "train",
-               intercept = FALSE)$val)
-
-adjCV <- m2$validation$adj
-nc <- which(adjCV == min(adjCV))
 
 # .......................................................
 # .......................................................
@@ -612,10 +631,11 @@ if(ps < 0.05){
   bests <- worsts <- "No significant differences"
 }
 
-for(i in 1:length(anovas)){
-  
-  ps <- c(ps, anovas[[i]][2,5])
-  
+if (length(other_traits) > 0) {
+  for(i in 1:length(anovas)){
+    
+    ps <- c(ps, anovas[[i]][2,5])
+    
     if(ps[i]<0.05){
       bests<-c(bests,paste(summaries[[i]]$term[grep("a",summaries[[i]]$.group)],collapse=", "))
       worsts<-c(worsts,paste(rev(summaries[[i]]$term[grep(summaries[[i]]$.group[nrow(summaries[[i]])],
@@ -623,15 +643,27 @@ for(i in 1:length(anovas)){
     }else{
       bests<-c(bests,"No significant differences")  
       worsts<-c(worsts,"No significant differences")  
+    }
   }
+  
+  ptab <- data.frame(Ranking = c("Overall", other_traits_full),
+                     "Best Ranked" = bests,
+                     "Worst Ranked" = worsts,
+                     p.value = ps,
+                     check.names = FALSE,
+                     stringsAsFactors = FALSE)
+  
+} 
+
+if (length(other_traits) == 0) {
+  ptab <- data.frame(Ranking = "Overall",
+                     "Best Ranked" = bests,
+                     "Worst Ranked" = worsts,
+                     p.value = ps,
+                     check.names = FALSE,
+                     stringsAsFactors = FALSE)
 }
 
-ptab <- data.frame(Ranking = c("Overall", other_traits_full),
-                   "Best Ranked" = bests,
-                   "Worst Ranked" = worsts,
-                   p.value = ps,
-                   check.names = FALSE,
-                   stringsAsFactors = FALSE)
 
 ptab$sig <- stars.pval(ptab$p.value)
 
