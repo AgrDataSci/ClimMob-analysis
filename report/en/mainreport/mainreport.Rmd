@@ -292,7 +292,8 @@ cat(paste(trait_summaries, collapse = '\n'))
 Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the panelled `r option` was ranked above the other `r options` shown as bars. The most winner `r option` is shown in the top left panel and the least winner is shown in the bottom right panel.
 
 ```{r contests_bars, dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap="Figure 2.3. Head to head performance for 'overall performance'."}
-plot(contests[[2]]) + 
+if(length(other_traits) > 0){
+  plot(contests[[2]]) + 
   labs(y = "", x = "") + 
   theme_minimal() +  
   theme(axis.text.x = element_text(size = 10, color = "#000000"),
@@ -300,7 +301,7 @@ plot(contests[[2]]) +
         strip.text.x = element_text(size = 11, color = "#000000", face = "bold"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
-
+}
 ```
 
 ### Other characteristics 
@@ -337,7 +338,8 @@ kable(agreement_table,
 \
 
 ```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=9, fig.cap="Figure 2.4. Agreement between individual characteristic and 'overall performance'."}
-plot(agreement) +
+if (length(other_traits) > 0) {
+  plot(agreement) +
   theme_minimal() +  
   theme(axis.text.x = element_text(size = 10, color = "#000000"),
         axis.text.y = element_text(size = 10, color = "#000000"),
@@ -345,6 +347,7 @@ plot(agreement) +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
   scale_fill_manual(values = c('#66c2a5','#fc8d62','#8da0cb'))
+}
 ```
 
 \

@@ -5,7 +5,7 @@
 # # ................................................................
 # # ................................................................
 
-# tag <- "techapp"
+# tag <- "chocolate_ghana"
 # args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
 #          paste0("dev/output/",tag,"/"), "TRUE","en","docx",
 #          "participant","item", getwd())

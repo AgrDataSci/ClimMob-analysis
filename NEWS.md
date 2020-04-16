@@ -1,3 +1,12 @@
+ClimMob-analysis (2020-04-15)
+=========================
+
+### Improvements
+
+* Add conditional checks when only 'overall characteristic' is available to produce the report  
+
+
+
 ClimMob-analysis (2020-03-19)
 =========================
 
