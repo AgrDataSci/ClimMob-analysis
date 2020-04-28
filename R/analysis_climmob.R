@@ -731,12 +731,14 @@ for (i in seq_along(outtabs)) {
 
 if (dim(pval_nodes)[[2]] > 0) {
   
-  pval_nodes <- pval_nodes[,c("Covariate", "Node", "p")]
+  pval_nodes <- pval_nodes[,c("Covariate", "Node", "p.value")]
   
   row.names(pval_nodes) <- NULL
   
   # put bold in significant values 
   putbold <- which(pval_nodes$p <= sig_level)
+  
+  sig <- stars.pval(pval_nodes$p.value)
   
   for(i in seq_along(putbold)) {
     index_i <- putbold[i]
@@ -744,6 +746,10 @@ if (dim(pval_nodes)[[2]] > 0) {
     pval_nodes[index_i, ] <- paste0("**", pval_nodes[index_i, ], "**")
     
   }
+  
+  pval_nodes$sig <- sig
+  
+  names(pval_nodes)[names(pval_nodes) == "sig"] <- ""
   
   nodemessage <- ""
   

@@ -127,7 +127,7 @@ A summary of the p-values testing the hypothesis that there exist differences in
 
 \
 
-```{r}
+```{r table11}
 kable(ptab, 
       caption = paste0("Table 1.1. Summary of differences found in ",options," by characteristic."))
 ```

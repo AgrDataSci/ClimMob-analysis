@@ -9,7 +9,7 @@
 # args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
 #          paste0("dev/output/",tag,"/"), "TRUE","en","html",
 #          "participant","item", getwd())
-# source("dev/run_climmobv2.R")
+source("dev/run_climmobv2.R")
 
 # get the arguments from server's call
 args <- commandArgs(trailingOnly = TRUE)
