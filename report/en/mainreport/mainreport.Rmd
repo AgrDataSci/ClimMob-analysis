@@ -57,6 +57,14 @@ kable(data.frame("Short name" = pars$chars$char,
 ```
 
 \
+This is where the experimental plots were located. 
+
+
+
+```{r network, dpi=dpi, fig.height=7, fig.width=7}
+plot_map(x, c("lon","lat"), map.types = "OpenTopoMap")
+```
+
 
 Table 1 shows the `r options` assessed within this project, with the frequency and percentage of `r rankers` who assessed each `r option`. If the `r options` has large names (> 10 characters) an abbreviation was applied across the figures in this report.
 

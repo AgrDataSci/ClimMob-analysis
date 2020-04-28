@@ -976,11 +976,13 @@ summary.btdata <- function(object, ...){
 plot_worth_bar <- function(object, value, group, palette = NULL){
   
   if(is.null(palette)) {
-    palette <- "YlGnBu"
+    palette <- grDevices::colorRampPalette(c("#FFFF80", "#38E009","#1A93AB", "#0C1078"))
   }
   
   object <- object[,c(group, value)]
   names(object) <- c("group", "value")
+  
+  nr <- dim(object)[[1]]
   
   object$group <- as.character(object$group)
   
@@ -1009,20 +1011,19 @@ plot_worth_bar <- function(object, value, group, palette = NULL){
                       show.legend = FALSE,
                       width = 1, 
                       color = "#ffffff") + 
-    ggplot2::scale_fill_brewer(direction = 1,
-                               palette = palette,
-                               name = "") + 
+    scale_fill_manual(values = palette(nr)) + 
     ggplot2::scale_x_continuous(labels = paste0(seq(0, maxv, by = 10), "%"),
                                 breaks = seq(0, maxv, by = 10),
                                 limits = c(0, maxv)) +
-    theme_minimal() +
+    ggplot2::theme_minimal() +
     ggplot2::theme(legend.position="bottom",
                    legend.text = element_text(size = 9),
                    panel.grid.major = element_blank(),
                    axis.text.x = element_text(color = "#000000")) +
-    labs(y = "",
+    ggplot2::labs(y = "",
          x = "") + 
-    geom_text(aes(label = group), position = position_dodge(width = 1), hjust = -.1)
+    ggplot2::geom_text(aes(label = group), 
+                       position = position_dodge(width = 1), hjust = -.1)
   
 }
 

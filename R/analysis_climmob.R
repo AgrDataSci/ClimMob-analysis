@@ -17,7 +17,9 @@ overallVSlocal <- length(pars$perf) > 0
 # it should always be the first as sorted in ClimMobTools:::.decode_pars()
 of <- which(grepl("overall", trait))[1] ==  1
 if (isFALSE(of)) {
+  
   warning("Overall comparison is missing\n")
+
 }
 
 trait_list <- list()
@@ -44,20 +46,32 @@ for(i in seq_along(trait)){
   
   # add comparison with local item
   if (i == 1 & overallVSlocal) {
+    
     ovsl <- as.vector(pars$perf[, paste0("quest_", seq_len(pars$perf$n_quest))])
+    
     for (k in seq_along(ovsl)) {
+      
       ovsl[k] <- names(cmdata[which(grepl(ovsl[k], names(cmdata)))])
+    
     }
+    
     ovsl <- as.character(ovsl)
     
     keep2 <- apply(cmdata[ovsl], 1, is.na)
+    
     keep2 <- as.vector(colSums(keep2) == 0)
+    
+    keep2 <- keep & keep2
     
     dropit2 <- (sum(keep2) / nranker) < missper
     
-    if (dropit2) next
+    if (isTRUE(dropit2)) {
+      overallVSlocal <- FALSE
+      next
+    }
     
     result[["keep2"]] <- keep2
+    
     result[["ovsl"]] <- ovsl
     
   }
@@ -128,8 +142,18 @@ if (all(expvar != "xinterceptx")) {
 
 # .......................................................
 # .......................................................
+# Make map ####
+
+# Check if lonlat is provided
+grepl("_lon", names(cmdata))
+
+plot_map(x, c("lon","lat"), map.types = "OpenTopoMap")
+
+
+# .......................................................
+# .......................................................
 # This is Table 01 #
-# Create a table with frequencies where each item was evaluated
+# Create a table with frequencies where each item was evaluated ####
 itemdata <- cmdata[, grepl("package_item", names(cmdata))]
 
 itemtable <- data.frame(table(unlist(itemdata)))
@@ -154,8 +178,8 @@ if (isTRUE(gender)) {
   nMan <- sum(gender_i == "Man", na.rm = TRUE)
   nWom <- sum(gender_i == "Woman", na.rm = TRUE)
   
-  dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Man")), 
-              tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Woman"))) 
+  dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Man", na.rm = TRUE)), 
+              tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Woman", na.rm = TRUE))) 
   
   itemtable$m <- dt[, 1]
   
@@ -167,9 +191,9 @@ if (isTRUE(gender)) {
   
 }
 
-itemtable$Abbreviation <- gosset:::.reduce(as.character(itemtable$Item))
+itemtable$Abbreviation <- gosset:::.reduce(as.character(itemtable[,Option]))
 
-itemtable <- itemtable[union(c("Item","Abbreviation"), names(itemtable))]
+itemtable <- itemtable[union(c(Option,"Abbreviation"), names(itemtable))]
 
 # .......................................................
 # .......................................................
