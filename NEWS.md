@@ -2,6 +2,22 @@ ClimMob-analysis (2020-04-15)
 =========================
 
 ### Improvements
+* Add map with trial plots
+* Remove legend of self-explain figures
+* Setup covariates before PLT analysis. Round floating numnbers to 3 decimals. And transform char into factor.
+* PLS biplot is added
+
+### Changes in behaviour
+* Packages 'mapview' and 'ggrepel' are added
+
+### Bug fixes
+* Fix index of Table 1
+
+
+ClimMob-analysis (2020-04-15)
+=========================
+
+### Improvements
 
 * Add conditional checks when only 'overall characteristic' is available to produce the report  
 

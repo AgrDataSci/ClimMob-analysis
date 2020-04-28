@@ -55,7 +55,7 @@ if(length(x_tmp) == 1){
 
 \
 
-```{r dpi=dpi, fig.height=multcomp_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals.")}
+```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals.")}
 
 if(length(x_tmp)>1){
   plot.multcompPL(summaries[[i]], level = ci_level) +

@@ -969,7 +969,7 @@ summary.btdata <- function(object, ...){
   
 }
 
-# Plot a pie chart
+# Plot worth bar
 # @param object a data.frame with worth parameters
 # @param value an integer for index in object for the column with values to plot
 # @param group an integer for index in object to the colunm with values to group with
@@ -1026,5 +1026,37 @@ plot_worth_bar <- function(object, value, group, palette = NULL){
                        position = position_dodge(width = 1), hjust = -.1)
   
 }
+
+
+# Plot coefficient estimates
+plot_coef <- function(object, ...) {
+  
+  ggplot(data = object, 
+         aes(x = term, 
+             y = ctd,
+             ymax = ctd + 1.40 * quasiSE,
+             ymin = ctd - 1.40 * quasiSE,
+             col = Label)) +
+    geom_point(position = position_dodge(width = 0.3), size = 1) +
+    geom_errorbar(position = position_dodge(width = 0.3), width = 0) +
+    coord_flip() +
+    scale_color_brewer(palette = "Set1", name = "") +
+    geom_text(aes(label= .group),
+              size = 2,
+              fontface = 1,
+              nudge_x = rep(c(-0.3, 0.5), each = nlevels(object$term))) +
+    labs(y = "", 
+         x = "") + 
+    theme_bw() +
+    theme(legend.position = "bottom",
+          legend.text = element_text(size = 7, colour = "black"),
+          panel.background = element_blank(),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          axis.text.x = element_text(size = 9, colour = "black"),
+          axis.text.y = element_text(size = 9, colour = "black"))
+  
+}
+
 
 
