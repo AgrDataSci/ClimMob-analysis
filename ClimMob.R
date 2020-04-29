@@ -5,10 +5,11 @@
 # # ................................................................
 # # ................................................................
 
-# tag <- "chocolate_ghana"
+# tag <- "nic_apante_2015"
 # args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-#          paste0("dev/output/",tag,"/"), "TRUE","en","docx",
-#          "participant","item", getwd())
+#          paste0("dev/output/",tag,"/"), "TRUE","en","html",
+#          "farmer", "variety", getwd())
+# source("dev/run_climmobv2.R")
 
 # get the arguments from server's call
 args <- commandArgs(trailingOnly = TRUE)
@@ -39,6 +40,8 @@ library("pls")
 library("gtools")
 library("ggplot2")
 library("igraph")
+library("mapview")
+library("ggrepel")
 
 source(paste0(fullpath, "/R/functions.R"))
 
@@ -113,7 +116,7 @@ missexp <- 0.8
 minsplit <- ceiling(nrow(cmdata) * 0.1)
 if (minsplit < 10) {minsplit <- 10}
 # Set alpha
-sig_level <- 0.05
+sig_level <- 0.1
 
 # method for adjustments for confidence intervals and setting widths for comparison. 
 # Defaults to B-H (Benjamini an Hochberg). Any of the methods from p.adjust will work here 
@@ -139,6 +142,7 @@ info_table_typeinfo <- "" #info.table.typeinfo <- "expert advice"
 # ................................................................
 # ................................................................
 # Run analysis ####
+dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
 source(paste0(fullpath, "/R/analysis_climmob.R"))
 
 # ................................................................
@@ -153,7 +157,6 @@ output_format <- ifelse(extension == "docx","word_document",
                         paste0(extension,"_document"))
 
 # produce main report if output type is "summary" or "both"
-dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
 rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport.Rmd"),
                   output_dir = pathname,
                   output_format = output_format,
@@ -163,3 +166,4 @@ rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport
 # if (infosheets) {
 #   source("Farmer Reports/farmerreport.R")
 # }
+

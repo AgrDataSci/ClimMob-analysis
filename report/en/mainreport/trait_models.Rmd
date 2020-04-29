@@ -2,80 +2,34 @@
 
 
 ```{r}
-x_tmp <- anovas[[i]]
-if (length(x_tmp)>1) {
-  p_tmp <- x_tmp[2,5]
-  
-  x_tmp[,6] <- stars.pval(x_tmp[, 5])
-  x_tmp[,5] <- format.pval(x_tmp[, 5])
-  names(x_tmp)[6] <- ""
-  x_tmp[2, "model"] <- other_traits_list[[i]]$fullname
-
-  kable(x_tmp,
+aov_ii <- aov_tables[[i]]
+if (length(aov_ii) > 1) {
+  kable(aov_ii,
+        row.names = FALSE,
         caption = paste0("Table 4.",i,".1. Likelihood ratio test results from fitted Plackett-Luce model with rankings from '", tolower(other_traits_list[[i]]$fullname), "'."))
 }
 
 ```
 
 \
-
-```{r}
-message_tmp=""
-if (length(x_tmp) > 1) {
-if (p_tmp < 0.001) {
-  message1 <- paste0("p=", format.pval(p_tmp), 
-                    ". This suggests that there is strong evidence of ",
-                    "a difference in the rankings between ",
-                    options,".")
-}
-
-if (p_tmp < 0.01 & p_tmp > 0.001) {
-  message1 <- paste0("p=", format.pval(p_tmp), 
-                     ". This suggests that there is evidence of a difference between ",
-                     options,".")
-}
-if (p_tmp > 0.01 & p_tmp < 0.05) {
-  message1 <- paste0("p=", format.pval(p_tmp), 
-                    ". This suggests that there is some evidence of a difference between ",
-                    options,".")  
-}
-if (p_tmp > 0.05) {
-  message1 <- paste0("p=", format.pval(p_tmp),
-                    ". This suggests that there is not enough evidence to conclude that",
-                    " there are differences between",
-                    options,".")  
-}
-}
-if(length(x_tmp) == 1){
-  message_tmp <- "No statistical analysis was able to be conducted on this characteristic."
-}
-```
-
-`r message_tmp`
-
 \
 
-```{r dpi=dpi, fig.height=multcomp_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals.")}
+```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals.")}
 
-if(length(x_tmp)>1){
-  plot.multcompPL(summaries[[i]], level = ci_level) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 10, color = "#000000"),
-        axis.text.y = element_text(size = 10, color = "#000000")) 
+if(length(aov_ii) > 1){
+  plot(plot_summaries[[i]])
 }
 ```
 
 \
 
 ```{r}
-if (length(x_tmp) > 1) {
+if (length(aov_ii) > 1) {
   ms_i <- summaries[[i]]
-  ms_i <- ms_i[, c("estimate","quasiSE",".group")]
-  names(ms_i) <- c("Estimate","quasiSE","Group")
-  
-  kable(ms_i, digits = 2,
+  kable(ms_i, 
+        digits = 4,
         row.names = FALSE,
-        caption = paste0("Table 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '",
+        caption = paste0("Table 4.",i,".2. Model coefficients and mean separation of Plackett-Luce model for '",
                          tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals."))
 }
 ```
@@ -83,20 +37,20 @@ if (length(x_tmp) > 1) {
 \
 
 ```{r}
-if (length(x_tmp) > 1) {
-
-
-kable(worths[[i]][,-2],
+if (length(aov_ii) > 1) {
+  
+  kable(worths[[i]][,-2],
       row.names = FALSE,
       caption = paste0("Table 4.",i,".3 ","Percetage probability of being highest ranked for '",
                       tolower(other_traits_list[[i]]$fullname), "'."))
+  
 }
 ```
 
 \
 
-```{r, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".2. Prabability of being the best ranked for '", tolower(other_traits_list[[i]]$fullname),"'.")}
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".2. Probability of being the best ranked for '", tolower(other_traits_list[[i]]$fullname),"'.")}
 x <- worths[[i]]
-plot_worth_bar(x, value = 2, group = 1)
+plot_worth_bar(x, value = "Worth", group = Option)
 ```
 

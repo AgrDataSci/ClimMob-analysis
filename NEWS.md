@@ -1,3 +1,23 @@
+ClimMob-analysis (2020-04-29)
+=========================
+
+### Improvements
+* Add map with trial plots when lonlat is available.
+* Add number of valid answers in each characteristic in the first table of Section 1.
+* Remove legend of self-explained figures.
+* Add Partial Least Squares biplot.
+* Some analysis are still performed in the .Rmd file as written by Stats4Dev. I've started a migration to the 'R/analysis_climmob.R' file for clarity and to make easy future debugs.
+* Setup covariates before PLT analysis. Round floating numbers to 3 decimals (eg. lonlat). And coerce characters into factors.
+* Fix colunms with p.values and harmonize all related tables
+
+### Changes in behaviour
+* Packages 'mapview' and 'ggrepel' are added
+
+### Bug fixes
+* Fix index of Table 1
+* Fix palette smoothig in Fig 3.2 (and the others related to other characteristics) to accept more than 9 items.
+
+
 ClimMob-analysis (2020-04-15)
 =========================
 

@@ -121,25 +121,26 @@ multcompPL<-function(mod,terms=NULL,threshold=0.05,Letters=letters,adjust="none"
 }
 
 # simple ggplot function to plot output from multcompPL with error bars
-plot.multcompPL<-function(x,level=0.95,xlab="",ylab="", ...){
+plot_multcompPL <- function(object, term, estimate, quasiSE, group, level = 0.95, xlab = "", ylab = "", ...){
   
-  x$term <- gosset:::.reduce(as.character(x$term), ...)
+  object <- object[,c(term, estimate, quasiSE, group)]
+  names(object) <- c("x","y","qse","g")
   
-  p1<- ggplot(data = x,
-              aes(y = estimate, 
-                  x = term,
-                  label = .group, 
-                  ymax = estimate + qnorm(1-(1-level)/2) * quasiSE,
-                  ymin = estimate - qnorm(1-(1-level)/2) * quasiSE)) +
+  object$x <- gosset:::.reduce(as.character(object$x), ...)
+  
+  ggplot(data = object,
+              aes(x = x, 
+                  y = y,
+                  label = g, 
+                  ymax = y + stats::qnorm(1-(1-level)/2) * qse,
+                  ymin = y - stats::qnorm(1-(1-level)/2) * qse)) +
     geom_point() +
-    geom_errorbar(width=0.1) +
+    geom_errorbar(width = 0.1) +
     coord_flip() +
     geom_text(vjust = 1.2) +
     xlab(xlab) + 
     ylab(ylab) +
     theme_bw()
-  
-  return(p1)
 
 }
 
@@ -969,18 +970,20 @@ summary.btdata <- function(object, ...){
   
 }
 
-# Plot a pie chart
+# Plot worth bar
 # @param object a data.frame with worth parameters
 # @param value an integer for index in object for the column with values to plot
 # @param group an integer for index in object to the colunm with values to group with
 plot_worth_bar <- function(object, value, group, palette = NULL){
   
   if(is.null(palette)) {
-    palette <- "YlGnBu"
+    palette <- grDevices::colorRampPalette(c("#FFFF80", "#38E009","#1A93AB", "#0C1078"))
   }
   
   object <- object[,c(group, value)]
   names(object) <- c("group", "value")
+  
+  nr <- dim(object)[[1]]
   
   object$group <- as.character(object$group)
   
@@ -1009,21 +1012,52 @@ plot_worth_bar <- function(object, value, group, palette = NULL){
                       show.legend = FALSE,
                       width = 1, 
                       color = "#ffffff") + 
-    ggplot2::scale_fill_brewer(direction = 1,
-                               palette = palette,
-                               name = "") + 
+    scale_fill_manual(values = palette(nr)) + 
     ggplot2::scale_x_continuous(labels = paste0(seq(0, maxv, by = 10), "%"),
                                 breaks = seq(0, maxv, by = 10),
                                 limits = c(0, maxv)) +
-    theme_minimal() +
+    ggplot2::theme_minimal() +
     ggplot2::theme(legend.position="bottom",
                    legend.text = element_text(size = 9),
                    panel.grid.major = element_blank(),
                    axis.text.x = element_text(color = "#000000")) +
-    labs(y = "",
+    ggplot2::labs(y = "",
          x = "") + 
-    geom_text(aes(label = group), position = position_dodge(width = 1), hjust = -.1)
+    ggplot2::geom_text(aes(label = group), 
+                       position = position_dodge(width = 1), hjust = -.1)
   
 }
+
+
+# Plot coefficient estimates
+plot_coef <- function(object, ...) {
+  
+  ggplot(data = object, 
+         aes(x = term, 
+             y = ctd,
+             ymax = ctd + 1.40 * quasiSE,
+             ymin = ctd - 1.40 * quasiSE,
+             col = Label)) +
+    geom_point(position = position_dodge(width = 0.3), size = 1) +
+    geom_errorbar(position = position_dodge(width = 0.3), width = 0) +
+    coord_flip() +
+    scale_color_brewer(palette = "Set1", name = "") +
+    geom_text(aes(label= .group),
+              size = 2,
+              fontface = 1,
+              nudge_x = rep(c(-0.3, 0.5), each = nlevels(object$term))) +
+    labs(y = "", 
+         x = "") + 
+    theme_bw() +
+    theme(legend.position = "bottom",
+          legend.text = element_text(size = 7, colour = "black"),
+          panel.background = element_blank(),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          axis.text.x = element_text(size = 9, colour = "black"),
+          axis.text.y = element_text(size = 9, colour = "black"))
+  
+}
+
 
 

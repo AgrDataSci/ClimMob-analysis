@@ -4,10 +4,7 @@
 # crowdsourcing trials using Plackett-Luce model
 # ................................................................
 # ................................................................
-# Kaue de Sousa 
-# Updated 12Mar2020
-# .......................................................
-# .......................................................
+
 # Organise the rankings and check for missing data ####
 trait <- pars$chars$char
 trait_full <- pars$chars$char_full
@@ -17,7 +14,9 @@ overallVSlocal <- length(pars$perf) > 0
 # it should always be the first as sorted in ClimMobTools:::.decode_pars()
 of <- which(grepl("overall", trait))[1] ==  1
 if (isFALSE(of)) {
+  
   warning("Overall comparison is missing\n")
+
 }
 
 trait_list <- list()
@@ -44,20 +43,32 @@ for(i in seq_along(trait)){
   
   # add comparison with local item
   if (i == 1 & overallVSlocal) {
+    
     ovsl <- as.vector(pars$perf[, paste0("quest_", seq_len(pars$perf$n_quest))])
+    
     for (k in seq_along(ovsl)) {
+      
       ovsl[k] <- names(cmdata[which(grepl(ovsl[k], names(cmdata)))])
+    
     }
+    
     ovsl <- as.character(ovsl)
     
     keep2 <- apply(cmdata[ovsl], 1, is.na)
+    
     keep2 <- as.vector(colSums(keep2) == 0)
+    
+    keep2 <- keep & keep2
     
     dropit2 <- (sum(keep2) / nranker) < missper
     
-    if (dropit2) next
+    if (isTRUE(dropit2)) {
+      overallVSlocal <- FALSE
+      next
+    }
     
     result[["keep2"]] <- keep2
+    
     result[["ovsl"]] <- ovsl
     
   }
@@ -128,8 +139,53 @@ if (all(expvar != "xinterceptx")) {
 
 # .......................................................
 # .......................................................
-# This is Table 01 #
-# Create a table with frequencies where each item was evaluated
+# Make map ####
+
+# Check if lonlat is provided
+lon <- grepl("_lon", names(cmdata))
+lat <- grepl("_lat", names(cmdata))
+
+geoTRUE <- any(lon) & any(lat)
+
+if (isTRUE(geoTRUE)) {
+  lon <- which(lon)[1]
+  lat <- which(lat)[1]
+  
+  lonlat <- cmdata[,c(lon,lat)]
+  
+  lonlat <- na.omit(lonlat)
+  
+  nlonlat <- dim(lonlat)[[1]]
+  
+  if (nlonlat > 0){
+    
+    names(lonlat) <- c("lon","lat")
+    
+    trial_map <- plot_map(lonlat, c("lon","lat"),
+                          map.types = c("CartoDB.Positron", "OpenTopoMap"))
+    
+    mapshot(trial_map, 
+            url = paste0(getwd(), "/", pathname, projname, "_trial_map.html"),
+            file = paste0(getwd(), "/", pathname, projname, "_trial_map.png"))
+    
+    trial_map_statement <- c("The map below shows the distribution of the trials in this project.")
+                             
+  
+  }
+  
+}
+
+if (isFALSE(geoTRUE)) {
+  
+  trial_map_statement <- ""
+  
+}
+
+
+# .......................................................
+# .......................................................
+# Make Table 1 ####
+# Create a table with frequencies where each item was evaluated #
 itemdata <- cmdata[, grepl("package_item", names(cmdata))]
 
 itemtable <- data.frame(table(unlist(itemdata)))
@@ -154,8 +210,8 @@ if (isTRUE(gender)) {
   nMan <- sum(gender_i == "Man", na.rm = TRUE)
   nWom <- sum(gender_i == "Woman", na.rm = TRUE)
   
-  dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Man")), 
-              tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Woman"))) 
+  dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Man", na.rm = TRUE)), 
+              tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Woman", na.rm = TRUE))) 
   
   itemtable$m <- dt[, 1]
   
@@ -167,9 +223,9 @@ if (isTRUE(gender)) {
   
 }
 
-itemtable$Abbreviation <- gosset:::.reduce(as.character(itemtable$Item))
+itemtable$Abbreviation <- gosset:::.reduce(as.character(itemtable[,Option]))
 
-itemtable <- itemtable[union(c("Item","Abbreviation"), names(itemtable))]
+itemtable <- itemtable[union(c(Option, "Abbreviation"), names(itemtable))]
 
 # .......................................................
 # .......................................................
@@ -227,8 +283,8 @@ fav2$fav_score <- round(fav2$fav_score, 1)
 
 fav2 <- fav2[,-which(grepl("wins", names(fav2)))]
 
-names(fav2) <- c(Option,"N","Top Ranked","Bottom Ranked",
-                 "Net Favourability Score")
+names(fav2) <- c(Option,"N","Top Ranked",
+                 "Bottom Ranked", "Net Favourability Score")
 
 # Contest Plots
 cont1 <- summarise_dominance(R)
@@ -241,7 +297,9 @@ cont2 <- summarise_victories(R)
 # this assess how the other traits agreed with the overall preference
 # build rankings for the other characteristics
 other_traits <- trait[-1]
+
 other_traits_full <- trait_full[-1]
+
 if (length(other_traits) > 0) {
   
   # filter cmdata so it matches the dims in all traits
@@ -349,13 +407,26 @@ worthscaled <- data.frame(label = factor(names(worthscaled),
                           prob = paste0(round(worthscaled * 100, 1), "%"), 
                           check.names = FALSE)
 
-names(worthscaled) <- c(Option, c("Worth","Win probability"))
+# Get Table 3.4
+worthscaled <- worthscaled[,c("label", "worth", "prob")]
+row.names(worthscaled) <- NULL
+names(worthscaled) <- c(Option, c("Worth", "Win probability"))
+
+
+# Get the aov Table 1.1
+aov_mod_overall <- anova.PL(mod_overall)
+aov_mod_overall[,5] <- paste(format.pval(aov_mod_overall[,5]), 
+                             stars.pval(aov_mod_overall[,5]))
+aov_mod_overall[2, "model"] <- "Overall performance"
+
 
 # Run over the other traits
 mods <- list()
 summaries <- list()
+plot_summaries <- list()
 worths <- list()
 anovas <- list()
+aov_tables <- list()
 contests_t <- list()
 
 for (i in seq_along(other_traits)){
@@ -397,8 +468,6 @@ for (i in seq_along(other_traits)){
     
   }
   
- 
-  
   contests <- list()
   contests[[1]] <- summarise_dominance(Rot)
   contests[[2]] <- summarise_victories(Rot)
@@ -409,12 +478,44 @@ for (i in seq_along(other_traits)){
   
   mods[[i]] <- mod_t
   
-  summaries[[i]] <- multcompPL(mod_t, adjust = ci_adjust)
+  # aov tables for other characteristics in Section 4. Table 4.*.1
+  aov_i <- anova.PL(mod_t)
   
-  anovas[[i]] <- anova.PL(mod_t)
+  # this is to be used later for Table 1.1
+  anovas[[i]] <- aov_i
   
+  # organise pvalues
+  aov_i[,5] <- paste(format.pval(aov_i[,5]), 
+                     stars.pval(aov_i[,5]))
+  aov_i[2, "model"] <- other_traits_full[[i]]
+  
+  aov_tables[[i]] <- aov_i
+  
+  # This is Table 4.*.2
+  summ_i <- multcompPL(mod_t, adjust = ci_adjust)
+  summ_i$items <- row.names(summ_i)  
+  rownames(summ_i) <- NULL
+  summ_i <- summ_i[, c("items", "estimate","quasiSE",".group")]
+  names(summ_i) <- c(Option, "Estimate","quasiSE","Group")
+  
+  summaries[[i]] <- summ_i
+  
+  # And this is Figure 3.*.2
+  summ_i_plot <- 
+    plot_multcompPL(summ_i, 
+                    term = Option, 
+                    estimate = "Estimate",
+                    quasiSE = "quasiSE",
+                    group = "Group",
+                    level = ci_level) + 
+    theme_classic() +
+    theme(axis.text.x = element_text(size = 10, color = "#000000"),
+          axis.text.y = element_text(size = 10, color = "#000000"))
+  
+  plot_summaries[[i]] <- summ_i_plot
+  
+  # This is Table 4.*.3
   worths_i <- rev(sort(coef(mod_t, log = FALSE)))
-  
   worths_i <- data.frame(label = factor(names(worths_i),
                                         (names(worths_i))),
                          worth = worths_i,
@@ -422,7 +523,6 @@ for (i in seq_along(other_traits)){
                          check.names = FALSE)
   
   names(worths_i) <- c(Option, c("Worth","Win probability"))
-  
   worths[[i]] <- worths_i
 }
 
@@ -440,14 +540,17 @@ coefs <- as.data.frame(coefs)
 # add item names as rows
 rownames(coefs) <- rownames(qvcalc(mod_overall)[[2]])
 # set col names with title case traits
-names(coefs) <- c("Overall", ClimMobTools:::.title_case(other_traits))
+otf <- gsub(" ","_", other_traits_full)
+names(coefs) <- c("Overall", ClimMobTools:::.title_case(otf))
 
 # .......................................................
 # .......................................................
 # Compute partial least squares ####
+arrows <- data.frame()
+scores <- data.frame()
 
 if (length(other_traits) > 0) {
-  fml <- paste("Overall ~ ", paste(ClimMobTools:::.title_case(other_traits), collapse = " + "))
+  fml <- paste("Overall ~ ", paste(ClimMobTools:::.title_case(otf), collapse = " + "))
   fml <- as.formula(fml)
   
   m2 <- plsr(fml,
@@ -455,11 +558,9 @@ if (length(other_traits) > 0) {
              validation = "LOO", 
              jackknife = TRUE)
   
-  arrows <- NULL
-  scores <- NULL
   if (ncol(m2$projection) > 1 ) {
     arrows <- data.frame((m2$projection)[,1:2],
-                         trait = other_traits,
+                         trait = otf,
                          x0 = 0, 
                          y0 = 0, 
                          stringsAsFactors = FALSE)
@@ -473,7 +574,44 @@ if (length(other_traits) > 0) {
                  intercept = FALSE)$val)
   
   adjCV <- m2$validation$adj
+  
   nc <- which(adjCV == min(adjCV))
+}
+
+if (dim(arrows)[[1]] > 0) {
+  
+  pls_plot <- ggplot(data = arrows,
+                     aes(y = Comp.2, 
+                         x = Comp.1, 
+                         label = trait, 
+                         yend = y0, 
+                         xend = x0)) +
+    geom_hline(yintercept = 0) + 
+    geom_vline(xintercept = 0) +
+    geom_segment(col = "red", arrow = arrow(length = unit(0.5, "cm"), ends = "first" )) +
+    geom_abline(linetype = 2, col = "gray50", slope = (yve[2] - yve[1]) / yve[1], intercept = 0) +
+    geom_text_repel(fontface = 2, size = 4, col = "red") +
+    geom_text(data = scores, 
+              aes(y = Comp.2,
+                  x = Comp.1, 
+                  label = var), 
+              inherit.aes = FALSE, fontface = 2, size = 3) +
+    theme_bw() +
+    theme(panel.grid.minor = element_blank()) +
+    labs(x = paste0("PC1 ", round(yve[1] * 100, 2), "%"),
+         y = paste0("PC2 ", round((yve[2]-yve[1]) * 100, 2),"%"))
+  
+  pls_summary_line <- paste("The first two components recombining the specific characteristics",
+  "are able to explain", paste0(round(yve[2] * 100, 2), "%"), "of the variability in the overall performance.",
+  "The dashed line represents the overall performance, with an increase in performance as the x and y increase.",
+  "The", option, "positioned close to the dashed line will be performing equally across all characteristics;",
+  "the", option, "positioned further away from the dashed line, on either side, will have varying performance",
+  "in different characteristics. Better performance in characteristics will correspond with arrows pointing",
+  "in the direction away from the dashed line and worse performance in characteristics directed on the opposite side.") 
+}
+
+if (dim(arrows)[[1]] == 0) {
+  pls_summary_line <- "However, partial least squares analysis was not possible with this project data."
 }
 
 # .......................................................
@@ -521,12 +659,25 @@ if (isFALSE(overallVSlocal)) {
 
 # data frame of explanatory variables
 Gdata <- as.data.frame(cmdata[keep, expvar_list$expvar], stringsAsFactors = TRUE)
+nvar <- length(expvar_list$expvar)
+# setup the variables
+Gdata[1:nvar] <- lapply(Gdata[1:nvar], function(x){
+  if(is.numeric(x)) {
+    x <- round(x, 3)
+  }
+  
+  if(is.character(x)) {
+    x <- as.factor(x)
+  }
+  return(x)
+})
+
 names(Gdata) <- expvar_list$expvar_full
 Gdata <- cbind(G, Gdata)
 
 tree_f <- pltree(G ~ .,
                  data = Gdata, 
-                 minsize = minsplit, 
+                 minsize = minsplit,
                  alpha = sig_level)
 
 
@@ -589,11 +740,14 @@ for(j in seq_along(tree_f)){
     })[[1]]
   
   if (length(zzz) > 0) {
+    x <- data.frame(Node = j,
+                    t(nodeapply(tree_f, j, function(n){
+                      info_node(n)$test
+                    })[[1]]))
+      
+    x$p.value <- round(x$p.value, 3)
     
-    outtabs[[j]] <- data.frame(Node = j,
-                               t(nodeapply(tree_f, j, function(n){
-                                 info_node(n)$test
-                                 })[[1]]))
+    outtabs[[j]] <- x
     
     outtabs[[j]]$p <- format.pval(outtabs[[j]]$p.value)
   }
@@ -606,43 +760,94 @@ for(j in seq_along(tree_f)){
   }
 }
 
+# Built table with p-values per node
+pval_nodes <- data.frame()
+
+for (i in seq_along(outtabs)) {
+  if (ncol(outtabs[[i]]) > 3) {
+    ot <- data.frame(Covariate = rownames(outtabs[[i]]),
+                     outtabs[[i]])
+    pval_nodes <- rbind(pval_nodes, ot)
+  }
+}
+
+if (dim(pval_nodes)[[2]] > 0) {
+  
+  pval_nodes <- pval_nodes[,c("Covariate", "Node", "p.value")]
+  
+  row.names(pval_nodes) <- NULL
+  
+  # put bold in significant values 
+  putbold <- which(pval_nodes$p <= sig_level)
+  
+  sig <- stars.pval(pval_nodes$p.value)
+  
+  pval_nodes$p.value <- paste(format.pval(pval_nodes$p.value), 
+                              stars.pval(pval_nodes$p.value))
+  
+  for(i in seq_along(putbold)) {
+    index_i <- putbold[i]
+    
+    pval_nodes[index_i, ] <- paste0("**", pval_nodes[index_i, ], "**")
+    
+  }
+  
+  nodemessage <- ""
+  
+}
+
+if (dim(pval_nodes)[[2]] == 0) {
+  nodemessage <- "No covariates were able to be assessed statistically."
+}
+
 # ....................................................................
 # ....................................................................
 # Build headline summaries ####
 
 siglist <- NULL
-for(i in 1:length(outtabs)){
-  if (ncol(outtabs[[i]]) > 3) {
+for(i in seq_along(outtabs)){
+  if (dim(outtabs[[i]])[[2]] > 3) {
     siglist <- c(siglist,
-                 rownames(outtabs[[i]])[outtabs[[i]]$p.value<0.05])
+                 rownames(outtabs[[i]])[outtabs[[i]]$p.value < sig_level])
   }
 }
+
 siglist <- unique(siglist)
 
 ps <- fullanova[2, 5]
-if(ps < 0.05){
+if (ps < sig_level) {
   bests <- paste(model_summaries$term[grep("a", model_summaries$.group)], 
                  collapse =", ")
   
-  worsts <-paste(rev(model_summaries$term[grep(model_summaries$.group[nrow(model_summaries)],
-                                              model_summaries$.group)]),
-                 collapse=", ")
-}else{
+  worsts <- paste(rev(model_summaries$term[grep(model_summaries$.group[nrow(model_summaries)],
+                                                model_summaries$.group)]),
+                 collapse = ", ")
+} else {
   bests <- worsts <- "No significant differences"
 }
 
 if (length(other_traits) > 0) {
+  
   for(i in 1:length(anovas)){
     
     ps <- c(ps, anovas[[i]][2,5])
     
-    if(ps[i]<0.05){
-      bests<-c(bests,paste(summaries[[i]]$term[grep("a",summaries[[i]]$.group)],collapse=", "))
-      worsts<-c(worsts,paste(rev(summaries[[i]]$term[grep(summaries[[i]]$.group[nrow(summaries[[i]])],
-                                                          summaries[[i]]$.group)]),collapse=", "))
+    if(ps[i] < sig_level){
+      
+      summ_i <- summaries[[i]]
+      
+      bests <- c(bests,
+                 paste(summ_i[,Option][grepl("a", summ_i[,"Group"])],
+                       collapse=", "))
+      
+      worsts <- c(worsts,
+                  paste(rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option]),
+                        collapse=", "))
     }else{
-      bests<-c(bests,"No significant differences")  
-      worsts<-c(worsts,"No significant differences")  
+      
+      bests <- c(bests,"No significant differences")  
+      
+      worsts <- c(worsts,"No significant differences")  
     }
   }
   
@@ -664,22 +869,57 @@ if (length(other_traits) == 0) {
                      stringsAsFactors = FALSE)
 }
 
-
-ptab$sig <- stars.pval(ptab$p.value)
-
-ptab$p.value <- round(ptab$p.value, 5)
+ptab$p.value <- paste(format.pval(ptab$p.value), stars.pval(ptab$p.value))
 
 
-outtabs[[1]]$p.value <- as.numeric(outtabs[[1]]$p.value)
-
+# This is Table 1.2.1
 uni_sum <- outtabs[[1]]
-uni_sum$Variable <- rownames(outtabs[[1]])
-uni_sum$p <- paste(format.pval(outtabs[[1]]$p.value),stars.pval(outtabs[[1]]$p.value))
+uni_sum$p.value <- as.numeric(uni_sum$p.value)
+uni_sum$Covariate <- rownames(uni_sum)
+uni_sum$p.value <- paste(format.pval(uni_sum$p.value), stars.pval(uni_sum$p.value))
+uni_sum <- uni_sum[,c("Covariate","p.value")]
 rownames(uni_sum) <- NULL
 
+# This is Table 3.3
+model_summaries$items <- row.names(model_summaries)  
+rownames(model_summaries) <- NULL
+model_summaries <- model_summaries[, c("items", "estimate","quasiSE",".group")]
+names(model_summaries) <- c(Option, "Estimate","quasiSE","Group")
+
+# And this is Figure 3.1
+mod_sum_PL <- 
+  plot_multcompPL(model_summaries, 
+                  term = Option, 
+                  estimate = "Estimate",
+                  quasiSE = "quasiSE",
+                  group = "Group",
+                  level = ci_level) + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000"))
+
+
+# This is the fist table in Section 1
+
+
+tbl_section1 <- data.frame(name = pars$chars$char_full,
+                           char = pars$chars$char)
+
+respondents <- NULL
+for(i in seq_along(trait_list)) {
+  
+  respondents <- c(respondents, sum(trait_list[[i]]$keep))
+  
+}
+
+tbl_section1$x <- respondents
+
+names(tbl_section1) <- c("Characteristic", "Short name", "Number of valid answers")
 
 # define height of plots based on items
-favplot_h <- nitems * 0.6
-contest_h <- nitems * 0.6 * 2
-agreem_h <- ntrait * 1.3
-multcomp_h <- nitems * 0.8 
+favplot_h <- nitems * 0.4
+contest_h <- nitems * 0.4 * 2
+agreem_h <- ntrait * 0.9
+multcomp_h <- nitems * 0.6 
+
+
