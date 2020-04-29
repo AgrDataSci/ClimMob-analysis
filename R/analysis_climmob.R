@@ -407,13 +407,26 @@ worthscaled <- data.frame(label = factor(names(worthscaled),
                           prob = paste0(round(worthscaled * 100, 1), "%"), 
                           check.names = FALSE)
 
-names(worthscaled) <- c(Option, c("Worth","Win probability"))
+# Get Table 3.4
+worthscaled <- worthscaled[,c("label", "worth", "prob")]
+row.names(worthscaled) <- NULL
+names(worthscaled) <- c(Option, c("Worth", "Win probability"))
+
+
+# Get the aov Table 1.1
+aov_mod_overall <- anova.PL(mod_overall)
+aov_mod_overall[,5] <- paste(format.pval(aov_mod_overall[,5]), 
+                             stars.pval(aov_mod_overall[,5]))
+aov_mod_overall[2, "model"] <- "Overall performance"
+
 
 # Run over the other traits
 mods <- list()
 summaries <- list()
+plot_summaries <- list()
 worths <- list()
 anovas <- list()
+aov_tables <- list()
 contests_t <- list()
 
 for (i in seq_along(other_traits)){
@@ -455,8 +468,6 @@ for (i in seq_along(other_traits)){
     
   }
   
- 
-  
   contests <- list()
   contests[[1]] <- summarise_dominance(Rot)
   contests[[2]] <- summarise_victories(Rot)
@@ -467,12 +478,44 @@ for (i in seq_along(other_traits)){
   
   mods[[i]] <- mod_t
   
-  summaries[[i]] <- multcompPL(mod_t, adjust = ci_adjust)
+  # aov tables for other characteristics in Section 4. Table 4.*.1
+  aov_i <- anova.PL(mod_t)
   
-  anovas[[i]] <- anova.PL(mod_t)
+  # this is to be used later for Table 1.1
+  anovas[[i]] <- aov_i
   
+  # organise pvalues
+  aov_i[,5] <- paste(format.pval(aov_i[,5]), 
+                     stars.pval(aov_i[,5]))
+  aov_i[2, "model"] <- other_traits_full[[i]]
+  
+  aov_tables[[i]] <- aov_i
+  
+  # This is Table 4.*.2
+  summ_i <- multcompPL(mod_t, adjust = ci_adjust)
+  summ_i$items <- row.names(summ_i)  
+  rownames(summ_i) <- NULL
+  summ_i <- summ_i[, c("items", "estimate","quasiSE",".group")]
+  names(summ_i) <- c(Option, "Estimate","quasiSE","Group")
+  
+  summaries[[i]] <- summ_i
+  
+  # And this is Figure 3.*.2
+  summ_i_plot <- 
+    plot_multcompPL(summ_i, 
+                    term = Option, 
+                    estimate = "Estimate",
+                    quasiSE = "quasiSE",
+                    group = "Group",
+                    level = ci_level) + 
+    theme_classic() +
+    theme(axis.text.x = element_text(size = 10, color = "#000000"),
+          axis.text.y = element_text(size = 10, color = "#000000"))
+  
+  plot_summaries[[i]] <- summ_i_plot
+  
+  # This is Table 4.*.3
   worths_i <- rev(sort(coef(mod_t, log = FALSE)))
-  
   worths_i <- data.frame(label = factor(names(worths_i),
                                         (names(worths_i))),
                          worth = worths_i,
@@ -480,7 +523,6 @@ for (i in seq_along(other_traits)){
                          check.names = FALSE)
   
   names(worths_i) <- c(Option, c("Worth","Win probability"))
-  
   worths[[i]] <- worths_i
 }
 
@@ -569,7 +611,7 @@ if (dim(arrows)[[1]] > 0) {
 }
 
 if (dim(arrows)[[1]] == 0) {
-  pls_summary_line<-"However, partial least squares analysis was not possible with this project data."
+  pls_summary_line <- "However, partial least squares analysis was not possible with this project data."
 }
 
 # .......................................................
@@ -740,16 +782,15 @@ if (dim(pval_nodes)[[2]] > 0) {
   
   sig <- stars.pval(pval_nodes$p.value)
   
+  pval_nodes$p.value <- paste(format.pval(pval_nodes$p.value), 
+                              stars.pval(pval_nodes$p.value))
+  
   for(i in seq_along(putbold)) {
     index_i <- putbold[i]
     
     pval_nodes[index_i, ] <- paste0("**", pval_nodes[index_i, ], "**")
     
   }
-  
-  pval_nodes$sig <- sig
-  
-  names(pval_nodes)[names(pval_nodes) == "sig"] <- ""
   
   nodemessage <- ""
   
@@ -774,29 +815,39 @@ for(i in seq_along(outtabs)){
 siglist <- unique(siglist)
 
 ps <- fullanova[2, 5]
-if(ps < 0.05){
+if (ps < sig_level) {
   bests <- paste(model_summaries$term[grep("a", model_summaries$.group)], 
                  collapse =", ")
   
-  worsts <-paste(rev(model_summaries$term[grep(model_summaries$.group[nrow(model_summaries)],
-                                              model_summaries$.group)]),
-                 collapse=", ")
-}else{
+  worsts <- paste(rev(model_summaries$term[grep(model_summaries$.group[nrow(model_summaries)],
+                                                model_summaries$.group)]),
+                 collapse = ", ")
+} else {
   bests <- worsts <- "No significant differences"
 }
 
 if (length(other_traits) > 0) {
+  
   for(i in 1:length(anovas)){
     
     ps <- c(ps, anovas[[i]][2,5])
     
     if(ps[i] < sig_level){
-      bests<-c(bests,paste(summaries[[i]]$term[grep("a",summaries[[i]]$.group)],collapse=", "))
-      worsts<-c(worsts,paste(rev(summaries[[i]]$term[grep(summaries[[i]]$.group[nrow(summaries[[i]])],
-                                                          summaries[[i]]$.group)]),collapse=", "))
+      
+      summ_i <- summaries[[i]]
+      
+      bests <- c(bests,
+                 paste(summ_i[,Option][grepl("a", summ_i[,"Group"])],
+                       collapse=", "))
+      
+      worsts <- c(worsts,
+                  paste(rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option]),
+                        collapse=", "))
     }else{
-      bests<-c(bests,"No significant differences")  
-      worsts<-c(worsts,"No significant differences")  
+      
+      bests <- c(bests,"No significant differences")  
+      
+      worsts <- c(worsts,"No significant differences")  
     }
   }
   
@@ -818,22 +869,57 @@ if (length(other_traits) == 0) {
                      stringsAsFactors = FALSE)
 }
 
-
-ptab$sig <- stars.pval(ptab$p.value)
-
-ptab$p.value <- round(ptab$p.value, 5)
+ptab$p.value <- paste(format.pval(ptab$p.value), stars.pval(ptab$p.value))
 
 
-outtabs[[1]]$p.value <- as.numeric(outtabs[[1]]$p.value)
-
+# This is Table 1.2.1
 uni_sum <- outtabs[[1]]
-uni_sum$Variable <- rownames(outtabs[[1]])
-uni_sum$p <- paste(format.pval(outtabs[[1]]$p.value),stars.pval(outtabs[[1]]$p.value))
+uni_sum$p.value <- as.numeric(uni_sum$p.value)
+uni_sum$Covariate <- rownames(uni_sum)
+uni_sum$p.value <- paste(format.pval(uni_sum$p.value), stars.pval(uni_sum$p.value))
+uni_sum <- uni_sum[,c("Covariate","p.value")]
 rownames(uni_sum) <- NULL
 
+# This is Table 3.3
+model_summaries$items <- row.names(model_summaries)  
+rownames(model_summaries) <- NULL
+model_summaries <- model_summaries[, c("items", "estimate","quasiSE",".group")]
+names(model_summaries) <- c(Option, "Estimate","quasiSE","Group")
+
+# And this is Figure 3.1
+mod_sum_PL <- 
+  plot_multcompPL(model_summaries, 
+                  term = Option, 
+                  estimate = "Estimate",
+                  quasiSE = "quasiSE",
+                  group = "Group",
+                  level = ci_level) + 
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000"))
+
+
+# This is the fist table in Section 1
+
+
+tbl_section1 <- data.frame(name = pars$chars$char_full,
+                           char = pars$chars$char)
+
+respondents <- NULL
+for(i in seq_along(trait_list)) {
+  
+  respondents <- c(respondents, sum(trait_list[[i]]$keep))
+  
+}
+
+tbl_section1$x <- respondents
+
+names(tbl_section1) <- c("Characteristic", "Short name", "Number of valid answers")
 
 # define height of plots based on items
 favplot_h <- nitems * 0.4
 contest_h <- nitems * 0.4 * 2
 agreem_h <- ntrait * 0.9
 multcomp_h <- nitems * 0.6 
+
+

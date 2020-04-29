@@ -121,25 +121,26 @@ multcompPL<-function(mod,terms=NULL,threshold=0.05,Letters=letters,adjust="none"
 }
 
 # simple ggplot function to plot output from multcompPL with error bars
-plot.multcompPL<-function(x,level=0.95,xlab="",ylab="", ...){
+plot_multcompPL <- function(object, term, estimate, quasiSE, group, level = 0.95, xlab = "", ylab = "", ...){
   
-  x$term <- gosset:::.reduce(as.character(x$term), ...)
+  object <- object[,c(term, estimate, quasiSE, group)]
+  names(object) <- c("x","y","qse","g")
   
-  p1<- ggplot(data = x,
-              aes(y = estimate, 
-                  x = term,
-                  label = .group, 
-                  ymax = estimate + qnorm(1-(1-level)/2) * quasiSE,
-                  ymin = estimate - qnorm(1-(1-level)/2) * quasiSE)) +
+  object$x <- gosset:::.reduce(as.character(object$x), ...)
+  
+  ggplot(data = object,
+              aes(x = x, 
+                  y = y,
+                  label = g, 
+                  ymax = y + stats::qnorm(1-(1-level)/2) * qse,
+                  ymin = y - stats::qnorm(1-(1-level)/2) * qse)) +
     geom_point() +
-    geom_errorbar(width=0.1) +
+    geom_errorbar(width = 0.1) +
     coord_flip() +
     geom_text(vjust = 1.2) +
     xlab(xlab) + 
     ylab(ylab) +
     theme_bw()
-  
-  return(p1)
 
 }
 

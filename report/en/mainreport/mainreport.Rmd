@@ -49,9 +49,8 @@ Overall there were `r nranker` `r rankers` contributing to this project. Each `r
 
 ```{r characteristics}
 
-kable(data.frame("Short name" = pars$chars$char,
-                 "Question"   = pars$chars$char_full,
-                 check.names = FALSE), 
+kable(tbl_section1, 
+      row.names = FALSE,
       align = "l")
 
 ```
@@ -127,10 +126,11 @@ A summary of the p-values testing the hypothesis that there exist differences in
 
 \
 
-```{r table11}
+```{r table1.1}
 kable(ptab, 
       caption = paste0("Table 1.1. Summary of differences found in ",options," by characteristic."))
 ```
+
 
 
 ## Effect of covariates
@@ -161,12 +161,14 @@ if (length(na.omit(outtabs[[1]]$p.value)) == 0) {
 A summary of the univariate signifance levels for all covariates that were able to be tested is shown in Table 1.2.1.
 ```{r summary-univariate}
 
-kable(uni_sum[,c(5,4)],
+kable(uni_sum,
       caption = paste0("Table 1.2.1. Summary of univariate p-values for first split in ",
                        "Plackett-Luce tree model for the 'overall performance'."))
 
 
 ```
+
+
 
 \
 
@@ -414,46 +416,11 @@ kable(data.frame("Short name" = expvar_list$expvar,
 Table 3.2 shows the results from the likelihood ratio test from the Plackett-Luce model for overall performance of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
 
 ```{r, aov1}
-x1 <- anova.PL(mod_overall)
-p <- x1[2,5]
-x1[,6] <- stars.pval(x1[, 5])
-x1[,5] <- format.pval(x1[, 5])
-names(x1)[6] <- ""
-x1[2, "model"] <- "Overall"
-
-kable(x1, 
+kable(aov_mod_overall, 
       caption = "Table 3.2. Likelihood ratio test results from fitted Plackett-Luce model with rankings from 'overall performance'.")
 ```
 
 
-```{r pval_sentence}
-if (p < 0.001) {
-  message1 <- paste0("p=", format.pval(p), 
-                    ". This suggests that there is strong evidence of ",
-                    "a difference in the rankings between ",
-                    options)
-}
-
-if (p<0.01 & p >0.001) {
-  message1 <- paste0("p=", format.pval(p), 
-                     ". This suggests that there is evidence of a difference between ",
-                     options)
-}
-if (p>0.01 & p <0.05) {
-  message1 <- paste0("p=", format.pval(p), 
-                    ". This suggests that there is some evidence of a difference between ",
-                    options)  
-}
-if (p>0.05) {
-  message1 <- paste0("p=", format.pval(p),
-                    ". This suggests that there is not enough evidence to conclude that",
-                    " there are differences between ",
-                    options)  
-}
-```
-
-
-`r message1`
 
 \
 
@@ -462,10 +429,7 @@ Figure 3.1 shows the estimates of the model coefficients with `r ci_level*100`% 
 Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others; when `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the `r sig_level*100`% significance level. 
 
 ```{r est_plot, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.1. Model coefficients and mean separation of Plackett-Luce model for 'overall performance' with ", ci_level*100, "% confidence intervals.")}
-plot.multcompPL(model_summaries, level = ci_level) + 
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 10, color = "#000000"),
-        axis.text.y = element_text(size = 10, color = "#000000")) 
+plot(mod_sum_PL)
 ```
 
 \
@@ -475,10 +439,9 @@ The same information as Figure 3.1 is shown in Table 3.3 below.
 \
 
 ```{r est_table}
-ms <- model_summaries[, c("estimate","quasiSE",".group")]
-names(ms) <- c("Estimate","quasiSE","Group")
-
-kable(ms, digits = 2,
+kable(model_summaries, 
+      digits = 4,
+      row.names = FALSE,
       caption = paste0("Table 3.3. Model coefficients and mean separation of ",
                        options," with ",
                        100*sig_level,"% level with ",ci_adjust," adjustment."))
@@ -490,8 +453,8 @@ Table 3.4 and Figure 3.2 use the coefficients from the Plackett-Luce model to es
 
 \
 
-```{r}
-kable(worthscaled[, -2],
+```{r table3.4}
+kable(worthscaled[,-2],
       row.names = FALSE,
       caption = "Table 3.4. Percentage probability of being the best ranked for 'overall performance'.")
 ```
@@ -499,7 +462,7 @@ kable(worthscaled[, -2],
 \
 
 ```{r rankedfirst, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap="Figure 3.2. Probability of being the best ranked for 'overall performance'."}
-plot_worth_bar(worthscaled, value = 2, group = 1)
+plot_worth_bar(worthscaled, value = "Worth", group = Option)
 ```
 
 \
@@ -510,11 +473,11 @@ plot_worth_bar(worthscaled, value = 2, group = 1)
 ```{r, characteristicmodels}
 model_traits <- NULL
 if (length(other_traits_list) > 0) {
-  for (i in seq_along(other_traits_list)){
-    model_traits<-c(model_traits,
-                    knitr::knit_child(paste0(fullpath, "/report/", 
-                                             language, "/mainreport/trait_models.Rmd"), 
-                                      quiet=TRUE))
+  for (i in seq_along(other_traits_list)) {
+    model_traits <- c(model_traits,
+                      knitr::knit_child(paste0(fullpath, "/report/", 
+                                               language, "/mainreport/trait_models.Rmd"), 
+                                        quiet = TRUE))
 }
 }
 
@@ -537,10 +500,11 @@ A model-based recursive partitioning method [@Strobl2009] was used to determine 
 \
 
 ```{r univar_pval}
-kable(uni_sum[,c(5,4)],
+kable(uni_sum,
       caption = paste0("Table 5.1. Univariate p-values for first split in ",
                        "Plackett-Luce tree model for the overall ranking."))
 ```
+
 
 \
 

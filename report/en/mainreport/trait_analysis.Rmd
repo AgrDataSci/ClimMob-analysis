@@ -43,7 +43,7 @@ p2 <-
 ```{r}
 knitr::kable(fav2[nrow(fav2):1,],
              row.names = FALSE,
-             caption = paste0("Table 2.2.",i,": Favourability statistics for '",
+             caption = paste0("Table 2.2.",i,". Favourability statistics for '",
                            tolower(other_traits_list[[i]]$fullname),"'"))
 ```
 
@@ -52,6 +52,3 @@ knitr::kable(fav2[nrow(fav2):1,],
 ```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.2.",i, ". Net favourability score for '",tolower(other_traits_list[[i]]$fullname),"'.")}
 p2
 ```
-
-
-
