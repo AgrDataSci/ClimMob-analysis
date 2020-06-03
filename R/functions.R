@@ -1061,3 +1061,180 @@ plot_coef <- function(object, ...) {
 
 
 
+#' Plot nodes from recursive partitioning trees
+#'
+#' Make a ggplot2 chart from model-based recursive partitioning trees with quasi-variance
+#'
+#' @param object an object of class modelparty
+#' @param labels optional, new labels for the axis X in the plot
+#' by default
+#' @param ... additional arguments passed to ggplot2
+#' @return a list of plots with probabilities of winning and 
+#' intervals based on quasi-standard errors
+#' @seealso \code{\link[qvcalc]{qvcalc}} \code{\link[ggplot2]{ggplot}}
+#' @examples
+#' 
+#' library("PlackettLuce")
+#' library("qvcalc")
+#' library("ggplot2")
+#' 
+#' data("breadwheat", package = "gosset")
+#' 
+#' G <- rank_tricot(data = breadwheat, 
+#'                  items = c("variety_a","variety_b","variety_c"), 
+#'                  input = c("overall_best","overall_worst"),
+#'                  group = TRUE)
+#' 
+#' mydata <- cbind(G, breadwheat[c("lon","lat")])
+#' 
+#' # fit a pltree model using lon and lat
+#' mod <- pltree(G ~ ., data = mydata)
+#' 
+#' # plot nodes
+#' p <- plot_nodes(mod)
+#' 
+#' @importFrom partykit nodeids
+#' @importFrom psychotools itempar
+#' @importFrom qvcalc qvcalc
+#' @import ggparty
+#' @importFrom ggplot2 ggplot aes geom_vline geom_point geom_errorbar scale_x_continuous 
+#' theme_bw labs theme element_text element_blank element_rect element_line
+#' @export
+
+
+library("psychotree")
+library("ggplot2")
+library("ggparty")
+library("patchwork")
+
+
+## Germany's Next Topmodel 2007 data
+data("Topmodel2007", package = "psychotree")
+
+## BT tree
+tm_tree <- bttree(preference ~ ., data = Topmodel2007, minsize = 5)
+
+object <- tm_tree
+dots <- list()
+
+plot_nodes <- function(object, ...){
+  
+  # Extract ids from terminal nodes
+  node_id <- partykit::nodeids(object, terminal = TRUE)
+  
+  dots <- list(...)
+  
+  if ("font.size" %in% names(dots)) {
+    font.size <- dots[["font.size"]]
+  } else {
+    font.size <- NULL
+  }
+  
+  
+  # get node information
+  nodes <- list()
+  for (i in seq_along(node_id)) {
+    nodes[[i]] <- object[[ node_id[i] ]]$node$info$object
+  }
+  
+  # get number of observers in each node
+  nobs <- list()
+  for (i in seq_along(node_id)) {
+    nobs[[i]] <- as.integer(object[[ node_id[i] ]]$node$info$nobs) 
+  }
+  
+  # get item parameters from model
+  coeffs <- lapply(nodes, psychotools::itempar)
+  
+  # get estimates from item parameters using qvcalc
+  coeffs <- lapply(coeffs, qvcalc::qvcalc)
+  
+  # extract dataframes with estimates
+  coeffs <- lapply(coeffs, function(X){
+    df <- X[]$qvframe }
+  )
+  
+  # get item names
+  items <- rownames(coeffs[[1]])
+  
+  # Add limits in error bars and item names
+  coeffs <- lapply(coeffs, function(X){
+    X <- within(X, {
+      bmin <- X$estimate-(X$quasiSE)
+      bmax <- X$estimate+(X$quasiSE)
+      items <- items
+    })
+    
+    X$bmax <- ifelse(X$bmax > 1, 0.991, X$bmax)
+    
+    X$bmin <- ifelse(X$bmin < 0, 0.001, X$bmin)
+    return(X)
+  })
+  
+  # Add node information and number of observations
+  for (i in seq_along(node_id)) {
+    coeffs[[i]] <- within(coeffs[[i]], {
+      nobs <- nobs[[i]]
+      node <- node_id[i]}
+    )
+  }
+  
+  coeffs <- do.call("rbind", coeffs)
+  
+  coeffs$node <- factor(coeffs$node, levels = sort(node_id))
+  
+  coeffs$items <- factor(coeffs$items, levels = sort(items))
+  
+  # Get max and min values for the x axis in the plot
+  xmax <- round(max(coeffs$bmax, na.rm = TRUE) + 0.01, digits = 4)
+  xmin <- round(min(coeffs$bmin, na.rm = TRUE), digits = 4)
+  
+  # Check font size for axis X and Y, and plot title
+  if (is.null(font.size)) {
+    s.title <- 13
+    s.axis <- 15
+  } else{
+    s.title <- font.size[1]
+    s.axis <- font.size[2]
+  }
+  
+  # get the tree structure
+  tree <- 
+    ggparty(object) +
+    geom_edge() +
+    geom_edge_label() +
+    geom_node_splitvar()
+  
+  p <- ggplot2::ggplot(coeffs, ggplot2::aes(x = estimate, y = items)) +
+    ggplot2::geom_vline(xintercept = 1/length(items), 
+                        colour = "#E5E7E9", size = 0.8) +
+    ggplot2::geom_point(pch = 21, size = 2, 
+                        fill = "black",colour = "black") +
+    ggplot2::geom_errorbarh(ggplot2::aes(xmin = bmin,
+                                         xmax = bmax),
+                            colour="black", height = 0.2) +
+    ggplot2::scale_x_continuous(limits = c(0, xmax)) +
+    ggplot2::theme_bw() +
+    ggplot2::labs(x = NULL, y = NULL ,
+                  title = paste0("Node ", X$node[1], " (n= ", X$nobs[1], ")")) +
+    ggplot2::theme(plot.title = ggplot2::element_text(size = s.title),
+                   axis.text.x = ggplot2::element_text(size = s.axis, angle = 0,
+                                                       hjust = 0.5, vjust = 1, face = "plain",
+                                                       colour = "black"),
+                   axis.text.y = ggplot2::element_text(size = s.axis, angle = 0,
+                                                       hjust = 1, vjust = 0.5, face = "plain",
+                                                       colour = "black"),
+                   plot.background = ggplot2::element_blank(),
+                   panel.grid.major = ggplot2::element_blank(),
+                   panel.grid.minor = ggplot2::element_blank(),
+                   panel.border = ggplot2::element_rect(colour = "black", size = 1),
+                   axis.ticks = ggplot2::element_line(colour = "black", size = 0.5),
+                   axis.ticks.length = grid::unit(0.3, "cm"))
+  
+  p
+  
+  names(plots) <- paste0("node",node_id)
+  
+  return(plots)
+}
+

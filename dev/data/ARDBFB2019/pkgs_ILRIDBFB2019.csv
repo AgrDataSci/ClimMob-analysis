@@ -1,0 +1,803 @@
+﻿Package code,Variety A,Variety B,Variety C
+Package #1,"EH1493
+","Adoshe
+","IAR(H)
+"
+Package #2,"HB1307
+","HB1965
+","Hagere 
+"
+Package #3,"HB1966
+","Cross 41/98
+","Agenehu
+"
+Package #4,"Adoshe
+","IAR(H)
+","Shegee
+"
+Package #5,"HB1965
+","EH1493
+","Cross 41/98
+"
+Package #6,"Agenehu
+","Shegee
+","HB1966
+"
+Package #7,"Hagere 
+","HB1966
+","HB1307
+"
+Package #8,"Cross 41/98
+","Agenehu
+","IAR(H)
+"
+Package #9,"EH1493
+","HB1965
+","Adoshe
+"
+Package #10,"Shegee
+","HB1307
+","Hagere 
+"
+Package #11,"IAR(H)
+","Adoshe
+","HB1965
+"
+Package #12,"Cross 41/98
+","Hagere 
+","Agenehu
+"
+Package #13,"HB1966
+","HB1307
+","EH1493
+"
+Package #14,"HB1307
+","HB1966
+","Shegee
+"
+Package #15,"Adoshe
+","IAR(H)
+","Cross 41/98
+"
+Package #16,"HB1965
+","Hagere 
+","EH1493
+"
+Package #17,"Agenehu
+","Cross 41/98
+","Shegee
+"
+Package #18,"Hagere 
+","HB1965
+","Adoshe
+"
+Package #19,"IAR(H)
+","EH1493
+","HB1966
+"
+Package #20,"Shegee
+","Agenehu
+","HB1307
+"
+Package #21,"EH1493
+","HB1307
+","Agenehu
+"
+Package #22,"HB1966
+","Shegee
+","HB1965
+"
+Package #23,"Cross 41/98
+","Adoshe
+","Hagere 
+"
+Package #24,"Hagere 
+","HB1966
+","IAR(H)
+"
+Package #25,"Adoshe
+","Shegee
+","Cross 41/98
+"
+Package #26,"HB1307
+","IAR(H)
+","HB1965
+"
+Package #27,"Agenehu
+","EH1493
+","Adoshe
+"
+Package #28,"IAR(H)
+","Cross 41/98
+","Agenehu
+"
+Package #29,"HB1965
+","Hagere 
+","EH1493
+"
+Package #30,"Shegee
+","Cross 41/98
+","HB1966
+"
+Package #31,"Adoshe
+","Shegee
+","HB1307
+"
+Package #32,"HB1307
+","Agenehu
+","Hagere 
+"
+Package #33,"HB1966
+","EH1493
+","HB1965
+"
+Package #34,"Hagere 
+","Adoshe
+","IAR(H)
+"
+Package #35,"Shegee
+","IAR(H)
+","HB1966
+"
+Package #36,"EH1493
+","HB1307
+","Cross 41/98
+"
+Package #37,"HB1965
+","Agenehu
+","Shegee
+"
+Package #38,"Agenehu
+","HB1965
+","Adoshe
+"
+Package #39,"Cross 41/98
+","Hagere 
+","IAR(H)
+"
+Package #40,"EH1493
+","HB1966
+","HB1307
+"
+Package #41,"HB1966
+","Cross 41/98
+","Agenehu
+"
+Package #42,"IAR(H)
+","Adoshe
+","EH1493
+"
+Package #43,"HB1307
+","HB1965
+","Hagere 
+"
+Package #44,"Adoshe
+","EH1493
+","Shegee
+"
+Package #45,"Agenehu
+","Hagere 
+","IAR(H)
+"
+Package #46,"Cross 41/98
+","Shegee
+","HB1966
+"
+Package #47,"HB1965
+","HB1307
+","Cross 41/98
+"
+Package #48,"Shegee
+","IAR(H)
+","HB1307
+"
+Package #49,"HB1965
+","HB1966
+","Adoshe
+"
+Package #50,"Hagere 
+","Agenehu
+","EH1493
+"
+Package #51,"HB1307
+","Adoshe
+","Agenehu
+"
+Package #52,"HB1966
+","Cross 41/98
+","Hagere 
+"
+Package #53,"IAR(H)
+","EH1493
+","HB1965
+"
+Package #54,"Shegee
+","Hagere 
+","HB1966
+"
+Package #55,"EH1493
+","Shegee
+","Cross 41/98
+"
+Package #56,"Agenehu
+","IAR(H)
+","Adoshe
+"
+Package #57,"HB1966
+","HB1307
+","HB1965
+"
+Package #58,"Cross 41/98
+","HB1965
+","Adoshe
+"
+Package #59,"Hagere 
+","IAR(H)
+","HB1307
+"
+Package #60,"EH1493
+","Agenehu
+","Shegee
+"
+Package #61,"Adoshe
+","HB1966
+","EH1493
+"
+Package #62,"HB1307
+","Agenehu
+","Shegee
+"
+Package #63,"IAR(H)
+","Cross 41/98
+","Hagere 
+"
+Package #64,"HB1965
+","Shegee
+","IAR(H)
+"
+Package #65,"Hagere 
+","HB1966
+","EH1493
+"
+Package #66,"Cross 41/98
+","HB1307
+","Agenehu
+"
+Package #67,"Agenehu
+","Adoshe
+","HB1965
+"
+Package #68,"Adoshe
+","Shegee
+","HB1966
+"
+Package #69,"HB1965
+","Hagere 
+","Cross 41/98
+"
+Package #70,"IAR(H)
+","EH1493
+","HB1307
+"
+Package #71,"HB1307
+","Cross 41/98
+","Adoshe
+"
+Package #72,"HB1966
+","Agenehu
+","Hagere 
+"
+Package #73,"Shegee
+","HB1965
+","EH1493
+"
+Package #74,"Cross 41/98
+","HB1966
+","IAR(H)
+"
+Package #75,"Adoshe
+","Hagere 
+","IAR(H)
+"
+Package #76,"EH1493
+","HB1307
+","Shegee
+"
+Package #77,"Agenehu
+","EH1493
+","HB1965
+"
+Package #78,"Cross 41/98
+","HB1965
+","Agenehu
+"
+Package #79,"Shegee
+","Hagere 
+","HB1966
+"
+Package #80,"IAR(H)
+","Adoshe
+","HB1307
+"
+Package #81,"HB1966
+","HB1965
+","Adoshe
+"
+Package #82,"Hagere 
+","HB1307
+","Cross 41/98
+"
+Package #83,"Agenehu
+","IAR(H)
+","Shegee
+"
+Package #84,"EH1493
+","Adoshe
+","HB1966
+"
+Package #85,"IAR(H)
+","EH1493
+","Cross 41/98
+"
+Package #86,"HB1965
+","Shegee
+","Hagere 
+"
+Package #87,"HB1307
+","HB1966
+","Agenehu
+"
+Package #88,"Agenehu
+","IAR(H)
+","EH1493
+"
+Package #89,"Shegee
+","Cross 41/98
+","HB1965
+"
+Package #90,"Adoshe
+","Hagere 
+","HB1307
+"
+Package #91,"Adoshe
+","Shegee
+","IAR(H)
+"
+Package #92,"Hagere 
+","HB1966
+","HB1965
+"
+Package #93,"EH1493
+","HB1307
+","Cross 41/98
+"
+Package #94,"Shegee
+","Agenehu
+","Hagere 
+"
+Package #95,"HB1966
+","Cross 41/98
+","Adoshe
+"
+Package #96,"HB1965
+","IAR(H)
+","HB1307
+"
+Package #97,"EH1493
+","HB1965
+","Agenehu
+"
+Package #98,"Adoshe
+","Agenehu
+","HB1966
+"
+Package #99,"IAR(H)
+","EH1493
+","Shegee
+"
+Package #100,"HB1307
+","Cross 41/98
+","Hagere 
+"
+Package #101,"HB1307
+","Agenehu
+","IAR(H)
+"
+Package #102,"Hagere 
+","Adoshe
+","Shegee
+"
+Package #103,"HB1966
+","HB1965
+","EH1493
+"
+Package #104,"Cross 41/98
+","Hagere 
+","HB1965
+"
+Package #105,"Shegee
+","IAR(H)
+","HB1966
+"
+Package #106,"Cross 41/98
+","EH1493
+","Adoshe
+"
+Package #107,"Hagere 
+","HB1307
+","Agenehu
+"
+Package #108,"HB1965
+","Shegee
+","HB1307
+"
+Package #109,"Agenehu
+","HB1966
+","Adoshe
+"
+Package #110,"IAR(H)
+","EH1493
+","Cross 41/98
+"
+Package #111,"HB1307
+","Hagere 
+","EH1493
+"
+Package #112,"HB1965
+","Agenehu
+","IAR(H)
+"
+Package #113,"Cross 41/98
+","Adoshe
+","Shegee
+"
+Package #114,"HB1966
+","Adoshe
+","Hagere 
+"
+Package #115,"HB1966
+","HB1965
+","Cross 41/98
+"
+Package #116,"Shegee
+","IAR(H)
+","HB1307
+"
+Package #117,"EH1493
+","HB1966
+","Agenehu
+"
+Package #118,"Agenehu
+","Shegee
+","Hagere 
+"
+Package #119,"Adoshe
+","HB1307
+","HB1965
+"
+Package #120,"Hagere 
+","Cross 41/98
+","EH1493
+"
+Package #121,"IAR(H)
+","Cross 41/98
+","HB1966
+"
+Package #122,"EH1493
+","HB1307
+","HB1965
+"
+Package #123,"Adoshe
+","Agenehu
+","Shegee
+"
+Package #124,"HB1965
+","Hagere 
+","IAR(H)
+"
+Package #125,"Cross 41/98
+","EH1493
+","Adoshe
+"
+Package #126,"HB1307
+","HB1966
+","Agenehu
+"
+Package #127,"Shegee
+","HB1965
+","IAR(H)
+"
+Package #128,"HB1966
+","HB1307
+","Cross 41/98
+"
+Package #129,"Agenehu
+","Hagere 
+","EH1493
+"
+Package #130,"Hagere 
+","Adoshe
+","Shegee
+"
+Package #131,"Adoshe
+","IAR(H)
+","HB1966
+"
+Package #132,"IAR(H)
+","Shegee
+","Cross 41/98
+"
+Package #133,"HB1965
+","Agenehu
+","HB1307
+"
+Package #134,"EH1493
+","Shegee
+","HB1965
+"
+Package #135,"HB1307
+","Adoshe
+","Hagere 
+"
+Package #136,"Cross 41/98
+","HB1966
+","EH1493
+"
+Package #137,"Agenehu
+","IAR(H)
+","HB1966
+"
+Package #138,"Shegee
+","HB1965
+","HB1307
+"
+Package #139,"Adoshe
+","Cross 41/98
+","Agenehu
+"
+Package #140,"Hagere 
+","EH1493
+","IAR(H)
+"
+Package #141,"EH1493
+","Shegee
+","Hagere 
+"
+Package #142,"HB1966
+","HB1307
+","Adoshe
+"
+Package #143,"IAR(H)
+","HB1965
+","Cross 41/98
+"
+Package #144,"HB1965
+","Hagere 
+","Agenehu
+"
+Package #145,"Agenehu
+","HB1966
+","Shegee
+"
+Package #146,"HB1307
+","EH1493
+","Adoshe
+"
+Package #147,"Cross 41/98
+","IAR(H)
+","HB1307
+"
+Package #148,"Hagere 
+","IAR(H)
+","HB1966
+"
+Package #149,"Shegee
+","Adoshe
+","HB1965
+"
+Package #150,"Cross 41/98
+","Agenehu
+","EH1493
+"
+Package #151,"HB1307
+","Cross 41/98
+","Shegee
+"
+Package #152,"EH1493
+","Adoshe
+","Hagere 
+"
+Package #153,"IAR(H)
+","HB1966
+","HB1965
+"
+Package #154,"Adoshe
+","HB1307
+","Agenehu
+"
+Package #155,"HB1965
+","Hagere 
+","IAR(H)
+"
+Package #156,"HB1966
+","Shegee
+","EH1493
+"
+Package #157,"Agenehu
+","HB1965
+","Cross 41/98
+"
+Package #158,"IAR(H)
+","EH1493
+","HB1307
+"
+Package #159,"Shegee
+","Cross 41/98
+","Hagere 
+"
+Package #160,"HB1966
+","IAR(H)
+","Adoshe
+"
+Package #161,"EH1493
+","Agenehu
+","Cross 41/98
+"
+Package #162,"Hagere 
+","HB1307
+","HB1966
+"
+Package #163,"Adoshe
+","Agenehu
+","Shegee
+"
+Package #164,"HB1965
+","EH1493
+","Adoshe
+"
+Package #165,"HB1307
+","Agenehu
+","IAR(H)
+"
+Package #166,"Hagere 
+","HB1966
+","HB1965
+"
+Package #167,"Cross 41/98
+","Shegee
+","IAR(H)
+"
+Package #168,"HB1965
+","Cross 41/98
+","HB1307
+"
+Package #169,"Shegee
+","HB1966
+","EH1493
+"
+Package #170,"Adoshe
+","Hagere 
+","Agenehu
+"
+Package #171,"IAR(H)
+","Shegee
+","Hagere 
+"
+Package #172,"EH1493
+","Cross 41/98
+","HB1966
+"
+Package #173,"HB1307
+","HB1965
+","Adoshe
+"
+Package #174,"Agenehu
+","IAR(H)
+","EH1493
+"
+Package #175,"HB1966
+","Adoshe
+","HB1307
+"
+Package #176,"Agenehu
+","HB1965
+","Shegee
+"
+Package #177,"Hagere 
+","Adoshe
+","Cross 41/98
+"
+Package #178,"IAR(H)
+","EH1493
+","HB1965
+"
+Package #179,"Cross 41/98
+","HB1307
+","Shegee
+"
+Package #180,"EH1493
+","Hagere 
+","HB1966
+"
+Package #181,"Cross 41/98
+","Adoshe
+","Agenehu
+"
+Package #182,"HB1307
+","Hagere 
+","IAR(H)
+"
+Package #183,"HB1966
+","HB1965
+","Agenehu
+"
+Package #184,"Shegee
+","EH1493
+","Adoshe
+"
+Package #185,"Agenehu
+","IAR(H)
+","Hagere 
+"
+Package #186,"HB1966
+","HB1307
+","Cross 41/98
+"
+Package #187,"Shegee
+","Cross 41/98
+","HB1965
+"
+Package #188,"Adoshe
+","IAR(H)
+","HB1307
+"
+Package #189,"Hagere 
+","Shegee
+","EH1493
+"
+Package #190,"HB1965
+","Agenehu
+","HB1966
+"
+Package #191,"EH1493
+","Cross 41/98
+","Hagere 
+"
+Package #192,"IAR(H)
+","HB1966
+","HB1965
+"
+Package #193,"Adoshe
+","Hagere 
+","Agenehu
+"
+Package #194,"HB1307
+","EH1493
+","Shegee
+"
+Package #195,"HB1965
+","Adoshe
+","Cross 41/98
+"
+Package #196,"IAR(H)
+","HB1966
+","HB1307
+"
+Package #197,"Cross 41/98
+","Agenehu
+","Shegee
+"
+Package #198,"EH1493
+","HB1307
+","Adoshe
+"
+Package #199,"Agenehu
+","HB1965
+","IAR(H)
+"
+Package #200,"Hagere 
+","Shegee
+","Cross 41/98
+"
+Package #201,HB1966,Cross 41/98,Shegee
+Package #202,Agenehu,Hagere ,EH1493

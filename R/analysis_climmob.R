@@ -145,7 +145,7 @@ if (all(expvar != "xinterceptx")) {
 lon <- grepl("_lon", names(cmdata))
 lat <- grepl("_lat", names(cmdata))
 
-geoTRUE <- any(lon) & any(lat)
+geoTRUE <- all(any(lon), any(lat))
 
 if (isTRUE(geoTRUE)) {
   lon <- which(lon)[1]
