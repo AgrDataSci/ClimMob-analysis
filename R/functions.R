@@ -1066,32 +1066,26 @@ plot_coef <- function(object, ...) {
 #' Make a ggplot2 chart from model-based recursive partitioning trees with quasi-variance
 #'
 #' @param object an object of class modelparty
-#' @param labels optional, new labels for the axis X in the plot
-#' by default
+#' @param add.letters optional
 #' @param ... additional arguments passed to ggplot2
 #' @return a list of plots with probabilities of winning and 
 #' intervals based on quasi-standard errors
 #' @seealso \code{\link[qvcalc]{qvcalc}} \code{\link[ggplot2]{ggplot}}
 #' @examples
 #' 
-#' library("PlackettLuce")
-#' library("qvcalc")
+#' library("psychotree")
 #' library("ggplot2")
+#' library("ggparty")
+#' library("patchwork")
 #' 
-#' data("breadwheat", package = "gosset")
 #' 
-#' G <- rank_tricot(data = breadwheat, 
-#'                  items = c("variety_a","variety_b","variety_c"), 
-#'                  input = c("overall_best","overall_worst"),
-#'                  group = TRUE)
+#' ## Germany's Next Topmodel 2007 data
+#' data("Topmodel2007", package = "psychotree")
 #' 
-#' mydata <- cbind(G, breadwheat[c("lon","lat")])
+#' ## BT tree
+#' tm_tree <- bttree(preference ~ ., data = Topmodel2007, minsize = 5, alpha = 0.1)
 #' 
-#' # fit a pltree model using lon and lat
-#' mod <- pltree(G ~ ., data = mydata)
-#' 
-#' # plot nodes
-#' p <- plot_nodes(mod)
+#' plot_tree(tm_tree)
 #' 
 #' @importFrom partykit nodeids
 #' @importFrom psychotools itempar
@@ -1100,36 +1094,14 @@ plot_coef <- function(object, ...) {
 #' @importFrom ggplot2 ggplot aes geom_vline geom_point geom_errorbar scale_x_continuous 
 #' theme_bw labs theme element_text element_blank element_rect element_line
 #' @export
-
-
-library("psychotree")
-library("ggplot2")
-library("ggparty")
-library("patchwork")
-
-
-## Germany's Next Topmodel 2007 data
-data("Topmodel2007", package = "psychotree")
-
-## BT tree
-tm_tree <- bttree(preference ~ ., data = Topmodel2007, minsize = 5)
-
-object <- tm_tree
-dots <- list()
-
-plot_nodes <- function(object, ...){
+plot_tree <- function(object, add.letters = FALSE, ...){
   
   # Extract ids from terminal nodes
   node_id <- partykit::nodeids(object, terminal = TRUE)
   
   dots <- list(...)
   
-  if ("font.size" %in% names(dots)) {
-    font.size <- dots[["font.size"]]
-  } else {
-    font.size <- NULL
-  }
-  
+  font.size <- dots[["font.size"]]
   
   # get node information
   nodes <- list()
@@ -1149,7 +1121,7 @@ plot_nodes <- function(object, ...){
   # get estimates from item parameters using qvcalc
   coeffs <- lapply(coeffs, qvcalc::qvcalc)
   
-  # extract dataframes with estimates
+  # extract data frames with estimates
   coeffs <- lapply(coeffs, function(X){
     df <- X[]$qvframe }
   )
@@ -1181,49 +1153,96 @@ plot_nodes <- function(object, ...){
   
   coeffs <- do.call("rbind", coeffs)
   
-  coeffs$node <- factor(coeffs$node, levels = sort(node_id))
+  if (isTRUE(add.letters)){
+    groups <- try(lapply(nodes, function(x){
+      x <- multcompPL(x)
+      x[sort(items), ".group"]
+    }), silent = TRUE)
+    groups <- unlist(groups)
+    if (grepl("Error",groups[[1]])){
+      message("Unable to get letters for the plotting object.\n")
+      groups <- ""
+    }
+    coeffs <- cbind(coeffs, groups = groups)
+  }else{
+    coeffs$groups <- ""
+  }
   
+  node_lev <- unique(paste0("Node ", coeffs$node, " (n=", coeffs$nobs, ")"))
+  
+  coeffs$id <- coeffs$node
+  
+  coeffs$node <- factor(paste0("Node ", coeffs$node, " (n=", coeffs$nobs, ")"),
+                         levels = node_lev)
+   
   coeffs$items <- factor(coeffs$items, levels = sort(items))
+  
+  # get the tree structure
+  if(length(node_id) > 1){
+  tree <- 
+    ggparty::ggparty(object, terminal_space = 0) +
+    ggparty::geom_edge() +
+    ggparty::geom_edge_label() +
+    ggplot2::theme(legend.position = "none") +
+    ggparty::geom_node_label(line_list = list(aes(label = splitvar),
+                                     aes(label = paste("p =",
+                                                       formatC(p.value,
+                                                               format = "e",
+                                                               digits = 1))),
+                                     aes(label = ""),
+                                     aes(label = id)),
+                    line_gpar = list(list(size = 12),
+                                     list(size = 8),
+                                     list(size = 8),
+                                     list(size = 8,
+                                          col = "black",
+                                          fontface = "bold",
+                                          alignment = "center")),
+                    ids = "inner") +
+    coord_cartesian(ylim = c(0.1, 1.1))
+  }
   
   # Get max and min values for the x axis in the plot
   xmax <- round(max(coeffs$bmax, na.rm = TRUE) + 0.01, digits = 4)
-  xmin <- round(min(coeffs$bmin, na.rm = TRUE), digits = 4)
+  xmin <- round(min(coeffs$bmin, na.rm = TRUE) - 0.01, digits = 4)
+  xbreaks <- round(c(mean(c(0, xmax)), xmax), 2)
+  #xbreaks <- seq(0, (xmax*100), by = 2)/100
+  xbreaks <- c(0, xbreaks)
+  xlabs <- gsub("0[.]",".", as.character(xbreaks))
+  
   
   # Check font size for axis X and Y, and plot title
-  if (is.null(font.size)) {
-    s.title <- 13
-    s.axis <- 15
-  } else{
-    s.title <- font.size[1]
-    s.axis <- font.size[2]
-  }
+  s.axis <- 11
+
   
-  # get the tree structure
-  tree <- 
-    ggparty(object) +
-    geom_edge() +
-    geom_edge_label() +
-    geom_node_splitvar()
-  
-  p <- ggplot2::ggplot(coeffs, ggplot2::aes(x = estimate, y = items)) +
+  p <- 
+    ggplot2::ggplot(coeffs, ggplot2::aes(x = estimate, y = items)) +
     ggplot2::geom_vline(xintercept = 1/length(items), 
                         colour = "#E5E7E9", size = 0.8) +
+    geom_text(aes(label = groups),
+              size = 2.5,
+              nudge_y = 0.25) +
     ggplot2::geom_point(pch = 21, size = 2, 
                         fill = "black",colour = "black") +
     ggplot2::geom_errorbarh(ggplot2::aes(xmin = bmin,
                                          xmax = bmax),
-                            colour="black", height = 0.2) +
-    ggplot2::scale_x_continuous(limits = c(0, xmax)) +
+                            colour="black", height = 0.1) +
+    ggplot2::scale_x_continuous(limits = c(0, xmax),
+                                breaks = xbreaks,
+                                labels = xlabs) +
+    facet_grid(. ~ node) +
     ggplot2::theme_bw() +
-    ggplot2::labs(x = NULL, y = NULL ,
-                  title = paste0("Node ", X$node[1], " (n= ", X$nobs[1], ")")) +
-    ggplot2::theme(plot.title = ggplot2::element_text(size = s.title),
-                   axis.text.x = ggplot2::element_text(size = s.axis, angle = 0,
-                                                       hjust = 0.5, vjust = 1, face = "plain",
+    ggplot2::labs(x = "", y = "") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(size = s.axis, angle = 0,
+                                                       hjust = 0.5, vjust = 1, 
+                                                       face = "plain",
                                                        colour = "black"),
                    axis.text.y = ggplot2::element_text(size = s.axis, angle = 0,
-                                                       hjust = 1, vjust = 0.5, face = "plain",
+                                                       hjust = 1, vjust = 0.5, 
+                                                       face = "plain",
                                                        colour = "black"),
+                   text = element_text(size = 10),
+                   strip.background = element_blank(),
                    plot.background = ggplot2::element_blank(),
                    panel.grid.major = ggplot2::element_blank(),
                    panel.grid.minor = ggplot2::element_blank(),
@@ -1231,10 +1250,10 @@ plot_nodes <- function(object, ...){
                    axis.ticks = ggplot2::element_line(colour = "black", size = 0.5),
                    axis.ticks.length = grid::unit(0.3, "cm"))
   
-  p
-  
-  names(plots) <- paste0("node",node_id)
-  
-  return(plots)
+  if(length(node_id) > 1){
+    require("patchwork")
+    p <- (tree / p)
+  }
+  return(p)
 }
 

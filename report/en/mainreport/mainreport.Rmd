@@ -508,24 +508,33 @@ kable(uni_sum,
 
 \
 
-Figure 5.1 shows the partitioning of the rankings based on the most significantly different sub-groups which could be identified from the data using a `r sig_level*100`% significance level. At the top of the tree is the full dataset, then working down through the different levels of the tree shows the combinations of variables which define each subgroup. The model parameters are shown for the final subgroups ("terminal nodes") in the plots at the bottoms of the tree. 
+Figure 5.1 shows the partitioning of the rankings based on the most significantly different sub-groups which could be identified from the data using a `r sig_level*100`% significance level. At the top of the tree is the full dataset, then working down through the different levels of the tree shows the combinations of variables which define each subgroup. The model parameters are shown for the final subgroups ("terminal nodes") in the plots at the bottoms of the tree. The model quasi-variance estimates, along with `r ci_level*100`% confidence intervals are provided. This will help identification of which `r options` were better suited to particular sub-groups identified by the analysis.
 
-
-```{r pltree, dpi=dpi, asis=TRUE,fig.height=8,fig.width=10, fig.cap="Figure 5.1. Plackett-Luce tree for the overall performance."}
+```{r pltree1"}
 if (length(tree_f)==1) {
   nofig1 <- "No significant explanatory variables identified."
 }else{
   nofig1 <- ""
 }
-
-plot(tree_f)
 ```
+
+```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap="Figure 5.1. Plackett-Luce tree for the overall performance. The horizontal axis is the probability of winning. Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of items)."}
+plot_tree(tree_f, add.letters = TRUE)
+```
+
 `r nofig1`
 
 \
 \
+```{r node_summary1}
+if (length(siglist) > 0) {
+  table2stat <- paste("The highest and lowest performing", option, "within each sub-group is identified within Table 5.2.")
+}else{
+  table2stat <- ""
+}
+```
 
-The highest and lowest performing `r option` within each sub-group is identified within Table 5.2.
+`r table2stat`
 
 ```{r node_summary}
 if (length(siglist) > 0) {
@@ -535,16 +544,6 @@ if (length(siglist) > 0) {
 ```
 
 \
-
-The model coefficient estimates, along with `r ci_level*100`% confidence intervals are provided in Figure 5.2. This will help identification of which `r options` were better suited to particular sub-groups identified by the analysis.
-
-```{r, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap="Figure 5.2. Coefficient estimates within each identified terminal node."}
-if(length(tree_f)>1){
-plot_coef(coefs_t)
-}
-
-```
-`r nofig1`
 
 Table 5.3 outlines the p-values for each covariate at each of the nodes in the tree, outlining whether an additional significant split could be determined from within the existing sub-group at that node.
 

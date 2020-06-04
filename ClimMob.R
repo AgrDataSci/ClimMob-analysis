@@ -5,7 +5,7 @@
 # # ................................................................
 # # ................................................................
 
-# tag <- "nic_apante_2015"
+# tag <- "techapp"
 # args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
 #          paste0("dev/output/",tag,"/"), "TRUE","en","html",
 #          "farmer", "variety", getwd())
@@ -42,6 +42,8 @@ library("ggplot2")
 library("igraph")
 library("mapview")
 library("ggrepel")
+library("ggparty")
+library("patchwork")
 
 source(paste0(fullpath, "/R/functions.R"))
 

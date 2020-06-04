@@ -15,6 +15,8 @@ library("ggplot2")
 library("igraph")
 library("mapview")
 library("ggrepel")
+library("ggparty")
+library("patchwork")
 
 source(paste0("R/functions.R"))
 
