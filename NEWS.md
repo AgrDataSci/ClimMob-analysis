@@ -1,3 +1,12 @@
+ClimMob-analysis (2020-06-04)
+=========================
+### Improvents
+* New function to plot Plackett-Luce trees
+
+### Changes in behaviour
+* New R packages added "patchwork", "ggparty", "ggrepel"
+
+
 ClimMob-analysis (2020-04-29)
 =========================
 
