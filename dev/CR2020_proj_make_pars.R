@@ -1,30 +1,3 @@
-# # ................................................................
-# # ................................................................
-# # Main script to call for the analysis and rendering the reports 
-# # in ClimMob v3
-# # ................................................................
-# # ................................................................
-
-tag <- "techapp"
-args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-         paste0("dev/output/",tag,"/"), "TRUE","en","html",
-         "farmer", "variety", getwd())
-# source("dev/run_climmobv2.R")
-
-# get the arguments from server's call
-#args <- commandArgs(trailingOnly = TRUE)
-infoname    <- args[1] # a json file with parameters for the analysis
-outputname  <- args[2] # a json file with the results
-pathname    <- args[3] # the path where results will be written
-infosheets  <- as.logical(args[4]) # logical, if infosheets should be written TRUE FALSE
-language    <- args[5] # the language to write the report "en" for english and "es" for spanish
-extension   <- args[6] # report file format it can be "docx", "pdf", and "html"
-ranker      <- args[7] # how the system will refer to participants/farmers
-option      <- args[8] # how the system will refer to tested items
-fullpath    <- args[9] # this is backward path
-
-# ................................................................
-# ................................................................
 ## Packages ####
 library("ClimMobTools")
 library("gosset")
@@ -45,28 +18,65 @@ library("ggrepel")
 library("ggparty")
 library("patchwork")
 
-source(paste0(fullpath, "/R/functions.R"))
+source(paste0("R/functions.R"))
+
+key <- "e6052866-5055-4a87-bfef-58e7487556a9"
+
+cmdata <- getDataCM(key, "CR2020", server = "testing", pivot.wider = TRUE, tidynames = FALSE)
+
+charpattern <- c("_overallperf_", "_love_")
+newname <- c("Overall Characteristic","Love")
+
+chars <- data.frame()
+
+for(i in seq_along(charpattern)){
+  index <- charpattern[i]
+  index <- which(grepl(index, names(cmdata)))
+  
+  ch <- data.frame(quest_1 = names(cmdata)[index[1]],
+                   quest_2 = names(cmdata)[index[2]],
+                   n_quest = 2,
+                   char_full = newname[i],
+                   char = newname[i])
+  
+  chars <- rbind(chars, ch)
+  
+}
 
 
+perf <- data.frame(quest_1 = "finalevaluation_ASS90dd6f89c1df_perf_overallchar_1",
+                   quest_2 = "finalevaluation_ASS90dd6f89c1df_perf_overallchar_2",
+                   quest_3 = "finalevaluation_ASS90dd6f89c1df_perf_overallchar_3",
+                   n_quest = 3,
+                   perf_full = "Overall performance",
+                   perf = "overall_performance")
+
+expl <- data.frame(name = c("What is the gender?", "Longitude", "Latitude"),
+                   id = NA,
+                   vars = c("registration_REG_gender","registration_REG_lon","registration_REG_lat"))
+
+
+
+pars <- list(chars = chars, expl = expl, perf = perf)
+rm(ch, chars, expl, perf, i, charpattern, key, newname, index)
 # ................................................................
 # ................................................................
-# Read data #### 
-# Read data with selected traits and explanatory variables to be analysed
-pars <- jsonlite::fromJSON(infoname)
-pars <- ClimMobTools:::.decode_pars(pars)
-
-cmdata <- jsonlite::fromJSON(outputname)
-class(cmdata) <- union("CM_list", class(cmdata))
-cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
-
 # ................................................................
 # ................................................................
 # Dataset parameters ####
+option <- "color"
+ranker <- "participant"
+extension <- "docx"
+language <- "en"
+fullpath <- getwd()
+
 Option <- ClimMobTools:::.title_case(option)
 
 # the project name
 projname <- which(grepl("project_name", names(cmdata)))
 projname <- cmdata[1, projname]
+
+pathname <- paste0("dev/output/",projname,"/")
 
 # variables to produce split of results into multiple groups.
 expvar <- pars$expl$vars
@@ -145,7 +155,7 @@ info_table_typeinfo <- "" #info.table.typeinfo <- "expert advice"
 # ................................................................
 # Run analysis ####
 dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
-source(paste0(fullpath, "/R/analysis_climmob.R"))
+source(paste0("R/analysis_climmob.R"))
 
 # ................................................................
 # ................................................................
@@ -159,13 +169,7 @@ output_format <- ifelse(extension == "docx","word_document",
                         paste0(extension,"_document"))
 
 # produce main report if output type is "summary" or "both"
-rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport.Rmd"),
+rmarkdown::render(paste0("report/", language, "/mainreport/mainreport.Rmd"),
                   output_dir = pathname,
                   output_format = output_format,
                   output_file = paste0(projname,"_report",".",extension))
-
-# #produce farmer reports if output type is "farmer" or "both"
-# if (infosheets) {
-#   source("Farmer Reports/farmerreport.R")
-# }
-
