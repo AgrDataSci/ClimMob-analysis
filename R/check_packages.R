@@ -4,6 +4,8 @@
 # # run this code each 15-days
 # # ................................................................
 # # ................................................................
+install.packages("remotes")
+library("remotes")
 
 latest_version <- function(pkg, repo_path){
   
