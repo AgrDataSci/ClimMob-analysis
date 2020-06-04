@@ -1,6 +1,7 @@
 # # ................................................................
 # # ................................................................
 # # Check for the latest released version of core packages
+# # run this code each 15-days
 # # ................................................................
 # # ................................................................
 
@@ -38,9 +39,18 @@ if (isFALSE(latest)) {
 
 }
 
+latest <- latest_version("climatrends",
+                          "https://raw.githubusercontent.com/agrobioinfoservices/climatrends/master/DESCRIPTION")
+
+if (isFALSE(latest)) {
+  remotes::install_github("agrobioinfoservices/gosset",
+                          upgrade = "never")
+  
+}
+
 pkg <- c("PlackettLuce", "partykit", "qvcalc", "psychotools", "jsonlite", 
          "multcompView", "knitr", "rmarkdown", "pls", "gtools", "ggplot2", 
-         "igraph")
+         "igraph", "mapview", "ggrepel", "patchwork", "ggparty")
 
 install.packages(pkg, type = "binary")
 
