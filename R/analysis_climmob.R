@@ -4,7 +4,112 @@
 # crowdsourcing trials using Plackett-Luce model
 # ................................................................
 # ................................................................
+# ................................................................
+# ................................................................
+## Packages ####
+library("ClimMobTools")
+library("gosset")
+library("PlackettLuce")
+library("partykit")
+library("qvcalc")
+library("psychotools")
+library("jsonlite")
+library("multcompView")
+library("knitr")
+library("rmarkdown")
+library("pls")
+library("gtools")
+library("ggplot2")
+library("igraph")
+library("mapview")
+library("ggrepel")
+library("ggparty")
+library("patchwork")
 
+source(paste0(fullpath, "/R/functions.R"))
+# ................................................................
+# ................................................................
+# Dataset parameters ####
+Option <- ClimMobTools:::.title_case(option)
+options <- ClimMobTools:::.pluralize(option)
+rankers <- ClimMobTools:::.pluralize(ranker)
+
+# the project name
+projname <- which(grepl("project_name", names(cmdata)))
+projname <- cmdata[1, projname]
+
+# variables to produce split of results into multiple groups.
+expvar <- pars$expl$vars
+expvar_full <- pars$expl$name
+
+# number of rankers
+nranker <- nrow(cmdata)
+
+itemnames <- cmdata[, grepl("package_item", names(cmdata))]
+
+# Number of items each participant evaluates
+ncomp <- ncol(itemnames)
+
+# Name of items tested
+items <- unique(sort(unlist(itemnames)))
+
+# Number o items tested
+nitems <- length(items)
+
+# Number of characteristics (traits) avaluated
+ntrait <- nrow(pars$chars)
+nothertraits <- ntrait - 1
+
+# Colnames where items are placed within cmdata
+itemnames <- names(itemnames)
+
+# number of questions
+nquest <- pars$chars$n_quest[1]
+
+# define which function should be called to build the rankings
+if (ncomp == 3) {
+  rankwith <- "rank_tricot"
+}
+
+if (ncomp > 3) {
+  rankwith <- "rank_numeric"
+}
+
+# ................................................................
+# ................................................................
+# Statistic parameters ####
+# Set maximum proportion of missing data allowed in a characteristic evaluation
+# before it is excluded. 
+missper <- 0.5
+
+# Set minimum proportion of valid observations in explanatory variables
+missexp <- 0.8
+
+# Set minimum split size for tree models.
+minsplit <- ceiling(nrow(cmdata) * 0.1)
+if (minsplit < 10) {
+  minsplit <- 10
+}
+# Set alpha
+sig_level <- 0.1
+
+# method for adjustments for confidence intervals and setting widths for comparison. 
+# Defaults to B-H (Benjamini an Hochberg). Any of the methods from p.adjust will work here 
+# though: "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"
+ci_adjust <- "BH"
+
+# confidence interval level for comparison plots with error bars. 84% to give an
+# approximate 5% significance level for comparisons of non-overlapping confidence
+# intervals (e.g. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC524673/)
+# should probably allow alternatives to be 0.9, 0.95 or 0.99
+ci_level <- 0.84
+
+# resolution of display items
+dpi <- 250
+out_width <- "100%"
+
+# ................................................................
+# ................................................................
 # Organise the rankings and check for missing data ####
 trait <- pars$chars$char
 trait_full <- pars$chars$char_full

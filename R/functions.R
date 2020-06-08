@@ -1090,7 +1090,7 @@ plot_coef <- function(object, ...) {
 #' @importFrom partykit nodeids
 #' @importFrom psychotools itempar
 #' @importFrom qvcalc qvcalc
-#' @import ggparty
+#' @importFrom ggparty ggparty, geom_edge, geom_edge_label, geom_node_label
 #' @importFrom ggplot2 ggplot aes geom_vline geom_point geom_errorbar scale_x_continuous 
 #' theme_bw labs theme element_text element_blank element_rect element_line
 #' @export
@@ -1160,7 +1160,8 @@ plot_tree <- function(object, add.letters = FALSE, ...){
     }), silent = TRUE)
     groups <- unlist(groups)
     if (grepl("Error",groups[[1]])){
-      message("Unable to get letters for the plotting object.\n")
+      message("Unable to get letters for the plotting object.",
+              " The issue has likely occurred in qvcalc::qvcalc() \n")
       groups <- ""
     }
     coeffs <- cbind(coeffs, groups = groups)
@@ -1184,20 +1185,22 @@ plot_tree <- function(object, add.letters = FALSE, ...){
     ggparty::geom_edge() +
     ggparty::geom_edge_label() +
     ggplot2::theme(legend.position = "none") +
-    ggparty::geom_node_label(line_list = list(aes(label = splitvar),
-                                     aes(label = paste("p =",
-                                                       formatC(p.value,
-                                                               format = "e",
-                                                               digits = 1))),
-                                     aes(label = ""),
-                                     aes(label = id)),
-                    line_gpar = list(list(size = 12),
-                                     list(size = 8),
-                                     list(size = 8),
-                                     list(size = 8,
-                                          col = "black",
-                                          fontface = "bold",
-                                          alignment = "center")),
+    ggparty::geom_node_label(line_list = list(
+      aes(label = splitvar),
+      aes(label = paste("p =",
+                        formatC(p.value,
+                                format = "e",
+                                digits = 1))),
+      aes(label = ""),
+      aes(label = id)),
+      line_gpar = list(list(size = 12),
+                       list(size = 8),
+                       list(size = 8),
+                       list(size = 8,
+                            col = "black",
+                            fontface = "bold",
+                            alignment = "center")
+    ),
                     ids = "inner") +
     coord_cartesian(ylim = c(0.1, 1.1))
   }
@@ -1208,7 +1211,8 @@ plot_tree <- function(object, add.letters = FALSE, ...){
   xbreaks <- round(c(mean(c(0, xmax)), xmax), 2)
   #xbreaks <- seq(0, (xmax*100), by = 2)/100
   xbreaks <- c(0, xbreaks)
-  xlabs <- gsub("0[.]",".", as.character(xbreaks))
+  xlabs <- as.character(xbreaks)
+  #xlabs <- gsub("0[.]",".", as.character(xbreaks))
   
   
   # Check font size for axis X and Y, and plot title

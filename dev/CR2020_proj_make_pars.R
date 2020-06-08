@@ -17,13 +17,14 @@ library("mapview")
 library("ggrepel")
 library("ggparty")
 library("patchwork")
+library("readxl")
 
 source(paste0("R/functions.R"))
 
-key <- "e6052866-5055-4a87-bfef-58e7487556a9"
+# Read the data 
 
-cmdata <- getDataCM(key, "CR2020", server = "testing", pivot.wider = TRUE, tidynames = FALSE)
-
+# ................................
+# Make list of parameters ####
 charpattern <- c("_overallperf_", "_love_")
 newname <- c("Overall Characteristic","Love")
 
