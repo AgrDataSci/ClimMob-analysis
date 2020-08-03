@@ -4,10 +4,10 @@
 # # ................................................................
 # # ................................................................
 
-tag <- "techapp"
+tag <- "leaders"
 args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
          paste0("dev/output/",tag,"/"), "TRUE","en","html",
-         "farmer", "variety", getwd())
+         "participant", "option", getwd())
 
 # get the arguments from server's call
 # args <- commandArgs(trailingOnly = TRUE)
@@ -62,10 +62,9 @@ info_table_typeinfo <- "" #info.table.typeinfo <- "expert advice"
 # ................................................................
 # ................................................................
 # Run analysis ####
-try(
-  dir.create(pathname, showWarnings = FALSE, recursive = TRUE), 
-  silent = TRUE
-)
+tryCatch({
+  dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
+})
 
 
 source(paste0(fullpath, "/R/analysis_climmob.R"))

@@ -62,64 +62,6 @@ win_plot<-function(x){
   return(p1)
 }
 
-multcompPL<-function(mod,terms=NULL,threshold=0.05,Letters=letters,adjust="none"){
-  
-  require(qvcalc)
-  require(multcompView)
-  
-  #get estimates with quasi-SEs
-  qv1<-qvcalc(mod)$qvframe
-  
-  #reduce frame to only selected terms if not all comparisons are desired
-  if(is.null(terms)==FALSE){
-    qv1<-subset(qv1,rownames(qv1)%in%terms)
-    #give error if less than 2 terms can be identified
-    if(nrow(qv1)<3){
-      stop("Less than 2 terms selected")
-    }
-  }
-  
-  #set up matrices for all differences and pooled errors
-  diffs<-mat.or.vec(nrow(qv1),nrow(qv1))
-  ses<-mat.or.vec(nrow(qv1),nrow(qv1))
-  
-  for(i in 1:nrow(qv1)){
-    for(j in 1:nrow(qv1)){
-      
-      #get differences and pooled ses
-      diffs[i,j]<-qv1$estimate[i]-qv1$estimate[j]
-      ses[i,j]<-sqrt(qv1$quasiVar[i]+qv1$quasiVar[j])
-    }
-  }
-  
-  #calculate z scores
-  z<-diffs/ses
-  #TO DO: What DF to use to use here? Is it just the resid DF?
-  p<-2*(1-pt(abs(z),mod$df.residual))
-  
-  #adjust p-value if you want to adjust. make sure to only take each p once for adjustment
-  p[upper.tri(p)]<-p.adjust(p[upper.tri(p)],method = adjust)
-  
-  #make sure lower triangular is mirror of upper
-  p[lower.tri(p)] = t(p)[lower.tri(p)]
-  
-  #set rownames
-  rownames(p)<-colnames(p)<-rownames(qv1)
-  
-  #re-order qv output to ensure letters are produced in a sensible order
-  qv1$term<-reorder(factor(rownames(qv1)),qv1$estimate,mean)
-  qv1<-qv1[order(qv1$estimate,decreasing = TRUE),]
-  
-  #get mean seperation letter groupings
-  qv1$.group<-multcompLetters2(estimate ~ term, p, qv1,
-                               compare="<",
-                               threshold=threshold,
-                               Letters=Letters,
-                               reversed = FALSE)$`Letters`
-  return(qv1)
-  
-}
-
 # simple ggplot function to plot output from multcompPL with error bars
 plot_multcompPL <- function(object, term, estimate, quasiSE, group, level = 0.95, xlab = "", ylab = "", ...){
   
@@ -1261,3 +1203,61 @@ plot_tree <- function(object, add.letters = FALSE, ...){
   return(p)
 }
 
+
+# multcompPL<-function(mod,terms=NULL,threshold=0.05,Letters=letters,adjust="none"){
+#   
+#   require(qvcalc)
+#   require(multcompView)
+#   
+#   #get estimates with quasi-SEs
+#   qv1<-qvcalc(mod)$qvframe
+#   
+#   #reduce frame to only selected terms if not all comparisons are desired
+#   if(is.null(terms)==FALSE){
+#     qv1<-subset(qv1,rownames(qv1)%in%terms)
+#     #give error if less than 2 terms can be identified
+#     if(nrow(qv1)<3){
+#       stop("Less than 2 terms selected")
+#     }
+#   }
+#   
+#   #set up matrices for all differences and pooled errors
+#   diffs<-mat.or.vec(nrow(qv1),nrow(qv1))
+#   ses<-mat.or.vec(nrow(qv1),nrow(qv1))
+#   
+#   for(i in 1:nrow(qv1)){
+#     for(j in 1:nrow(qv1)){
+#       
+#       #get differences and pooled ses
+#       diffs[i,j]<-qv1$estimate[i]-qv1$estimate[j]
+#       ses[i,j]<-sqrt(qv1$quasiVar[i]+qv1$quasiVar[j])
+#     }
+#   }
+#   
+#   #calculate z scores
+#   z<-diffs/ses
+#   #TO DO: What DF to use to use here? Is it just the resid DF?
+#   p<-2*(1-pt(abs(z),mod$df.residual))
+#   
+#   #adjust p-value if you want to adjust. make sure to only take each p once for adjustment
+#   p[upper.tri(p)]<-p.adjust(p[upper.tri(p)],method = adjust)
+#   
+#   #make sure lower triangular is mirror of upper
+#   p[lower.tri(p)] = t(p)[lower.tri(p)]
+#   
+#   #set rownames
+#   rownames(p)<-colnames(p)<-rownames(qv1)
+#   
+#   #re-order qv output to ensure letters are produced in a sensible order
+#   qv1$term<-reorder(factor(rownames(qv1)),qv1$estimate,mean)
+#   qv1<-qv1[order(qv1$estimate,decreasing = TRUE),]
+#   
+#   #get mean seperation letter groupings
+#   qv1$.group<-multcompLetters2(estimate ~ term, p, qv1,
+#                                compare="<",
+#                                threshold=threshold,
+#                                Letters=Letters,
+#                                reversed = FALSE)$`Letters`
+#   return(qv1)
+#   
+# }

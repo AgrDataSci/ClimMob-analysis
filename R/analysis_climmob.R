@@ -29,12 +29,15 @@ library("patchwork")
 done <- tryCatch({
   
   source(paste0(fullpath, "/R/functions.R"))
+  
   # ................................................................
   # ................................................................
   # Dataset parameters ####
   items <- cmdata[, grepl("package_item", names(cmdata))]
   ncomp <- dim(items)[[2]]
   
+  # select which function will be used to create the Plackett-Luce rankings
+  # it will depends on how many items each participant compares
   if (ncomp == 3) {
     rankwith <- "rank_tricot"
   }
@@ -43,6 +46,7 @@ done <- tryCatch({
     rankwith <- "rank_numeric"
   }
   
+  # Get some info from the data and imputed parameters 
   Option <-  ClimMobTools:::.title_case(option)
   options <- ClimMobTools:::.pluralize(option)
   rankers <- ClimMobTools:::.pluralize(ranker)
@@ -51,13 +55,13 @@ done <- tryCatch({
   itemnames <- names(items)
   items <- unique(sort(unlist(items)))
   nitems <- length(unique(sort(unlist(items))))
-  ncomp <- ncomp
   expvar <- pars$expl$vars
   expvar_full <- pars$expl$name
   ntrait <- dim(pars$chars)[[1]]
   nothertraits <- dim(pars$chars)[[1]] - 1
   nquest <- pars$chars$n_quest[1]
   rankwith <- rankwith
+  reference <- items[[1]]
   
   # ................................................................
   # ................................................................
@@ -101,20 +105,29 @@ done <- tryCatch({
   
   overallVSlocal <- length(pars$perf) > 0
   
+  # this list will keep the logical vectors to filter the data per 
+  # remaining trait, the ones that passed the evaluation on minimal 
+  # amount of missing data 
   trait_list <- list()
   
   # run over traits to filter NAs and prepare for PlackettLuce rankings
   for(i in seq_along(trait)){
+    
     result <- list()
+    
     # get the question full name
     trait_i <- as.character(pars$chars[i, paste0("quest_", seq_len(nquest))])
     
-    # look for it within cmdata
+    # look for it in cmdata
     for(j in seq_along(trait_i)) {
+      
       trait_i[j] <- names(cmdata[which(grepl(trait_i[j], names(cmdata)))])
+    
     }
     
-    # check for NAs in this trait
+    # check for data completeness in this trait
+    # should return a vector with TRUE, FALSE, 
+    # where TRUE = complete, FALSE = missing
     keep <- apply(cmdata[trait_i], 1, is.na)
     keep <- as.vector(colSums(keep) == 0)
     
@@ -124,11 +137,12 @@ done <- tryCatch({
     # if larger than it will be dropped
     if (isTRUE(dropit)) next
     
-    # add comparison with local item
+    # if required, add comparison with local item
     if (isTRUE(i == 1 & overallVSlocal)) {
       
       ovsl <- as.vector(pars$perf[, paste0("quest_", seq_len(pars$perf$n_quest))])
       
+      # search for the colunms in the data
       for (k in seq_along(ovsl)) {
         
         ovsl[k] <- names(cmdata[which(grepl(ovsl[k], names(cmdata)))])
@@ -137,17 +151,21 @@ done <- tryCatch({
       
       ovsl <- as.character(ovsl)
       
+      # check for data completeness
       keep2 <- apply(cmdata[ovsl], 1, is.na)
-      
       keep2 <- as.vector(colSums(keep2) == 0)
       
+      # combine with the vector from the first iteration in the i loop
+      # which is the overall performance
       keep2 <- keep & keep2
       
+      # check if it has the minimal number of observations
       dropit2 <- (sum(keep2) / nranker) < missper
       
+      # if if below the minimal number of observations then the comparison
+      # with the local item is ignored
       if (isTRUE(dropit2)) {
         overallVSlocal <- FALSE
-        next
       }
       
       result[["keep2"]] <- keep2
@@ -166,9 +184,12 @@ done <- tryCatch({
   
   trait <- names(trait_list)
   
+  # refresh the number of traits
+  ntrait <- length(trait_list)
+  
   # Now look for the explanatory variables
-  # if no variable provided than add a pseudo variable that will be used in pltree
-  # this is to fit the model with the intercept only
+  # if no variable is provided than add a pseudo variable that will be used 
+  # in pltree(), this is to fit the model with the intercept only
   expvar_list <- list()
   if (any(expvar == "xinterceptx")) {
     cmdata$xinterceptx <- rep(0, nranker)
@@ -241,18 +262,49 @@ done <- tryCatch({
     
     if (nlonlat > 0){
       
+      lonlat[1:2] <- lapply(lonlat[1:2], as.numeric)
+      
+      # to ensure the privacy of participants location
+      # we put the lonlat info into clusters of 0.5 resolution
+      h <- dist(lonlat)
+      
+      h <- hclust(h)
+      
+      h <- cutree(h, h = 0.5)
+      
+      # split the lonlat by each defined cluster
+      lonlat <- split(lonlat, h)
+      
+      # and take the mean 
+      lonlat <- lapply(lonlat, function(x) {
+        colMeans(x)
+      })
+      
+      # back to dataframe
+      lonlat <- do.call("rbind", lonlat)
+      
+      lonlat <- as.data.frame(lonlat)
+      
       names(lonlat) <- c("lon","lat")
       
       trial_map <- plot_map(lonlat, c("lon","lat"),
                             map.types = c("CartoDB.Positron", "OpenTopoMap"))
       
       mapshot(trial_map, 
-              url = paste0(fullpath, pathname, projname, "_trial_map.html"),
-              file = paste0(fullpath, pathname, projname, "_trial_map.png"))
+              url = paste0(getwd(), "/", pathname, projname, "_trial_map.html"),
+              file = paste0(getwd(), "/", pathname, projname, "_trial_map.png"))
       
-      trial_map_statement <- c("The map below shows the distribution of the trials in this project.")
+      trial_map_statement <- paste("The map below shows the distribution",
+                                   "of the trials in this project. To ensure the",
+                                   "privacy of the participants, the coordinates",
+                                   "were clustered with a 0.5 resolution. You can find",
+                                   "the original coordinates in your ClimMob data.")
       
       
+    }
+    
+    if (nlonlat == 0) {
+      geoTRUE <- FALSE
     }
     
   }
@@ -318,41 +370,33 @@ done <- tryCatch({
   overall <- trait_list[[1]]
   
   if (isTRUE(overallVSlocal)) {
-    if (ncomp == 3) {
-      keep <- overall$keep2 & overall$keep
       
-      R <- rank_tricot(cmdata[keep, ],
-                       items = itemnames,
-                       input = overall$input,
-                       additional.rank = cmdata[keep, overall$ovsl])
-    }
+    keep <- overall$keep2 & overall$keep
     
-    if (ncomp > 3) {
-      keep <- overall$keep
-      
-      R <- rank_numeric(cmdata[keep, ],
-                        items = itemnames,
-                        input = overall$input)
-    }
+    a <- list(cmdata[keep, ],
+              items = itemnames,
+              input = overall$input,
+              additional.rank = cmdata[keep, overall$ovsl])
+    
+    R <- do.call(rankwith, args = a)
+
   }
   
   if (isFALSE(overallVSlocal)) {
+    
     keep <- overall$keep
     
-    if (ncomp == 3){
-      R <- rank_tricot(cmdata[keep, ],
-                       items = itemnames,
-                       input = overall$input)
-    }
+    # list of arguments for the function that will be used to 
+    # create the rankings
+    a <- list(cmdata[keep, ],
+              items = itemnames,
+              input = overall$input)
     
-    if (ncomp > 3){
-      R <- rank_numeric(cmdata[keep, ],
-                        items = itemnames,
-                        input = overall$input)
-    }
+    R <- do.call(rankwith, args = a)
     
   }
   
+  # get the network of items evaluated in the project
   net <- network(R)
   
   fav1 <- summarise_favourite(R) 
@@ -382,54 +426,39 @@ done <- tryCatch({
   
   other_traits_full <- trait_full[-1]
   
-  if (length(other_traits) > 0) {
+  if (isTRUE(length(other_traits) > 0)) {
     
     # filter cmdata so it matches the dims in all traits
     keep <- NULL
     for(i in seq_along(trait_list)) {
       keep <- cbind(keep, trait_list[[i]]$keep)
     }
+    
     keep <- rowSums(keep)
     keep <- keep == length(trait_list)
     
-    if (ncomp == 3) {
-      compare_to <- rank_tricot(cmdata[keep, ], 
-                                items = itemnames,
-                                input = overall$input)
-    }
+    # list of arguments for the function that will be used to 
+    # create the rankings
+    a <- list(cmdata[keep, ], 
+              items = itemnames,
+              input = overall$input)
     
-    if (ncomp > 3) {
-      compare_to <- rank_numeric(cmdata[keep, ], 
-                                 items = itemnames,
-                                 input = overall$input)
-    }
-    
+    compare_to <- do.call(rankwith, args = a)
     
     compare_with <- list()
-    if (ncomp == 3) {
-      for (i in seq_along(other_traits)) {
-        
-        ot <- trait_list[[other_traits[i]]]
-        
-        otr <- rank_tricot(cmdata[keep, ],
-                           items = itemnames,
-                           input = ot$input)  
-        compare_with[[i]] <- otr
-      }
+    for (i in seq_along(other_traits)) {
+      
+      ot <- trait_list[[other_traits[i]]]
+      
+      a <- list(cmdata[keep, ],
+                items = itemnames,
+                input = ot$input)
+      
+      otr <- do.call(rankwith, args = a) 
+      
+      compare_with[[i]] <- otr
+      
     }
-    
-    if (ncomp > 3) {
-      for (i in seq_along(other_traits)) {
-        
-        ot <- trait_list[[other_traits[i]]]
-        
-        otr <- rank_numeric(cmdata[keep, ],
-                            items = itemnames,
-                            input = ot$input)  
-        compare_with[[i]] <- otr
-      }
-    }
-    
     
     agreement <- summarise_agreement(compare_to, 
                                      compare_with, 
@@ -458,7 +487,7 @@ done <- tryCatch({
     
   } 
   
-  if (length(other_traits) == 0) {
+  if (isTRUE(length(other_traits) == 0)) {
     strongest_link <- character()
     weakest_link <- character()
     agreement_table <- data.frame(Option = "Only Overall Performance was used",
@@ -477,7 +506,7 @@ done <- tryCatch({
   # PlackettLuce Model ####
   mod_overall <- PlackettLuce(R)
   
-  model_summaries <- multcompPL(mod_overall, adjust = ci_adjust)
+  model_summaries <- multcompPL(mod_overall, adjust = ci_adjust, ref = reference)
   
   fullanova <- anova.PL(mod_overall)
   
@@ -516,37 +545,24 @@ done <- tryCatch({
     ot <- trait_list[[ot]]
     
     if (isTRUE(overallVSlocal)) {
-      if (ncomp == 3) {
-        keep <- overall$keep2 & ot$keep
-        
-        Rot <- rank_tricot(cmdata[keep, ],
-                           items = itemnames,
-                           input = ot$input,
-                           additional.rank = cmdata[keep, overall$ovsl])
-      }
+      keep <- overall$keep2 & ot$keep
       
-      if (ncomp > 3) {
-        keep <- overall$keep2 & ot$keep
-        
-        Rot <- rank_numeric(cmdata[keep, ],
-                            items = itemnames,
-                            input = ot$input)
-      }
+      a <- list(cmdata[keep, ],
+                items = itemnames,
+                input = ot$input,
+                additional.rank = cmdata[keep, overall$ovsl])
+      
+      Rot <- do.call(rankwith, args = a)
     }
     
     if (isFALSE(overallVSlocal)) {
       keep <- ot$keep
-      if (ncomp == 3){
-        Rot <- rank_tricot(data  = cmdata[keep, ],
-                           items = itemnames,
-                           input = ot$input) 
-      }
       
-      if (ncomp > 3) {
-        Rot <- rank_numeric(data  = cmdata[keep, ],
-                            items = itemnames,
-                            input = ot$input) 
-      }
+      a <- list(data  = cmdata[keep, ],
+                items = itemnames,
+                input = ot$input)
+      
+      Rot <- do.call(rankwith, args = a)
       
     }
     
@@ -574,7 +590,7 @@ done <- tryCatch({
     aov_tables[[i]] <- aov_i
     
     # This is Table 4.*.2
-    summ_i <- multcompPL(mod_t, adjust = ci_adjust)
+    summ_i <- multcompPL(mod_t, adjust = ci_adjust, ref = reference)
     summ_i$items <- row.names(summ_i)  
     rownames(summ_i) <- NULL
     summ_i <- summ_i[, c("items", "estimate","quasiSE",".group")]
@@ -611,19 +627,21 @@ done <- tryCatch({
   # .......................................................
   # .......................................................
   # PlackettLuce combining traits together ####
-  coefs <- qvcalc(mod_overall)[[2]]$estimate
+  coefs <- qvcalc(mod_overall, ref = reference)[[2]]$estimate
   
   for(i in seq_along(other_traits)){
     coefs <- cbind(coefs, 
-                   scale(qvcalc(mods[[i]])[[2]]$estimate))
+                   scale(qvcalc(mods[[i]], ref = reference)[[2]]$estimate))
   }
   
   coefs <- as.data.frame(coefs)
+  
   # add item names as rows
   rownames(coefs) <- rownames(qvcalc(mod_overall)[[2]])
+  
   # set col names with title case traits
   otf <- gsub(" ","_", other_traits_full)
-  names(coefs) <- c("Overall", ClimMobTools:::.title_case(otf))
+  names(coefs)[1] <- c("Overall")
   
   # .......................................................
   # .......................................................
@@ -631,7 +649,9 @@ done <- tryCatch({
   arrows <- data.frame()
   scores <- data.frame()
   
-  if (length(other_traits) > 0) {
+  if (isTRUE(length(other_traits) > 0)) {
+    names(coefs)[-1] <- ClimMobTools:::.title_case(otf)
+    
     fml <- paste("Overall ~ ", paste(ClimMobTools:::.title_case(otf), collapse = " + "))
     fml <- as.formula(fml)
     
@@ -660,7 +680,7 @@ done <- tryCatch({
     nc <- which(adjCV == min(adjCV))
   }
   
-  if (dim(arrows)[[1]] > 0) {
+  if (isTRUE(dim(arrows)[[1]] > 0)) {
     
     pls_plot <- ggplot(data = arrows,
                        aes(y = Comp.2, 
@@ -693,7 +713,8 @@ done <- tryCatch({
   }
   
   if (dim(arrows)[[1]] == 0) {
-    pls_summary_line <- "However, partial least squares analysis was not possible with this project data."
+    pls_summary_line <- paste("However, partial least squares analysis",
+                              "was not possible with this project data.")
   }
   
   # .......................................................
