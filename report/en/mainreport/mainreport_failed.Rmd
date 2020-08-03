@@ -1,0 +1,30 @@
+---
+title: "Report of ClimMob Project"
+author: "ClimMob.net"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  word_document:
+    reference_docx: word_style_template.docx
+  html_document:
+    toc: true
+  pdf_document:
+    toc: true
+---
+
+```{r setup_opts, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      error = FALSE,
+                      message=FALSE,
+                      warning = FALSE)
+```
+
+\
+\
+
+Sorry, we couldn't generate your report. Please contact our user service via the 'Chat bot'. You can find it in the bottom left corner of your ClimMob account. 
+
+
+The ClimMob Team
+
+
+

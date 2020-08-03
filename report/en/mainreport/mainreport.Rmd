@@ -1,6 +1,6 @@
 ---
-title: "`r paste('Analysis of ClimMob project ', projname)`"
-author: "Automated Report by ClimMob"
+title: "`r paste('Report of ClimMob project ', projname)`"
+author: "ClimMob.net"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   word_document:

@@ -1,0 +1,1400 @@
+{
+    "project": {
+        "user_name": "bmadriz",
+        "project_cod": "bmadriz01",
+        "project_name": "Proyecto uno server pruebas",
+        "project_abstract": "Primera prueba en server de pruebas",
+        "project_tags": "Pruebas,development",
+        "project_pi": "Brandon Madriz",
+        "project_piemail": "bmadriz@mrbotcr.com",
+        "project_active": 1,
+        "project_public": 0,
+        "project_dashboard": 1,
+        "project_regstatus": 2,
+        "project_assstatus": 0,
+        "project_createcomb": 0,
+        "project_createpkgs": 0,
+        "project_numobs": 10,
+        "project_numcom": 3,
+        "project_lat": "",
+        "project_lon": "",
+        "project_creationdate": "2020-04-03 05:40:13",
+        "project_localvariety": 1,
+        "project_cnty": "CR",
+        "extra": null
+    },
+    "registry": {
+        "lkptables": [],
+        "fields": [
+            {
+                "name": "surveyid",
+                "odktype": "",
+                "desc": "Submission ID",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "originid",
+                "odktype": "",
+                "desc": "Origin",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "_submitted_by",
+                "odktype": "text",
+                "desc": "Submitted by",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "_submitted_date",
+                "odktype": "datetime",
+                "desc": "Submitted date",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "_geopoint",
+                "odktype": "geopoint",
+                "desc": "GPS point",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_deviceimei",
+                "odktype": "deviceid",
+                "desc": "Device IMEI",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_start",
+                "odktype": "start",
+                "desc": "Start of survey",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "qst162",
+                "odktype": "barcode",
+                "desc": "Package code",
+                "key": "true",
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "farmername",
+                "odktype": "text",
+                "desc": "Farmer name",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_end",
+                "odktype": "end",
+                "desc": "End of survey",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "rowuuid",
+                "odktype": "",
+                "desc": "Unique Row Identifier (UUID)",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            }
+        ]
+    },
+    "assessments": [
+        {
+            "code": "53b537262b8a",
+            "desc": "Envios",
+            "lkptables": [
+                {
+                    "name": "ASS53b537262b8a_lkpchar_bm01_pos",
+                    "desc": "Lookup table (Cúal variedad le rindió más ?)",
+                    "fields": [
+                        {
+                            "name": "char_bm01_pos_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "char_bm01_pos_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "char_bm01_pos_cod": 1,
+                            "char_bm01_pos_des": "Option A"
+                        },
+                        {
+                            "char_bm01_pos_cod": 2,
+                            "char_bm01_pos_des": "Option B"
+                        },
+                        {
+                            "char_bm01_pos_cod": 3,
+                            "char_bm01_pos_des": "Option C"
+                        }
+                    ]
+                },
+                {
+                    "name": "ASS53b537262b8a_lkpqst163",
+                    "desc": "Lookup table (Select the farmer)",
+                    "fields": [
+                        {
+                            "name": "qst163_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "qst163_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "qst163_cod": 1,
+                            "qst163_des": "P:1-Brandon"
+                        },
+                        {
+                            "qst163_cod": 2,
+                            "qst163_des": "P:2-Maria"
+                        },
+                        {
+                            "qst163_cod": 3,
+                            "qst163_des": "P:3-Hugo"
+                        },
+                        {
+                            "qst163_cod": 4,
+                            "qst163_des": "P:4-Lucia"
+                        },
+                        {
+                            "qst163_cod": 5,
+                            "qst163_des": "P:5-Ashley"
+                        },
+                        {
+                            "qst163_cod": 6,
+                            "qst163_des": "P:6-Rosa"
+                        },
+                        {
+                            "qst163_cod": 7,
+                            "qst163_des": "P:7-Michael"
+                        },
+                        {
+                            "qst163_cod": 8,
+                            "qst163_des": "P:8-Rafael"
+                        },
+                        {
+                            "qst163_cod": 9,
+                            "qst163_des": "P:9-Calos"
+                        },
+                        {
+                            "qst163_cod": 10,
+                            "qst163_des": "P:10-Hillary"
+                        }
+                    ]
+                }
+            ],
+            "fields": [
+                {
+                    "name": "surveyid",
+                    "odktype": "",
+                    "desc": "Submission ID",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "originid",
+                    "odktype": "",
+                    "desc": "Origin",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_submitted_by",
+                    "odktype": "text",
+                    "desc": "Submitted by",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_submitted_date",
+                    "odktype": "datetime",
+                    "desc": "Submitted date",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_geopoint",
+                    "odktype": "geopoint",
+                    "desc": "GPS point",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_deviceimei",
+                    "odktype": "deviceid",
+                    "desc": "Device IMEI",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_start",
+                    "odktype": "start",
+                    "desc": "Start of survey",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "qst163",
+                    "odktype": "select_one qst163_opts",
+                    "desc": "Select the farmer",
+                    "key": "true",
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS53b537262b8a_lkpqst163",
+                    "rfield": "qst163_cod"
+                },
+                {
+                    "name": "cal_qst163",
+                    "odktype": "calculate",
+                    "desc": "",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "char_bm01_pos",
+                    "odktype": "select_one char_bm01_pos_opts",
+                    "desc": "Cúal variedad le rindió más ?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS53b537262b8a_lkpchar_bm01_pos",
+                    "rfield": "char_bm01_pos_cod"
+                },
+                {
+                    "name": "char_bm01_neg",
+                    "odktype": "select_one char_bm01_neg_opts",
+                    "desc": "Cúal variedad fue menos rendidora ?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASS53b537262b8a_lkpchar_bm01_pos",
+                    "rfield": "char_bm01_pos_cod"
+                },
+                {
+                    "name": "clm_end",
+                    "odktype": "end",
+                    "desc": "End of survey",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "rowuuid",
+                    "odktype": "",
+                    "desc": "Unique Row Identifier (UUID)",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                }
+            ]
+        },
+        {
+            "code": "d2f91f545928",
+            "desc": "desempeño general",
+            "lkptables": [
+                {
+                    "name": "ASSd2f91f545928_lkpchar_overallperf_pos",
+                    "desc": "Lookup table (Overall, which option performed better?)",
+                    "fields": [
+                        {
+                            "name": "char_overallperf_pos_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "char_overallperf_pos_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "char_overallperf_pos_cod": 1,
+                            "char_overallperf_pos_des": "Option A"
+                        },
+                        {
+                            "char_overallperf_pos_cod": 2,
+                            "char_overallperf_pos_des": "Option B"
+                        },
+                        {
+                            "char_overallperf_pos_cod": 3,
+                            "char_overallperf_pos_des": "Option C"
+                        }
+                    ]
+                },
+                {
+                    "name": "ASSd2f91f545928_lkpqst163",
+                    "desc": "Lookup table (Select the farmer)",
+                    "fields": [
+                        {
+                            "name": "qst163_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "qst163_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "qst163_cod": 1,
+                            "qst163_des": "P:1-Brandon"
+                        },
+                        {
+                            "qst163_cod": 2,
+                            "qst163_des": "P:2-Maria"
+                        },
+                        {
+                            "qst163_cod": 3,
+                            "qst163_des": "P:3-Hugo"
+                        },
+                        {
+                            "qst163_cod": 4,
+                            "qst163_des": "P:4-Lucia"
+                        },
+                        {
+                            "qst163_cod": 5,
+                            "qst163_des": "P:5-Ashley"
+                        },
+                        {
+                            "qst163_cod": 6,
+                            "qst163_des": "P:6-Rosa"
+                        },
+                        {
+                            "qst163_cod": 7,
+                            "qst163_des": "P:7-Michael"
+                        },
+                        {
+                            "qst163_cod": 8,
+                            "qst163_des": "P:8-Rafael"
+                        },
+                        {
+                            "qst163_cod": 9,
+                            "qst163_des": "P:9-Calos"
+                        },
+                        {
+                            "qst163_cod": 10,
+                            "qst163_des": "P:10-Hillary"
+                        }
+                    ]
+                }
+            ],
+            "fields": [
+                {
+                    "name": "surveyid",
+                    "odktype": "",
+                    "desc": "Submission ID",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "originid",
+                    "odktype": "",
+                    "desc": "Origin",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_submitted_by",
+                    "odktype": "text",
+                    "desc": "Submitted by",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_submitted_date",
+                    "odktype": "datetime",
+                    "desc": "Submitted date",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_geopoint",
+                    "odktype": "geopoint",
+                    "desc": "GPS point",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_deviceimei",
+                    "odktype": "deviceid",
+                    "desc": "Device IMEI",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_start",
+                    "odktype": "start",
+                    "desc": "Start of survey",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "qst163",
+                    "odktype": "select_one qst163_opts",
+                    "desc": "Select the farmer",
+                    "key": "true",
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSd2f91f545928_lkpqst163",
+                    "rfield": "qst163_cod"
+                },
+                {
+                    "name": "cal_qst163",
+                    "odktype": "calculate",
+                    "desc": "",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "char_overallperf_pos",
+                    "odktype": "select_one char_overallperf_pos_opts",
+                    "desc": "Overall, which option performed better?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSd2f91f545928_lkpchar_overallperf_pos",
+                    "rfield": "char_overallperf_pos_cod"
+                },
+                {
+                    "name": "char_overallperf_neg",
+                    "odktype": "select_one char_overallperf_neg_opts",
+                    "desc": "Overall, which option performed worst?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSd2f91f545928_lkpchar_overallperf_pos",
+                    "rfield": "char_overallperf_pos_cod"
+                },
+                {
+                    "name": "clm_end",
+                    "odktype": "end",
+                    "desc": "End of survey",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "rowuuid",
+                    "odktype": "",
+                    "desc": "Unique Row Identifier (UUID)",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                }
+            ]
+        }
+    ],
+    "packages": [
+        {
+            "package_id": 1,
+            "farmername": "Brandon",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Fuerte Sequia"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Matagalpa"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Ferroso"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 2,
+            "farmername": "Maria",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Rojo"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Ferroso"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Centro Sur"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 3,
+            "farmername": "Hugo",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Centro Sur"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Fuerte Sequia"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Rojo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 4,
+            "farmername": "Lucia",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Matagalpa"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Rojo"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Fuerte Sequia"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 5,
+            "farmername": "Ashley ",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Ferroso"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Centro Sur"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Matagalpa"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 6,
+            "farmername": "Rosa",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Fuerte Sequia"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Ferroso"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Centro Sur"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 7,
+            "farmername": "Michael",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Rojo"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Matagalpa"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Ferroso"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 8,
+            "farmername": "Rafael",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Matagalpa"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Centro Sur"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Rojo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 9,
+            "farmername": "Calos",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Ferroso"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Rojo"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Fuerte Sequia"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 10,
+            "farmername": "Hillary ",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Centro Sur"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Fuerte Sequia"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Bean varieties",
+                            "alias_name": "INTA Matagalpa"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "specialfields": [
+        {
+            "type": "Characteristic",
+            "name": "ASS53b537262b8a_char_bm01_pos",
+            "desc": "Cúal variedad le rindió más ?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASS53b537262b8a_char_bm01_neg",
+            "desc": "Cúal variedad fue menos rendidora ?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASSd2f91f545928_char_overallperf_pos",
+            "desc": "Overall, which option performed better?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASSd2f91f545928_char_overallperf_neg",
+            "desc": "Overall, which option performed worst?"
+        }
+    ],
+    "data": [
+        {
+            "REG_surveyid": "a521b573-6241-48b2-878b-bd3eb642a067",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:11:49",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:11:15",
+            "REG_qst162": "1",
+            "REG_farmername": "Brandon",
+            "REG_clm_end": "2020-04-03 09:11:24",
+            "REG_rowuuid": "0e37d09d-5403-482b-bbca-649ff5439320",
+            "ASS53b537262b8a_surveyid": "1322b3d3-52b3-46ba-a5d1-351e916b471c",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:41",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:20:39",
+            "ASS53b537262b8a_qst163": 1,
+            "ASS53b537262b8a_cal_qst163": "P:1-Brandon",
+            "ASS53b537262b8a_char_bm01_pos": 3,
+            "ASS53b537262b8a_char_bm01_neg": 1,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:20:43",
+            "ASS53b537262b8a_rowuuid": "280a36de-7679-4343-8412-623c2fc553e7",
+            "ASSd2f91f545928_surveyid": "582c4f54-a272-49e3-8580-872a1961b06b",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:17",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:27:16",
+            "ASSd2f91f545928_qst163": 1,
+            "ASSd2f91f545928_cal_qst163": "P:1-Brandon",
+            "ASSd2f91f545928_char_overallperf_pos": 1,
+            "ASSd2f91f545928_char_overallperf_neg": 2,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:27:20",
+            "ASSd2f91f545928_rowuuid": "160acefa-3e03-49ab-be7f-8b20dff142bf"
+        },
+        {
+            "REG_surveyid": "09181a92-05bb-47ce-8714-9f70ca40bcac",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:14:50",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:15:30",
+            "REG_qst162": "10",
+            "REG_farmername": "Hillary ",
+            "REG_clm_end": "2020-04-03 09:15:57",
+            "REG_rowuuid": "c81ec0ee-e5a8-4e35-abfa-fa83a0c88d25",
+            "ASS53b537262b8a_surveyid": "ae912325-bbe2-4b19-88f9-43fb2ba84ce0",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:37",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:19:28",
+            "ASS53b537262b8a_qst163": 10,
+            "ASS53b537262b8a_cal_qst163": "P:10-Hillary",
+            "ASS53b537262b8a_char_bm01_pos": 2,
+            "ASS53b537262b8a_char_bm01_neg": 1,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:19:32",
+            "ASS53b537262b8a_rowuuid": "547d2fa0-ddec-4bfc-90e6-2a1336cdf334",
+            "ASSd2f91f545928_surveyid": "e2bdbfbb-7788-4f01-a7c3-ed61c9a099a2",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:17",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:27:22",
+            "ASSd2f91f545928_qst163": 10,
+            "ASSd2f91f545928_cal_qst163": "P:10-Hillary",
+            "ASSd2f91f545928_char_overallperf_pos": 2,
+            "ASSd2f91f545928_char_overallperf_neg": 1,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:27:26",
+            "ASSd2f91f545928_rowuuid": "b8c8b3db-75b4-4ab2-aebf-ed44f481d34f"
+        },
+        {
+            "REG_surveyid": "b39354b6-7bd5-40b1-b552-a60e76818dbb",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:11:49",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:11:26",
+            "REG_qst162": "2",
+            "REG_farmername": "Maria",
+            "REG_clm_end": "2020-04-03 09:11:33",
+            "REG_rowuuid": "c280c291-89e0-4108-8a5a-9c75e1dcbe51",
+            "ASS53b537262b8a_surveyid": "7643c8fb-4687-457b-a267-d6ca7a34ad1a",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:38",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:19:34",
+            "ASS53b537262b8a_qst163": 2,
+            "ASS53b537262b8a_cal_qst163": "P:2-Maria",
+            "ASS53b537262b8a_char_bm01_pos": 2,
+            "ASS53b537262b8a_char_bm01_neg": 1,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:19:38",
+            "ASS53b537262b8a_rowuuid": "753e376e-94ac-46de-ab97-6ef045fb2482",
+            "ASSd2f91f545928_surveyid": "b93e150a-b2fa-4df8-af51-7516cb864836",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:17",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:27:28",
+            "ASSd2f91f545928_qst163": 2,
+            "ASSd2f91f545928_cal_qst163": "P:2-Maria",
+            "ASSd2f91f545928_char_overallperf_pos": 3,
+            "ASSd2f91f545928_char_overallperf_neg": 1,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:27:32",
+            "ASSd2f91f545928_rowuuid": "dd8f2799-1c81-4605-9474-976e536ea9c1"
+        },
+        {
+            "REG_surveyid": "73d89d00-2a08-4dfa-a532-1fc87972aac9",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:11:50",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:11:35",
+            "REG_qst162": "3",
+            "REG_farmername": "Hugo",
+            "REG_clm_end": "2020-04-03 09:11:42",
+            "REG_rowuuid": "924cc8d2-2768-4346-aa1d-52c0d6b32f5d",
+            "ASS53b537262b8a_surveyid": "f5a2b0f1-9db2-4787-974e-82140ebdd752",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:38",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:19:40",
+            "ASS53b537262b8a_qst163": 3,
+            "ASS53b537262b8a_cal_qst163": "P:3-Hugo",
+            "ASS53b537262b8a_char_bm01_pos": 2,
+            "ASS53b537262b8a_char_bm01_neg": 3,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:19:47",
+            "ASS53b537262b8a_rowuuid": "a74c21ae-0936-4dcc-8e29-bb826a9cdb44",
+            "ASSd2f91f545928_surveyid": "c873fb92-bfef-4e53-9019-64a6e4aab424",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:17",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:27:35",
+            "ASSd2f91f545928_qst163": 3,
+            "ASSd2f91f545928_cal_qst163": "P:3-Hugo",
+            "ASSd2f91f545928_char_overallperf_pos": 2,
+            "ASSd2f91f545928_char_overallperf_neg": 3,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:27:39",
+            "ASSd2f91f545928_rowuuid": "4fd2e099-22dc-472d-a107-7bd1e8a7a359"
+        },
+        {
+            "REG_surveyid": "7e670654-ccac-4862-8555-dd7d2b8a2af9",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:11:50",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:11:44",
+            "REG_qst162": "4",
+            "REG_farmername": "Lucia",
+            "REG_clm_end": "2020-04-03 09:11:55",
+            "REG_rowuuid": "345bbe01-16a2-45c9-944f-79fbbaa703d5",
+            "ASS53b537262b8a_surveyid": "28902d15-71a3-4d65-9317-cca2ab697a3f",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:39",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:19:50",
+            "ASS53b537262b8a_qst163": 4,
+            "ASS53b537262b8a_cal_qst163": "P:4-Lucia",
+            "ASS53b537262b8a_char_bm01_pos": 3,
+            "ASS53b537262b8a_char_bm01_neg": 2,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:19:57",
+            "ASS53b537262b8a_rowuuid": "30fff397-5644-4e26-ae3c-06091aefbffb",
+            "ASSd2f91f545928_surveyid": "e75846c2-2282-4aee-9908-6263942d2706",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:18",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:27:41",
+            "ASSd2f91f545928_qst163": 4,
+            "ASSd2f91f545928_cal_qst163": "P:4-Lucia",
+            "ASSd2f91f545928_char_overallperf_pos": 3,
+            "ASSd2f91f545928_char_overallperf_neg": 1,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:27:45",
+            "ASSd2f91f545928_rowuuid": "565713b9-84e8-486d-9c59-0d350ef4d84b"
+        },
+        {
+            "REG_surveyid": "88f4f31d-15fc-4cc5-be52-2526d33c194d",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:11:50",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:12:00",
+            "REG_qst162": "5",
+            "REG_farmername": "Ashley ",
+            "REG_clm_end": "2020-04-03 09:12:09",
+            "REG_rowuuid": "c46e3432-317a-4d0b-8acf-952b97d2c0a4",
+            "ASS53b537262b8a_surveyid": "ebb556af-cc55-41f4-ac52-3e8d7642be5d",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:39",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:19:59",
+            "ASS53b537262b8a_qst163": 5,
+            "ASS53b537262b8a_cal_qst163": "P:5-Ashley",
+            "ASS53b537262b8a_char_bm01_pos": 1,
+            "ASS53b537262b8a_char_bm01_neg": 2,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:20:06",
+            "ASS53b537262b8a_rowuuid": "b95eab81-ea5c-4b93-99c4-ec96fc192e88",
+            "ASSd2f91f545928_surveyid": "35bec4a4-7930-432f-9ca9-84440b679c38",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:19",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:27:53",
+            "ASSd2f91f545928_qst163": 5,
+            "ASSd2f91f545928_cal_qst163": "P:5-Ashley",
+            "ASSd2f91f545928_char_overallperf_pos": 2,
+            "ASSd2f91f545928_char_overallperf_neg": 3,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:27:57",
+            "ASSd2f91f545928_rowuuid": "a72b5afd-4fea-4f87-aec8-e0acfc855604"
+        },
+        {
+            "REG_surveyid": "14547a4f-692f-4460-8582-3e006c2b1e47",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:11:51",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:12:10",
+            "REG_qst162": "6",
+            "REG_farmername": "Rosa",
+            "REG_clm_end": "2020-04-03 09:12:17",
+            "REG_rowuuid": "bb5f4fe8-e41f-4cab-a6d0-8715c37aa13d",
+            "ASS53b537262b8a_surveyid": "e4aa3ed1-2caf-4b2e-8ee7-b9623a3ed276",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:39",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:20:08",
+            "ASS53b537262b8a_qst163": 6,
+            "ASS53b537262b8a_cal_qst163": "P:6-Rosa",
+            "ASS53b537262b8a_char_bm01_pos": 3,
+            "ASS53b537262b8a_char_bm01_neg": 1,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:20:14",
+            "ASS53b537262b8a_rowuuid": "efe5a509-5ccf-422a-8706-f782096bf03e",
+            "ASSd2f91f545928_surveyid": "114d56e3-1e10-4269-a65a-4241d65dc0d7",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:19",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:27:59",
+            "ASSd2f91f545928_qst163": 6,
+            "ASSd2f91f545928_cal_qst163": "P:6-Rosa",
+            "ASSd2f91f545928_char_overallperf_pos": 3,
+            "ASSd2f91f545928_char_overallperf_neg": 1,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:28:04",
+            "ASSd2f91f545928_rowuuid": "4b3ae01f-210b-4de1-97fd-778156e1af55"
+        },
+        {
+            "REG_surveyid": "09dfad5c-322c-4356-8d71-7f0658b937d9",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:13:00",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:13:17",
+            "REG_qst162": "7",
+            "REG_farmername": "Michael",
+            "REG_clm_end": "2020-04-03 09:13:29",
+            "REG_rowuuid": "62cb3ff6-5f73-49d9-ae25-f2be60cb2905",
+            "ASS53b537262b8a_surveyid": "0e85fefd-09b6-4ebe-8ee3-c478bfbb8504",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:40",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:20:16",
+            "ASS53b537262b8a_qst163": 7,
+            "ASS53b537262b8a_cal_qst163": "P:7-Michael",
+            "ASS53b537262b8a_char_bm01_pos": 3,
+            "ASS53b537262b8a_char_bm01_neg": 1,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:20:21",
+            "ASS53b537262b8a_rowuuid": "a59328a1-0734-41f0-822b-b928dfd14416",
+            "ASSd2f91f545928_surveyid": "8a8f4a88-3ed8-4f3f-95b2-997829241aaf",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:19",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:28:06",
+            "ASSd2f91f545928_qst163": 7,
+            "ASSd2f91f545928_cal_qst163": "P:7-Michael",
+            "ASSd2f91f545928_char_overallperf_pos": 3,
+            "ASSd2f91f545928_char_overallperf_neg": 1,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:28:11",
+            "ASSd2f91f545928_rowuuid": "9ee1b094-4a0d-4322-ace1-e8974fe939b7"
+        },
+        {
+            "REG_surveyid": "8675a73a-d552-4f79-b9ac-ea663976fde0",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:11:51",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:12:46",
+            "REG_qst162": "8",
+            "REG_farmername": "Rafael",
+            "REG_clm_end": "2020-04-03 09:12:56",
+            "REG_rowuuid": "43f53a69-42cd-4f5e-9309-4df969be7395",
+            "ASS53b537262b8a_surveyid": "6825ef27-10ec-4161-9496-1715270ddec3",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:40",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:20:23",
+            "ASS53b537262b8a_qst163": 8,
+            "ASS53b537262b8a_cal_qst163": "P:8-Rafael",
+            "ASS53b537262b8a_char_bm01_pos": 3,
+            "ASS53b537262b8a_char_bm01_neg": 1,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:20:28",
+            "ASS53b537262b8a_rowuuid": "dd6f31d0-15aa-42e0-ae2d-5def4b167e59",
+            "ASSd2f91f545928_surveyid": "ec029d06-194b-439c-8ac3-52b3f7b799cb",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:20",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:28:12",
+            "ASSd2f91f545928_qst163": 8,
+            "ASSd2f91f545928_cal_qst163": "P:8-Rafael",
+            "ASSd2f91f545928_char_overallperf_pos": 3,
+            "ASSd2f91f545928_char_overallperf_neg": 2,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:28:18",
+            "ASSd2f91f545928_rowuuid": "117677eb-45bf-4f78-bb61-c6215c19c5fb"
+        },
+        {
+            "REG_surveyid": "5f4f66ac-374e-4b24-b0a7-1670bbf6b8a6",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "victor",
+            "REG__submitted_date": "2020-04-03 15:13:01",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "867128035634212",
+            "REG_clm_start": "2020-04-03 09:13:41",
+            "REG_qst162": "9",
+            "REG_farmername": "Calos",
+            "REG_clm_end": "2020-04-03 09:14:08",
+            "REG_rowuuid": "9ce45bd7-0b19-480f-b2d9-922e0f1b5fae",
+            "ASS53b537262b8a_surveyid": "afaab2e7-0df7-4a90-8ccc-2da180324c6c",
+            "ASS53b537262b8a_originid": "ODKTOOLS",
+            "ASS53b537262b8a__submitted_by": "victor",
+            "ASS53b537262b8a__submitted_date": "2020-04-03 15:19:40",
+            "ASS53b537262b8a__geopoint": null,
+            "ASS53b537262b8a_clm_deviceimei": "867128035634212",
+            "ASS53b537262b8a_clm_start": "2020-04-03 09:20:30",
+            "ASS53b537262b8a_qst163": 9,
+            "ASS53b537262b8a_cal_qst163": "P:9-Calos",
+            "ASS53b537262b8a_char_bm01_pos": 1,
+            "ASS53b537262b8a_char_bm01_neg": 2,
+            "ASS53b537262b8a_clm_end": "2020-04-03 09:20:37",
+            "ASS53b537262b8a_rowuuid": "caa2d252-ed5d-4b35-a502-8700901ef781",
+            "ASSd2f91f545928_surveyid": "e322b563-327a-4405-a774-b4cc379d24e6",
+            "ASSd2f91f545928_originid": "ODKTOOLS",
+            "ASSd2f91f545928__submitted_by": "victor",
+            "ASSd2f91f545928__submitted_date": "2020-04-03 15:27:20",
+            "ASSd2f91f545928__geopoint": null,
+            "ASSd2f91f545928_clm_deviceimei": "867128035634212",
+            "ASSd2f91f545928_clm_start": "2020-04-03 09:28:20",
+            "ASSd2f91f545928_qst163": 9,
+            "ASSd2f91f545928_cal_qst163": "P:9-Calos",
+            "ASSd2f91f545928_char_overallperf_pos": 3,
+            "ASSd2f91f545928_char_overallperf_neg": 2,
+            "ASSd2f91f545928_clm_end": "2020-04-03 09:28:24",
+            "ASSd2f91f545928_rowuuid": "3aaf5abe-a049-4e97-9cf9-57b3777b4c30"
+        }
+    ],
+    "importantfields": [
+        {
+            "type": "PackageID",
+            "field": "REG_QST162",
+            "desc": "Package ID"
+        },
+        {
+            "type": "FarmerName",
+            "field": "REG_farmername",
+            "desc": "Name of registered farmer"
+        },
+        {
+            "type": "OverallCharPos",
+            "field": "ASSd2f91f545928_char_overallperf_pos",
+            "desc": "Over all characteristic positive"
+        },
+        {
+            "type": "OverallCharNeg",
+            "field": "ASSd2f91f545928_char_overallperf_neg",
+            "desc": "Over all characteristic negative"
+        }
+    ]
+}

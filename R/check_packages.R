@@ -28,7 +28,8 @@ latest <- latest_version("ClimMobTools",
 if (isFALSE(latest)) {
   
   remotes::install_github("agrobioinfoservices/ClimMobTools",
-                           upgrade = "never")
+                          upgrade = "never",
+                          force = TRUE)
 
 }
 
@@ -37,7 +38,8 @@ latest <- latest_version("gosset",
   
 if (isFALSE(latest)) {
   remotes::install_github("agrobioinfoservices/gosset",
-                           upgrade = "never")
+                          upgrade = "never", 
+                          force = TRUE)
 
 }
 
@@ -45,8 +47,9 @@ latest <- latest_version("climatrends",
                           "https://raw.githubusercontent.com/agrobioinfoservices/climatrends/master/DESCRIPTION")
 
 if (isFALSE(latest)) {
-  remotes::install_github("agrobioinfoservices/gosset",
-                          upgrade = "never")
+  remotes::install_github("agrobioinfoservices/climatrends",
+                          upgrade = "never", 
+                          force = TRUE)
   
 }
 
@@ -54,5 +57,5 @@ pkg <- c("PlackettLuce", "partykit", "qvcalc", "psychotools", "jsonlite",
          "multcompView", "knitr", "rmarkdown", "pls", "gtools", "ggplot2", 
          "igraph", "mapview", "ggrepel", "patchwork", "ggparty")
 
-install.packages(pkg, type = "binary")
+install.packages(pkg)
 
