@@ -296,7 +296,7 @@ done <- tryCatch({
       
       trial_map_statement <- paste("The map below shows the distribution",
                                    "of the trials in this project. To ensure the",
-                                   "privacy of the participants, the coordinates",
+                                   "participants'privacy, the coordinates",
                                    "were clustered with a 0.5 resolution. You can find",
                                    "the original coordinates in your ClimMob data.")
       
@@ -593,7 +593,7 @@ done <- tryCatch({
     summ_i <- multcompPL(mod_t, adjust = ci_adjust, ref = reference)
     summ_i$items <- row.names(summ_i)  
     rownames(summ_i) <- NULL
-    summ_i <- summ_i[, c("items", "estimate","quasiSE",".group")]
+    summ_i <- summ_i[, c("items", "estimate","quasiSE","group")]
     names(summ_i) <- c(Option, "Estimate","quasiSE","Group")
     
     summaries[[i]] <- summ_i
@@ -712,57 +712,45 @@ done <- tryCatch({
                               "in the direction away from the dashed line and worse performance in characteristics directed on the opposite side.") 
   }
   
-  if (dim(arrows)[[1]] == 0) {
+  if (isTRUE(dim(arrows)[[1]] <= 0)) {
     pls_summary_line <- paste("However, partial least squares analysis",
                               "was not possible with this project data.")
   }
   
   # .......................................................
   # .......................................................
-  # Analysis with explanatory variables ####
+  # Plackett-Luce trees with explanatory variables ####
   if (isTRUE(overallVSlocal)) {
-    if (ncomp == 3) {
-      keep <- overall$keep2 & expvar_list$keep
-      
-      G <- rank_tricot(cmdata[keep, ],
-                       items = itemnames,
-                       input = overall$input,
-                       additional.rank = cmdata[keep, overall$ovsl], 
-                       group = TRUE)
-    }
     
-    if (ncomp > 3) {
-      keep <- overall$keep2 & expvar_list$keep
+    keep <- overall$keep2 & expvar_list$keep
+    
+    a <- list(cmdata[keep, ],
+              items = itemnames,
+              input = overall$input,
+              additional.rank = cmdata[keep, overall$ovsl], 
+              group = TRUE)
+    
+    G <- do.call(rankwith, args = a)
       
-      G <- rank_numeric(cmdata[keep, ],
-                        items = itemnames,
-                        input = overall$input,
-                        group = TRUE)
-    }
     
   } 
   
   if (isFALSE(overallVSlocal)) {
     keep <- overall$keep & expvar_list$keep
-    if (ncomp == 3) {
-      G <- rank_tricot(cmdata[keep, ],
-                       items = itemnames,
-                       input = overall$input, 
-                       group = TRUE)
-    }
     
-    if (ncomp > 3) {
-      G <- rank_numeric(cmdata[keep, ],
-                        items = itemnames,
-                        input = overall$input, 
-                        group = TRUE)
-    }
+    a <- list(cmdata[keep, ],
+              items = itemnames,
+              input = overall$input, 
+              group = TRUE)
+    
+    G <- do.call(rankwith, args = a)
     
   }
   
   # data frame of explanatory variables
   Gdata <- as.data.frame(cmdata[keep, expvar_list$expvar], stringsAsFactors = TRUE)
   nvar <- length(expvar_list$expvar)
+  
   # setup the variables
   Gdata[1:nvar] <- lapply(Gdata[1:nvar], function(x){
     if(is.numeric(x)) {
@@ -781,20 +769,21 @@ done <- tryCatch({
   tree_f <- pltree(G ~ .,
                    data = Gdata, 
                    minsize = minsplit,
-                   alpha = sig_level)
+                   alpha = sig_level,
+                   ref = reference)
   
   
   # if the tree has splits, extract coeffs from nodes
-  if (length(tree_f) > 1) { 
+  if (isTRUE(length(tree_f) > 1)) { 
     
-    node_ids <- nodeids(tree_f,terminal = TRUE)
+    node_ids <- nodeids(tree_f, terminal = TRUE)
     
     coefs_t <- NULL
     for(i in seq_along(node_ids)) {
       
       coef_i <- data.frame(node = node_ids[i],
                            rule = partykit:::.list.rules.party(tree_f, node_ids[i]),
-                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object),
+                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object, ref = reference),
                            n = tree_f[[ node_ids[i] ]]$node$info$nobs,
                            stringsAsFactors = FALSE)
       
@@ -822,8 +811,8 @@ done <- tryCatch({
       
       best_tree <- rbind(best_tree,
                          c(tmp$n[1], 
-                           paste(tmp$term[grepl("a", tmp$.group)], collapse=", "),
-                           paste(rev(tmp$term[grepl(tmp$.group[nrow(tmp)], tmp$.group)]), collapse=", ")))
+                           paste(tmp$term[grepl("a", tmp$group)], collapse=", "),
+                           paste(rev(tmp$term[grepl(tmp$group[nrow(tmp)], tmp$group)]), collapse=", ")))
     }
     
     node_summary <- data.frame(rules, 
@@ -906,7 +895,6 @@ done <- tryCatch({
   # ....................................................................
   # ....................................................................
   # Build headline summaries ####
-  
   siglist <- NULL
   for(i in seq_along(outtabs)){
     if (dim(outtabs[[i]])[[2]] > 3) {
@@ -918,39 +906,70 @@ done <- tryCatch({
   siglist <- unique(siglist)
   
   ps <- fullanova[2, 5]
-  if (ps < sig_level) {
-    bests <- paste(model_summaries$term[grep("a", model_summaries$.group)], 
-                   collapse =", ")
+  if (isTRUE(ps < sig_level)) {
+    bests <- model_summaries$term[grep("a", model_summaries$group)]
     
-    worsts <- paste(rev(model_summaries$term[grep(model_summaries$.group[nrow(model_summaries)],
-                                                  model_summaries$.group)]),
-                    collapse = ", ")
+    if (isTRUE(length(bests) > 3)) {
+      bests <- bests[1:3]
+    }
+    
+    bests <- paste(bests, collapse =", ")
+    
+    worsts <- rev(model_summaries$term[grep(model_summaries$group[nrow(model_summaries)],
+                                            model_summaries$group)])
+    
+    if(isTRUE(length(worsts) > 3)) {
+      worsts <- worsts[1:3]
+    }
+    
+    worsts <- paste(worsts, collapse = ", ")
+    
   } else {
-    bests <- worsts <- "No significant differences"
+    
+    bests <- worsts <- "No significant difference"
+  
   }
   
-  if (length(other_traits) > 0) {
+  if (isTRUE(length(other_traits) > 0)) {
     
-    for(i in 1:length(anovas)){
+    for(i in seq_along(anovas)){
       
       ps <- c(ps, anovas[[i]][2,5])
       
-      if(ps[i] < sig_level){
+      if (isTRUE(ps[i] < sig_level)) {
         
         summ_i <- summaries[[i]]
         
-        bests <- c(bests,
-                   paste(summ_i[,Option][grepl("a", summ_i[,"Group"])],
-                         collapse=", "))
+        # take the best three items from this comparison
+        bests_i <- summ_i[,"term"][grepl("a", summ_i[,"group"])]
+        # if more than three, subset to get only three
+        if (isTRUE(length(bests_i) > 3)) {
+          bests_i <- bests_i[1:3]
+        }
         
-        worsts <- c(worsts,
-                    paste(rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option]),
-                          collapse=", "))
+        bests_i <- paste(bests_i, collapse = ", ")
+        
+        # put it together with the bests for overall performance
+        bests <- c(bests, bests_i)
+        
+        # get the three worst items
+        worsts_i <- rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option])
+        
+        # if more than three, subset to get only three
+        if (isTRUE(length(worsts_i) > 3)) {
+          worsts_i <- worsts_i[1:3]
+        }
+        
+        worsts_i <- paste(worsts_i, collapse=", ")
+        
+        worsts <- c(worsts, worsts_i)
+        
+        
       }else{
         
-        bests <- c(bests,"No significant differences")  
+        bests <- c(bests, "No significant difference")  
         
-        worsts <- c(worsts,"No significant differences")  
+        worsts <- c(worsts,"No significant difference")  
       }
     }
     
@@ -963,7 +982,7 @@ done <- tryCatch({
     
   } 
   
-  if (length(other_traits) == 0) {
+  if (isTRUE(length(other_traits) == 0)) {
     ptab <- data.frame(Ranking = "Overall",
                        "Best Ranked" = bests,
                        "Worst Ranked" = worsts,
@@ -983,27 +1002,23 @@ done <- tryCatch({
   uni_sum <- uni_sum[,c("Covariate","p.value")]
   rownames(uni_sum) <- NULL
   
+  # And this is Figure 3.1
+  mod_sum_PL <-
+    plot(model_summaries, level = ci_level) + 
+    theme_classic() +
+    theme(axis.text.x = element_text(size = 10, color = "#000000"),
+          axis.text.y = element_text(size = 10, color = "#000000")) +
+    labs(y = Option, x = "Estimate")
+  
+  
   # This is Table 3.3
   model_summaries$items <- row.names(model_summaries)  
   rownames(model_summaries) <- NULL
-  model_summaries <- model_summaries[, c("items", "estimate","quasiSE",".group")]
+  model_summaries <- model_summaries[, c("items", "estimate","quasiSE","group")]
   names(model_summaries) <- c(Option, "Estimate","quasiSE","Group")
-  
-  # And this is Figure 3.1
-  mod_sum_PL <- plot_multcompPL(model_summaries, 
-                                term = Option, 
-                                estimate = "Estimate",
-                                quasiSE = "quasiSE",
-                                group = "Group",
-                                level = ci_level) + 
-    theme_classic() +
-    theme(axis.text.x = element_text(size = 10, color = "#000000"),
-          axis.text.y = element_text(size = 10, color = "#000000"))
   
   
   # This is the fist table in Section 1
-  
-  
   tbl_section1 <- data.frame(name = pars$chars$char_full,
                              char = pars$chars$char)
   

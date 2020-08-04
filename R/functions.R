@@ -62,29 +62,29 @@ win_plot<-function(x){
   return(p1)
 }
 
-# simple ggplot function to plot output from multcompPL with error bars
-plot_multcompPL <- function(object, term, estimate, quasiSE, group, level = 0.95, xlab = "", ylab = "", ...){
-  
-  object <- object[,c(term, estimate, quasiSE, group)]
-  names(object) <- c("x","y","qse","g")
-  
-  object$x <- gosset:::.reduce(as.character(object$x), ...)
-  
-  ggplot(data = object,
-              aes(x = x, 
-                  y = y,
-                  label = g, 
-                  ymax = y + stats::qnorm(1-(1-level)/2) * qse,
-                  ymin = y - stats::qnorm(1-(1-level)/2) * qse)) +
-    geom_point() +
-    geom_errorbar(width = 0.1) +
-    coord_flip() +
-    geom_text(vjust = 1.2) +
-    xlab(xlab) + 
-    ylab(ylab) +
-    theme_bw()
-
-}
+# # simple ggplot function to plot output from multcompPL with error bars
+# plot_multcompPL <- function(object, term, estimate, quasiSE, group, level = 0.95, xlab = "", ylab = "", ...){
+#   
+#   object <- object[,c(term, estimate, quasiSE, group)]
+#   names(object) <- c("x","y","qse","g")
+#   
+#   object$x <- gosset:::.reduce(as.character(object$x), ...)
+#   
+#   ggplot(data = object,
+#               aes(x = x, 
+#                   y = y,
+#                   label = g, 
+#                   ymax = y + stats::qnorm(1-(1-level)/2) * qse,
+#                   ymin = y - stats::qnorm(1-(1-level)/2) * qse)) +
+#     geom_point() +
+#     geom_errorbar(width = 0.1) +
+#     coord_flip() +
+#     geom_text(vjust = 1.2) +
+#     xlab(xlab) + 
+#     ylab(ylab) +
+#     theme_bw()
+# 
+# }
 
 anova.PL<-function(model){
   if(class(model)!="PlackettLuce"){
@@ -106,268 +106,268 @@ anova.PL<-function(model){
 
 
 
-map.f <-  function(
-    data = data4,
-    lon = "lon", 
-    lat = "lat",
-    remove_outliers = TRUE,
-    number_of_clusters = 6,
-    cluster_method = "complete",
-    max_cluster_dist = 250,
-    min_cluster_pert = 0.05, 
-    padding = NULL,
-    map_provider = "Esri.WorldImagery",
-    minimap_position = "bottomright"
-  ) {
-    
-    ## Take input df and create a data frame with only lon & lat
-    ## Making coding easier and removing unnecessary columns
-    
-    df <- 
-      data.frame(
-        lon = data[, lon],
-        lat = data[, lat],
-        stringsAsFactors = FALSE
-      )
-    
-    ## Checks if there are any NAs and removes them
-    
-    if(
-      any(is.na(df))
-    ){
-      warning("Data contains ", sum(is.na(df[,"lon"])|is.na(df[,"lat"])) ,
-              " missing or invalid points which have been removed \n")
-      df <- na.omit(df)
-    }    
-    
-    
-    ## Checks if lon & lat are  are numeric, converts if neccesary
-    ## and supresses warnings. May introduce NAs.
-    
-    if(
-      !(is.numeric(df$lon))|!(is.numeric(df$lat))
-    ){
-      df[, "lon"] <- suppressWarnings(as.numeric(df[, "lon"]))
-      df[, "lat"] <- suppressWarnings(as.numeric(df[, "lat"]))
-    }
-    
-    ## Ensure data lon & lat are each within [-180, 180] and 
-    ## data frame does not include the point (0,0).
-    ## If not, then points are converted to NAs
-    
-    
-    if (
-      any(
-        df <= -180 | df >= 180 | (df$lon == 0 & df$lat == 0)
-      )
-    ){
-      
-      df$lon[which(!between(df$lon,-180, 180))] <- NA 
-      df$lat[which(!between(df$lat,-180, 180))] <- NA
-      df[which(df$lon == 0 & df$lat == 0),] <- NA
-    }
-    
-    ## Checks if there are any NAs and removes them
-    
-    if(
-      any(is.na(df))
-    ){
-      warning("Data contains ", sum(is.na(df[,"lon"])|is.na(df[,"lat"])) ,
-              " missing or invalid points which have been removed \n")
-      df <- na.omit(df)
-    }    
-    
-    
-    
-    ## Outliers are defined as points that are part of cluster that are not too 
-    ## small or are not too far away from other clusters.
-    ## This section will calculate clusters, test if these clusters meet the size 
-    ## and distance requirements and remove any that do not meet this criteria
-    ## If the number_of_clusters == 0 or remove_outliers is FALSE then the code
-    ## will not run.
-    
-    if(remove_outliers){
-      
-      ## Create clusters; 
-      df <- 
-        df %>% 
-        ## Remove duplicate lon & lat temporarily
-        distinct(lon, lat, .keep_all = FALSE) %>% 
-        ## Create a distance matrix of all points,
-        dist() %>% 
-        ## Calculate clustering information of the points with hclust
-        ## using the algo specified by cluster_methods
-        hclust(method = "single") %>% 
-        ## Return cluster group for each point, grouping into the number of clusters 
-        ## specified by number_of_points 
-        cutree(h = max_cluster_dist/110) %>%
-        ## Add clusters group column to the distinct lon & lat points
-        {
-          bind_cols(
-            distinct(df, lon, lat, .keep_all = FALSE), 
-            cluster = .)
-        } %>%  
-        ## Rejoin to main dataset
-        right_join(df, by = c("lon", "lat")) 
-      
-      # 
-      # ## Create list of clusters to include
-      # 
-      #     tmp <- 
-      #       df %>%
-      # ## Calculate centre for each cluster using mean lon and mean lat
-      #       group_by(cluster) %>% 
-      #       summarise(mean(lon), mean(lat)) %>% 
-      #       ungroup() %>% 
-      # ## Calculate distance between each cluster centre as a distance matrix
-      #       dist() %>% 
-      # ## Crude conversion from lon & lat to km
-      #       multiply_by(110) %>% 
-      # ## Set all distances between the cluster and itself to NAs
-      #       as.matrix() %>% 
-      #       `diag<-`(NA) %>% 
-      # ## Find the minimum distance to another cluster for each cluster
-      #       apply(1, min, na.rm = TRUE) %>% 
-      # ## Test if mimimum distance of each cluster to the nearest cluster is below the  
-      # ## the maximum boundary set by max_cluster_dist
-      #       t() %>% 
-      #       is_less_than(max_cluster_dist) %>% 
-      # ## Return the list of all clusters the are considered valid
-      #       which()
-      
-      tmp <-
-        df %>% 
-        ## Calculate percentage of points in each cluster
-        group_by(cluster) %>% 
-        summarise(pert = n()) %>% 
-        mutate(pert = pert / sum(pert))  %>%
-        ## Keep those that are larger than the minimum cluster size
-        filter(pert > min_cluster_pert) %>%
-        ## Combine the list of cluster with enough points with the clusters that are not
-        ## too far from each other
-        use_series("cluster") 
-      #    plot(df$lon, df$lat, col = df$cluster)
-      
-      
-      ## If clusters are to be removed, then create a warning message saying how many
-      ## points are considered outliers
-      
-      if(NROW(df[!(df$cluster %in% tmp), ]) != 0){
-        warning(NROW(df[!(df$cluster %in% tmp), ]),
-                " records are considered outliers and have been removed \n")
-      }
-      
-      # Subset dataset to only those that are considered vaild clusters
-      df <-
-        df[df$cluster %in% tmp, ]
-    }
-    
-    ## Find the maximum distance between my points
-    
-    lon_dif <- dist(df$lon)
-    lat_dif <- dist(df$lat)
-    max_dif <- 
-      max(
-        c(max(lon_dif),
-          max(lat_dif)
-        ))
-    
-    ## Create the map
-    
-    #  return(list(df = df, map = map))
-    map <-
-      ## Supress messages and create base layer 
-      suppressMessages(
-        df %>% 
-          leaflet(options = leafletOptions(maxZoom = 17)) %>% 
-          ## Set rectangular view of the final map using the min and max of lon & lat
-          ## padding option does not work
-          fitBounds(
-            lng1 = min(df$lon), lat1 = min(df$lat), 
-            lng2 = max(df$lon), lat2 = max(df$lat),
-            options = list(padding = padding)
-          ) %>%
-          ## Define the base map texture using map_provider
-          addProviderTiles(map_provider, options = providerTileOptions(maxNativeZoom=17))  %>% 
-          ## Add clusters markers (calculated seperate to above process)
-          #addAwesomeMarkers(icon = icons, clusterOptions = markerClusterOptions()) %>% 
-          ## Add point markers
-          addCircleMarkers(
-            radius = 4, 
-            #        fillColor = "midnight blue", 
-            opacity = 0.5, 
-            fillOpacity = 0.5,
-            fillColor = "black",
-            color = "white",
-            clusterOptions = markerClusterOptions()
-          ) %>%
-          ## Add minimap to final map, position based on minimap_position
-          addMiniMap(position = minimap_position)
-      )
-    
-    map_interval <-
-      10^round(log10(max_dif))/2
-    
-    map_interval <-
-      ifelse(round(max_dif/map_interval) == 1, 10^round(log10(max_dif))/5, 10^round(log10(max_dif))/2)
-    
-    
-    if(abs(map_interval)<0.01){
-      lon_line <-
-        data.frame(
-          lon = c(median(df$lon)-0.03, median(df$lon)+0.03),
-          lat = c(median(df$lat))
-        )
-      
-      lat_line <-
-        data.frame(
-          lon = c(median(df$lon)),
-          lat = c(median(df$lat)-0.03, median(df$lat)+0.03)
-        )
-      
-      map <-
-        map %>% 
-        addPolylines(data = lon_line, lng = ~lon, lat = ~lat, color = "#000", opacity = 1, weight = 3) %>% 
-        addPolylines(data = lat_line, lng = ~lon, lat = ~lat, color = "#000", opacity = 1, weight = 3) %>%
-        addControl(html = paste(round(median(df$lon), digits = 5), round(median(df$lat), digits = 5), sep = ", "), position = "topleft")
-    } else {
-      
-      xticks <-
-        seq(
-          floor(map$x$fitBounds[[2]]/map_interval)*map_interval,
-          ceiling(map$x$fitBounds[[4]]/map_interval)*map_interval,
-          by=map_interval
-        )
-      
-      yticks <-
-        seq(
-          floor(map$x$fitBounds[[1]]/map_interval)*map_interval,
-          ceiling(map$x$fitBounds[[3]]/map_interval)*map_interval,
-          by = map_interval
-        )
-      
-      map <- 
-        map %>%
-        addGraticule(interval = map_interval) %>% 
-        addLabelOnlyMarkers(lng=xticks-map_interval/20,lat=max(df$lat,na.rm=T),label=as.character(xticks), 
-                            labelOptions = labelOptions(noHide = T, direction = 'right', textOnly = T,style = list(
-                              "color" = "white",
-                              "font-style" = "bold",
-                              "font-size" = "12px"
-                            ))) %>%
-        addLabelOnlyMarkers(lng=min(df$lon,na.rm=T),lat=yticks,label=as.character(yticks), 
-                            labelOptions = labelOptions(noHide = T, direction = 'right', textOnly = T,style = list(
-                              "color" = "white",
-                              "font-style" = "bold",
-                              "font-size" = "12px"
-                            )))
-    }
-    
-    map$x$options = list("zoomControl" = FALSE)
-    
-    return(map = map)
-    
-  }
+# map.f <-  function(
+#     data = data4,
+#     lon = "lon", 
+#     lat = "lat",
+#     remove_outliers = TRUE,
+#     number_of_clusters = 6,
+#     cluster_method = "complete",
+#     max_cluster_dist = 250,
+#     min_cluster_pert = 0.05, 
+#     padding = NULL,
+#     map_provider = "Esri.WorldImagery",
+#     minimap_position = "bottomright"
+#   ) {
+#     
+#     ## Take input df and create a data frame with only lon & lat
+#     ## Making coding easier and removing unnecessary columns
+#     
+#     df <- 
+#       data.frame(
+#         lon = data[, lon],
+#         lat = data[, lat],
+#         stringsAsFactors = FALSE
+#       )
+#     
+#     ## Checks if there are any NAs and removes them
+#     
+#     if(
+#       any(is.na(df))
+#     ){
+#       warning("Data contains ", sum(is.na(df[,"lon"])|is.na(df[,"lat"])) ,
+#               " missing or invalid points which have been removed \n")
+#       df <- na.omit(df)
+#     }    
+#     
+#     
+#     ## Checks if lon & lat are  are numeric, converts if neccesary
+#     ## and supresses warnings. May introduce NAs.
+#     
+#     if(
+#       !(is.numeric(df$lon))|!(is.numeric(df$lat))
+#     ){
+#       df[, "lon"] <- suppressWarnings(as.numeric(df[, "lon"]))
+#       df[, "lat"] <- suppressWarnings(as.numeric(df[, "lat"]))
+#     }
+#     
+#     ## Ensure data lon & lat are each within [-180, 180] and 
+#     ## data frame does not include the point (0,0).
+#     ## If not, then points are converted to NAs
+#     
+#     
+#     if (
+#       any(
+#         df <= -180 | df >= 180 | (df$lon == 0 & df$lat == 0)
+#       )
+#     ){
+#       
+#       df$lon[which(!between(df$lon,-180, 180))] <- NA 
+#       df$lat[which(!between(df$lat,-180, 180))] <- NA
+#       df[which(df$lon == 0 & df$lat == 0),] <- NA
+#     }
+#     
+#     ## Checks if there are any NAs and removes them
+#     
+#     if(
+#       any(is.na(df))
+#     ){
+#       warning("Data contains ", sum(is.na(df[,"lon"])|is.na(df[,"lat"])) ,
+#               " missing or invalid points which have been removed \n")
+#       df <- na.omit(df)
+#     }    
+#     
+#     
+#     
+#     ## Outliers are defined as points that are part of cluster that are not too 
+#     ## small or are not too far away from other clusters.
+#     ## This section will calculate clusters, test if these clusters meet the size 
+#     ## and distance requirements and remove any that do not meet this criteria
+#     ## If the number_of_clusters == 0 or remove_outliers is FALSE then the code
+#     ## will not run.
+#     
+#     if(remove_outliers){
+#       
+#       ## Create clusters; 
+#       df <- 
+#         df %>% 
+#         ## Remove duplicate lon & lat temporarily
+#         distinct(lon, lat, .keep_all = FALSE) %>% 
+#         ## Create a distance matrix of all points,
+#         dist() %>% 
+#         ## Calculate clustering information of the points with hclust
+#         ## using the algo specified by cluster_methods
+#         hclust(method = "single") %>% 
+#         ## Return cluster group for each point, grouping into the number of clusters 
+#         ## specified by number_of_points 
+#         cutree(h = max_cluster_dist/110) %>%
+#         ## Add clusters group column to the distinct lon & lat points
+#         {
+#           bind_cols(
+#             distinct(df, lon, lat, .keep_all = FALSE), 
+#             cluster = .)
+#         } %>%  
+#         ## Rejoin to main dataset
+#         right_join(df, by = c("lon", "lat")) 
+#       
+#       # 
+#       # ## Create list of clusters to include
+#       # 
+#       #     tmp <- 
+#       #       df %>%
+#       # ## Calculate centre for each cluster using mean lon and mean lat
+#       #       group_by(cluster) %>% 
+#       #       summarise(mean(lon), mean(lat)) %>% 
+#       #       ungroup() %>% 
+#       # ## Calculate distance between each cluster centre as a distance matrix
+#       #       dist() %>% 
+#       # ## Crude conversion from lon & lat to km
+#       #       multiply_by(110) %>% 
+#       # ## Set all distances between the cluster and itself to NAs
+#       #       as.matrix() %>% 
+#       #       `diag<-`(NA) %>% 
+#       # ## Find the minimum distance to another cluster for each cluster
+#       #       apply(1, min, na.rm = TRUE) %>% 
+#       # ## Test if mimimum distance of each cluster to the nearest cluster is below the  
+#       # ## the maximum boundary set by max_cluster_dist
+#       #       t() %>% 
+#       #       is_less_than(max_cluster_dist) %>% 
+#       # ## Return the list of all clusters the are considered valid
+#       #       which()
+#       
+#       tmp <-
+#         df %>% 
+#         ## Calculate percentage of points in each cluster
+#         group_by(cluster) %>% 
+#         summarise(pert = n()) %>% 
+#         mutate(pert = pert / sum(pert))  %>%
+#         ## Keep those that are larger than the minimum cluster size
+#         filter(pert > min_cluster_pert) %>%
+#         ## Combine the list of cluster with enough points with the clusters that are not
+#         ## too far from each other
+#         use_series("cluster") 
+#       #    plot(df$lon, df$lat, col = df$cluster)
+#       
+#       
+#       ## If clusters are to be removed, then create a warning message saying how many
+#       ## points are considered outliers
+#       
+#       if(NROW(df[!(df$cluster %in% tmp), ]) != 0){
+#         warning(NROW(df[!(df$cluster %in% tmp), ]),
+#                 " records are considered outliers and have been removed \n")
+#       }
+#       
+#       # Subset dataset to only those that are considered vaild clusters
+#       df <-
+#         df[df$cluster %in% tmp, ]
+#     }
+#     
+#     ## Find the maximum distance between my points
+#     
+#     lon_dif <- dist(df$lon)
+#     lat_dif <- dist(df$lat)
+#     max_dif <- 
+#       max(
+#         c(max(lon_dif),
+#           max(lat_dif)
+#         ))
+#     
+#     ## Create the map
+#     
+#     #  return(list(df = df, map = map))
+#     map <-
+#       ## Supress messages and create base layer 
+#       suppressMessages(
+#         df %>% 
+#           leaflet(options = leafletOptions(maxZoom = 17)) %>% 
+#           ## Set rectangular view of the final map using the min and max of lon & lat
+#           ## padding option does not work
+#           fitBounds(
+#             lng1 = min(df$lon), lat1 = min(df$lat), 
+#             lng2 = max(df$lon), lat2 = max(df$lat),
+#             options = list(padding = padding)
+#           ) %>%
+#           ## Define the base map texture using map_provider
+#           addProviderTiles(map_provider, options = providerTileOptions(maxNativeZoom=17))  %>% 
+#           ## Add clusters markers (calculated seperate to above process)
+#           #addAwesomeMarkers(icon = icons, clusterOptions = markerClusterOptions()) %>% 
+#           ## Add point markers
+#           addCircleMarkers(
+#             radius = 4, 
+#             #        fillColor = "midnight blue", 
+#             opacity = 0.5, 
+#             fillOpacity = 0.5,
+#             fillColor = "black",
+#             color = "white",
+#             clusterOptions = markerClusterOptions()
+#           ) %>%
+#           ## Add minimap to final map, position based on minimap_position
+#           addMiniMap(position = minimap_position)
+#       )
+#     
+#     map_interval <-
+#       10^round(log10(max_dif))/2
+#     
+#     map_interval <-
+#       ifelse(round(max_dif/map_interval) == 1, 10^round(log10(max_dif))/5, 10^round(log10(max_dif))/2)
+#     
+#     
+#     if(abs(map_interval)<0.01){
+#       lon_line <-
+#         data.frame(
+#           lon = c(median(df$lon)-0.03, median(df$lon)+0.03),
+#           lat = c(median(df$lat))
+#         )
+#       
+#       lat_line <-
+#         data.frame(
+#           lon = c(median(df$lon)),
+#           lat = c(median(df$lat)-0.03, median(df$lat)+0.03)
+#         )
+#       
+#       map <-
+#         map %>% 
+#         addPolylines(data = lon_line, lng = ~lon, lat = ~lat, color = "#000", opacity = 1, weight = 3) %>% 
+#         addPolylines(data = lat_line, lng = ~lon, lat = ~lat, color = "#000", opacity = 1, weight = 3) %>%
+#         addControl(html = paste(round(median(df$lon), digits = 5), round(median(df$lat), digits = 5), sep = ", "), position = "topleft")
+#     } else {
+#       
+#       xticks <-
+#         seq(
+#           floor(map$x$fitBounds[[2]]/map_interval)*map_interval,
+#           ceiling(map$x$fitBounds[[4]]/map_interval)*map_interval,
+#           by=map_interval
+#         )
+#       
+#       yticks <-
+#         seq(
+#           floor(map$x$fitBounds[[1]]/map_interval)*map_interval,
+#           ceiling(map$x$fitBounds[[3]]/map_interval)*map_interval,
+#           by = map_interval
+#         )
+#       
+#       map <- 
+#         map %>%
+#         addGraticule(interval = map_interval) %>% 
+#         addLabelOnlyMarkers(lng=xticks-map_interval/20,lat=max(df$lat,na.rm=T),label=as.character(xticks), 
+#                             labelOptions = labelOptions(noHide = T, direction = 'right', textOnly = T,style = list(
+#                               "color" = "white",
+#                               "font-style" = "bold",
+#                               "font-size" = "12px"
+#                             ))) %>%
+#         addLabelOnlyMarkers(lng=min(df$lon,na.rm=T),lat=yticks,label=as.character(yticks), 
+#                             labelOptions = labelOptions(noHide = T, direction = 'right', textOnly = T,style = list(
+#                               "color" = "white",
+#                               "font-style" = "bold",
+#                               "font-size" = "12px"
+#                             )))
+#     }
+#     
+#     map$x$options = list("zoomControl" = FALSE)
+#     
+#     return(map = map)
+#     
+#   }
 
 
 node_terminal1<-
