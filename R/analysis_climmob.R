@@ -25,6 +25,7 @@ library("mapview")
 library("ggrepel")
 library("ggparty")
 library("patchwork")
+library("leaflet")
 
 done <- tryCatch({
   
@@ -262,42 +263,16 @@ done <- tryCatch({
     
     if (nlonlat > 0){
       
-      lonlat[1:2] <- lapply(lonlat[1:2], as.numeric)
-      
-      # to ensure the privacy of participants location
-      # we put the lonlat info into clusters of 0.5 resolution
-      h <- dist(lonlat)
-      
-      h <- hclust(h)
-      
-      h <- cutree(h, h = 0.5)
-      
-      # split the lonlat by each defined cluster
-      lonlat <- split(lonlat, h)
-      
-      # and take the mean 
-      lonlat <- lapply(lonlat, function(x) {
-        colMeans(x)
-      })
-      
-      # back to dataframe
-      lonlat <- do.call("rbind", lonlat)
-      
-      lonlat <- as.data.frame(lonlat)
-      
-      names(lonlat) <- c("lon","lat")
-      
-      trial_map <- plot_map(lonlat, c("lon","lat"),
-                            map.types = c("CartoDB.Positron", "OpenTopoMap"))
+      trial_map <- plot_map(lonlat, xy = c(1, 2))
       
       mapshot(trial_map, 
               url = paste0(getwd(), "/", pathname, projname, "_trial_map.html"),
               file = paste0(getwd(), "/", pathname, projname, "_trial_map.png"))
       
       trial_map_statement <- paste("The map below shows the distribution",
-                                   "of the trials in this project. To ensure the",
-                                   "participants'privacy, the coordinates",
-                                   "were clustered with a 0.5 resolution. You can find",
+                                   "of the trials in this project. To comply with the",
+                                   "participants' privacy, the coordinates",
+                                   "were clustered with a 0.05 resolution. You can find",
                                    "the original coordinates in your ClimMob data.")
       
       
@@ -591,24 +566,19 @@ done <- tryCatch({
     
     # This is Table 4.*.2
     summ_i <- multcompPL(mod_t, adjust = ci_adjust, ref = reference)
+    # And this is Figure 3.*.2
+    summ_i_plot <- 
+      plot(summ_i, level = ci_level) + 
+      theme_classic() +
+      theme(axis.text.x = element_text(size = 10, color = "#000000"),
+            axis.text.y = element_text(size = 10, color = "#000000"))
+    
     summ_i$items <- row.names(summ_i)  
     rownames(summ_i) <- NULL
     summ_i <- summ_i[, c("items", "estimate","quasiSE","group")]
     names(summ_i) <- c(Option, "Estimate","quasiSE","Group")
     
     summaries[[i]] <- summ_i
-    
-    # And this is Figure 3.*.2
-    summ_i_plot <- 
-      plot_multcompPL(summ_i, 
-                      term = Option, 
-                      estimate = "Estimate",
-                      quasiSE = "quasiSE",
-                      group = "Group",
-                      level = ci_level) + 
-      theme_classic() +
-      theme(axis.text.x = element_text(size = 10, color = "#000000"),
-            axis.text.y = element_text(size = 10, color = "#000000"))
     
     plot_summaries[[i]] <- summ_i_plot
     
@@ -915,7 +885,7 @@ done <- tryCatch({
     
     bests <- paste(bests, collapse =", ")
     
-    worsts <- rev(model_summaries$term[grep(model_summaries$group[nrow(model_summaries)],
+    worsts <- rev(model_summaries$term[grepl(model_summaries$group[nrow(model_summaries)],
                                             model_summaries$group)])
     
     if(isTRUE(length(worsts) > 3)) {
@@ -941,7 +911,7 @@ done <- tryCatch({
         summ_i <- summaries[[i]]
         
         # take the best three items from this comparison
-        bests_i <- summ_i[,"term"][grepl("a", summ_i[,"group"])]
+        bests_i <- as.character(summ_i[, Option][grepl("a", summ_i[,"Group"])])
         # if more than three, subset to get only three
         if (isTRUE(length(bests_i) > 3)) {
           bests_i <- bests_i[1:3]
@@ -953,7 +923,7 @@ done <- tryCatch({
         bests <- c(bests, bests_i)
         
         # get the three worst items
-        worsts_i <- rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option])
+        worsts_i <- as.character(rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option]))
         
         # if more than three, subset to get only three
         if (isTRUE(length(worsts_i) > 3)) {

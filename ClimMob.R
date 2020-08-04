@@ -6,7 +6,7 @@
 
 tag <- "leaders"
 args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-         paste0("dev/output/",tag,"/"), "TRUE","en","html",
+         paste0("dev/output/",tag,"/"), "TRUE","en","docx",
          "participant", "option", getwd())
 
 # get the arguments from server's call
@@ -65,9 +65,6 @@ info_table_typeinfo <- "" #info.table.typeinfo <- "expert advice"
 tryCatch({
   dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
 })
-
-#cmdata$evaluation_ASS0dfe2b4467a3_char_agecompare_pos <- NA
-#cmdata$evaluation_ASS0dfe2b4467a3_perf_overallchar_2 <- NA
 
 source(paste0(fullpath, "/R/analysis_climmob.R"))
 
