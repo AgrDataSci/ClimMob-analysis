@@ -1,28 +1,13 @@
 **`r other_traits_list[[i]]$fullname`**
 
 ```{r}
-if (ncomp == 3) {
-  RR <- rank_tricot(data = cmdata[other_traits_list[[i]]$keep, ],
-                    items = itemnames,
-                    input = other_traits_list[[i]]$input)
-}
-
-if (ncomp > 3) {
-  RR <- rank_numeric(data = cmdata[other_traits_list[[i]]$keep, ],
-                     items = itemnames,
-                     input = other_traits_list[[i]]$input)
-}
-
-
-
-
-cont_t <- summarise_victories(RR)
+vic_i <- vic_other_traits[[i]]
 ```
 
 \
 
 ```{r,dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap=paste0("2.4.",i, ". Head to head performance for '",tolower(other_traits_list[[i]]$fullname),"'.")}
-plot(cont_t) + 
+plot(vic_i) + 
   labs(y = "", x = "") + 
   theme_minimal() +  
   theme(axis.text.x = element_text(size = 10, color = "#000000"),

@@ -27,6 +27,7 @@ done <- tryCatch({
   library("ggparty")
   library("patchwork")
   library("leaflet")
+  library("multcompView")
   source(paste0(fullpath, "/R/functions.R"))
   
   # ................................................................
@@ -190,7 +191,7 @@ done <- tryCatch({
   # if no variable is provided than add a pseudo variable that will be used 
   # in pltree(), this is to fit the model with the intercept only
   expvar_list <- list()
-  drop_covar_statement <- ""
+  
   if (any(expvar == "xinterceptx")) {
     cmdata$xinterceptx <- rep(0, nranker)
     expvar_list[["expvar"]] <- "xinterceptx"
@@ -238,17 +239,6 @@ done <- tryCatch({
       expvar_list[["keep"]] <- keep
     }
     
-    # make the statement if there is any covariate dropped
-    if (isTRUE(length(expvar_dropped)) > 0) {
-      drop_covar_statement <- paste("The covariates(s)",
-                                    paste(expvar_dropped, collapse = ", "), 
-                                    "were not able to be included in the analysis.")
-    }
-    
-    if (isTRUE(length(expvar_dropped) == 0)) {
-      drop_covar_statement <- ""
-    }
-    
   }
   
   # .......................................................
@@ -278,13 +268,6 @@ done <- tryCatch({
       mapshot(trial_map, 
               url = paste0(getwd(), "/", pathname, projname, "_trial_map.html"),
               file = paste0(getwd(), "/", pathname, projname, "_trial_map.png"))
-      
-      trial_map_statement <- paste("The map below shows the distribution",
-                                   "of the trials in this project. To comply with the",
-                                   "participants' privacy, the coordinates",
-                                   "were clustered with a 0.05 resolution. You can find",
-                                   "the original coordinates in your ClimMob data.")
-      
       
     }
     
@@ -402,8 +385,47 @@ done <- tryCatch({
   
   cont2 <- summarise_victories(R)
   
+  # .......................................................
+  # .......................................................
   # run the same for the other characteristics, if any
+  other_traits <- trait[-1]
   
+  other_traits_full <- trait_full[-1]
+  
+  other_traits_list <- trait_list[-1]
+  
+  if (isTRUE(length(other_traits) > 0)) {
+    fav_other_traits <- list()
+    vic_other_traits <- list()
+    dom_other_traits <- list()
+    for(i in seq_along(other_traits_list)){
+      
+      a <- list(data = cmdata[other_traits_list[[i]]$keep, ],
+                items = itemnames,
+                input = other_traits_list[[i]]$input)
+      
+      R_i <- do.call(rankwith, args = a)
+      
+      fav1_i <- summarise_favorite(R_i)
+      fav2_i <- fav1_i
+      
+      fav2_i$best <- paste0(round(fav2_i$best, 1), "%")
+      fav2_i$worst <- paste0(round(fav2_i$worst, 1), "%")
+      fav2_i$fav_score <- round(fav2_i$fav_score, 1)
+      
+      fav2_i <- fav2_i[,-which(grepl("wins", names(fav2_i)))]
+      
+      names(fav2_i) <- c(Option,"N","Top Ranked","Bottom Ranked",
+                         "Net Favourability Score")
+      
+      fav_other_traits[[i]] <- list(fav1_i, fav2_i)
+    
+      vic_other_traits[[i]] <- summarise_victories(R_i)
+      
+      dom_other_traits[[i]] <- summarise_dominance(R_i)
+      
+    }
+  }
   
   
   # .......................................................
@@ -411,10 +433,6 @@ done <- tryCatch({
   # Trait concordance ####
   # this assess how the other traits agreed with the overall preference
   # build rankings for the other characteristics
-  other_traits <- trait[-1]
-  
-  other_traits_full <- trait_full[-1]
-  
   if (isTRUE(length(other_traits) > 0)) {
     
     # filter cmdata so it matches the dims in all traits
@@ -687,18 +705,6 @@ done <- tryCatch({
       labs(x = paste0("PC1 ", round(yve[1] * 100, 2), "%"),
            y = paste0("PC2 ", round((yve[2]-yve[1]) * 100, 2),"%"))
     
-    pls_summary_line <- paste("The first two components recombining the specific characteristics",
-                              "are able to explain", paste0(round(yve[2] * 100, 2), "%"), "of the variability in the overall performance.",
-                              "The dashed line represents the overall performance, with an increase in performance as the x and y increase.",
-                              "The", option, "positioned close to the dashed line will be performing equally across all characteristics;",
-                              "the", option, "positioned further away from the dashed line, on either side, will have varying performance",
-                              "in different characteristics. Better performance in characteristics will correspond with arrows pointing",
-                              "in the direction away from the dashed line and worse performance in characteristics directed on the opposite side.") 
-  }
-  
-  if (isTRUE(dim(arrows)[[1]] <= 0)) {
-    pls_summary_line <- paste("However, partial least squares analysis",
-                              "was not possible with this project data.")
   }
   
   # .......................................................
@@ -758,8 +764,6 @@ done <- tryCatch({
   
   
   # if the tree has splits, extract coeffs from nodes
-  node_statement <- ""
-  
   if (isTRUE(length(tree_f) > 1)) { 
     
     node_ids <- nodeids(tree_f, terminal = TRUE)
@@ -807,12 +811,7 @@ done <- tryCatch({
     
     names(node_summary) <- c("Split","Number of Respondents","Best Ranked","Worst Ranked")
     
-    # make the statement for the table with the node summary
-    mode_statement <- paste("Table 1.2.2 shows which", options,
-                             "where identified as the best and worst ranked in the subgroups identified by",
-                             "the Plackett-Luce tree for the 'overall performance'.")
-    
-  }
+    }
   
   # fitted 
   
@@ -876,12 +875,6 @@ done <- tryCatch({
       
     }
     
-    nodemessage <- ""
-    
-  }
-  
-  if (isTRUE(dim(pval_nodes)[[2]] == 0)) {
-    nodemessage <- "No covariates were able to be assessed statistically."
   }
   
   # ....................................................................
@@ -984,55 +977,6 @@ done <- tryCatch({
   }
   
   ptab$p.value <- paste(format.pval(ptab$p.value), stars.pval(ptab$p.value))
-  
-  # make the statement for the report about the statistical significance
-  if (isFALSE(is.na(ps[1]))) {
-    
-    if (isTRUE(ps[1] < sig_level)) {
-      stat_diff_statement <- paste0("There were statistically significant differences found",
-                      " in the rankings of ", options ," in the overall performance (p=",ptab$p.value[1],
-                      "). The best ranked ", options ," overall were ", ptab$`Best Ranked`[1])
-    }
-    
-    if (isTRUE(ps[1] >= sig_level)) {
-      stat_diff_statement <- paste0("There were no statistically significant differences found",
-                                    " in the rankings of ", options ," in the overall performance (p=",
-                                    ptab$p.value[1],")")
-    }
-    
-  }
-  
-  if (isTRUE(is.na(ps[1]))) {
-    stat_diff_statement <- "No statistical model was able to be fitted on this data."
-  }
-  
-  if (any(na.omit(ps[2:length(ps)]) < sig_level)){
-    stat_diff_statement <- paste(stat_diff_statement,". Statistically significant differences were also",
-                                 "found in the characteristic(s)",
-                                 paste(trait_full[ps[2:length(ps)] < sig_level], collapse=", "))
-  }
-  
-  # make the statement for the effect of covariates in the model
-  if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)) {
-    
-    if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
-      effect_covar_statement <- paste("Statistically significant relationship to the overall performance was found for",
-                                      length(siglist), "of the covariates tested.",
-                                      "The significant relationship was found for:",
-                                      paste(paste0(siglist," (p=",outtabs[[1]][siglist,"p"],")."),collapse=", "))
-      
-    }
-    
-    if(isFALSE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
-      effect_covar_statement <- paste0("None of the covariates tested were found to have a statistically significant ",
-                                       "relationship to the overall performance at the ", expression(alpha), " = ",  sig_level, 
-                                       ".")
-    }
-  }
-  if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) == 0)) {
-    effect_covar_statement <- "No model to test covariates were successfully fitted on this analysis."
-  }
-  
   
   # This is Table 1.2.1
   uni_sum <- outtabs[[1]]
