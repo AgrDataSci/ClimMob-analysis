@@ -1,12 +1,19 @@
 ###Functions for Climmob Reporting Analysis
 
 ##List of functions
-# lonlat <- data.frame(lon = c(15.6, 16.7, 15.55, 15.551),
-#                      lat = c(65.8, 66.3, 66.25, 66.251))
-# 
-# p <- plot_map(lonlat, xy = c(1,2), cut.tree = 0.05)
-
-
+#' Plot map using leaflet
+#' @param data a data frame
+#' @param xy index of data for the longitude and latitude coordinates (in that order)
+#' @param make.clusters logical, if TRUE coordinates are aggregated by a defined cluster size
+#' @param cut.tree numeric, to define the cluster size when make.clusters = TRUE
+#' @param map_provider he name of the provider (see http://leaflet-extras.github.io/leaflet-providers/preview/ 
+#'        and https://github.com/leaflet-extras/leaflet-providers)
+#' @param minimap_position the position of the mini map 
+#' @examples
+#' lonlat <- data.frame(lon = c(15.6, 16.7, 15.55, 15.551),
+#'                      lat = c(65.8, 66.3, 66.25, 66.251))
+#' 
+#' p <- plot_map(lonlat, xy = c(1,2), cut.tree = 0.05)
 plot_map <- function(data, 
                      xy = NULL,
                      make.clusters = TRUE,
@@ -642,21 +649,6 @@ summary.btdata <- function(object, ...){
     cat("Summary of fully-connected components: \n")
     print(my_df)
   }
-}
-
-# Check if library has the latest version
-.latest_version <- function(pkg, repo_path){
-  
-  desc <- readLines(repo_path)
-  
-  vers <- desc[grepl("Version", desc)]
-  
-  locvers <- as.character(packageVersion(pkg))
-  
-  latest <- grepl(locvers, vers)
-  
-  isTRUE(latest)
-  
 }
 
 # Plot worth bar

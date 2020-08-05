@@ -41,10 +41,10 @@ p2 <-
 ```
 
 ```{r}
-knitr::kable(fav2[nrow(fav2):1,],
+knitr::kable(fav2[nrow(fav2):1, ],
              row.names = FALSE,
-             caption = paste0("Table 2.2.",i,". Favourability statistics for '",
-                           tolower(other_traits_list[[i]]$fullname),"'"))
+             caption = paste0("Table 2.2.", i, ". Favourability scores for '",
+                              tolower(other_traits_list[[i]]$fullname),"'"))
 ```
 
 \

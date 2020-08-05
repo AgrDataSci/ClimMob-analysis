@@ -54,7 +54,7 @@ if (isFALSE(latest)) {
 }
 
 pkg <- c("PlackettLuce", "partykit", "qvcalc", "psychotools", "jsonlite", 
-         "multcompView", "knitr", "rmarkdown", "pls", "gtools", "ggplot2", 
+         "knitr", "rmarkdown", "pls", "gtools", "ggplot2", "leaflet",
          "igraph", "mapview", "ggrepel", "patchwork", "ggparty")
 
 install.packages(pkg)

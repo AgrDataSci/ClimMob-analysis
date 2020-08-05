@@ -83,7 +83,7 @@ if (isTRUE(done)) {
     rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport.Rmd"),
                       output_dir = pathname,
                       output_format = output_format,
-                      output_file = paste0("climmod_main_report", ".", extension))
+                      output_file = paste0(projname, "_climmob_main_report", ".", extension))
   }, error = function(e) {
     return(FALSE)
   }
@@ -100,6 +100,6 @@ if (isFALSE(done)) {
   rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport_failed.Rmd"),
                     output_dir = pathname,
                     output_format = output_format,
-                    output_file = paste0("climmod_main_report", ".", extension))
+                    output_file = paste0(projname, "_climmob_main_report", ".", extension))
 }
 

@@ -335,7 +335,7 @@ for(i in 1:length(outtabs)){
 siglist<-unique(siglist)
 
 ps<-fullanova[2,5]
-if(ps<0.05){
+if(isTRUE(ps<0.05)){
 bests<-paste(model_summaries$term[grep("a",model_summaries$.group)],collapse=", ")
 worsts<-paste(rev(model_summaries$term[grep(model_summaries$.group[nrow(model_summaries)],
                                             model_summaries$.group)]),collapse=", ")

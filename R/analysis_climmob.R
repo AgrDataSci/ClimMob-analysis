@@ -6,29 +6,27 @@
 # ................................................................
 # ................................................................
 # ................................................................
-## Packages ####
-library("ClimMobTools")
-library("gosset")
-library("PlackettLuce")
-library("partykit")
-library("qvcalc")
-library("psychotools")
-library("jsonlite")
-library("multcompView")
-library("knitr")
-library("rmarkdown")
-library("pls")
-library("gtools")
-library("ggplot2")
-library("igraph")
-library("mapview")
-library("ggrepel")
-library("ggparty")
-library("patchwork")
-library("leaflet")
-
 done <- tryCatch({
   
+  ## Packages ####
+  library("ClimMobTools")
+  library("gosset")
+  library("PlackettLuce")
+  library("partykit")
+  library("qvcalc")
+  library("psychotools")
+  library("jsonlite")
+  library("knitr")
+  library("rmarkdown")
+  library("pls")
+  library("gtools")
+  library("ggplot2")
+  library("igraph")
+  library("mapview")
+  library("ggrepel")
+  library("ggparty")
+  library("patchwork")
+  library("leaflet")
   source(paste0(fullpath, "/R/functions.R"))
   
   # ................................................................
@@ -192,6 +190,7 @@ done <- tryCatch({
   # if no variable is provided than add a pseudo variable that will be used 
   # in pltree(), this is to fit the model with the intercept only
   expvar_list <- list()
+  drop_covar_statement <- ""
   if (any(expvar == "xinterceptx")) {
     cmdata$xinterceptx <- rep(0, nranker)
     expvar_list[["expvar"]] <- "xinterceptx"
@@ -228,7 +227,7 @@ done <- tryCatch({
     expvar_dropped <- expvar_full[dropit]
     
     # if no explanatory variable left out put a pseudo variable
-    if(length(expvar) == 0) {
+    if(isTRUE(length(expvar) == 0)) {
       cmdata$xinterceptx <- rep(0, nranker)
       expvar_list[["expvar"]] <- "xinterceptx"
       expvar_list[["expvar_full"]] <- "Intercept"
@@ -237,6 +236,17 @@ done <- tryCatch({
       expvar_list[["expvar"]] <- expvar
       expvar_list[["expvar_full"]] <- expvar_full
       expvar_list[["keep"]] <- keep
+    }
+    
+    # make the statement if there is any covariate dropped
+    if (isTRUE(length(expvar_dropped)) > 0) {
+      drop_covar_statement <- paste("The covariates(s)",
+                                    paste(expvar_dropped, collapse = ", "), 
+                                    "were not able to be included in the analysis.")
+    }
+    
+    if (isTRUE(length(expvar_dropped) == 0)) {
+      drop_covar_statement <- ""
     }
     
   }
@@ -391,6 +401,10 @@ done <- tryCatch({
   cont1 <- summarise_dominance(R)
   
   cont2 <- summarise_victories(R)
+  
+  # run the same for the other characteristics, if any
+  
+  
   
   # .......................................................
   # .......................................................
@@ -744,6 +758,8 @@ done <- tryCatch({
   
   
   # if the tree has splits, extract coeffs from nodes
+  node_statement <- ""
+  
   if (isTRUE(length(tree_f) > 1)) { 
     
     node_ids <- nodeids(tree_f, terminal = TRUE)
@@ -791,8 +807,14 @@ done <- tryCatch({
     
     names(node_summary) <- c("Split","Number of Respondents","Best Ranked","Worst Ranked")
     
+    # make the statement for the table with the node summary
+    mode_statement <- paste("Table 1.2.2 shows which", options,
+                             "where identified as the best and worst ranked in the subgroups identified by",
+                             "the Plackett-Luce tree for the 'overall performance'.")
+    
   }
   
+  # fitted 
   
   outtabs <- NULL
   for(j in seq_along(tree_f)){
@@ -858,7 +880,7 @@ done <- tryCatch({
     
   }
   
-  if (dim(pval_nodes)[[2]] == 0) {
+  if (isTRUE(dim(pval_nodes)[[2]] == 0)) {
     nodemessage <- "No covariates were able to be assessed statistically."
   }
   
@@ -962,6 +984,54 @@ done <- tryCatch({
   }
   
   ptab$p.value <- paste(format.pval(ptab$p.value), stars.pval(ptab$p.value))
+  
+  # make the statement for the report about the statistical significance
+  if (isFALSE(is.na(ps[1]))) {
+    
+    if (isTRUE(ps[1] < sig_level)) {
+      stat_diff_statement <- paste0("There were statistically significant differences found",
+                      " in the rankings of ", options ," in the overall performance (p=",ptab$p.value[1],
+                      "). The best ranked ", options ," overall were ", ptab$`Best Ranked`[1])
+    }
+    
+    if (isTRUE(ps[1] >= sig_level)) {
+      stat_diff_statement <- paste0("There were no statistically significant differences found",
+                                    " in the rankings of ", options ," in the overall performance (p=",
+                                    ptab$p.value[1],")")
+    }
+    
+  }
+  
+  if (isTRUE(is.na(ps[1]))) {
+    stat_diff_statement <- "No statistical model was able to be fitted on this data."
+  }
+  
+  if (any(na.omit(ps[2:length(ps)]) < sig_level)){
+    stat_diff_statement <- paste(stat_diff_statement,". Statistically significant differences were also",
+                                 "found in the characteristic(s)",
+                                 paste(trait_full[ps[2:length(ps)] < sig_level], collapse=", "))
+  }
+  
+  # make the statement for the effect of covariates in the model
+  if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)) {
+    
+    if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
+      effect_covar_statement <- paste("Statistically significant relationship to the overall performance was found for",
+                                      length(siglist), "of the covariates tested.",
+                                      "The significant relationship was found for:",
+                                      paste(paste0(siglist," (p=",outtabs[[1]][siglist,"p"],")."),collapse=", "))
+      
+    }
+    
+    if(isFALSE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
+      effect_covar_statement <- paste0("None of the covariates tested were found to have a statistically significant ",
+                                       "relationship to the overall performance at the ", expression(alpha), " = ",  sig_level, 
+                                       ".")
+    }
+  }
+  if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) == 0)) {
+    effect_covar_statement <- "No model to test covariates were successfully fitted on this analysis."
+  }
   
   
   # This is Table 1.2.1

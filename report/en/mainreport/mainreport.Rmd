@@ -34,7 +34,7 @@ The primary goal of ClimMob is to support the selection of innovative technologi
  
 ClimMob software assigns a limited number of items (typically 3) to each participant, who will compare their performance. Each participant gets a different combination of items drawn from a much larger set of items (typically 15-25). Comparisons of this kind are thought to be a very reliable way to obtain data. Once the results of the microtasks have been collected, ClimMob builds an image of the whole set of assigned objects, combining all observations. ClimMob not only reconstructs the overall ordering of items, but also takes into account differences and similarities between participants and the conditions under which they observe (e.g. socio-economic and plot environmental characteristics). It assigns similar participants to groups that each corresponds among different group profiles. Groups are created on the basis of whichever items which have been collected, that are found to be significantly linked to the observed rankings.
  
-ClimMob uses Plackett-Luce models to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'mapview' [@mapview], 'multcompView' [@multcompView], 'patchwork' [@patchwork],  and 'pls' [@pls].
+ClimMob uses Plackett-Luce models to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork],  and 'pls' [@pls].
  
 
 ## How to cite
@@ -93,35 +93,7 @@ igraph::plot.igraph(net,
 
 ## Overall differences in rankings
 
-```{r statistical-diff}
-if (!is.na(ps[1])) {
-  
-  if (ps[1] < sig_level) {
-    line1 <- paste0("There were statistically significant differences found",
-                    " in the rankings of ", options ," in the overall performance (p=",ptab$p.value[1],
-                    "). The best ranked ", options ," overall were ",ptab$`Best Ranked`[1])
-  }
-  
-  if (ps[1] >= sig_level) {
-    line1 <- paste0("There were no statistically significant differences found",
-                    " in the rankings of ", options ," in the overall performance (p=",
-                    ptab$p.value[1],")")
-  }
-  
-}
-
-if (is.na(ps[1])) {
-  line1 <- "No statistical model was able to be fitted on this data"
-}
-
-if (any(na.omit(ps[2:length(ps)]) < sig_level)){
-  line1 <- paste(line1,". Statistically significant differences were also found in the characteristic(s)",
-                 paste(trait_full[ps[2:length(ps)] < sig_level], collapse=", "))
-}
-
-```
-
-`r  paste(line1, collapse='\n')`
+`r  paste(stat_diff_statement, collapse='\n')`
 
 A summary of the p-values testing the hypothesis that there exist differences in the rankings within each of the Plackett-Luce models fitted for each of the assessed characteristics, and the list of `r options` which were significantly highest and lowest ranked overall, are summarised in Table 1.1.
 
@@ -136,30 +108,9 @@ kable(ptab,
 
 ## Effect of covariates
 
-```{r eff-expvar}
-if (length(na.omit(outtabs[[1]]$p.value)) > 0) {
-  if (any(na.omit(outtabs[[1]]$p.value) < sig_level)) {
-    line2 <- paste0("Statistically significant relationship to the overall performance was found for ",
-                    length(siglist), " of the covariates tested.",
-                    " The significant relationship was found for: ",
-                    paste(paste0(siglist," (p=",outtabs[[1]][siglist,"p"],")"),collapse=", "))
-    
-  }
-  if( !any(na.omit(outtabs[[1]]$p.value) < sig_level)) {
-    line2 <- paste0("None of the covariates tested were found to have a statistically significant",
-                    " relationship to the overall performance at the ", sig_level*100, 
-                    "% significance level.")
-  }
-}
-if (length(na.omit(outtabs[[1]]$p.value)) == 0) {
-  line2 <- "No models to test covariates were successfully fitted on this analysis."
-}
+`r  paste(effect_covar_statement, collapse='\n')`
 
-```
-
-`r  paste(line2, collapse='\n')`
-
-A summary of the univariate signifance levels for all covariates that were able to be tested is shown in Table 1.2.1.
+A summary of the univariate significance levels for all covariates that were able to be tested is shown in Table 1.2.1.
 ```{r summary-univariate}
 
 kable(uni_sum,
@@ -173,39 +124,17 @@ kable(uni_sum,
 
 \
 
-```{r no-expvar-used}
-if (length(expvar_dropped) > 0) {
-  stopmessage <- paste("The variable(s)",
-                      paste(expvar_dropped, collapse = ", "), 
-                      "were not able to be included within the analysis.")
-}
+`r  paste(drop_covar_statement, collapse='\n')`
 
-if (length(expvar_dropped) == 0) {
-  stopmessage <- ""
-}
+\
 
-```
-
-`r  paste(stopmessage, collapse='\n')`
-
-```{r}
-if (length(siglist) > 0) {
-  line3 <- paste0("Table 1.2.2 shows which ",options,
-                  " where identified as the best and worst ranked in the subgroups identified by",
-                  " including explanatory variables into the 'overall performance'.")
-}
-if (length(siglist) == 0) {
-  line3<-""
-}
-```
-
-`r  paste(line3, collapse='\n')`
+`r  paste(node_statement, collapse='\n')`
 
 ```{r subgroups-found}
-if(length(siglist)>0){
+if(isTRUE(length(siglist)>0)){
   kable(node_summary, 
         caption = paste0("Table 1.2.2. Summary of different subgroups identified",
-                         " by multivariate Plackett-Luce tree model."))
+                         " by the Plackett-Luce model."))
 }
 
 ```
@@ -246,12 +175,12 @@ Overall performance of each of the `r options` is summarised in Table 2.1.
 ```{r fav_table}
 knitr::kable(fav2,
              row.names = FALSE,
-             caption = "Table 2.1. Summary of overall performance.")
+             caption = "Table 2.1. Favourability scores for overall performance.")
 ```
 
 \
 
-This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head to head contests' for which the `r option` won and the net favourability score. A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
+This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head to head contests' for which the `r option` won and the net *favourability* score. A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
 
 ```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap="Figure 2.1. Net favourability score for 'overall performance'."}
 plot(fav1) + 
@@ -264,27 +193,14 @@ plot(fav1) +
         legend.position = "none")
 ```
 
-```{r favsentence}
-favsentence_i <- which(fav1$fav_score < max(fav1$fav_score) & fav1$fav_score >= 50)
-
-favsentence <- ifelse(length(favsentence_i) > 0, 
-                      paste0("Other ", options," with strong positive rankings (> 50) were ", 
-                             paste(fav1$items[favsentence_i], collapse=", "),"."),
-                      "")
-```
-
-\
 
 The `r option` `r fav1[[1,1]]` was the 'best' `r option` overall being ranked highest by `r round(fav1[[1,3]], 1)`% of the `r fav1[[1,2]]` `r rankers` who assessed this `r option`. 
 
-`r favsentence`
-
-\
 \
 
 ### Other characteristics  
 
-Net favourability scores are shown below for the other characteristics assessed in this project.
+Net *favourability* scores are shown below for the other characteristics assessed in this project.
 
 
 ```{r, characteristicsplots}
