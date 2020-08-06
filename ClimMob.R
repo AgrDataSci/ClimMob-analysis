@@ -66,7 +66,8 @@ tryCatch({
   dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
 })
 
-cmdata$evaluation_ASS0dfe2b4467a3_char_agecompare_neg <- NA
+#cmdata$evaluation_ASS0dfe2b4467a3_char_agecompare_neg <- NA
+#cmdata$evaluation_ASS0dfe2b4467a3_char_overallperf_neg <- NA
 
 source(paste0(fullpath, "/R/analysis_climmob.R"))
 

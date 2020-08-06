@@ -20,12 +20,12 @@ f2 <- fav_other_traits[[i]][[2]]
 
 knitr::kable(f2[nrow(f2):1, ],
              row.names = FALSE,
-             caption = paste0("Table 2.2.", i, ". Favourability scores for '",
+             caption = paste0("Table 2.1.", i, ". Favourability scores for '",
                               tolower(other_traits_list[[i]]$fullname),"'"))
 ```
 
 \
 
-```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.2.",i, ". Net favourability score for '",tolower(other_traits_list[[i]]$fullname),"'.")}
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1.",i, ". Net favourability score for '",tolower(other_traits_list[[i]]$fullname),"'.")}
 p2
 ```

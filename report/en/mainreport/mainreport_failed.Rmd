@@ -14,15 +14,16 @@ output:
 ```{r setup_opts, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,
                       error = FALSE,
-                      message=FALSE,
+                      message = FALSE,
                       warning = FALSE)
 ```
 
 \
 \
 
-Sorry, we couldn't generate your report. Please contact our user service via the 'Chat bot'. You can find it in the bottom left corner of your ClimMob account. 
+Sorry, we had an issue in generating your report. Please contact our user service via the 'Chat bot'. You can find it in the bottom left corner of your ClimMob account. 
 
+\
 
 The ClimMob Team
 

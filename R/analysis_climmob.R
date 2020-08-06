@@ -976,7 +976,13 @@ done <- tryCatch({
                        stringsAsFactors = FALSE)
   }
   
-  ptab$p.value <- paste(format.pval(ptab$p.value), stars.pval(ptab$p.value))
+  pval_legend <- attr(stars.pval(ptab$p.value), "legend")
+  
+  ptab[,5] <- stars.pval(ptab$p.value)
+  names(ptab)[5] <- ""
+  
+  ptab$p.value <- format.pval(ptab$p.value)
+  
   
   # This is Table 1.2.1
   uni_sum <- outtabs[[1]]
@@ -1003,17 +1009,20 @@ done <- tryCatch({
   
   
   # This is the fist table in Section 1
-  tbl_section1 <- data.frame(name = pars$chars$char_full,
-                             char = pars$chars$char)
-  
-  respondents <- NULL
-  for(i in seq_along(trait_list)) {
+  tbl_section1 <- data.frame()
+  for(i in seq_along(pars$chars[,1])) {
     
-    respondents <- c(respondents, sum(trait_list[[i]]$keep))
+    nd <- try(sum(trait_list[[i]][["keep"]]), silent = TRUE)
+    if (isFALSE(is.numeric(nd))){
+      nd <- 0L
+    }
     
+    d <- data.frame(name = pars$chars[i,"char_full"],
+                    char = pars$chars[i,"char"],
+                    n = nd)
+    
+    tbl_section1 <- rbind(tbl_section1, d)
   }
-  
-  tbl_section1$x <- respondents
   
   names(tbl_section1) <- c("Characteristic", "Short name", "Number of valid answers")
   
