@@ -68,12 +68,12 @@ done <- tryCatch({
   # Statistic parameters ####
   # maximum proportion of missing data allowed in a characteristic evaluation
   # before it is excluded. 
-  missper <- 0.7
+  missper <- 0.5
   
   # minimum proportion of valid observations in explanatory variables
   missexp <- 0.8
   
-  # minimum split size for tree models.
+  # minimum split size for tree models
   minsplit <- ceiling(nranker * 0.1)
   if (isTRUE(minsplit < 10)) {
     minsplit <- 10
@@ -142,7 +142,7 @@ done <- tryCatch({
       
       ovsl <- as.vector(pars$perf[, paste0("quest_", seq_len(pars$perf$n_quest))])
       
-      # search for the colunms in the data
+      # search for the columns in the data
       for (k in seq_along(ovsl)) {
         
         ovsl[k] <- names(cmdata[which(grepl(ovsl[k], names(cmdata)))])
@@ -545,7 +545,6 @@ done <- tryCatch({
   worths <- list()
   anovas <- list()
   aov_tables <- list()
-  contests_t <- list()
   
   for (i in seq_along(other_traits)){
     ot <- other_traits[i]
@@ -572,13 +571,7 @@ done <- tryCatch({
       Rot <- do.call(rankwith, args = a)
       
     }
-    
-    contests <- list()
-    contests[[1]] <- summarise_dominance(Rot)
-    contests[[2]] <- summarise_victories(Rot)
-    
-    contests_t[[i]] <- contests
-    
+
     mod_t <- PlackettLuce(Rot)
     
     mods[[i]] <- mod_t
@@ -605,9 +598,8 @@ done <- tryCatch({
       theme(axis.text.x = element_text(size = 10, color = "#000000"),
             axis.text.y = element_text(size = 10, color = "#000000"))
     
-    summ_i$items <- row.names(summ_i)  
-    rownames(summ_i) <- NULL
-    summ_i <- summ_i[, c("items", "estimate","quasiSE","group")]
+    summ_i <- summ_i[, c("term", "estimate","quasiSE","group")]
+
     names(summ_i) <- c(Option, "Estimate","quasiSE","Group")
     
     summaries[[i]] <- summ_i
@@ -822,7 +814,7 @@ done <- tryCatch({
       info_node(n)$test
     })[[1]]
     
-    if (length(zzz) > 0) {
+    if (isTRUE(length(zzz) > 0)) {
       x <- data.frame(Node = j,
                       t(nodeapply(tree_f, j, function(n){
                         info_node(n)$test
@@ -833,9 +825,7 @@ done <- tryCatch({
       outtabs[[j]] <- x
       
       outtabs[[j]]$p <- format.pval(outtabs[[j]]$p.value)
-    }
-    
-    else{
+    }else{
       outtabs[[j]] <- data.frame(Node = j, 
                                  Message = "No further splits possible", 
                                  p.value = NA,

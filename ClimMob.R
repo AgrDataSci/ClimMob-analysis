@@ -4,9 +4,9 @@
 # # ................................................................
 # # ................................................................
 
-tag <- "leaders"
+tag <- "techapp"
 args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-         paste0("dev/output/",tag,"/"), "TRUE","en","docx",
+         paste0("dev/output/",tag,"/"), "TRUE","en","html",
          "participant", "option", getwd())
 
 # get the arguments from server's call
