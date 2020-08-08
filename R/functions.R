@@ -8,6 +8,7 @@
 #' @param cut.tree numeric, to define the cluster size when make.clusters = TRUE
 #' @param map_provider he name of the provider (see http://leaflet-extras.github.io/leaflet-providers/preview/ 
 #'        and https://github.com/leaflet-extras/leaflet-providers)
+#' @param minimap logical, TRUE to add the minimap
 #' @param minimap_position the position of the mini map 
 #' @examples
 #' lonlat <- data.frame(lon = c(15.6, 16.7, 15.55, 15.551),
@@ -19,6 +20,7 @@ plot_map <- function(data,
                      make.clusters = TRUE,
                      cut.tree = 0.05,
                      map_provider = "Esri.WorldImagery",
+                     minimap = TRUE,
                      minimap_position = "bottomright", 
                      ...){
   
@@ -72,8 +74,9 @@ plot_map <- function(data,
   map <- leaflet::fitBounds(map = map, lng1 = min(d$lon), lat1 = min(d$lat),
                             lng2 = max(d$lon), lat2 = max(d$lat))
   
-  map <- leaflet::addProviderTiles(map = map, provider =  map_provider, 
-                          options = leaflet::providerTileOptions(maxNativeZoom = 17))
+  map <- leaflet::addProviderTiles(map = map, 
+                                   provider =  map_provider, 
+                                   options = leaflet::providerTileOptions(maxNativeZoom = 17))
   
   map <- leaflet::addCircleMarkers(map = map, 
                                    radius = 2, 
@@ -81,8 +84,11 @@ plot_map <- function(data,
                                    fillOpacity = 1, 
                                    fillColor = "black", 
                                    color = "#d73027")
+  if (isTRUE(minimap)) {
+    
+    map <- leaflet::addMiniMap(map = map, position = minimap_position)
   
-  map <- leaflet::addMiniMap(map = map, position = minimap_position)
+  }
   
   map$x$options = list("zoomControl" = FALSE)
   

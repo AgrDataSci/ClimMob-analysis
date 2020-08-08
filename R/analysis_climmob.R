@@ -61,7 +61,6 @@ done <- tryCatch({
   nothertraits <- dim(pars$chars)[[1]] - 1
   nquest <- pars$chars$n_quest[1]
   rankwith <- rankwith
-  reference <- items[[1]]
   
   # ................................................................
   # ................................................................
@@ -263,7 +262,7 @@ done <- tryCatch({
     
     if (nlonlat > 0){
       
-      trial_map <- plot_map(lonlat, xy = c(1, 2))
+      trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = FALSE)
       
       mapshot(trial_map, 
               url = paste0(getwd(), "/", pathname, projname, "_trial_map.html"),

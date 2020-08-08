@@ -216,7 +216,6 @@ if (all(expvar != "xinterceptx")) {
 
 `r  paste(drop_covar_statement, collapse='\n')`
 
-\
 
 ```{r node_statement} 
 # node statement
@@ -240,7 +239,6 @@ if(isTRUE(length(siglist)>0)){
 
 ```
 
-\
 \
 
 ## Correlation between the overall performance and the other characteristics

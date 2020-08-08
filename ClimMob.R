@@ -4,13 +4,13 @@
 # # ................................................................
 # # ................................................................
 
-tag <- "techapp"
-args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-         paste0("dev/output/",tag,"/"), "TRUE","en","html",
-         "participant", "option", getwd())
+# tag <- "CR2020"
+# args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
+#          paste0("dev/output/",tag,"/"), "TRUE","en","docx",
+#          "participant", "option", getwd(), NA)
 
 # get the arguments from server's call
-# args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
 pathname    <- args[3] # the path where results will be written
@@ -20,6 +20,10 @@ extension   <- args[6] # report file format it can be "docx", "pdf", and "html"
 ranker      <- args[7] # how the system will refer to participants/farmers
 option      <- args[8] # how the system will refer to tested items
 fullpath    <- args[9] # this is backward path
+reference   <- args[10] # the reference item for the analysis
+if (isTRUE(is.na(reference))) {
+  reference <- 1
+}
 
 # ................................................................
 # ................................................................
