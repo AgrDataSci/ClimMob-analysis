@@ -1,0 +1,52 @@
+{
+    "Characteristics": [
+        {
+            "name": "Overall Characteristic",
+            "id": 204,
+            "vars": [
+                {
+                    "name": "ASS90dd6f89c1df_char_overallperf_pos"
+                },
+                {
+                    "name": "ASS90dd6f89c1df_char_overallperf_neg"
+                }
+            ]
+        },
+        {
+            "name": "About love",
+            "id": 240,
+            "vars": [
+                {
+                    "name": "ASS90dd6f89c1df_char_love_pos"
+                },
+                {
+                    "name": "ASS90dd6f89c1df_char_love_neg"
+                }
+            ]
+        }
+    ],
+    "Performance": [
+        {
+            "name": "Overall performace",
+            "id": 205,
+            "vars": [
+                {
+                    "name": "ASS90dd6f89c1df_perf_overallchar_1"
+                },
+                {
+                    "name": "ASS90dd6f89c1df_perf_overallchar_2"
+                },
+                {
+                    "name": "ASS90dd6f89c1df_perf_overallchar_3"
+                }
+            ]
+        }
+    ],
+    "Explanatory": [
+        {
+            "name": "What is the gender ?",
+            "id": 237,
+            "vars": "REG_gender"
+        }
+    ]
+}

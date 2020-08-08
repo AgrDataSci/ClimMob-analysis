@@ -1,0 +1,31 @@
+
+**`r other_traits_list[[i]]$fullname`**
+
+```{r, include=FALSE, echo=FALSE}
+f1 <- fav_other_traits[[i]][[1]]
+p2 <- 
+  plot(f1) +
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 10, color = "#000000"),
+        axis.text.y = element_text(size = 10, color = "#000000"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+```
+
+```{r}
+f2 <- fav_other_traits[[i]][[2]]
+
+knitr::kable(f2[nrow(f2):1, ],
+             row.names = FALSE,
+             caption = paste0("Table 2.1.", i, ". Favourability scores for '",
+                              tolower(other_traits_list[[i]]$fullname),"'"))
+```
+
+\
+
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1.",i, ". Net favourability score for '",tolower(other_traits_list[[i]]$fullname),"'.")}
+p2
+```

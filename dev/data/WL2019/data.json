@@ -1,18 +1,6 @@
 {
     "Characteristics": [
         {
-            "name": "AgeCompare",
-            "id": 950,
-            "vars": [
-                {
-                    "name": "ASS0dfe2b4467a3_char_agecompare_pos"
-                },
-                {
-                    "name": "ASS0dfe2b4467a3_char_agecompare_neg"
-                }
-            ]
-        },
-        {
             "name": "Overall Characteristic",
             "id": 204,
             "vars": [
@@ -42,11 +30,5 @@
             ]
         }
     ],
-    "Explanatory": [
-        {
-            "name": "What is the gender ?",
-            "id": 237,
-            "vars": "REG_gender"
-        }
-    ]
+    "Explanatory": []
 }

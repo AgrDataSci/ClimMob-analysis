@@ -1,31 +1,100 @@
 ###Functions for Climmob Reporting Analysis
 
 ##List of functions
-##Updated 01 May 2019
-##
-##scale01() : simple scaling function
-##
-##byfac() : produces PlackettLuce estimates and errorbars to compare between different levels of factor
-##
-##favourability() : calculates total wins, losses and favourability scores
-##
-##favourability_plot() : plot of favourability scores
-##
-##win_plot() : plot of win %
-##
-##multcompPL() : does mean seperation from PlackettLuce object with CLD grouping
-##
-##plot.multcompPL() : plots errorbars, confidence intervals and CLD letters
-##
-##concordance() : determines level of agreement between list of traits with the overall trait
-##
-##contests() : produce pairwise contest matrix between all varieties
-##
-##anova.PL() : ANOVA table from LRT test of PL Model
-##
-##draw.emojis() : draws emojis for the feedback forms
-##
-##get_ranking() : part of the favourability function, slightly modified to include second best as well
+#' Plot map using leaflet
+#' @param data a data frame
+#' @param xy index of data for the longitude and latitude coordinates (in that order)
+#' @param make.clusters logical, if TRUE coordinates are aggregated by a defined cluster size
+#' @param cut.tree numeric, to define the cluster size when make.clusters = TRUE
+#' @param map_provider he name of the provider (see http://leaflet-extras.github.io/leaflet-providers/preview/ 
+#'        and https://github.com/leaflet-extras/leaflet-providers)
+#' @param minimap logical, TRUE to add the minimap
+#' @param minimap_position the position of the mini map 
+#' @examples
+#' lonlat <- data.frame(lon = c(15.6, 16.7, 15.55, 15.551),
+#'                      lat = c(65.8, 66.3, 66.25, 66.251))
+#' 
+#' p <- plot_map(lonlat, xy = c(1,2), cut.tree = 0.05)
+plot_map <- function(data, 
+                     xy = NULL,
+                     make.clusters = TRUE,
+                     cut.tree = 0.05,
+                     map_provider = "Esri.WorldImagery",
+                     minimap = TRUE,
+                     minimap_position = "bottomright", 
+                     ...){
+  
+  d <- data[, xy]
+  
+  # coerce to numeric
+  d[1:2] <- lapply(d[1:2], as.numeric)
+  
+  # remove NAs
+  d <- stats::na.omit(d)
+  
+  nd <- dim(d)[[1]]
+  
+  if (isTRUE(nd == 0)) {
+    stop("No remaining coordinates to plot. ",
+         "Please check for NAs or if the values can be coerced to numeric. \n")
+  }
+  
+  names(d) <- c("lon","lat")
+  
+  if (isTRUE(make.clusters)) {
+    # to ensure the privacy of participants location
+    # we can put the lonlat info into clusters of 0.5 resolution
+    h <- stats::dist(d)
+    
+    h <- stats::hclust(h)
+    
+    h <- stats::cutree(h, h = cut.tree)
+    
+    # split the d by each defined cluster
+    d <- split(d, h)
+    
+    # and take the mean 
+    d <- lapply(d, function(x) {
+      colMeans(x)
+    })
+    
+    # back to data frame
+    d <- do.call("rbind", d)
+    
+    d <- as.data.frame(d)
+    
+    names(d) <- c("lon","lat")
+    
+  }
+  
+  
+  map <- leaflet::leaflet(data = d, 
+                          options = leaflet::leafletOptions(maxZoom = 17))
+  
+  map <- leaflet::fitBounds(map = map, lng1 = min(d$lon), lat1 = min(d$lat),
+                            lng2 = max(d$lon), lat2 = max(d$lat))
+  
+  map <- leaflet::addProviderTiles(map = map, 
+                                   provider =  map_provider, 
+                                   options = leaflet::providerTileOptions(maxNativeZoom = 17))
+  
+  map <- leaflet::addCircleMarkers(map = map, 
+                                   radius = 2, 
+                                   opacity = 1,
+                                   fillOpacity = 1, 
+                                   fillColor = "black", 
+                                   color = "#d73027")
+  if (isTRUE(minimap)) {
+    
+    map <- leaflet::addMiniMap(map = map, position = minimap_position)
+  
+  }
+  
+  map$x$options = list("zoomControl" = FALSE)
+  
+  return(map)
+  
+}
 
 
 scale01 <- function(x) (x-min(x))/(max(x)-min(x))
@@ -62,88 +131,6 @@ win_plot<-function(x){
   return(p1)
 }
 
-multcompPL<-function(mod,terms=NULL,threshold=0.05,Letters=letters,adjust="none"){
-  
-  require(qvcalc)
-  require(multcompView)
-  
-  #get estimates with quasi-SEs
-  qv1<-qvcalc(mod)$qvframe
-  
-  #reduce frame to only selected terms if not all comparisons are desired
-  if(is.null(terms)==FALSE){
-    qv1<-subset(qv1,rownames(qv1)%in%terms)
-    #give error if less than 2 terms can be identified
-    if(nrow(qv1)<3){
-      stop("Less than 2 terms selected")
-    }
-  }
-  
-  #set up matrices for all differences and pooled errors
-  diffs<-mat.or.vec(nrow(qv1),nrow(qv1))
-  ses<-mat.or.vec(nrow(qv1),nrow(qv1))
-  
-  for(i in 1:nrow(qv1)){
-    for(j in 1:nrow(qv1)){
-      
-      #get differences and pooled ses
-      diffs[i,j]<-qv1$estimate[i]-qv1$estimate[j]
-      ses[i,j]<-sqrt(qv1$quasiVar[i]+qv1$quasiVar[j])
-    }
-  }
-  
-  #calculate z scores
-  z<-diffs/ses
-  #TO DO: What DF to use to use here? Is it just the resid DF?
-  p<-2*(1-pt(abs(z),mod$df.residual))
-  
-  #adjust p-value if you want to adjust. make sure to only take each p once for adjustment
-  p[upper.tri(p)]<-p.adjust(p[upper.tri(p)],method = adjust)
-  
-  #make sure lower triangular is mirror of upper
-  p[lower.tri(p)] = t(p)[lower.tri(p)]
-  
-  #set rownames
-  rownames(p)<-colnames(p)<-rownames(qv1)
-  
-  #re-order qv output to ensure letters are produced in a sensible order
-  qv1$term<-reorder(factor(rownames(qv1)),qv1$estimate,mean)
-  qv1<-qv1[order(qv1$estimate,decreasing = TRUE),]
-  
-  #get mean seperation letter groupings
-  qv1$.group<-multcompLetters2(estimate ~ term, p, qv1,
-                               compare="<",
-                               threshold=threshold,
-                               Letters=Letters,
-                               reversed = FALSE)$`Letters`
-  return(qv1)
-  
-}
-
-# simple ggplot function to plot output from multcompPL with error bars
-plot_multcompPL <- function(object, term, estimate, quasiSE, group, level = 0.95, xlab = "", ylab = "", ...){
-  
-  object <- object[,c(term, estimate, quasiSE, group)]
-  names(object) <- c("x","y","qse","g")
-  
-  object$x <- gosset:::.reduce(as.character(object$x), ...)
-  
-  ggplot(data = object,
-              aes(x = x, 
-                  y = y,
-                  label = g, 
-                  ymax = y + stats::qnorm(1-(1-level)/2) * qse,
-                  ymin = y - stats::qnorm(1-(1-level)/2) * qse)) +
-    geom_point() +
-    geom_errorbar(width = 0.1) +
-    coord_flip() +
-    geom_text(vjust = 1.2) +
-    xlab(xlab) + 
-    ylab(ylab) +
-    theme_bw()
-
-}
-
 anova.PL<-function(model){
   if(class(model)!="PlackettLuce"){
     stop("Model type is not Plackett Luce")
@@ -161,271 +148,6 @@ anova.PL<-function(model){
                 "Pr(>Chisq)"=c(NA,p),check.names = FALSE,stringsAsFactors = FALSE)
   return(x)
 }
-
-
-
-map.f <-  function(
-    data = data4,
-    lon = "lon", 
-    lat = "lat",
-    remove_outliers = TRUE,
-    number_of_clusters = 6,
-    cluster_method = "complete",
-    max_cluster_dist = 250,
-    min_cluster_pert = 0.05, 
-    padding = NULL,
-    map_provider = "Esri.WorldImagery",
-    minimap_position = "bottomright"
-  ) {
-    
-    ## Take input df and create a data frame with only lon & lat
-    ## Making coding easier and removing unnecessary columns
-    
-    df <- 
-      data.frame(
-        lon = data[, lon],
-        lat = data[, lat],
-        stringsAsFactors = FALSE
-      )
-    
-    ## Checks if there are any NAs and removes them
-    
-    if(
-      any(is.na(df))
-    ){
-      warning("Data contains ", sum(is.na(df[,"lon"])|is.na(df[,"lat"])) ,
-              " missing or invalid points which have been removed \n")
-      df <- na.omit(df)
-    }    
-    
-    
-    ## Checks if lon & lat are  are numeric, converts if neccesary
-    ## and supresses warnings. May introduce NAs.
-    
-    if(
-      !(is.numeric(df$lon))|!(is.numeric(df$lat))
-    ){
-      df[, "lon"] <- suppressWarnings(as.numeric(df[, "lon"]))
-      df[, "lat"] <- suppressWarnings(as.numeric(df[, "lat"]))
-    }
-    
-    ## Ensure data lon & lat are each within [-180, 180] and 
-    ## data frame does not include the point (0,0).
-    ## If not, then points are converted to NAs
-    
-    
-    if (
-      any(
-        df <= -180 | df >= 180 | (df$lon == 0 & df$lat == 0)
-      )
-    ){
-      
-      df$lon[which(!between(df$lon,-180, 180))] <- NA 
-      df$lat[which(!between(df$lat,-180, 180))] <- NA
-      df[which(df$lon == 0 & df$lat == 0),] <- NA
-    }
-    
-    ## Checks if there are any NAs and removes them
-    
-    if(
-      any(is.na(df))
-    ){
-      warning("Data contains ", sum(is.na(df[,"lon"])|is.na(df[,"lat"])) ,
-              " missing or invalid points which have been removed \n")
-      df <- na.omit(df)
-    }    
-    
-    
-    
-    ## Outliers are defined as points that are part of cluster that are not too 
-    ## small or are not too far away from other clusters.
-    ## This section will calculate clusters, test if these clusters meet the size 
-    ## and distance requirements and remove any that do not meet this criteria
-    ## If the number_of_clusters == 0 or remove_outliers is FALSE then the code
-    ## will not run.
-    
-    if(remove_outliers){
-      
-      ## Create clusters; 
-      df <- 
-        df %>% 
-        ## Remove duplicate lon & lat temporarily
-        distinct(lon, lat, .keep_all = FALSE) %>% 
-        ## Create a distance matrix of all points,
-        dist() %>% 
-        ## Calculate clustering information of the points with hclust
-        ## using the algo specified by cluster_methods
-        hclust(method = "single") %>% 
-        ## Return cluster group for each point, grouping into the number of clusters 
-        ## specified by number_of_points 
-        cutree(h = max_cluster_dist/110) %>%
-        ## Add clusters group column to the distinct lon & lat points
-        {
-          bind_cols(
-            distinct(df, lon, lat, .keep_all = FALSE), 
-            cluster = .)
-        } %>%  
-        ## Rejoin to main dataset
-        right_join(df, by = c("lon", "lat")) 
-      
-      # 
-      # ## Create list of clusters to include
-      # 
-      #     tmp <- 
-      #       df %>%
-      # ## Calculate centre for each cluster using mean lon and mean lat
-      #       group_by(cluster) %>% 
-      #       summarise(mean(lon), mean(lat)) %>% 
-      #       ungroup() %>% 
-      # ## Calculate distance between each cluster centre as a distance matrix
-      #       dist() %>% 
-      # ## Crude conversion from lon & lat to km
-      #       multiply_by(110) %>% 
-      # ## Set all distances between the cluster and itself to NAs
-      #       as.matrix() %>% 
-      #       `diag<-`(NA) %>% 
-      # ## Find the minimum distance to another cluster for each cluster
-      #       apply(1, min, na.rm = TRUE) %>% 
-      # ## Test if mimimum distance of each cluster to the nearest cluster is below the  
-      # ## the maximum boundary set by max_cluster_dist
-      #       t() %>% 
-      #       is_less_than(max_cluster_dist) %>% 
-      # ## Return the list of all clusters the are considered valid
-      #       which()
-      
-      tmp <-
-        df %>% 
-        ## Calculate percentage of points in each cluster
-        group_by(cluster) %>% 
-        summarise(pert = n()) %>% 
-        mutate(pert = pert / sum(pert))  %>%
-        ## Keep those that are larger than the minimum cluster size
-        filter(pert > min_cluster_pert) %>%
-        ## Combine the list of cluster with enough points with the clusters that are not
-        ## too far from each other
-        use_series("cluster") 
-      #    plot(df$lon, df$lat, col = df$cluster)
-      
-      
-      ## If clusters are to be removed, then create a warning message saying how many
-      ## points are considered outliers
-      
-      if(NROW(df[!(df$cluster %in% tmp), ]) != 0){
-        warning(NROW(df[!(df$cluster %in% tmp), ]),
-                " records are considered outliers and have been removed \n")
-      }
-      
-      # Subset dataset to only those that are considered vaild clusters
-      df <-
-        df[df$cluster %in% tmp, ]
-    }
-    
-    ## Find the maximum distance between my points
-    
-    lon_dif <- dist(df$lon)
-    lat_dif <- dist(df$lat)
-    max_dif <- 
-      max(
-        c(max(lon_dif),
-          max(lat_dif)
-        ))
-    
-    ## Create the map
-    
-    #  return(list(df = df, map = map))
-    map <-
-      ## Supress messages and create base layer 
-      suppressMessages(
-        df %>% 
-          leaflet(options = leafletOptions(maxZoom = 17)) %>% 
-          ## Set rectangular view of the final map using the min and max of lon & lat
-          ## padding option does not work
-          fitBounds(
-            lng1 = min(df$lon), lat1 = min(df$lat), 
-            lng2 = max(df$lon), lat2 = max(df$lat),
-            options = list(padding = padding)
-          ) %>%
-          ## Define the base map texture using map_provider
-          addProviderTiles(map_provider, options = providerTileOptions(maxNativeZoom=17))  %>% 
-          ## Add clusters markers (calculated seperate to above process)
-          #addAwesomeMarkers(icon = icons, clusterOptions = markerClusterOptions()) %>% 
-          ## Add point markers
-          addCircleMarkers(
-            radius = 4, 
-            #        fillColor = "midnight blue", 
-            opacity = 0.5, 
-            fillOpacity = 0.5,
-            fillColor = "black",
-            color = "white",
-            clusterOptions = markerClusterOptions()
-          ) %>%
-          ## Add minimap to final map, position based on minimap_position
-          addMiniMap(position = minimap_position)
-      )
-    
-    map_interval <-
-      10^round(log10(max_dif))/2
-    
-    map_interval <-
-      ifelse(round(max_dif/map_interval) == 1, 10^round(log10(max_dif))/5, 10^round(log10(max_dif))/2)
-    
-    
-    if(abs(map_interval)<0.01){
-      lon_line <-
-        data.frame(
-          lon = c(median(df$lon)-0.03, median(df$lon)+0.03),
-          lat = c(median(df$lat))
-        )
-      
-      lat_line <-
-        data.frame(
-          lon = c(median(df$lon)),
-          lat = c(median(df$lat)-0.03, median(df$lat)+0.03)
-        )
-      
-      map <-
-        map %>% 
-        addPolylines(data = lon_line, lng = ~lon, lat = ~lat, color = "#000", opacity = 1, weight = 3) %>% 
-        addPolylines(data = lat_line, lng = ~lon, lat = ~lat, color = "#000", opacity = 1, weight = 3) %>%
-        addControl(html = paste(round(median(df$lon), digits = 5), round(median(df$lat), digits = 5), sep = ", "), position = "topleft")
-    } else {
-      
-      xticks <-
-        seq(
-          floor(map$x$fitBounds[[2]]/map_interval)*map_interval,
-          ceiling(map$x$fitBounds[[4]]/map_interval)*map_interval,
-          by=map_interval
-        )
-      
-      yticks <-
-        seq(
-          floor(map$x$fitBounds[[1]]/map_interval)*map_interval,
-          ceiling(map$x$fitBounds[[3]]/map_interval)*map_interval,
-          by = map_interval
-        )
-      
-      map <- 
-        map %>%
-        addGraticule(interval = map_interval) %>% 
-        addLabelOnlyMarkers(lng=xticks-map_interval/20,lat=max(df$lat,na.rm=T),label=as.character(xticks), 
-                            labelOptions = labelOptions(noHide = T, direction = 'right', textOnly = T,style = list(
-                              "color" = "white",
-                              "font-style" = "bold",
-                              "font-size" = "12px"
-                            ))) %>%
-        addLabelOnlyMarkers(lng=min(df$lon,na.rm=T),lat=yticks,label=as.character(yticks), 
-                            labelOptions = labelOptions(noHide = T, direction = 'right', textOnly = T,style = list(
-                              "color" = "white",
-                              "font-style" = "bold",
-                              "font-size" = "12px"
-                            )))
-    }
-    
-    map$x$options = list("zoomControl" = FALSE)
-    
-    return(map = map)
-    
-  }
 
 
 node_terminal1<-
@@ -569,26 +291,6 @@ network <- function(object, ...) {
 
 }
 
-
-
-#' Plot map using mapview
-#' @param data a data frame
-#' @param coords index of data for the lonlat coordinates
-#' @param add any additional index for colunms in data to add to the map
-plot_map <- function(data, coords = NULL, add = NULL, ...) {
-  
-  lonlat <- data[, c(coords, add)]
-  
-  lonlat <- stats::na.omit(lonlat)
-  
-  lonlat <- suppressWarnings(
-    sf::st_as_sf(lonlat, coords = c("lon","lat"), crs = 4326)
-  )
-  
-  suppressWarnings(
-    mapview::mapview(lonlat, ...)
-  )
-}
 
 #' Coearce rankings and explatory variables in a readable file for Cortana
 #' @param x a rankings object
@@ -955,21 +657,6 @@ summary.btdata <- function(object, ...){
   }
 }
 
-# Check if library has the latest version
-.latest_version <- function(pkg, repo_path){
-  
-  desc <- readLines(repo_path)
-  
-  vers <- desc[grepl("Version", desc)]
-  
-  locvers <- as.character(packageVersion(pkg))
-  
-  latest <- grepl(locvers, vers)
-  
-  isTRUE(latest)
-  
-}
-
 # Plot worth bar
 # @param object a data.frame with worth parameters
 # @param value an integer for index in object for the column with values to plot
@@ -1059,201 +746,21 @@ plot_coef <- function(object, ...) {
   
 }
 
-
-
-#' Plot nodes from recursive partitioning trees
-#'
-#' Make a ggplot2 chart from model-based recursive partitioning trees with quasi-variance
-#'
-#' @param object an object of class modelparty
-#' @param add.letters optional
-#' @param ... additional arguments passed to ggplot2
-#' @return a list of plots with probabilities of winning and 
-#' intervals based on quasi-standard errors
-#' @seealso \code{\link[qvcalc]{qvcalc}} \code{\link[ggplot2]{ggplot}}
-#' @examples
-#' 
-#' library("psychotree")
-#' library("ggplot2")
-#' library("ggparty")
-#' library("patchwork")
-#' 
-#' 
-#' ## Germany's Next Topmodel 2007 data
-#' data("Topmodel2007", package = "psychotree")
-#' 
-#' ## BT tree
-#' tm_tree <- bttree(preference ~ ., data = Topmodel2007, minsize = 5, alpha = 0.1)
-#' 
-#' plot_tree(tm_tree)
-#' 
-#' @importFrom partykit nodeids
-#' @importFrom psychotools itempar
-#' @importFrom qvcalc qvcalc
-#' @import ggparty
-#' @importFrom ggplot2 ggplot aes geom_vline geom_point geom_errorbar scale_x_continuous 
-#' theme_bw labs theme element_text element_blank element_rect element_line
-#' @export
-plot_tree <- function(object, add.letters = FALSE, ...){
-  
-  # Extract ids from terminal nodes
-  node_id <- partykit::nodeids(object, terminal = TRUE)
-  
-  dots <- list(...)
-  
-  font.size <- dots[["font.size"]]
-  
-  # get node information
-  nodes <- list()
-  for (i in seq_along(node_id)) {
-    nodes[[i]] <- object[[ node_id[i] ]]$node$info$object
-  }
-  
-  # get number of observers in each node
-  nobs <- list()
-  for (i in seq_along(node_id)) {
-    nobs[[i]] <- as.integer(object[[ node_id[i] ]]$node$info$nobs) 
-  }
-  
-  # get item parameters from model
-  coeffs <- lapply(nodes, psychotools::itempar)
-  
-  # get estimates from item parameters using qvcalc
-  coeffs <- lapply(coeffs, qvcalc::qvcalc)
-  
-  # extract data frames with estimates
-  coeffs <- lapply(coeffs, function(X){
-    df <- X[]$qvframe }
-  )
-  
-  # get item names
-  items <- rownames(coeffs[[1]])
-  
-  # Add limits in error bars and item names
-  coeffs <- lapply(coeffs, function(X){
-    X <- within(X, {
-      bmin <- X$estimate-(X$quasiSE)
-      bmax <- X$estimate+(X$quasiSE)
-      items <- items
-    })
-    
-    X$bmax <- ifelse(X$bmax > 1, 0.991, X$bmax)
-    
-    X$bmin <- ifelse(X$bmin < 0, 0.001, X$bmin)
-    return(X)
-  })
-  
-  # Add node information and number of observations
-  for (i in seq_along(node_id)) {
-    coeffs[[i]] <- within(coeffs[[i]], {
-      nobs <- nobs[[i]]
-      node <- node_id[i]}
-    )
-  }
-  
-  coeffs <- do.call("rbind", coeffs)
-  
-  if (isTRUE(add.letters)){
-    groups <- try(lapply(nodes, function(x){
-      x <- multcompPL(x)
-      x[sort(items), ".group"]
-    }), silent = TRUE)
-    groups <- unlist(groups)
-    if (grepl("Error",groups[[1]])){
-      message("Unable to get letters for the plotting object.\n")
-      groups <- ""
-    }
-    coeffs <- cbind(coeffs, groups = groups)
-  }else{
-    coeffs$groups <- ""
-  }
-  
-  node_lev <- unique(paste0("Node ", coeffs$node, " (n=", coeffs$nobs, ")"))
-  
-  coeffs$id <- coeffs$node
-  
-  coeffs$node <- factor(paste0("Node ", coeffs$node, " (n=", coeffs$nobs, ")"),
-                         levels = node_lev)
-   
-  coeffs$items <- factor(coeffs$items, levels = sort(items))
-  
-  # get the tree structure
-  if(length(node_id) > 1){
-  tree <- 
-    ggparty::ggparty(object, terminal_space = 0) +
-    ggparty::geom_edge() +
-    ggparty::geom_edge_label() +
-    ggplot2::theme(legend.position = "none") +
-    ggparty::geom_node_label(line_list = list(aes(label = splitvar),
-                                     aes(label = paste("p =",
-                                                       formatC(p.value,
-                                                               format = "e",
-                                                               digits = 1))),
-                                     aes(label = ""),
-                                     aes(label = id)),
-                    line_gpar = list(list(size = 12),
-                                     list(size = 8),
-                                     list(size = 8),
-                                     list(size = 8,
-                                          col = "black",
-                                          fontface = "bold",
-                                          alignment = "center")),
-                    ids = "inner") +
-    coord_cartesian(ylim = c(0.1, 1.1))
-  }
-  
-  # Get max and min values for the x axis in the plot
-  xmax <- round(max(coeffs$bmax, na.rm = TRUE) + 0.01, digits = 4)
-  xmin <- round(min(coeffs$bmin, na.rm = TRUE) - 0.01, digits = 4)
-  xbreaks <- round(c(mean(c(0, xmax)), xmax), 2)
-  #xbreaks <- seq(0, (xmax*100), by = 2)/100
-  xbreaks <- c(0, xbreaks)
-  xlabs <- gsub("0[.]",".", as.character(xbreaks))
-  
-  
-  # Check font size for axis X and Y, and plot title
-  s.axis <- 11
-
-  
-  p <- 
-    ggplot2::ggplot(coeffs, ggplot2::aes(x = estimate, y = items)) +
-    ggplot2::geom_vline(xintercept = 1/length(items), 
-                        colour = "#E5E7E9", size = 0.8) +
-    geom_text(aes(label = groups),
-              size = 2.5,
-              nudge_y = 0.25) +
-    ggplot2::geom_point(pch = 21, size = 2, 
-                        fill = "black",colour = "black") +
-    ggplot2::geom_errorbarh(ggplot2::aes(xmin = bmin,
-                                         xmax = bmax),
-                            colour="black", height = 0.1) +
-    ggplot2::scale_x_continuous(limits = c(0, xmax),
-                                breaks = xbreaks,
-                                labels = xlabs) +
-    facet_grid(. ~ node) +
-    ggplot2::theme_bw() +
-    ggplot2::labs(x = "", y = "") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(size = s.axis, angle = 0,
-                                                       hjust = 0.5, vjust = 1, 
-                                                       face = "plain",
-                                                       colour = "black"),
-                   axis.text.y = ggplot2::element_text(size = s.axis, angle = 0,
-                                                       hjust = 1, vjust = 0.5, 
-                                                       face = "plain",
-                                                       colour = "black"),
-                   text = element_text(size = 10),
-                   strip.background = element_blank(),
-                   plot.background = ggplot2::element_blank(),
-                   panel.grid.major = ggplot2::element_blank(),
-                   panel.grid.minor = ggplot2::element_blank(),
-                   panel.border = ggplot2::element_rect(colour = "black", size = 1),
-                   axis.ticks = ggplot2::element_line(colour = "black", size = 0.5),
-                   axis.ticks.length = grid::unit(0.3, "cm"))
-  
-  if(length(node_id) > 1){
-    require("patchwork")
-    p <- (tree / p)
-  }
-  return(p)
-}
-
+# Plot map using mapview
+# @param data a data frame
+# @param coords index of data for the lonlat coordinates
+# @param add any additional index for colunms in data to add to the map
+# plot_map <- function(data, coords = NULL, add = NULL, ...) {
+#   
+#   lonlat <- data[, c(coords, add)]
+#   
+#   lonlat <- stats::na.omit(lonlat)
+#   
+#   lonlat <- suppressWarnings(
+#     sf::st_as_sf(lonlat, coords = c("lon","lat"), crs = 4326)
+#   )
+#   
+#   suppressWarnings(
+#     mapview::mapview(lonlat, ...)
+#   )
+# }

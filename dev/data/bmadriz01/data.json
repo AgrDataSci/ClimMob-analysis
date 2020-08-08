@@ -1,0 +1,30 @@
+{
+    "Characteristics": [
+        {
+            "name": "Rendimiento",
+            "id": 1334,
+            "vars": [
+                {
+                    "name": "ASS53b537262b8a_char_bm01_pos"
+                },
+                {
+                    "name": "ASS53b537262b8a_char_bm01_neg"
+                }
+            ]
+        },
+        {
+            "name": "Overall Characteristic",
+            "id": 204,
+            "vars": [
+                {
+                    "name": "ASSd2f91f545928_char_overallperf_pos"
+                },
+                {
+                    "name": "ASSd2f91f545928_char_overallperf_neg"
+                }
+            ]
+        }
+    ],
+    "Performance": [],
+    "Explanatory": []
+}

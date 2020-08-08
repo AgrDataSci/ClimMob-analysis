@@ -1,3 +1,20 @@
+ClimMob-analysis (2020-08-08)
+=========================
+
+### Improvements
+* Analitical process was moved to a single script "R/analysis_climmob.R"
+* Dynamic statements for the report based on the in-putted data and results from analysis. This will also make less complicated to translate the report to other languages
+* Code is wrapped in a `tryCatch()` to prevent crashes when a non-expected behaviour in the data occurs. When any error occurs during the analysis the script will return a "failed report" with a message asking the user to contact ClimMob supporting service.
+* The process now produce the reports for projects with only one characteristic, the 'overall_performance', which is mandatory. If overall_performance is missing the script will return the "failed report".
+* Rankings can be build with more than 3 items per participant using `do.call()`, which will build the rankings with `rank_tricot()` when 3 items or with `rank_numeric()` when 4+ items. Projects with 4 or more items (to be tested by each participant) can now be enabled in ClimMob.net
+
+### Changes in behaviour
+* New argument (arg[10]) is added for the reference item (from a discussion with IITA and Cornell). The argument can be `NULL` or `NA` (which will take the first item as reference) or a character string selected by the user which should match with one of the items tested in the project.
+* Map is build with package `leaflet`
+* New packages added `leaflet` and `multcompView`
+* Coordinates in the report map (if any) are clustered in groups with a resolution of 0.05, to comply with the participant's privacy. 
+
+
 ClimMob-analysis (2020-06-04)
 =========================
 ### Improvents

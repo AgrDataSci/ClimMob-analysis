@@ -1,0 +1,1068 @@
+{
+    "project": {
+        "user_name": "jacobvanetten",
+        "project_cod": "CTI2020",
+        "project_name": "Colours Training India 2020",
+        "project_abstract": "An exercise to show how ClimMob can be used.",
+        "project_tags": "colours,India,preferences,gender,age",
+        "project_pi": "Jacob van Etten",
+        "project_piemail": "j.vanetten@cgiar.org",
+        "project_active": 1,
+        "project_public": 0,
+        "project_dashboard": 1,
+        "project_regstatus": 2,
+        "project_assstatus": 0,
+        "project_createcomb": 0,
+        "project_createpkgs": 0,
+        "project_numobs": 40,
+        "project_numcom": 3,
+        "project_lat": "",
+        "project_lon": "",
+        "project_creationdate": "2020-06-26 03:15:05",
+        "project_localvariety": 1,
+        "extra": null
+    },
+    "registry": {
+        "lkptables": [
+            {
+                "name": "REG_lkpgender1",
+                "desc": "Lookup table (What is your gender?)",
+                "fields": [
+                    {
+                        "name": "gender1_cod",
+                        "desc": "Code",
+                        "key": "true"
+                    },
+                    {
+                        "name": "gender1_des",
+                        "desc": "Description",
+                        "key": null
+                    }
+                ],
+                "values": [
+                    {
+                        "gender1_cod": "Man",
+                        "gender1_des": "Man"
+                    },
+                    {
+                        "gender1_cod": "Woman",
+                        "gender1_des": "Woman"
+                    }
+                ]
+            }
+        ],
+        "fields": [
+            {
+                "name": "surveyid",
+                "odktype": "",
+                "desc": "Submission ID",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "originid",
+                "odktype": "",
+                "desc": "Origin",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "_submitted_by",
+                "odktype": "text",
+                "desc": "Submitted by",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "_submitted_date",
+                "odktype": "datetime",
+                "desc": "Submitted date",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "_geopoint",
+                "odktype": "geopoint",
+                "desc": "GPS point",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_deviceimei",
+                "odktype": "deviceid",
+                "desc": "Device IMEI",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_start",
+                "odktype": "start",
+                "desc": "Start of survey",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "qst162",
+                "odktype": "barcode",
+                "desc": "Package code",
+                "key": "true",
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "farmername",
+                "odktype": "text",
+                "desc": "Farmer name",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "age1",
+                "odktype": "integer",
+                "desc": "What is your age?",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "gender1",
+                "odktype": "select_one gender1_opts",
+                "desc": "What is your gender?",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": "true",
+                "rtable": "REG_lkpgender1",
+                "rfield": "gender1_cod"
+            },
+            {
+                "name": "farmgoelocation",
+                "odktype": "geopoint",
+                "desc": "Farm Geolocation",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "clm_end",
+                "odktype": "end",
+                "desc": "End of survey",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            },
+            {
+                "name": "rowuuid",
+                "odktype": "",
+                "desc": "Unique Row Identifier (UUID)",
+                "key": null,
+                "isMultiSelect": null,
+                "multiSelectTable": null,
+                "rlookup": null,
+                "rtable": null,
+                "rfield": null
+            }
+        ]
+    },
+    "assessments": [
+        {
+            "code": "aaa80f9da753",
+            "desc": "Final evaluation",
+            "lkptables": [
+                {
+                    "name": "ASSaaa80f9da753_lkpqst163",
+                    "desc": "Lookup table (Select the farmer)",
+                    "fields": [
+                        {
+                            "name": "qst163_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "qst163_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "qst163_cod": 1,
+                            "qst163_des": "P:1-Dr Kakani"
+                        },
+                        {
+                            "qst163_cod": 11,
+                            "qst163_des": "P:11-Deepak Sharma"
+                        },
+                        {
+                            "qst163_cod": 12,
+                            "qst163_des": "P:12-Satyapal Singh"
+                        },
+                        {
+                            "qst163_cod": 19,
+                            "qst163_des": "P:19-Himansha Bisht"
+                        },
+                        {
+                            "qst163_cod": 21,
+                            "qst163_des": "P:21-Mamta Arya"
+                        },
+                        {
+                            "qst163_cod": 32,
+                            "qst163_des": "P:32-Prem Mathur"
+                        },
+                        {
+                            "qst163_cod": 33,
+                            "qst163_des": "P:33-Jacob van Etten"
+                        }
+                    ]
+                },
+                {
+                    "name": "ASSaaa80f9da753_lkpchar_love1_pos",
+                    "desc": "Lookup table (Which is most associated with love?)",
+                    "fields": [
+                        {
+                            "name": "char_love1_pos_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "char_love1_pos_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "char_love1_pos_cod": 1,
+                            "char_love1_pos_des": "Option A"
+                        },
+                        {
+                            "char_love1_pos_cod": 2,
+                            "char_love1_pos_des": "Option B"
+                        },
+                        {
+                            "char_love1_pos_cod": 3,
+                            "char_love1_pos_des": "Option C"
+                        }
+                    ]
+                },
+                {
+                    "name": "ASSaaa80f9da753_lkpperf_overallchar_1",
+                    "desc": "Lookup table (Overall, whichone is best A or what you usually use?)",
+                    "fields": [
+                        {
+                            "name": "perf_overallchar_1_cod",
+                            "desc": "Code",
+                            "key": "true"
+                        },
+                        {
+                            "name": "perf_overallchar_1_des",
+                            "desc": "Description",
+                            "key": null
+                        }
+                    ],
+                    "values": [
+                        {
+                            "perf_overallchar_1_cod": 1,
+                            "perf_overallchar_1_des": "Better"
+                        },
+                        {
+                            "perf_overallchar_1_cod": 2,
+                            "perf_overallchar_1_des": "Worst"
+                        }
+                    ]
+                }
+            ],
+            "fields": [
+                {
+                    "name": "surveyid",
+                    "odktype": "",
+                    "desc": "Submission ID",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "originid",
+                    "odktype": "",
+                    "desc": "Origin",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_submitted_by",
+                    "odktype": "text",
+                    "desc": "Submitted by",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_submitted_date",
+                    "odktype": "datetime",
+                    "desc": "Submitted date",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "_geopoint",
+                    "odktype": "geopoint",
+                    "desc": "GPS point",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_deviceimei",
+                    "odktype": "deviceid",
+                    "desc": "Device IMEI",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "clm_start",
+                    "odktype": "start",
+                    "desc": "Start of survey",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "qst163",
+                    "odktype": "select_one qst163_opts",
+                    "desc": "Select the farmer",
+                    "key": "true",
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSaaa80f9da753_lkpqst163",
+                    "rfield": "qst163_cod"
+                },
+                {
+                    "name": "cal_qst163",
+                    "odktype": "calculate",
+                    "desc": "",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "char_love1_pos",
+                    "odktype": "select_one char_love1_pos_opts",
+                    "desc": "Which is most associated with love?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSaaa80f9da753_lkpchar_love1_pos",
+                    "rfield": "char_love1_pos_cod"
+                },
+                {
+                    "name": "char_love1_neg",
+                    "odktype": "select_one char_love1_neg_opts",
+                    "desc": "Which is least associated with love?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSaaa80f9da753_lkpchar_love1_pos",
+                    "rfield": "char_love1_pos_cod"
+                },
+                {
+                    "name": "char_overallperf_pos",
+                    "odktype": "select_one char_overallperf_pos_opts",
+                    "desc": "Overall, which option performed better?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSaaa80f9da753_lkpchar_love1_pos",
+                    "rfield": "char_love1_pos_cod"
+                },
+                {
+                    "name": "char_overallperf_neg",
+                    "odktype": "select_one char_overallperf_neg_opts",
+                    "desc": "Overall, which option performed worst?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSaaa80f9da753_lkpchar_love1_pos",
+                    "rfield": "char_love1_pos_cod"
+                },
+                {
+                    "name": "perf_overallchar_1",
+                    "odktype": "select_one perf_overallchar_1_opts",
+                    "desc": "Overall, whichone is best A or what you usually use?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSaaa80f9da753_lkpperf_overallchar_1",
+                    "rfield": "perf_overallchar_1_cod"
+                },
+                {
+                    "name": "perf_overallchar_2",
+                    "odktype": "select_one perf_overallchar_2_opts",
+                    "desc": "Overall, whichone is best B or what you usually use?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSaaa80f9da753_lkpperf_overallchar_1",
+                    "rfield": "perf_overallchar_1_cod"
+                },
+                {
+                    "name": "perf_overallchar_3",
+                    "odktype": "select_one perf_overallchar_3_opts",
+                    "desc": "Overall, whichone is best C or what you usually use?",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": "true",
+                    "rtable": "ASSaaa80f9da753_lkpperf_overallchar_1",
+                    "rfield": "perf_overallchar_1_cod"
+                },
+                {
+                    "name": "clm_end",
+                    "odktype": "end",
+                    "desc": "End of survey",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                },
+                {
+                    "name": "rowuuid",
+                    "odktype": "",
+                    "desc": "Unique Row Identifier (UUID)",
+                    "key": null,
+                    "isMultiSelect": null,
+                    "multiSelectTable": null,
+                    "rlookup": null,
+                    "rtable": null,
+                    "rfield": null
+                }
+            ]
+        }
+    ],
+    "packages": [
+        {
+            "package_id": 1,
+            "farmername": "Dr Kakani",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "White"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Red"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 11,
+            "farmername": "Deepak Sharma",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Red"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 12,
+            "farmername": "Satyapal Singh",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "White"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Black"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 19,
+            "farmername": "Himansha Bisht",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Red"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "White"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 21,
+            "farmername": "Mamta Arya",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Blue"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Black"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Red"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 32,
+            "farmername": "Prem Mathur",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Red"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Black"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "package_id": 33,
+            "farmername": "Jacob van Etten",
+            "comps": [
+                {
+                    "comb_order": 1,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "White"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 2,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Yellow"
+                        }
+                    ]
+                },
+                {
+                    "comb_order": 3,
+                    "technologies": [
+                        {
+                            "tech_name": "Colors",
+                            "alias_name": "Blue"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "specialfields": [
+        {
+            "type": "Characteristic",
+            "name": "ASSaaa80f9da753_char_love1_pos",
+            "desc": "Which is most associated with love?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASSaaa80f9da753_char_love1_neg",
+            "desc": "Which is least associated with love?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASSaaa80f9da753_char_overallperf_pos",
+            "desc": "Overall, which option performed better?"
+        },
+        {
+            "type": "Characteristic",
+            "name": "ASSaaa80f9da753_char_overallperf_neg",
+            "desc": "Overall, which option performed worst?"
+        },
+        {
+            "type": "Performance",
+            "name": "ASSaaa80f9da753_perf_overallchar_1",
+            "desc": "Overall, whichone is best A or what you usually use?"
+        },
+        {
+            "type": "Performance",
+            "name": "ASSaaa80f9da753_perf_overallchar_2",
+            "desc": "Overall, whichone is best B or what you usually use?"
+        },
+        {
+            "type": "Performance",
+            "name": "ASSaaa80f9da753_perf_overallchar_3",
+            "desc": "Overall, whichone is best C or what you usually use?"
+        }
+    ],
+    "data": [
+        {
+            "REG_surveyid": "f13f159c-25bb-476e-b2a5-b5010cb8e572",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "jacob",
+            "REG__submitted_date": "2020-06-26 03:46:24",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "869644020187386",
+            "REG_clm_start": "2020-06-26 15:05:06",
+            "REG_qst162": "1",
+            "REG_farmername": "Dr Kakani",
+            "REG_age1": 52,
+            "REG_gender1": "Man",
+            "REG_farmgoelocation": "26.2517298 72.9875769 0.0 1399.999",
+            "REG_clm_end": "2020-06-26 15:15:58",
+            "REG_rowuuid": "5260b97e-30fb-4f7d-bb6c-1a1ecf164f41",
+            "ASSaaa80f9da753_surveyid": "f41b7174-270f-4ae4-bf48-8ba2cabb4b1a",
+            "ASSaaa80f9da753_originid": "ODKTOOLS",
+            "ASSaaa80f9da753__submitted_by": "jacob",
+            "ASSaaa80f9da753__submitted_date": "2020-06-26 04:17:37",
+            "ASSaaa80f9da753__geopoint": null,
+            "ASSaaa80f9da753_clm_deviceimei": "869644020187386",
+            "ASSaaa80f9da753_clm_start": "2020-06-26 15:45:49",
+            "ASSaaa80f9da753_qst163": 1,
+            "ASSaaa80f9da753_cal_qst163": "P:1-Dr Kakani",
+            "ASSaaa80f9da753_char_love1_pos": 1,
+            "ASSaaa80f9da753_char_love1_neg": 3,
+            "ASSaaa80f9da753_char_overallperf_pos": 2,
+            "ASSaaa80f9da753_char_overallperf_neg": 3,
+            "ASSaaa80f9da753_perf_overallchar_1": 2,
+            "ASSaaa80f9da753_perf_overallchar_2": 1,
+            "ASSaaa80f9da753_perf_overallchar_3": 2,
+            "ASSaaa80f9da753_clm_end": "2020-06-26 15:47:27",
+            "ASSaaa80f9da753_rowuuid": "e20dbd8c-2278-4fe6-a56e-98c2d980517a"
+        },
+        {
+            "REG_surveyid": "e932c1a7-0017-42f2-b14a-c33e873858ee",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "jacob",
+            "REG__submitted_date": "2020-06-26 03:51:33",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "860998039271030",
+            "REG_clm_start": "2020-06-26 15:03:44",
+            "REG_qst162": "11",
+            "REG_farmername": "Deepak Sharma",
+            "REG_age1": 54,
+            "REG_gender1": "Man",
+            "REG_farmgoelocation": "21.234879999999997 81.716475 183.6 8.5",
+            "REG_clm_end": "2020-06-26 15:21:16",
+            "REG_rowuuid": "9dbeaf3b-678f-4eaa-8f9d-53d1ab3dff54",
+            "ASSaaa80f9da753_surveyid": "b7d7e861-79ce-4f8c-ac08-ccba78f59b2d",
+            "ASSaaa80f9da753_originid": "ODKTOOLS",
+            "ASSaaa80f9da753__submitted_by": "jacob",
+            "ASSaaa80f9da753__submitted_date": "2020-06-26 04:22:10",
+            "ASSaaa80f9da753__geopoint": null,
+            "ASSaaa80f9da753_clm_deviceimei": "860998039271030",
+            "ASSaaa80f9da753_clm_start": "2020-06-26 15:51:38",
+            "ASSaaa80f9da753_qst163": 11,
+            "ASSaaa80f9da753_cal_qst163": "P:11-Deepak Sharma",
+            "ASSaaa80f9da753_char_love1_pos": 2,
+            "ASSaaa80f9da753_char_love1_neg": 1,
+            "ASSaaa80f9da753_char_overallperf_pos": 2,
+            "ASSaaa80f9da753_char_overallperf_neg": 1,
+            "ASSaaa80f9da753_perf_overallchar_1": 2,
+            "ASSaaa80f9da753_perf_overallchar_2": 1,
+            "ASSaaa80f9da753_perf_overallchar_3": 2,
+            "ASSaaa80f9da753_clm_end": "2020-06-26 15:51:57",
+            "ASSaaa80f9da753_rowuuid": "805136e4-380c-4d00-acf4-10ff72d424fe"
+        },
+        {
+            "REG_surveyid": "f1981bfe-b7b1-4df9-af2d-46b77c60ce84",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "jacob",
+            "REG__submitted_date": "2020-06-26 03:51:48",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "863081043163324",
+            "REG_clm_start": "2020-06-26 15:18:25",
+            "REG_qst162": "12",
+            "REG_farmername": "Satyapal Singh",
+            "REG_age1": 34,
+            "REG_gender1": "Man",
+            "REG_farmgoelocation": "21.23461532 81.71575913 205.0 24.656",
+            "REG_clm_end": "2020-06-26 15:21:36",
+            "REG_rowuuid": "845c7149-7a44-45c4-aa71-9a1515bd3fae",
+            "ASSaaa80f9da753_surveyid": "bf752c0c-cb8a-4034-9602-2e03881d99a5",
+            "ASSaaa80f9da753_originid": "ODKTOOLS",
+            "ASSaaa80f9da753__submitted_by": "jacob",
+            "ASSaaa80f9da753__submitted_date": "2020-06-26 04:16:19",
+            "ASSaaa80f9da753__geopoint": null,
+            "ASSaaa80f9da753_clm_deviceimei": "863081043163324",
+            "ASSaaa80f9da753_clm_start": "2020-06-26 15:45:27",
+            "ASSaaa80f9da753_qst163": 12,
+            "ASSaaa80f9da753_cal_qst163": "P:12-Satyapal Singh",
+            "ASSaaa80f9da753_char_love1_pos": 2,
+            "ASSaaa80f9da753_char_love1_neg": 1,
+            "ASSaaa80f9da753_char_overallperf_pos": 3,
+            "ASSaaa80f9da753_char_overallperf_neg": 1,
+            "ASSaaa80f9da753_perf_overallchar_1": 1,
+            "ASSaaa80f9da753_perf_overallchar_2": 2,
+            "ASSaaa80f9da753_perf_overallchar_3": 1,
+            "ASSaaa80f9da753_clm_end": "2020-06-26 15:46:05",
+            "ASSaaa80f9da753_rowuuid": "6ba9a382-8366-4bb2-b824-8d24ebd4ea77"
+        },
+        {
+            "REG_surveyid": "d9235055-4028-494c-b12e-4622e10ec396",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "jacob",
+            "REG__submitted_date": "2020-06-26 03:46:56",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "869950041258431",
+            "REG_clm_start": "2020-06-26 15:05:57",
+            "REG_qst162": "19",
+            "REG_farmername": "Himansha Bisht",
+            "REG_age1": 28,
+            "REG_gender1": "Woman",
+            "REG_farmgoelocation": "29.344603333333332 79.56426666666667 1269.5 4.9",
+            "REG_clm_end": "2020-06-26 15:16:28",
+            "REG_rowuuid": "07abe05c-ff3e-4ce0-be22-fb500b6f8499",
+            "ASSaaa80f9da753_surveyid": "8e7e5877-f213-4ef1-8292-3803c64f366f",
+            "ASSaaa80f9da753_originid": "ODKTOOLS",
+            "ASSaaa80f9da753__submitted_by": "jacob",
+            "ASSaaa80f9da753__submitted_date": "2020-06-26 04:17:20",
+            "ASSaaa80f9da753__geopoint": null,
+            "ASSaaa80f9da753_clm_deviceimei": "869950041258431",
+            "ASSaaa80f9da753_clm_start": "2020-06-26 15:45:07",
+            "ASSaaa80f9da753_qst163": 19,
+            "ASSaaa80f9da753_cal_qst163": "P:19-Himansha Bisht",
+            "ASSaaa80f9da753_char_love1_pos": 1,
+            "ASSaaa80f9da753_char_love1_neg": 3,
+            "ASSaaa80f9da753_char_overallperf_pos": 1,
+            "ASSaaa80f9da753_char_overallperf_neg": 3,
+            "ASSaaa80f9da753_perf_overallchar_1": 1,
+            "ASSaaa80f9da753_perf_overallchar_2": 1,
+            "ASSaaa80f9da753_perf_overallchar_3": 1,
+            "ASSaaa80f9da753_clm_end": "2020-06-26 15:47:11",
+            "ASSaaa80f9da753_rowuuid": "5cb5bf0a-37e9-497d-ac01-89fa0451dd0d"
+        },
+        {
+            "REG_surveyid": "2668af43-7384-4a5c-a03c-3070ba45d00b",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "jacob",
+            "REG__submitted_date": "2020-06-26 03:47:01",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "d16e58cbc8aabeab",
+            "REG_clm_start": "2020-06-26 15:04:17",
+            "REG_qst162": "21",
+            "REG_farmername": "Mamta Arya",
+            "REG_age1": 35,
+            "REG_gender1": "Woman",
+            "REG_farmgoelocation": "29.384633372146585 79.51373986768118 1616.5989931077668 64.0",
+            "REG_clm_end": "2020-06-26 15:16:47",
+            "REG_rowuuid": "87a3e9d1-8d80-42aa-bbfc-5eebc451aedf",
+            "ASSaaa80f9da753_surveyid": "bec34c5f-c786-4627-8969-157b19c9e5cd",
+            "ASSaaa80f9da753_originid": "ODKTOOLS",
+            "ASSaaa80f9da753__submitted_by": "jacob",
+            "ASSaaa80f9da753__submitted_date": "2020-06-26 04:20:37",
+            "ASSaaa80f9da753__geopoint": null,
+            "ASSaaa80f9da753_clm_deviceimei": "d16e58cbc8aabeab",
+            "ASSaaa80f9da753_clm_start": "2020-06-26 15:44:16",
+            "ASSaaa80f9da753_qst163": 21,
+            "ASSaaa80f9da753_cal_qst163": "P:21-Mamta Arya",
+            "ASSaaa80f9da753_char_love1_pos": 1,
+            "ASSaaa80f9da753_char_love1_neg": 3,
+            "ASSaaa80f9da753_char_overallperf_pos": 1,
+            "ASSaaa80f9da753_char_overallperf_neg": 3,
+            "ASSaaa80f9da753_perf_overallchar_1": 1,
+            "ASSaaa80f9da753_perf_overallchar_2": 1,
+            "ASSaaa80f9da753_perf_overallchar_3": 2,
+            "ASSaaa80f9da753_clm_end": "2020-06-26 15:44:51",
+            "ASSaaa80f9da753_rowuuid": "67645e9b-085e-41fd-9708-079f68de304e"
+        },
+        {
+            "REG_surveyid": "e72fcee0-7e72-4151-95e0-5f5b47137a41",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "jacob",
+            "REG__submitted_date": "2020-06-26 03:49:28",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "cd25ef50663361c4",
+            "REG_clm_start": "2020-06-26 15:15:18",
+            "REG_qst162": "32",
+            "REG_farmername": "Prem Mathur",
+            "REG_age1": 71,
+            "REG_gender1": "Man",
+            "REG_farmgoelocation": "28.58689969405532 77.06790902651846 173.0 5.0",
+            "REG_clm_end": "2020-06-26 15:19:12",
+            "REG_rowuuid": "628ab435-6ae8-4053-ae34-a0f5c7268502",
+            "ASSaaa80f9da753_surveyid": "1200d572-9477-4a17-880e-8103367be9e6",
+            "ASSaaa80f9da753_originid": "ODKTOOLS",
+            "ASSaaa80f9da753__submitted_by": "jacob",
+            "ASSaaa80f9da753__submitted_date": "2020-06-26 04:18:33",
+            "ASSaaa80f9da753__geopoint": null,
+            "ASSaaa80f9da753_clm_deviceimei": "cd25ef50663361c4",
+            "ASSaaa80f9da753_clm_start": "2020-06-26 15:45:07",
+            "ASSaaa80f9da753_qst163": 32,
+            "ASSaaa80f9da753_cal_qst163": "P:32-Prem Mathur",
+            "ASSaaa80f9da753_char_love1_pos": 1,
+            "ASSaaa80f9da753_char_love1_neg": 2,
+            "ASSaaa80f9da753_char_overallperf_pos": 3,
+            "ASSaaa80f9da753_char_overallperf_neg": 2,
+            "ASSaaa80f9da753_perf_overallchar_1": 1,
+            "ASSaaa80f9da753_perf_overallchar_2": 2,
+            "ASSaaa80f9da753_perf_overallchar_3": 1,
+            "ASSaaa80f9da753_clm_end": "2020-06-26 15:47:56",
+            "ASSaaa80f9da753_rowuuid": "4448960c-267b-4bea-bd53-b5603daaf900"
+        },
+        {
+            "REG_surveyid": "73a2808f-8011-4b5f-b517-a6393bdc9e30",
+            "REG_originid": "ODKTOOLS",
+            "REG__submitted_by": "jacob",
+            "REG__submitted_date": "2020-06-26 03:46:54",
+            "REG__geopoint": null,
+            "REG_clm_deviceimei": "b2ac9ee0556585e3",
+            "REG_clm_start": "2020-06-26 11:39:15",
+            "REG_qst162": "33",
+            "REG_farmername": "Jacob van Etten",
+            "REG_age1": 42,
+            "REG_gender1": "Man",
+            "REG_farmgoelocation": "37.3883685636541 -6.165582676847032 197.2848703005622 12.0",
+            "REG_clm_end": "2020-06-26 11:46:27",
+            "REG_rowuuid": "515dba48-5afa-4336-8405-5d325e588c96",
+            "ASSaaa80f9da753_surveyid": "f4ae0b46-a782-4485-91fa-83e35d476773",
+            "ASSaaa80f9da753_originid": "ODKTOOLS",
+            "ASSaaa80f9da753__submitted_by": "jacob",
+            "ASSaaa80f9da753__submitted_date": "2020-06-26 04:17:20",
+            "ASSaaa80f9da753__geopoint": null,
+            "ASSaaa80f9da753_clm_deviceimei": "b2ac9ee0556585e3",
+            "ASSaaa80f9da753_clm_start": "2020-06-26 12:15:04",
+            "ASSaaa80f9da753_qst163": 33,
+            "ASSaaa80f9da753_cal_qst163": "P:33-Jacob van Etten",
+            "ASSaaa80f9da753_char_love1_pos": 2,
+            "ASSaaa80f9da753_char_love1_neg": 3,
+            "ASSaaa80f9da753_char_overallperf_pos": 3,
+            "ASSaaa80f9da753_char_overallperf_neg": 2,
+            "ASSaaa80f9da753_perf_overallchar_1": 2,
+            "ASSaaa80f9da753_perf_overallchar_2": 2,
+            "ASSaaa80f9da753_perf_overallchar_3": 1,
+            "ASSaaa80f9da753_clm_end": "2020-06-26 12:17:03",
+            "ASSaaa80f9da753_rowuuid": "9838bf69-f08b-4588-8add-4c1d0fcfa4e4"
+        }
+    ],
+    "importantfields": [
+        {
+            "type": "PackageID",
+            "field": "REG_QST162",
+            "desc": "Package ID"
+        },
+        {
+            "type": "FarmerName",
+            "field": "REG_farmername",
+            "desc": "Name of registered farmer"
+        },
+        {
+            "type": "OverallCharPos",
+            "field": "ASSaaa80f9da753_char_overallperf_pos",
+            "desc": "Over all characteristic positive"
+        },
+        {
+            "type": "OverallCharNeg",
+            "field": "ASSaaa80f9da753_char_overallperf_neg",
+            "desc": "Over all characteristic negative"
+        },
+        {
+            "type": "OverallPerf1",
+            "field": "ASSaaa80f9da753_perf_overallchar_1",
+            "desc": "Over all performance of A against current"
+        },
+        {
+            "type": "OverallPerf2",
+            "field": "ASSaaa80f9da753_perf_overallchar_2",
+            "desc": "Over all performance of B against current"
+        },
+        {
+            "type": "OverallPerf3",
+            "field": "ASSaaa80f9da753_perf_overallchar_3",
+            "desc": "Over all performance of C against current"
+        }
+    ]
+}

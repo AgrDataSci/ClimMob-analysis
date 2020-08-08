@@ -1,15 +1,16 @@
 
-# if no info is provided at the input stage, the back of the sheet will just show the list of options and the farmer can add info if they wish
-info_table <- data.frame(options=sort(fav2$variety), info="")
+# if no info is provided at the input stage, the back of the sheet
+# will just show the list of options and the farmer can add info if they wish
+info_table <- data.frame(options=sort(fav1$items), info="")
 
-# if info/expert advice about options are provided at the input stage, these will be used instead of the list of items
-if(length(info.table.info)>0){
-  info_table <- data.frame(options=info.table.items, info=info.table.info)
-}
-
+# if info/expert advice about options are provided at the input
+# stage, these will be used instead of the list of items
+# if(length(info.table.info)>0){
+#   info_table <- data.frame(options=info.table.items, info=info.table.info)
+# }
 
 # additional potential parameters
-trait2show<-c() #only shows overall ranking at this stage
+trait2show <- c() #only shows overall ranking at this stage
 
 
 ###############################################
@@ -58,7 +59,6 @@ global_N <- fav2 %>% arrange(desc(`% Top Ranked`)) %>% pull(N)
 
 ###############################################
 # define colours, line widths, styles etc. - you can safely play with all of it
-
 grey_col <- colors()[230]
 grey_col1 <- colors()[235]
 grey_col2 <- colors()[240]
@@ -66,23 +66,29 @@ grey_col3 <- colors()[245]
 grey_dark <- colors()[190]
 grey_dark2 <- colors()[205]
 grey_dark2 <- grey_dark
-text_colors<-c(red="#B2182B", grey=colors()[200], blue="#2166AC")
-emoji_colors<-c(red="#e7b9bf", grey=grey_col2, blue="#bcd1e6")
-text_colors<-c(red=colors()[205], grey=colors()[195], blue="#2166AC")
-emoji_colors<-c(red=grey_col2, grey=grey_col2, blue="#bcd1e6")
-text_colors<-c(red=colors()[195], grey=grey_dark, blue="black")
-emoji_colors<-c(red=grey_col2, grey=grey_col1, blue=grey_col)
-emoji_colors<-c(red=grey_col, grey=grey_col, blue=grey_col)
-textsize_1=0.6
-textsize_2=1.1
-textsize_3=1.3
-arrowsize=3
-arrowlength=0.07
-boxwidth=1
-emojiradius=0.4
-color4you=T
-transparency <-1
-smiley_thickness <-1
+text_colors <- c(red = "#B2182B",
+                 grey = colors()[200],
+                 blue = "#2166AC")
+emoji_colors <- c(red = "#e7b9bf", grey = grey_col2, blue = "#bcd1e6")
+text_colors <- c(red = colors()[205],
+                 grey = colors()[195],
+                 blue = "#2166AC")
+emoji_colors <- c(red = grey_col2, grey = grey_col2, blue = "#bcd1e6")
+text_colors <- c(red = colors()[195],
+                 grey = grey_dark,
+                 blue = "black")
+emoji_colors <- c(red = grey_col2, grey = grey_col1, blue = grey_col)
+emoji_colors <- c(red = grey_col, grey = grey_col, blue = grey_col)
+textsize_1 <- 0.6
+textsize_2 <- 1.1
+textsize_3 <- 1.3
+arrowsize <- 3
+arrowlength <- 0.07
+boxwidth <- 1
+emojiradius <- 0.4
+color4you <- TRUE
+transparency <- 1
+smiley_thickness <- 1
 
 
 ###############################################
@@ -91,47 +97,48 @@ smiley_thickness <-1
 #vertical parameters
 n_toplines <- 7 #How many lines in the top box
 yspace_top <- 0.6 #line height in the top box
-yspace_box<-3 #space between top box and title
-yspace_title<-4 #space between title and ranking info
-yspace_header<-1.5 #space between header and ranking info (for the item sheet)
-yspace<-1 #line height in the ranking info
-htitle<-3.5 #height of the title box
+yspace_box <- 3 #space between top box and title
+yspace_title <- 4 #space between title and ranking info
+yspace_header <- 1.5 #space between header and ranking info (for the item sheet)
+yspace <- 1 #line height in the ranking info
+htitle <- 3.5 #height of the title box
 
 n_items <- length(global_ranking) #number of varieties/items
 
 #modify parameters to deal with high number of items
-if(n_items>23){
-  yspace<-.5
-  textsize_2=.8
-  emojiradius=0.3
-  if(n_items>43){
-    yspace<-.3
-    textsize_2=.5
-    emojiradius=0.2
-    if(n_items>73){
-      yspace<-.15
-      textsize_2=.27
-      textsize_1=.4
+if (isTRUE(nitems > 23)) {
+  yspace <- 0.5
+  textsize_2 = 0.8
+  emojiradius = 0.3
+  
+  if (isTRUE(nitems > 43)) {
+    yspace <- 0.3
+    textsize_2 = 0.5
+    emojiradius = 0.2
+    if (isTRUE(nitems > 73)) {
+      yspace <- 0.15
+      textsize_2 = 0.27
+      textsize_1 = 0.4
     }
   }
 }
 
 
-#horonzital parameters
-xstart<-0
-xend<-25
-xtop<-0.5
-#xtitle<-c(11, 11.2)
-xtitle<-c(12.5, 12.5)
-xsmileys<-4.8
-xarrowVtext<-2.2
-xarrowV<-5.5
-xranking<-7
-xarrowH<- c(15, 17)
-xsmiley<-18
-xranking2<-18.8
-charperunit <- (xend-xstart)/(70)
-xinfo<-10 #for item sheet
+# horizontal parameters
+xstart <- 0
+xend <- 25
+xtop <- 0.5
+# xtitle<-c(11, 11.2)
+xtitle <- c(12.5, 12.5)
+xsmileys <- 4.8
+xarrowVtext <- 2.2
+xarrowV <- 5.5
+xranking <- 7
+xarrowH <- c(15, 17)
+xsmiley <- 18
+xranking2 <- 18.8
+charperunit <- (xend - xstart) / (70)
+xinfo <- 10 #for item sheet
 
 
 ###############################################
@@ -144,29 +151,44 @@ make_y_bloc <- function(nb_items){
 ###############################################
 # preparing the design of the form
 
-#vertical positioning
-ytop <- -(1:n_toplines)*yspace_top #positions of the lines in the box
-ytopbox<-rev(range(ytop))+c(yspace_top,-yspace_top) #position of the box top and bottom 
-y <- ytopbox[2] - yspace_box + make_y_bloc(n_items) #position of the items/varieties in the ranking
-y2<- - yspace_box + make_y_bloc(nrow(info_table)) #position of the items/varieties in the info list for items sheet
-
-#nb of characters of each item - used to calculate the pproximate width of the ranker's items arrows
+# vertical positioning
+# positions of the lines in the box
+ytop <- -(1:n_toplines) * yspace_top 
+# position of the box top and bottom
+ytopbox <-rev(range(ytop)) + c(yspace_top, -yspace_top) 
+# position of the items/varieties in the ranking
+y <- ytopbox[2] - yspace_box + make_y_bloc(n_items) 
+# position of the items/varieties in the info list for items sheet
+y2 <- -yspace_box + make_y_bloc(nrow(info_table)) 
+# nb of characters of each item - used to calculate the 
+# approximate width of the ranker's items arrows
 global_width <- nchar(as.character(global_ranking))
 
-#colors of the items/varieties
-global_ranking_colors <- rgb(colorRamp(text_colors)(scale01(global_ranking_score)), max=255)
-
+# colors of the items/varieties
+global_ranking_colors <- rgb(colorRamp(text_colors)(scale01(global_ranking_score)), 
+                             max = 255)
 
 ###############################################
 # create a black arrow, saved as external file
 
 png("Farmer Reports/png Files/mask.png")
-ytmp1<-max(last(y), -35)
-ytmp2<-y[3]
-grid.polygon(c(-.3, .3, .3, .5, 0, -.5, -.3),
-             c(ytmp1, ytmp1, ytmp2-yspace/2, ytmp2-yspace/2*1.2, ytmp2, ytmp2-yspace/2*1.2, ytmp2-yspace/2), gp=gpar(fill="black"),
-             def="native",
-             vp=viewport(xs=c(-.5, .5), ys=c(ytmp1, ytmp2)))
+ytmp1 <- max(last(y),-35)
+ytmp2 <- y[3]
+grid.polygon(
+  c(-.3, .3, .3, .5, 0,-.5,-.3),
+  c(
+    ytmp1,
+    ytmp1,
+    ytmp2 - yspace / 2,
+    ytmp2 - yspace / 2 * 1.2,
+    ytmp2,
+    ytmp2 - yspace / 2 * 1.2,
+    ytmp2 - yspace / 2
+  ),
+  gp = gpar(fill = "black"),
+  def = "native",
+  vp = viewport(xs = c(-.5, .5), ys = c(ytmp1, ytmp2))
+)
 dev.off()
 
 ###############################################
@@ -179,15 +201,11 @@ rmat <- matrix(grey(seq(0,1,length=nrow(m))),
                nrow=nrow(m), ncol=ncol(m))
 rmat[mask == "#FFFFFF"] <- NA
 
-
-
-
-
-
 ###############################################
 # make the list of items/varieties with info png file
 
-png("Farmer Reports/png Files/items.png", width= 8.27, height= 11.7, units="in", res=300)
+png("Farmer Reports/png Files/items.png",
+    width= 8.27, height= 11.7, units="in", res=300)
 par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5), lheight=.9)
 plot.new()
 plot.window(ylim=c(-35,0), xlim=c(xstart, xend))
