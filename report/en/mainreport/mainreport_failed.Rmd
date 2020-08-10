@@ -21,11 +21,20 @@ knitr::opts_chunk$set(echo = FALSE,
 \
 \
 
-Sorry, we had an issue in generating your report. Please contact our supporting service via the 'Chat bot'. You can find it in the bottom left corner of your ClimMob account. 
+Sorry, we had an issue in generating your report. Please contact our supporting service via the 'Chat bot' and report the error described below. You can find the 'Chat bot' in the bottom left corner of your ClimMob account. 
 
+We tried to produce your report, but we got the following error(s): 
+
+```{r}
+print(error)
+```
+
+\
 \
 
 The ClimMob Team
+
+
 
 
 

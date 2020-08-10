@@ -1,4 +1,13 @@
-ClimMob-analysis (2020-08-08)
+ClimMob-analysis v1.1-1 (2020-08-10)
+=========================
+
+### Improvements
+* More informative error messages
+
+### Changes in behaviour
+* Name the report without project 'tag'. The convention is `paste0("climmob_main_report", ".", extension)`
+
+ClimMob-analysis v1.1 (2020-08-08)
 =========================
 
 ### Improvements
@@ -15,7 +24,7 @@ ClimMob-analysis (2020-08-08)
 * Coordinates in the report map (if any) are clustered in groups with a resolution of 0.05, to comply with the participant's privacy. 
 
 
-ClimMob-analysis (2020-06-04)
+ClimMob-analysis v0.9 (2020-06-04)
 =========================
 ### Improvents
 * New function to plot Plackett-Luce trees
@@ -25,7 +34,7 @@ ClimMob-analysis (2020-06-04)
 * New bib file for the main report
 
 
-ClimMob-analysis (2020-04-29)
+ClimMob-analysis v0.8 (2020-04-29)
 =========================
 
 ### Improvements
@@ -45,7 +54,7 @@ ClimMob-analysis (2020-04-29)
 * Fix palette smoothig in Fig 3.2 (and the others related to other characteristics) to accept more than 9 items.
 
 
-ClimMob-analysis (2020-04-15)
+ClimMob-analysis v0.7 (2020-04-15)
 =========================
 
 ### Improvements
@@ -54,7 +63,7 @@ ClimMob-analysis (2020-04-15)
 
 
 
-ClimMob-analysis (2020-03-19)
+ClimMob-analysis v0.6 (2020-03-19)
 =========================
 
 ### Improvements
@@ -66,7 +75,7 @@ ClimMob-analysis (2020-03-19)
 * Use numbers for references to make a cleaner document and improve readability.
 
 
-ClimMob-analysis (2020-03-12)
+ClimMob-analysis v0.5 (2020-03-12)
 =========================
 
 ### Fixed issues
@@ -81,7 +90,7 @@ ClimMob-analysis (2020-03-12)
 * References to R packages used for report production are added
 * Figure labels are added bellow the figures instead of Figure titles
 
-ClimMob-analysis (2020-02-21)
+ClimMob-analysis v0.4 (2020-02-21)
 =========================
 
 First release of new report
