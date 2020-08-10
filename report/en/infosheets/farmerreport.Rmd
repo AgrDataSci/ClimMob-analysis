@@ -8,7 +8,7 @@ output:
     df_print: paged
 ---
 ```{r setup_opts, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE,error = FALSE,message=FALSE,warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, error = FALSE,message=FALSE,warning = FALSE)
 ```
 
 ```{r image-ref-for-in-text, echo = FALSE, message=FALSE, fig.align='center', out.width='.99\\linewidth', fig.pos='H'}

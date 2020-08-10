@@ -4,11 +4,6 @@
 # # ................................................................
 # # ................................................................
 
-# tag <- "CR2020"
-# args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-#          paste0("dev/output/",tag,"/"), "TRUE","en","html",
-#          "participant", "option", getwd(), NA)
-
 # get the arguments from server's call
 args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis

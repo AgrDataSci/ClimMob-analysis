@@ -1,46 +1,79 @@
+# ................................................................
+# ................................................................
+# Summarise the results for the farmers reports
+# ................................................................
+# ................................................................
+# ................................................................
+# ................................................................
 
-# if no info is provided at the input stage, the back of the sheet
-# will just show the list of options and the farmer can add info if they wish
-info_table <- data.frame(options=sort(fav1$items), info="")
+# Make the overall picture ####
+# table with the worth parameters from overall performance
+# number of times each item was tested
+# and how many times it was ranked first or last
 
-# if info/expert advice about options are provided at the input
-# stage, these will be used instead of the list of items
-# if(length(info.table.info)>0){
-#   info_table <- data.frame(options=info.table.items, info=info.table.info)
-# }
+# make the rank without the Local item
+overall <- trait_list[[1]]
+keep <- overall$keep
 
-# additional potential parameters
-trait2show <- c() #only shows overall ranking at this stage
+# list of arguments for the function that will be used to 
+# create the rankings
+a <- list(cmdata[keep, ],
+          items = itemnames,
+          input = overall$input)
 
+R <- do.call(rankwith, args = a)
 
-###############################################
-# create table
+order_items <- coef(PlackettLuce(R), ref = 5)
 
-# make overall table
-df_feedback_overall <- cbind(df, get_ranking(a=df[,vars[1]],
-                                             b=df[,vars[2]],
-                                             c=df[,vars[3]],
-                                             best=df[,overall[1]],
-                                             worst=df[,overall[2]]
-))
+rank_items <- gosset:::.rank_decimal(order_items)$rank
 
+order_items <- names(order_items)
 
-df_feedback <- list(overall=df_feedback_overall)
+freq_items <- table(unlist(itemdata))
 
-# make other trait table - not used for now
-for(trait_i in trait2show){
-  pos_trait <- which(trait_names==trait_i)*2-1
-  df_feedback_trait_i <- cbind(df, get_ranking(a=df[,vars[1]],
-                                                  b=df[,vars[2]],
-                                                  c=df[,vars[3]],
-                                                  best=df[,pos_trait],
-                                                  worst=df[,pos_trait+1]
-  ))
-  
-  df_feedback[[trait_i]] <- df_feedback_trait_i
-}
+R <- R[1:nrow(R),, as.rankings = FALSE]
+R[R == 0] <- NA
 
-trait2show <-c("overall", trait2show)
+first <- apply(R, 1, function(x){
+  i <- which.min(x)
+  names(x)[i]
+}) 
+
+last <- apply(R, 1, function(x){
+  i <- which.max(x)
+  names(x)[i]
+}) 
+
+first_items <- table(first)
+last_items  <- table(last)
+
+infotable <- data.frame(item = order_items,
+                        rank = rank_items,
+                        freq = as.vector(freq_items[order_items]),
+                        first = as.vector(first_items[order_items]),
+                        last = as.vector(last_items[order_items]))
+
+infotable[is.na(infotable)] <- 0
+
+infotable <- infotable[order(infotable$rank), ]
+
+# ................................................................
+# ................................................................
+# Get the info from the participants ####
+sel <- c("id", "package_farmername", "package_item_A", "package_item_B", "package_item_C")
+partitable <- cmdata[keep, sel]
+
+names(partitable) <- gsub("package_|farmer", "", names(partitable))
+
+# now get the items that where ranked best, middle and worst by 
+# each participant
+partitable$first <- first
+partitable$last <- last
+partitable$middle <- apply(partitable, 1, function(x){
+  fl <- x[c("first","last")]
+  i <- !x[c("item_A", "item_B", "item_C")] %in% fl
+  x[c("item_A", "item_B", "item_C")][i]
+})
 
 
 ###############################################
@@ -103,8 +136,6 @@ yspace_header <- 1.5 #space between header and ranking info (for the item sheet)
 yspace <- 1 #line height in the ranking info
 htitle <- 3.5 #height of the title box
 
-n_items <- length(global_ranking) #number of varieties/items
-
 #modify parameters to deal with high number of items
 if (isTRUE(nitems > 23)) {
   yspace <- 0.5
@@ -157,22 +188,22 @@ ytop <- -(1:n_toplines) * yspace_top
 # position of the box top and bottom
 ytopbox <-rev(range(ytop)) + c(yspace_top, -yspace_top) 
 # position of the items/varieties in the ranking
-y <- ytopbox[2] - yspace_box + make_y_bloc(n_items) 
-# position of the items/varieties in the info list for items sheet
-y2 <- -yspace_box + make_y_bloc(nrow(info_table)) 
+y <- ytopbox[2] - yspace_box + make_y_bloc(nitems) 
+# position of the items in the info list for items sheet
+y2 <- -yspace_box + make_y_bloc(nrow(infotable)) 
 # nb of characters of each item - used to calculate the 
 # approximate width of the ranker's items arrows
-global_width <- nchar(as.character(global_ranking))
+global_width <- nchar(as.character(items))
 
 # colors of the items/varieties
-global_ranking_colors <- rgb(colorRamp(text_colors)(scale01(global_ranking_score)), 
+global_ranking_colors <- rgb(colorRamp(text_colors)(scale01(infotable$rank)), 
                              max = 255)
 
 ###############################################
 # create a black arrow, saved as external file
 
-png("Farmer Reports/png Files/mask.png")
-ytmp1 <- max(last(y),-35)
+png("mask.png")
+ytmp1 <- max(y[length(y)],-35)
 ytmp2 <- y[3]
 grid.polygon(
   c(-.3, .3, .3, .5, 0,-.5,-.3),
@@ -194,7 +225,7 @@ dev.off()
 ###############################################
 # read back in the arrow as colour matrix
 
-m <- readPNG("Farmer Reports/png Files/mask.png", native=FALSE)
+m <- readPNG("mask.png", native=FALSE)
 mask <- matrix(rgb(m[,,1],m[,,2],m[,,3]),
                nrow=nrow(m))
 rmat <- matrix(grey(seq(0,1,length=nrow(m))),
@@ -204,24 +235,51 @@ rmat[mask == "#FFFFFF"] <- NA
 ###############################################
 # make the list of items/varieties with info png file
 
-png("Farmer Reports/png Files/items.png",
+png("items.png",
     width= 8.27, height= 11.7, units="in", res=300)
 par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5), lheight=.9)
 plot.new()
 plot.window(ylim=c(-35,0), xlim=c(xstart, xend))
 
 #title
-rect(xleft=xstart,ybottom=y2["title"]-htitle*1/3, xright = xend, ytop = y2["title"]+htitle/3, col=grey_dark, border=NA)#col=grey_col2
-text(xtitle[2], y2["title"], paste("Information about the", options), font=2, cex=textsize_3, col="white")
+rect(xleft=xstart, 
+     ybottom=y2["title"]-htitle*1/3, 
+     xright = xend, 
+     ytop = y2["title"]+htitle/3, 
+     col=grey_dark, 
+     border=NA)
+
+text(xtitle[2], 
+     y2["title"], 
+     paste("Information about the", options),
+     font=2, 
+     cex=textsize_3, 
+     col="white")
 
 #header
-text(xstart,y2["header"],options, adj=c(0,NA), cex=textsize_3,  font=2)
-text(xinfo,y2["header"],info.table.typeinfo, adj=c(0,NA), cex=textsize_3,  font=2)
+text(xstart,
+     y2["header"], 
+     options, 
+     adj=c(0,NA), 
+     cex=textsize_3,  
+     font=2)
 
-#List items/varieties 
-text(xstart,y2[-(1:2)],info_table$options, adj=c(0,NA), cex=textsize_1)
+text(xinfo,y2["header"],
+     "Bla bla", 
+     adj=c(0,NA),
+     cex=textsize_3,  
+     font=2)
+
+#List items
+text(xstart,
+     y2[-(1:2)], 
+     infotable$items, 
+     adj=c(0,NA), 
+     cex=textsize_1)
+
+
 #Items/varieties info/advice
-text(xinfo,y2[-(1:2)],info_table$info, adj=c(0,NA), cex=textsize_1)
+text(xinfo,y2[-(1:2)], "blab kakankan", adj=c(0,NA), cex=textsize_1)
 
 dev.off()
 
@@ -230,8 +288,6 @@ dev.off()
 
 ###############################################
 # make all the personalized results png files, by looping over all the ranker.ids
-
-
 for(ranker_id in ranker.ids){
   
   #name of ranker

@@ -26,6 +26,7 @@ library("ggparty")
 library("patchwork")
 library("leaflet")
 library("multcompView")
+library("png")
 source(paste0(fullpath, "/R/functions.R"))
 
 # ................................................................
