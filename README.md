@@ -18,7 +18,6 @@ This repository contains the code used in the workflow to analyse and create rep
 
   - **R/** contains the supporting scripts used to organise the data and perform the analysis. They are called by ClimMob.R
   - **report/** with its subdirectories report/en and report/es contains the markdown templates to produce the reports in both English (en) and Spanish (es, not implemented yet). 
-  - **dev/** is used for the development of the package and should not be used to call for analysis or report production.
 
 
 
@@ -26,4 +25,4 @@ This repository contains the code used in the workflow to analyse and create rep
 
   - Please [report any issues or bugs](https://github.com/agrobioinfoservices/ClimMob-analysis/issues).
 
-  - License: GPL-3.
+  - License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
