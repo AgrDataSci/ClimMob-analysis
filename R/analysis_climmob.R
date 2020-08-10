@@ -6,33 +6,33 @@
 # ................................................................
 # ................................................................
 # ................................................................
-done <- tryCatch({
+## Packages ####
+library("ClimMobTools")
+library("gosset")
+library("PlackettLuce")
+library("partykit")
+library("qvcalc")
+library("psychotools")
+library("jsonlite")
+library("knitr")
+library("rmarkdown")
+library("pls")
+library("gtools")
+library("ggplot2")
+library("igraph")
+library("mapview")
+library("ggrepel")
+library("ggparty")
+library("patchwork")
+library("leaflet")
+library("multcompView")
+source(paste0(fullpath, "/R/functions.R"))
+
+# ................................................................
+# ................................................................
+# Dataset parameters ####
+dtpars <- tryCatch({
   
-  ## Packages ####
-  library("ClimMobTools")
-  library("gosset")
-  library("PlackettLuce")
-  library("partykit")
-  library("qvcalc")
-  library("psychotools")
-  library("jsonlite")
-  library("knitr")
-  library("rmarkdown")
-  library("pls")
-  library("gtools")
-  library("ggplot2")
-  library("igraph")
-  library("mapview")
-  library("ggrepel")
-  library("ggparty")
-  library("patchwork")
-  library("leaflet")
-  library("multcompView")
-  source(paste0(fullpath, "/R/functions.R"))
-  
-  # ................................................................
-  # ................................................................
-  # Dataset parameters ####
   items <- cmdata[, grepl("package_item", names(cmdata))]
   ncomp <- dim(items)[[2]]
   
@@ -62,9 +62,6 @@ done <- tryCatch({
   nquest <- pars$chars$n_quest[1]
   rankwith <- rankwith
   
-  # ................................................................
-  # ................................................................
-  # Statistic parameters ####
   # maximum proportion of missing data allowed in a characteristic evaluation
   # before it is excluded. 
   missper <- 0.5
@@ -95,9 +92,29 @@ done <- tryCatch({
   dpi <- 250
   out_width <- "100%"
   
-  # ................................................................
-  # ................................................................
-  # Organise the rankings and check for missing data ####
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 103. There was a problem compiling the parameters to process",
+      "the analysis."
+    )
+})
+
+
+if (isTRUE(grepl("Error 103", dtpars))) {
+  error <- c(error, dtpars)
+  done <- FALSE
+}
+
+
+# ................................................................
+# ................................................................
+# Organise the rankings ####
+# This is to check for missing data and create a vector
+# for each characteristic that will be used to filter 
+# inconsistent data
+org_rank <- tryCatch({
+  
   trait <- pars$chars$char
   
   trait_full <- pars$chars$char_full
@@ -121,7 +138,7 @@ done <- tryCatch({
     for(j in seq_along(trait_i)) {
       
       trait_i[j] <- names(cmdata[which(grepl(trait_i[j], names(cmdata)))])
-    
+      
     }
     
     # check for data completeness in this trait
@@ -186,9 +203,26 @@ done <- tryCatch({
   # refresh the number of traits
   ntrait <- length(trait_list)
   
-  # Now look for the explanatory variables
-  # if no variable is provided than add a pseudo variable that will be used 
-  # in pltree(), this is to fit the model with the intercept only
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 104. There was a problem organizing the rankings",
+      "in the ClimMob data."
+    )
+})
+
+if (isTRUE(grepl("Error 104", org_rank))) {
+  error <- c(error, org_rank)
+  done <- FALSE
+}
+
+# .......................................................
+# .......................................................
+# Organise the covariates ####
+# if no variable is provided than add a pseudo variable that will be used 
+# in pltree(), this is to fit the model with the intercept only
+org_covar <- tryCatch({
+  
   expvar_list <- list()
   
   if (any(expvar == "xinterceptx")) {
@@ -238,12 +272,24 @@ done <- tryCatch({
       expvar_list[["keep"]] <- keep
     }
     
-  }
-  
-  # .......................................................
-  # .......................................................
-  # Make map ####
-  
+}
+}, error = function(e) {
+      e$message <-
+        paste(
+          "Error 105. There was a problem organizing the covariates",
+          "that were selected for the anlysis."
+        )
+})
+
+if (isTRUE(grepl("Error 105", org_covar))) {
+  error <- c(error, org_covar)
+  done <- FALSE
+}
+
+# .......................................................
+# .......................................................
+# Make map ####
+org_lonlat <- tryCatch({
   # Check if lonlat is provided
   lon <- grepl("_lon", names(cmdata))
   lat <- grepl("_lat", names(cmdata))
@@ -280,13 +326,30 @@ done <- tryCatch({
     
     trial_map_statement <- ""
     
-  }
-  
-  
-  # .......................................................
-  # .......................................................
-  # Make Table 1 ####
-  # Create a table with frequencies where each item was evaluated #
+  }  
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 106. There was a problem producing the map with",
+      "the locations where trial data were collected."
+    )
+})
+
+if (isTRUE(grepl("Error 106", org_lonlat))) {
+  error <- c(error, org_lonlat)
+  geoTRUE <- FALSE
+  trial_map_statement <- ""
+}
+
+
+# .......................................................
+# .......................................................
+# Make frequencies of item evaluation #### 
+# This is a table, disaggregated by gender showing how many times
+# each item was tested 
+itemtable <- data.frame()
+
+try_freq_tbl <- tryCatch({
   itemdata <- cmdata[, grepl("package_item", names(cmdata))]
   
   itemtable <- data.frame(table(unlist(itemdata)))
@@ -328,16 +391,35 @@ done <- tryCatch({
   
   itemtable <- itemtable[union(c(Option, "Abbreviation"), names(itemtable))]
   
-  # .......................................................
-  # .......................................................
-  # Favourability Analysis Table ####
-  # do this for overall performance
-  
-  # find the index for overall evaluation
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 107. There was a problem producing the table with",
+      "the frequency of item evaluation."
+    )
+})
+
+if (isTRUE(grepl("Error 107", try_freq_tbl))) {
+  error <- c(error, try_freq_tbl)
+}
+
+
+# .......................................................
+# .......................................................
+# Favourability Analysis ####
+# first for overall performance
+net <- 0L
+fav1 <- 0L
+fav2 <- data.frame()
+cont1 <- 0L
+cont2 <- 0L
+
+try_fav_oa <- tryCatch({
+  # find the index for overall performance
   overall <- trait_list[[1]]
   
   if (isTRUE(overallVSlocal)) {
-      
+    
     keep <- overall$keep2 & overall$keep
     
     a <- list(cmdata[keep, ],
@@ -346,7 +428,7 @@ done <- tryCatch({
               additional.rank = cmdata[keep, overall$ovsl])
     
     R <- do.call(rankwith, args = a)
-
+    
   }
   
   if (isFALSE(overallVSlocal)) {
@@ -384,9 +466,23 @@ done <- tryCatch({
   
   cont2 <- summarise_victories(R)
   
-  # .......................................................
-  # .......................................................
-  # run the same for the other characteristics, if any
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 108. There was a problem performing the favourability analysis",
+      "based on the overall performance of tested items in the ClimMob project"
+    )
+})
+
+if (isTRUE(grepl("Error 108", try_fav_oa))) {
+  error <- c(error, try_fav_oa)
+}
+
+# .......................................................
+# .......................................................
+# run the same for the other characteristics
+try_fav_ot <- tryCatch({
+  
   other_traits <- trait[-1]
   
   other_traits_full <- trait_full[-1]
@@ -418,7 +514,7 @@ done <- tryCatch({
                          "Net Favourability Score")
       
       fav_other_traits[[i]] <- list(fav1_i, fav2_i)
-    
+      
       vic_other_traits[[i]] <- summarise_victories(R_i)
       
       dom_other_traits[[i]] <- summarise_dominance(R_i)
@@ -426,12 +522,28 @@ done <- tryCatch({
     }
   }
   
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 109. There was a problem performing the favourability analysis",
+      "for the other characteristics evaluated in the ClimMob project."
+    )
+})
+
+if (isTRUE(grepl("Error 109", try_fav_ot))) {
+  error <- c(error, try_fav_ot)
   
-  # .......................................................
-  # .......................................................
-  # Trait concordance ####
-  # this assess how the other traits agreed with the overall preference
-  # build rankings for the other characteristics
+  fav_other_traits <- list()
+  vic_other_traits <- list()
+  dom_other_traits <- list()
+}
+
+# .......................................................
+# .......................................................
+# Agreement analysis ####
+# this assess how the other traits agreed with the overall preference
+# build rankings for the other characteristics
+try_agree <- tryCatch({
   if (isTRUE(length(other_traits) > 0)) {
     
     # filter cmdata so it matches the dims in all traits
@@ -507,9 +619,39 @@ done <- tryCatch({
                             last = 0)
   }
   
-  # .......................................................
-  # .......................................................
-  # PlackettLuce Model ####
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 110. There was a problem performing the analysis on agreement",
+      "between overall performance and the other characteristics tested in",
+      "the ClimMob project."
+    )
+})
+
+if (isTRUE(grepl("Error 110", try_agree))) {
+  error <- c(error, try_agree)
+  
+  other_traits <- list()
+  strongest_link <- character()
+  weakest_link <- character()
+  agreement_table <- data.frame(Option = "Only Overall Performance was used",
+                                X = "",
+                                Y = "",
+                                Z = "")
+  names(agreement_table)<-c(" ","","  ","   ")
+  agreement <- data.frame(labels = "",
+                          kendall = 0,
+                          first = 0,
+                          last = 0)
+  
+  
+}
+
+# .......................................................
+# .......................................................
+# PlackettLuce Model ####
+try_pl <- tryCatch({
+  
   mod_overall <- PlackettLuce(R)
   
   model_summaries <- multcompPL(mod_overall, adjust = ci_adjust, ref = reference)
@@ -570,7 +712,7 @@ done <- tryCatch({
       Rot <- do.call(rankwith, args = a)
       
     }
-
+    
     mod_t <- PlackettLuce(Rot)
     
     mods[[i]] <- mod_t
@@ -598,7 +740,7 @@ done <- tryCatch({
             axis.text.y = element_text(size = 10, color = "#000000"))
     
     summ_i <- summ_i[, c("term", "estimate","quasiSE","group")]
-
+    
     names(summ_i) <- c(Option, "Estimate","quasiSE","Group")
     
     summaries[[i]] <- summ_i
@@ -636,12 +778,24 @@ done <- tryCatch({
   otf <- gsub(" ","_", other_traits_full)
   names(coefs)[1] <- c("Overall")
   
-  # .......................................................
-  # .......................................................
-  # Compute partial least squares ####
-  arrows <- data.frame()
-  scores <- data.frame()
-  
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 111. There was a problem fitting the Plackett-Luce model."
+    )
+})
+
+if (isTRUE(grepl("Error 111", try_pl))) {
+  error <- c(error, try_pl)
+  done <- FALSE
+}
+# .......................................................
+# .......................................................
+# Compute partial least squares ####
+arrows <- data.frame()
+scores <- data.frame()
+
+try_pls <- tryCatch({
   if (isTRUE(length(other_traits) > 0)) {
     names(coefs)[-1] <- ClimMobTools:::.title_case(otf)
     
@@ -675,12 +829,13 @@ done <- tryCatch({
   
   if (isTRUE(dim(arrows)[[1]] > 0)) {
     
-    pls_plot <- ggplot(data = arrows,
-                       aes(y = Comp.2, 
-                           x = Comp.1, 
-                           label = trait, 
-                           yend = y0, 
-                           xend = x0)) +
+    pls_plot <- 
+      ggplot(data = arrows,
+             aes(y = Comp.2, 
+                 x = Comp.1, 
+                 label = trait, 
+                 yend = y0, 
+                 xend = x0)) +
       geom_hline(yintercept = 0) + 
       geom_vline(xintercept = 0) +
       geom_segment(col = "red", arrow = arrow(length = unit(0.5, "cm"), ends = "first" )) +
@@ -698,9 +853,22 @@ done <- tryCatch({
     
   }
   
-  # .......................................................
-  # .......................................................
-  # Plackett-Luce trees with explanatory variables ####
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 112. There was a problem performing the Partial Least Squares",
+      "analysis with the ClimMob data"
+    )
+})
+
+if (isTRUE(grepl("Error 112", try_pls))) {
+  error <- c(error, try_pls)
+}
+
+# .......................................................
+# .......................................................
+# Plackett-Luce trees with explanatory variables ####
+try_plt <- tryCatch({
   if (isTRUE(overallVSlocal)) {
     
     keep <- overall$keep2 & expvar_list$keep
@@ -712,7 +880,7 @@ done <- tryCatch({
               group = TRUE)
     
     G <- do.call(rankwith, args = a)
-      
+    
     
   } 
   
@@ -802,10 +970,9 @@ done <- tryCatch({
     
     names(node_summary) <- c("Split","Number of Respondents","Best Ranked","Worst Ranked")
     
-    }
+  }
   
   # fitted 
-  
   outtabs <- NULL
   for(j in seq_along(tree_f)){
     
@@ -866,9 +1033,22 @@ done <- tryCatch({
     
   }
   
-  # ....................................................................
-  # ....................................................................
-  # Build headline summaries ####
+}, error = function(e) {
+  e$message <-
+    paste(
+      "Error 113. There was a problem fitting the Plackett-Luce Tree with",
+      "the in-putted covariates."
+    )
+})
+
+if (isTRUE(grepl("Error 113", try_plt))) {
+  error <- c(error, try_plt)
+  done <- FALSE
+}
+# ....................................................................
+# ....................................................................
+# Build headline summaries ####
+try_head_summ <- tryCatch({
   siglist <- NULL
   for(i in seq_along(outtabs)){
     if (dim(outtabs[[i]])[[2]] > 3) {
@@ -890,7 +1070,7 @@ done <- tryCatch({
     bests <- paste(bests, collapse =", ")
     
     worsts <- rev(model_summaries$term[grepl(model_summaries$group[nrow(model_summaries)],
-                                            model_summaries$group)])
+                                             model_summaries$group)])
     
     if(isTRUE(length(worsts) > 3)) {
       worsts <- worsts[1:3]
@@ -901,7 +1081,7 @@ done <- tryCatch({
   } else {
     
     bests <- worsts <- "No significant difference"
-  
+    
   }
   
   if (isTRUE(length(other_traits) > 0)) {
@@ -1021,10 +1201,16 @@ done <- tryCatch({
   agreem_h <- ntrait * 0.9
   multcomp_h <- nitems * 0.6 
   
-  done <- TRUE
-  
 }, error = function(e) {
-  return(FALSE)
+  e$message <-
+    paste(
+      "Error 114. There was a problem building the headline summaries of",
+      "the results in this report."
+    )
 })
 
+if (isTRUE(grepl("Error 114", try_head_summ))) {
+  error <- c(error, try_head_summ)
+  done <- FALSE
+}
 
