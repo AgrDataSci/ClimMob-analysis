@@ -256,7 +256,7 @@ node_statement <- paste("Table 1.5 shows which", options,
 `r  paste(node_statement, collapse='\n')`
 
 ```{r subgroups-found}
-if(isTRUE(length(siglist)>0)){
+if(isTRUE(length(tree_f) > 1)){
   kable(node_summary, 
         caption = paste0("Table 1.5. Summary of different subgroups identified",
                          " by the Plackett-Luce model."))

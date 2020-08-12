@@ -5,7 +5,7 @@
 # # ................................................................
 
 # get the arguments from server's call
-args <- commandArgs(trailingOnly = TRUE)
+#args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
 pathname    <- args[3] # the path where results will be written
@@ -136,7 +136,7 @@ if (all(infosheets, done)) {
 
 # if there was any error in the analysis, produce a error report 
 if (isFALSE(done)) {
-  rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport_failed.Rmd"),
+  rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport_failed.Rmd"),
                     output_dir = pathname,
                     output_format = output_format,
                     output_file = paste0("climmob_main_report", ".", extension))

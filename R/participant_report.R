@@ -351,7 +351,7 @@ for(i in seq_along(partitable$id)){
   
   text(x=xtop, 
        y=ytop[1], 
-       paste0(name, "'s Certificate of Participation in a Citizen Science Trial"), 
+       paste0(name, "'s Certificate of Participation in a ClimMob Trial"), 
        cex=textsize_2, 
        adj=c(0, NA))
   
