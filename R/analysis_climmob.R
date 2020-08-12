@@ -26,6 +26,9 @@ library("ggparty")
 library("patchwork")
 library("leaflet")
 library("multcompView")
+library("png")
+library("plotrix")
+library("gridExtra")
 source(paste0(fullpath, "/R/functions.R"))
 
 # ................................................................
@@ -190,9 +193,14 @@ org_rank <- tryCatch({
       
     }
     
+    # get the question registered in the survey
+    qi <- grepl(paste(strsplit(trait_i[[1]], "_")[[1]][-c(1:2)], collapse = "_"),
+                quest$name)
+    
     result[["keep"]] <- keep
     result[["input"]] <- trait_i
     result[["fullname"]] <- trait_full[i]
+    result[["question"]] <- quest$desc[qi]
     
     trait_list[[trait[i]]] <- result
     
@@ -202,6 +210,19 @@ org_rank <- tryCatch({
   
   # refresh the number of traits
   ntrait <- length(trait_list)
+  
+  # find the index for overall performance
+  overall <- trait_list[[1]]
+  
+  # and the other traits
+  other_traits <- trait[-1]
+  
+  other_traits_full <- trait_full[-1]
+  
+  other_traits_list <- trait_list[-1]
+  
+  # refresh number of other traits
+  nothertraits <- length(other_traits)
   
 }, error = function(e) {
   e$message <-
@@ -347,8 +368,6 @@ if (isTRUE(grepl("Error 106", org_lonlat))) {
 # Make frequencies of item evaluation #### 
 # This is a table, disaggregated by gender showing how many times
 # each item was tested 
-itemtable <- data.frame()
-
 try_freq_tbl <- tryCatch({
   itemdata <- cmdata[, grepl("package_item", names(cmdata))]
   
@@ -401,6 +420,7 @@ try_freq_tbl <- tryCatch({
 
 if (isTRUE(grepl("Error 107", try_freq_tbl))) {
   error <- c(error, try_freq_tbl)
+  itemtable <- data.frame()
 }
 
 
@@ -408,15 +428,7 @@ if (isTRUE(grepl("Error 107", try_freq_tbl))) {
 # .......................................................
 # Favourability Analysis ####
 # first for overall performance
-net <- 0L
-fav1 <- 0L
-fav2 <- data.frame()
-cont1 <- 0L
-cont2 <- 0L
-
 try_fav_oa <- tryCatch({
-  # find the index for overall performance
-  overall <- trait_list[[1]]
   
   if (isTRUE(overallVSlocal)) {
     
@@ -461,10 +473,31 @@ try_fav_oa <- tryCatch({
   names(fav2) <- c(Option,"N","Top Ranked",
                    "Bottom Ranked", "Net Favourability Score")
   
+  fav1 <- 
+    plot(fav1) + 
+    xlab("") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(size = 10, color = "#000000"),
+          axis.text.y = element_text(size = 10, color = "#000000"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.position = "none")
+  
   # Contest Plots
   cont1 <- summarise_dominance(R)
   
   cont2 <- summarise_victories(R)
+  
+  cont2 <-
+    plot(cont2) + 
+    labs(y = "", x = "") + 
+    theme_minimal() +  
+    theme(axis.text.x = element_text(size = 10, color = "#000000"),
+          axis.text.y = element_text(size = 10, color = "#000000"),
+          strip.text.x = element_text(size = 11, color = "#000000", face = "bold"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.position = "none")
   
 }, error = function(e) {
   e$message <-
@@ -476,6 +509,7 @@ try_fav_oa <- tryCatch({
 
 if (isTRUE(grepl("Error 108", try_fav_oa))) {
   error <- c(error, try_fav_oa)
+  done <- FALSE
 }
 
 # .......................................................
@@ -483,16 +517,14 @@ if (isTRUE(grepl("Error 108", try_fav_oa))) {
 # run the same for the other characteristics
 try_fav_ot <- tryCatch({
   
-  other_traits <- trait[-1]
-  
-  other_traits_full <- trait_full[-1]
-  
-  other_traits_list <- trait_list[-1]
-  
-  if (isTRUE(length(other_traits) > 0)) {
+  if (isTRUE(nothertraits > 0)) {
+    
     fav_other_traits <- list()
+    
     vic_other_traits <- list()
+    
     dom_other_traits <- list()
+    
     for(i in seq_along(other_traits_list)){
       
       a <- list(data = cmdata[other_traits_list[[i]]$keep, ],
@@ -532,10 +564,7 @@ try_fav_ot <- tryCatch({
 
 if (isTRUE(grepl("Error 109", try_fav_ot))) {
   error <- c(error, try_fav_ot)
-  
-  fav_other_traits <- list()
-  vic_other_traits <- list()
-  dom_other_traits <- list()
+  done <- FALSE
 }
 
 # .......................................................
@@ -544,10 +573,11 @@ if (isTRUE(grepl("Error 109", try_fav_ot))) {
 # this assess how the other traits agreed with the overall preference
 # build rankings for the other characteristics
 try_agree <- tryCatch({
-  if (isTRUE(length(other_traits) > 0)) {
+  if (isTRUE(nothertraits > 0)) {
     
     # filter cmdata so it matches the dims in all traits
     keep <- NULL
+    
     for(i in seq_along(trait_list)) {
       keep <- cbind(keep, trait_list[[i]]$keep)
     }
@@ -564,9 +594,10 @@ try_agree <- tryCatch({
     compare_to <- do.call(rankwith, args = a)
     
     compare_with <- list()
-    for (i in seq_along(other_traits)) {
+    
+    for (i in seq_along(other_traits_list)) {
       
-      ot <- trait_list[[other_traits[i]]]
+      ot <- other_traits_list[[i]]
       
       a <- list(cmdata[keep, ],
                 items = itemnames,
@@ -575,7 +606,6 @@ try_agree <- tryCatch({
       otr <- do.call(rankwith, args = a) 
       
       compare_with[[i]] <- otr
-      
     }
     
     agreement <- summarise_agreement(compare_to, 
@@ -597,7 +627,7 @@ try_agree <- tryCatch({
       x <- paste0(x,"%")
     })
     
-    names(agreement_table) <- c(Option, 
+    names(agreement_table) <- c("Characteristic", 
                                 "Complete Ranking Agreement",
                                 "Agreement with Overall Best", 
                                 "Agreement with Overall Worst")
@@ -605,7 +635,7 @@ try_agree <- tryCatch({
     
   } 
   
-  if (isTRUE(length(other_traits) == 0)) {
+  if (isTRUE(nothertraits == 0)) {
     strongest_link <- character()
     weakest_link <- character()
     agreement_table <- data.frame(Option = "Only Overall Performance was used",
@@ -631,14 +661,13 @@ try_agree <- tryCatch({
 if (isTRUE(grepl("Error 110", try_agree))) {
   error <- c(error, try_agree)
   
-  other_traits <- list()
   strongest_link <- character()
   weakest_link <- character()
   agreement_table <- data.frame(Option = "Only Overall Performance was used",
                                 X = "",
                                 Y = "",
                                 Z = "")
-  names(agreement_table)<-c(" ","","  ","   ")
+  names(agreement_table) <- c(" ","","  ","   ")
   agreement <- data.frame(labels = "",
                           kendall = 0,
                           first = 0,
@@ -651,7 +680,6 @@ if (isTRUE(grepl("Error 110", try_agree))) {
 # .......................................................
 # PlackettLuce Model ####
 try_pl <- tryCatch({
-  
   mod_overall <- PlackettLuce(R)
   
   model_summaries <- multcompPL(mod_overall, adjust = ci_adjust, ref = reference)
@@ -687,9 +715,8 @@ try_pl <- tryCatch({
   anovas <- list()
   aov_tables <- list()
   
-  for (i in seq_along(other_traits)){
-    ot <- other_traits[i]
-    ot <- trait_list[[ot]]
+  for (i in seq_along(other_traits_list)){
+    ot <- other_traits_list[[i]]
     
     if (isTRUE(overallVSlocal)) {
       keep <- overall$keep2 & ot$keep
@@ -792,11 +819,8 @@ if (isTRUE(grepl("Error 111", try_pl))) {
 # .......................................................
 # .......................................................
 # Compute partial least squares ####
-arrows <- data.frame()
-scores <- data.frame()
-
 try_pls <- tryCatch({
-  if (isTRUE(length(other_traits) > 0)) {
+  if (isTRUE(nothertraits > 0)) {
     names(coefs)[-1] <- ClimMobTools:::.title_case(otf)
     
     fml <- paste("Overall ~ ", paste(ClimMobTools:::.title_case(otf), collapse = " + "))
@@ -863,6 +887,8 @@ try_pls <- tryCatch({
 
 if (isTRUE(grepl("Error 112", try_pls))) {
   error <- c(error, try_pls)
+  arrows <- data.frame()
+  scores <- data.frame()
 }
 
 # .......................................................
@@ -1084,7 +1110,7 @@ try_head_summ <- tryCatch({
     
   }
   
-  if (isTRUE(length(other_traits) > 0)) {
+  if (isTRUE(nothertraits > 0)) {
     
     for(i in seq_along(anovas)){
       
@@ -1136,7 +1162,7 @@ try_head_summ <- tryCatch({
     
   } 
   
-  if (isTRUE(length(other_traits) == 0)) {
+  if (isTRUE(nothertraits == 0)) {
     ptab <- data.frame(Ranking = "Overall",
                        "Best Ranked" = bests,
                        "Worst Ranked" = worsts,
@@ -1179,6 +1205,7 @@ try_head_summ <- tryCatch({
   
   # This is the fist table in Section 1
   tbl_section1 <- data.frame()
+  
   for(i in seq_along(pars$chars[,1])) {
     
     nd <- try(sum(trait_list[[i]][["keep"]]), silent = TRUE)
@@ -1186,14 +1213,17 @@ try_head_summ <- tryCatch({
       nd <- 0L
     }
     
+    qi <- grepl(pars$chars$quest_1[i], quest$name)
+    
     d <- data.frame(name = pars$chars[i,"char_full"],
-                    char = pars$chars[i,"char"],
+                    char = quest$desc[qi],
                     n = nd)
     
     tbl_section1 <- rbind(tbl_section1, d)
+    
   }
   
-  names(tbl_section1) <- c("Characteristic", "Short name", "Number of valid answers")
+  names(tbl_section1) <- c("Characteristic", "Question", "Number of valid answers")
   
   # define height of plots based on items
   favplot_h <- nitems * 0.4

@@ -4,11 +4,6 @@
 # # ................................................................
 # # ................................................................
 
-# tag <- "CR2020"
-# args <- c(paste0("dev/data/",tag,"/data.json"), paste0("dev/data/",tag,"/info.json"),
-#          paste0("dev/output/",tag,"/"), "TRUE","en","html",
-#          "participant", "option", getwd(), NA)
-
 # get the arguments from server's call
 args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
@@ -33,7 +28,7 @@ done <- TRUE
 # ................................................................
 # Read data #### 
 # Read data with selected traits and explanatory variables to be analysed
-pars <- tryCatch({
+try_pars <- tryCatch({
   pars <- jsonlite::fromJSON(infoname)
   pars <- ClimMobTools:::.decode_pars(pars)
 }, error = function(e) {
@@ -45,17 +40,21 @@ pars <- tryCatch({
   }
 )
 
-if (isTRUE(grepl("Error 101", pars))) {
-  error <- c(error, pars)
+if (isTRUE(grepl("Error 101", try_pars))) {
+  error <- c(error, try_pars)
   done <- FALSE
 }
 
 # Read as json and add the class "CM_list" so it can be passed to as.data.frame 
 # method from ClimMobTools
-cmdata <- tryCatch({
+try_cmdata <- tryCatch({
   cmdata <- jsonlite::fromJSON(outputname)
   class(cmdata) <- union("CM_list", class(cmdata))
   cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
+  
+  quest <- jsonlite::fromJSON(outputname)
+  quest <- quest[["specialfields"]]
+  
 }, error = function(e) {
   e$message <-
     paste(
@@ -65,17 +64,10 @@ cmdata <- tryCatch({
 }
 )
 
-if (isTRUE(grepl("Error 102", cmdata))) {
-  error <- c(error, cmdata)
+if (isTRUE(grepl("Error 102", try_cmdata))) {
+  error <- c(error, try_cmdata)
   done <- FALSE
 }
-
-# ................................................................
-# ................................................................
-# Participant report parameters ####
-info_table_items <- c() #info.table.items <- c("variety 1", "variety 2", "variety 3")
-info_table_info <- c() #info.table.info <- c("plant it early", "good in high altitude", "")
-info_table_typeinfo <- "" #info.table.typeinfo <- "expert advice"
 
 # ................................................................
 # ................................................................
@@ -101,7 +93,7 @@ if (isTRUE(done)) {
   
   # the main report
   try_rep <- tryCatch({
-    rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport.Rmd"),
+    rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport.Rmd"),
                       output_dir = pathname,
                       output_format = output_format,
                       output_file = paste0("climmob_main_report", ".", extension))
@@ -118,19 +110,36 @@ if (isTRUE(done)) {
     error <- c(error, try_rep)
     done <- FALSE
   }
+}
+
+if (all(infosheets, done)) {
   
+  tryCatch({
+    dir.create(paste0(pathname, "/participant_report/png"),  
+               showWarnings = FALSE, recursive = TRUE)
+  })
+  
+  try_infosheet <- tryCatch({
+    source("R/participant_report.R")
+  }, error = function(e){
+    e$message <-
+      paste(
+        "Error 115. There was a problem writing the participants report(s)."
+      )
+  })
+  
+  if (isTRUE(grepl("Error 115", try_infosheet))) {
+    error <- c(error, try_infosheet)
+  }
   
 }
 
 # if there was any error in the analysis, produce a error report 
 if (isFALSE(done)) {
-  rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport/mainreport_failed.Rmd"),
+  rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport_failed.Rmd"),
                     output_dir = pathname,
                     output_format = output_format,
                     output_file = paste0("climmob_main_report", ".", extension))
 }
 
-# farmer reports if output type is "farmer" or "both"
-# if (isTRUE(infosheets)) {
-#   source("Farmer Reports/farmerreport.R")
-# }
+
