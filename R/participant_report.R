@@ -337,7 +337,7 @@ for(i in seq_along(partitable$id)){
   pngpath1 <- paste0(outputpath, "/participant_report/png/", 
                      partitable$id[i], ".png")
   
-  page1[[i]] <- paste0(getwd(), "/", pngpath1)
+  page1[[i]] <- pngpath1
   
   png(pngpath1, width= 21, height= 29, units="cm", res=300)
   par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5))
@@ -528,7 +528,7 @@ for(i in seq_along(partitable$id)){
   pngpath2 <- paste0(outputpath, "/participant_report/png/", 
                      partitable$id[i], "page2.png")
   
-  page2[[i]] <- paste0(getwd(), "/", pngpath2)
+  page2[[i]] <- pngpath2
   
   png(pngpath2, width= 21, height= 29, units="cm", res=300)
   par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5))
@@ -579,3 +579,4 @@ for(i in seq_along(partitable$id)){
                     output_file = paste0("participant_report_", ranker_description, ".",extension))
   
 }
+
