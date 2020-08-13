@@ -1,7 +1,6 @@
 
 <!-- badges: start -->
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3976638.svg)](https://doi.org/10.5281/zenodo.3976638)
-[![license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 [![ProjStatus](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
