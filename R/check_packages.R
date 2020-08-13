@@ -43,20 +43,11 @@ if (isFALSE(latest)) {
 
 }
 
-latest <- latest_version("climatrends",
-                          "https://raw.githubusercontent.com/agrobioinfoservices/climatrends/master/DESCRIPTION")
-
-if (isFALSE(latest)) {
-  remotes::install_github("agrobioinfoservices/climatrends",
-                          upgrade = "never", 
-                          force = TRUE)
-  
-}
-
 pkg <- c("PlackettLuce", "partykit", "qvcalc", "psychotools", "jsonlite", 
          "knitr", "rmarkdown", "pls", "gtools", "ggplot2", "leaflet",
          "igraph", "mapview", "ggrepel", "patchwork", "ggparty", "multcompView",
          "png", "plotrix","gridExtra")
+
 
 install.packages(pkg)
 

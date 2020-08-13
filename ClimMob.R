@@ -8,7 +8,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
-pathname    <- args[3] # the path where results will be written
+outputpath  <- args[3] # the path where results will be written
 infosheets  <- as.logical(args[4]) # logical, if infosheets should be written TRUE FALSE
 language    <- args[5] # the language to write the report "en" for english and "es" for spanish
 extension   <- args[6] # report file format it can be "docx", "pdf", and "html"
@@ -74,7 +74,7 @@ if (any_error(try_cmdata)) {
 # ................................................................
 # Run analysis ####
 tryCatch({
-  dir.create(pathname, showWarnings = FALSE, recursive = TRUE)
+  dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
 })
 
 if (isTRUE(done)) {
@@ -93,7 +93,7 @@ output_format <- ifelse(extension == "docx","word_document",
 if (all(infosheets, done)) {
   
   tryCatch({
-    dir.create(paste0(pathname, "/participant_report/png"),  
+    dir.create(paste0(outputpath, "/participant_report/png"),  
                showWarnings = FALSE, recursive = TRUE)
   })
   
@@ -118,7 +118,7 @@ if (isTRUE(done)) {
   # the main report
   try_rep <- tryCatch({
     rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport.Rmd"),
-                      output_dir = pathname,
+                      output_dir = outputpath,
                       output_format = output_format,
                       output_file = paste0("climmob_main_report", ".", extension))
   }, error = function(cond) {
@@ -137,9 +137,9 @@ if (isTRUE(done)) {
 # if there was any error in the analysis, produce a error report 
 if (isFALSE(done)) {
   rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport_failed.Rmd"),
-                    output_dir = pathname,
+                    output_dir = outputpath,
                     output_format = output_format,
                     output_file = paste0("climmob_main_report", ".", extension))
 }
 
-
+print(error)

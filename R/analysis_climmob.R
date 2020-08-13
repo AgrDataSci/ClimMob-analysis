@@ -20,11 +20,11 @@ library("pls")
 library("gtools")
 library("ggplot2")
 library("igraph")
-library("mapview")
 library("ggrepel")
 library("ggparty")
 library("patchwork")
 library("leaflet")
+library("mapview")
 library("multcompView")
 library("png")
 library("plotrix")
@@ -325,8 +325,8 @@ org_lonlat <- tryCatch({
       trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = FALSE)
       
       mapshot(trial_map, 
-              url = paste0(getwd(), "/", pathname, projname, "_trial_map.html"),
-              file = paste0(getwd(), "/", pathname, projname, "_trial_map.png"))
+              url = paste0(getwd(), "/", outputpath, projname, "_trial_map.html"),
+              file = paste0(getwd(), "/", outputpath, projname, "_trial_map.png"))
       
     }
     
@@ -348,6 +348,7 @@ org_lonlat <- tryCatch({
 
 if (any_error(org_lonlat)) {
   e <- paste("Error 106.", org_lonlat$message)
+  error <- c(error, e)
   geoTRUE <- FALSE
   trial_map_statement <- ""
 }
