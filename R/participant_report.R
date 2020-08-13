@@ -66,7 +66,7 @@ infotable <- infotable[order(infotable$rank), ]
 # ................................................................
 # Get the info from the participants ####
 sel <- c("id", "package_farmername", paste0("package_item_", LETTERS[1:ncomp]))
-partitable <- cmdata[keep, sel]
+partitable <- cmdata[, sel]
 
 names(partitable) <- gsub("package_|farmer", "", names(partitable))
 
@@ -82,14 +82,30 @@ ord <- as.data.frame(ord)
 
 names(ord) <- paste0("Position", 1:ncomp)
 
-partitable <- cbind(partitable, ord)
+# empty matrix to expand values from ord so it can fit partitable
+# in case of missing data
+x <- matrix(NA, 
+            ncol = ncomp, 
+            nrow = length(cmdata$id),
+            dimnames = list(seq_along(cmdata$id), paste0("Position", 1:ncomp)))
+
+partitable <- cbind(partitable, x)
+
+partitable[keep, paste0("Position", 1:ncomp)] <- ord
+
+# fill NAs with "Not replied" in the first case and then with an empty character
+partitable$Position1[is.na(partitable$Position1)] <- "Not replied"
+partitable[is.na(partitable)] <- ""
 
 # ................................................................
 # ................................................................
 # If any other trait, do the same ####
 if(isTRUE(nothertraits > 0)){
+  
   otr <- list()
+  
   for(i in seq_along(other_traits_list)){
+    
     ot <- other_traits_list[[i]]
     
     a <- list(cmdata[ot$keep, ],
@@ -108,8 +124,6 @@ if(isTRUE(nothertraits > 0)){
       names(x)
     }))
     
-    #dimnames(R)[[1]] <- partitable$id
-    
     # expand the rankings (in rows) so it can fit with the full
     # information to include those participants who did not replied the
     # question 
@@ -119,7 +133,7 @@ if(isTRUE(nothertraits > 0)){
                    dimnames = list(partitable$id, 
                                    paste0("Position", 1:ncomp)))
     
-    Rexp[dimnames(R)[[1]], ] <- R
+    Rexp[ot$keep, ] <- R
     
     R <- Rexp
     
@@ -137,13 +151,16 @@ if(isTRUE(nothertraits > 0)){
     
     x <- NULL
     
+    # combine (by rows) the response for the participant i 
+    # across all the j other traits
     for(j in seq_along(other_traits_list)){
       
       x <- rbind(x, otr[[j]][i, ])
       
     }
     
-    x <- rbind(ord[i, ], x)
+    # combine it with the main ranking for overall performance
+    x <- rbind(partitable[i, paste0("Position", 1:ncomp) ], x)
     
     # add the question that was made
     x <- cbind(Question = tbl_section1$Question, x)
@@ -321,7 +338,6 @@ for(i in seq_along(partitable$id)){
   
   # name of ranker
   name <- partitable$name[i]
-
   
   # items ranked by the ranker, ordered
   your_ranking <- as.vector(unlist(partitable[i, paste0("Position", 1:ncomp)]))

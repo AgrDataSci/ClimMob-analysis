@@ -142,6 +142,8 @@ if (isFALSE(done)) {
                     output_file = paste0("climmob_main_report", ".", extension))
 }
 
-print(error)
+if (length(error) > 0) {
+  print(error)
+}
 
 
