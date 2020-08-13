@@ -95,17 +95,14 @@ dtpars <- tryCatch({
   dpi <- 250
   out_width <- "100%"
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 103. There was a problem compiling the parameters to process",
-      "the analysis."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-
-if (isTRUE(grepl("Error 103", dtpars))) {
-  error <- c(error, dtpars)
+if (any_error(dtpars)) {
+  e <- paste("Error 103.", dtpars$message)
+  error <- c(error, e)
   done <- FALSE
 }
 
@@ -224,16 +221,14 @@ org_rank <- tryCatch({
   # refresh number of other traits
   nothertraits <- length(other_traits)
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 104. There was a problem organizing the rankings",
-      "in the ClimMob data."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 104", org_rank))) {
-  error <- c(error, org_rank)
+if (any_error(org_rank)) {
+  e <- paste("Error 104.", org_rank$message)
+  error <- c(error, e)
   done <- FALSE
 }
 
@@ -294,16 +289,14 @@ org_covar <- tryCatch({
     }
     
 }
-}, error = function(e) {
-      e$message <-
-        paste(
-          "Error 105. There was a problem organizing the covariates",
-          "that were selected for the anlysis."
-        )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 105", org_covar))) {
-  error <- c(error, org_covar)
+if (any_error(org_covar)) {
+  e <- paste("Error 105.", org_covar$message)
+  error <- c(error, e)
   done <- FALSE
 }
 
@@ -348,20 +341,16 @@ org_lonlat <- tryCatch({
     trial_map_statement <- ""
     
   }  
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 106. There was a problem producing the map with",
-      "the locations where trial data were collected."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 106", org_lonlat))) {
-  error <- c(error, org_lonlat)
+if (any_error(org_lonlat)) {
+  e <- paste("Error 106.", org_lonlat$message)
   geoTRUE <- FALSE
   trial_map_statement <- ""
 }
-
 
 # .......................................................
 # .......................................................
@@ -410,19 +399,16 @@ try_freq_tbl <- tryCatch({
   
   itemtable <- itemtable[union(c(Option, "Abbreviation"), names(itemtable))]
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 107. There was a problem producing the table with",
-      "the frequency of item evaluation."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 107", try_freq_tbl))) {
-  error <- c(error, try_freq_tbl)
+if (any_error(try_freq_tbl)) {
+  e <- paste("Error 107.", try_freq_tbl$message)
+  error <- c(error, e)
   itemtable <- data.frame()
 }
-
 
 # .......................................................
 # .......................................................
@@ -499,16 +485,14 @@ try_fav_oa <- tryCatch({
           panel.grid.minor = element_blank(),
           legend.position = "none")
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 108. There was a problem performing the favourability analysis",
-      "based on the overall performance of tested items in the ClimMob project"
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 108", try_fav_oa))) {
-  error <- c(error, try_fav_oa)
+if (any_error(try_fav_oa)) {
+  e <- paste("Error 108.", try_fav_oa$message)
+  error <- c(error, e)
   done <- FALSE
 }
 
@@ -554,16 +538,14 @@ try_fav_ot <- tryCatch({
     }
   }
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 109. There was a problem performing the favourability analysis",
-      "for the other characteristics evaluated in the ClimMob project."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 109", try_fav_ot))) {
-  error <- c(error, try_fav_ot)
+if (any_error(try_fav_ot)) {
+  e <- paste("Error 109.", try_fav_ot$message)
+  error <- c(error, e)
   done <- FALSE
 }
 
@@ -649,17 +631,14 @@ try_agree <- tryCatch({
                             last = 0)
   }
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 110. There was a problem performing the analysis on agreement",
-      "between overall performance and the other characteristics tested in",
-      "the ClimMob project."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 110", try_agree))) {
-  error <- c(error, try_agree)
+if (any_error(try_agree)) {
+  e <- paste("Error 110.", try_agree$message)
+  error <- c(error, e)
   
   strongest_link <- character()
   weakest_link <- character()
@@ -672,8 +651,6 @@ if (isTRUE(grepl("Error 110", try_agree))) {
                           kendall = 0,
                           first = 0,
                           last = 0)
-  
-  
 }
 
 # .......................................................
@@ -695,14 +672,14 @@ try_pl <- tryCatch({
                             check.names = FALSE)
   
   # Get Table 3.4
-  worthscaled <- worthscaled[,c("label", "worth", "prob")]
+  worthscaled <- worthscaled[, c("label", "worth", "prob")]
   row.names(worthscaled) <- NULL
   names(worthscaled) <- c(Option, c("Worth", "Win probability"))
   
   
   # Get the aov Table 1.1
   aov_mod_overall <- anova.PL(mod_overall)
-  aov_mod_overall[,5] <- paste(format.pval(aov_mod_overall[,5]), 
+  aov_mod_overall[, 5] <- paste(format.pval(aov_mod_overall[,5]), 
                                stars.pval(aov_mod_overall[,5]))
   aov_mod_overall[2, "model"] <- "Overall performance"
   
@@ -805,15 +782,14 @@ try_pl <- tryCatch({
   otf <- gsub(" ","_", other_traits_full)
   names(coefs)[1] <- c("Overall")
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 111. There was a problem fitting the Plackett-Luce model."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 111", try_pl))) {
-  error <- c(error, try_pl)
+if (any_error(try_pl)) {
+  e <- paste("Error 111.", try_pl$message)
+  error <- c(error, e)
   done <- FALSE
 }
 # .......................................................
@@ -877,16 +853,14 @@ try_pls <- tryCatch({
     
   }
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 112. There was a problem performing the Partial Least Squares",
-      "analysis with the ClimMob data"
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 112", try_pls))) {
-  error <- c(error, try_pls)
+if (any_error(try_pls)) {
+  e <- paste("Error 112.", try_pls$message)
+  error <- c(error, e)
   arrows <- data.frame()
   scores <- data.frame()
 }
@@ -1059,16 +1033,14 @@ try_plt <- tryCatch({
     
   }
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 113. There was a problem fitting the Plackett-Luce Tree with",
-      "the in-putted covariates."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 113", try_plt))) {
-  error <- c(error, try_plt)
+if (any_error(try_plt)) {
+  e <- paste("Error 113.", try_plt$message)
+  error <- c(error, e)
   done <- FALSE
 }
 # ....................................................................
@@ -1231,16 +1203,14 @@ try_head_summ <- tryCatch({
   agreem_h <- ntrait * 0.9
   multcomp_h <- nitems * 0.6 
   
-}, error = function(e) {
-  e$message <-
-    paste(
-      "Error 114. There was a problem building the headline summaries of",
-      "the results in this report."
-    )
-})
+}, error = function(cond) {
+  return(cond)
+}
+)
 
-if (isTRUE(grepl("Error 114", try_head_summ))) {
-  error <- c(error, try_head_summ)
+if (any_error(try_head_summ)) {
+  e <- paste("Error 114.", try_head_summ$message)
+  error <- c(error, e)
   done <- FALSE
 }
 

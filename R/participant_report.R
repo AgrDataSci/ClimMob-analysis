@@ -280,7 +280,7 @@ global_ranking_colors <- rgb(colorRamp(text_colors)(rev(scale01(infotable$rank))
 # ................................................................
 # ................................................................
 # create a black arrow, saved as external file
-png(paste0(fullpath, "/", pathname, "participant_report/png/mask.png"))
+png(paste0(pathname, "/participant_report/png/mask.png"))
 ytmp1 <- max(y[length(y)],-35)
 ytmp2 <- y[3]
 grid.polygon(
@@ -303,7 +303,7 @@ dev.off()
 # ................................................................
 # ................................................................
 # read back in the arrow as colour matrix
-m <- readPNG(paste0(fullpath, "/", pathname, "participant_report/png/mask.png"), native=FALSE)
+m <- readPNG(paste0(pathname, "/participant_report/png/mask.png"), native=FALSE)
 mask <- matrix(rgb(m[,,1],m[,,2],m[,,3]),
                nrow=nrow(m))
 rmat <- matrix(grey(seq(0,1,length=nrow(m))),
@@ -332,8 +332,8 @@ for(i in seq_along(partitable$id)){
   width_yours <- global_width[match(your_ranking, infotable$item)] 
   
   # make the result png file
-  pngpath1 <- paste0(fullpath, "/", pathname, "participant_report/png/", 
-                       partitable$id[i], ".png")
+  pngpath1 <- paste0(pathname, "/participant_report/png/", 
+                     partitable$id[i], ".png")
   
   png(pngpath1, width= 21, height= 29, units="cm", res=300)
   par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5))
@@ -519,7 +519,7 @@ for(i in seq_along(partitable$id)){
   
   if(isTRUE(nothertraits > 0)){
   # make the result png file
-  pngpath2 <- paste0(fullpath, "/", pathname, "participant_report/png/", 
+  pngpath2 <- paste0(pathname, "/participant_report/png/", 
                      partitable$id[i], "page2.png")
   
   png(pngpath2, width= 21, height= 29, units="cm", res=300)
@@ -566,61 +566,8 @@ for(i in seq_along(partitable$id)){
   ranker_description <- paste0(id_i, "_", name)
   
   rmarkdown::render(paste0(fullpath, "/report/", language, "/participant_report.Rmd"),
-                    output_dir = paste0(pathname, "participant_report/"),
+                    output_dir = paste0(pathname, "/participant_report/"),
                     output_format = output_format,
                     output_file = paste0("participant_report_", ranker_description, ".",extension))
   
 }
-
-# # ................................................................
-# # ................................................................
-# # make the list of items with info png file
-# png(paste0(fullpath, "/", pathname, "participant_report/png/items.png"),
-#     width= 8.27, height= 11.7, units="in", res=300)
-# par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5), lheight=.9)
-# plot.new()
-# plot.window(ylim=c(-35,0), xlim=c(xstart, xend))
-# 
-# # title
-# rect(xleft=xstart, 
-#      ybottom=y2["title"]-htitle*1/3, 
-#      xright = xend, 
-#      ytop = y2["title"]+htitle/3, 
-#      col=grey_dark, 
-#      border=NA)
-# 
-# text(xtitle[2], 
-#      y2["title"], 
-#      paste("Information about the", options),
-#      font=2, 
-#      cex=textsize_3, 
-#      col="white")
-# 
-# #header
-# text(xstart,
-#      y2["header"], 
-#      options, 
-#      adj=c(0,NA), 
-#      cex=textsize_3,  
-#      font=2)
-# 
-# text(xinfo,y2["header"],
-#      paste("Which of the", ncomp, options, "that you received", 
-#            "had the best overall impression?"), 
-#      adj=c(0,NA),
-#      cex=textsize_3,  
-#      font=2)
-# 
-# #List items
-# text(xstart,
-#      y2[-(1:2)], 
-#      infotable$items, 
-#      adj=c(0,NA), 
-#      cex=textsize_1)
-# 
-# 
-# #Items/varieties info/advice
-# text(xinfo,y2[-(1:2)], "blab kakankan", adj=c(0,NA), cex=textsize_1)
-# 
-# dev.off()
-
