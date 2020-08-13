@@ -267,7 +267,7 @@ draw.emojis <- function(x,y,type="happy",radius=0.3, color="grey", border="black
   if(type=="sad") draw.arc(x,y-radius/1.5,radius=radius/2, deg1=20, deg2=160, col=border, lwd=thickness/1.2)
   if(type=="neutral") segments(x0=x-radius/4, x1=x+radius/4, y0=y-radius/3, y1=y-radius/3, lwd = thickness, col=border)
 }
-draw.emojis<-Vectorize(draw.emojis)
+draw.emojis <- Vectorize(draw.emojis)
 
 #' Visualise network
 #' @param object an object of class rankings
@@ -746,21 +746,3 @@ plot_coef <- function(object, ...) {
   
 }
 
-# Plot map using mapview
-# @param data a data frame
-# @param coords index of data for the lonlat coordinates
-# @param add any additional index for colunms in data to add to the map
-# plot_map <- function(data, coords = NULL, add = NULL, ...) {
-#   
-#   lonlat <- data[, c(coords, add)]
-#   
-#   lonlat <- stats::na.omit(lonlat)
-#   
-#   lonlat <- suppressWarnings(
-#     sf::st_as_sf(lonlat, coords = c("lon","lat"), crs = 4326)
-#   )
-#   
-#   suppressWarnings(
-#     mapview::mapview(lonlat, ...)
-#   )
-# }

@@ -1,11 +1,13 @@
-ClimMob-analysis v1.1-1 (2020-08-10)
+ClimMob-analysis v1.1-1 (2020-08-13)
 =========================
 
 ### Improvements
 * More informative error messages
+* Enable the production of participants individual reports
+* Many bug fixes
 
 ### Changes in behaviour
-* Name the report without project 'tag'. The convention is `paste0("climmob_main_report", ".", extension)`
+* Name the report without project 'code'. The convention is `paste0("climmob_main_report", ".", extension)`
 
 ClimMob-analysis v1.1 (2020-08-08)
 =========================

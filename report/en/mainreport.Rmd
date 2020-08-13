@@ -102,20 +102,20 @@ if (isTRUE("igraph" %in% class(net))){
 
 \
 
-```{r any_error}
-any_error <- ""
+```{r error}
+e <- ""
 if (isFALSE(is.null(error))){
-  any_error <- paste("During the execution of the requested analysis",
-                      "we also found the following errors that disabled",
-                      "the production of some results (tables, charts).",
-                      "Please report the errors to the ClimMob Team, via the",
-                      "'Chat bot' in your ClimMob account.")
+  e <- paste("During the execution of the requested analysis",
+             "we also found the following errors that disabled",
+             "the production of some outputs.",
+             "Please report the error(s) to the ClimMob Team, via the",
+             "'Chat bot' in your ClimMob account.")
 }
 ```
 
-`r paste(any_error, collapse = '\n')`
+`r paste(e, collapse = '\n')`
 
-```{r any_error2}
+```{r error2}
 if (isFALSE(is.null(error))){
 print(error)
 }
@@ -691,7 +691,7 @@ if (isTRUE(length(tree_f) > 1)) {
 }
 ```
 
-\
+\pagebreak
 
 # References
 

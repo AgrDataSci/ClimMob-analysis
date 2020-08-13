@@ -12,16 +12,12 @@ knitr::opts_chunk$set(echo = FALSE, error = FALSE,message=FALSE,warning = FALSE)
 ```
 
 ```{r image-ref-for-in-text, echo = FALSE, message=FALSE, fig.align='center', out.width='.99\\linewidth', fig.pos='H'}
-knitr::include_graphics(paste0(fullpath, "/", pathname, 
-                               "participant_report/png/",
-                               partitable$id[i], ".png"))
+knitr::include_graphics(page1[[i]])
 ```
 
 ```{r other_chars2}
 if(isTRUE(nothertraits > 0)){
-knitr::include_graphics(paste0(fullpath, "/", pathname, 
-                               "participant_report/png/",
-                               partitable$id[i], "page2.png"))
+knitr::include_graphics(page2[[i]])
 }
 ```
 
