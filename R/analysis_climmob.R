@@ -24,7 +24,6 @@ library("ggrepel")
 library("ggparty")
 library("patchwork")
 library("leaflet")
-library("mapview")
 library("multcompView")
 library("png")
 library("plotrix")
@@ -323,10 +322,6 @@ org_lonlat <- tryCatch({
     if (nlonlat > 0){
       
       trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = FALSE)
-      
-      mapshot(trial_map, 
-              url = paste0(outputpath, projname, "_trial_map.html"),
-              file = paste0(outputpath, projname, "_trial_map.png"))
       
     }
     
