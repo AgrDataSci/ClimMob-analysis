@@ -5,11 +5,11 @@
 [![Lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-# *ClimMob*: Workflow for data analysis using the ClimMob platform
+# Workflow for data analysis and report with crowdsourced citizen science-generated data
 
 ## Overview
 
-This repository contains the code used in the workflow to analyse and create reports from the [ClimMob](https://climmob.net/blog/) platform. Read the latest enhancements in this algorithm [here](NEWS.md).
+This repository contains the code used in the workflow to analyse data and create reports for the [ClimMob](https://climmob.net/blog/) platform. Read the latest enhancements in this algorithm [here](NEWS.md).
 
 ## Repository organisation
 
