@@ -78,12 +78,10 @@ plot_map <- function(data,
                                    provider =  map_provider, 
                                    options = leaflet::providerTileOptions(maxNativeZoom = 17))
   
-  map <- leaflet::addCircleMarkers(map = map, 
-                                   radius = 2, 
-                                   opacity = 1,
-                                   fillOpacity = 1, 
-                                   fillColor = "black", 
-                                   color = "#d73027")
+  #map <- leaflet::addCircleMarkers(map = map)
+  
+  map <- leaflet::addMarkers(map)
+  
   if (isTRUE(minimap)) {
     
     map <- leaflet::addMiniMap(map = map, position = minimap_position)
@@ -95,7 +93,6 @@ plot_map <- function(data,
   return(map)
   
 }
-
 
 scale01 <- function(x) (x-min(x))/(max(x)-min(x))
 
