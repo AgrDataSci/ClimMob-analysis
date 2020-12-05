@@ -382,7 +382,7 @@ knitr::kable(fav2,
 
 This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head to head contests' for which the `r option` won and the net *favourability* score. A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
 
-```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favourability score for for the characteristic '", ovname, "'.")}
+```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favourability score for the characteristic '", ovname, "'.")}
 plot(fav1)
 ```
 

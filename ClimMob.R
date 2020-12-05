@@ -7,7 +7,7 @@
 # # ................................................................
 # Arguments ####
 # get the arguments from server's call
-#args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 infoname    <- args[1] # a json file with parameters for the analysis
 outputname  <- args[2] # a json file with the results
 outputpath  <- args[3] # the path where results will be written
@@ -63,7 +63,6 @@ any_error <- function(x){
 # Read data with selected traits and explanatory variables to be analysed
 try_pars <- tryCatch({
   pars <- jsonlite::fromJSON(infoname)
-  #pars$Characteristics <- pars$Characteristics[-5,]
   pars <- ClimMobTools:::.decode_pars(pars)
 }, error = function(cond) {
     return(cond)
