@@ -64,9 +64,9 @@ dtpars <- tryCatch({
   nquest <- pars$chars$n_quest[1]
   rankwith <- rankwith
   
-  # maximum proportion of missing data allowed in a characteristic evaluation
+  # minimum n of complete data required in a characteristic evaluation
   # before it is excluded. 
-  missper <- 0.5
+  missper <- 4
   
   # minimum proportion of valid observations in explanatory variables
   missexp <- 0.8
@@ -146,13 +146,14 @@ org_rank <- tryCatch({
     keep <- apply(cmdata[trait_i], 1, is.na)
     keep <- as.vector(colSums(keep) == 0)
     
-    # check if proportion of missing data is larger than the threshold
-    dropit <- (sum(keep) / nranker) < missper
+    # check if number of missing data is lower than the threshold
+    dropit <- sum(keep) < missper
     
-    # if larger than it will be dropped
+    # if lower than missper it will be dropped
     if (isTRUE(dropit)) next
     
     # if required, add comparison with local item
+    # again, it assumes that overall performance is the first characteristic
     if (isTRUE(i == 1 & overallVSlocal)) {
       
       ovsl <- as.vector(pars$perf[, paste0("quest_", seq_len(pars$perf$n_quest))])
@@ -261,8 +262,8 @@ org_covar <- tryCatch({
       keep <- cbind(keep, k)
     }
     
-    # find those that are bellow the threshold of missexp
-    dropit <- (colSums(keep) / nranker) < missexp
+    # find those that are above the threshold of missexp
+    dropit <- (colSums(keep) / nranker) > missexp
     
     # drop those bellow threshold
     keep <- as.data.frame(keep[, !dropit])

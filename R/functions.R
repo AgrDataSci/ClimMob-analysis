@@ -85,7 +85,7 @@ plot_map <- function(data,
   if (isTRUE(minimap)) {
     
     map <- leaflet::addMiniMap(map = map, position = minimap_position)
-  
+    
   }
   
   map$x$options = list("zoomControl" = FALSE)
@@ -285,7 +285,7 @@ network <- function(object, ...) {
   adj <- btdata(adj, return_graph = TRUE)
   
   netw <- adj$graph
-
+  
 }
 
 
@@ -706,7 +706,7 @@ plot_worth_bar <- function(object, value, group, palette = NULL){
                    panel.grid.major = element_blank(),
                    axis.text.x = element_text(color = "#000000")) +
     ggplot2::labs(y = "",
-         x = "") + 
+                  x = "") + 
     ggplot2::geom_text(aes(label = group), 
                        position = position_dodge(width = 1), hjust = -.1)
   
@@ -742,4 +742,3 @@ plot_coef <- function(object, ...) {
           axis.text.y = element_text(size = 9, colour = "black"))
   
 }
-
