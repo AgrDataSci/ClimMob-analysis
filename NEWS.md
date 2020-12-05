@@ -3,9 +3,9 @@ ClimMob-analysis v1.1-2 (2020-12-05)
 
 ### Changes in behaviour
 
-* The native characteristic 'overall characteristic' from the ClimMob default library is not required. If not provided the algorithm will used the last characteristic in the parameters file (info.json).
+* The native characteristic 'overall characteristic' from the ClimMob default library is not required. If not provided the algorithm will use the last characteristic in the parameters file (info.json).
 * The reported is adapted to accept this new behaviour.
-* If there is an error in matching the strings of covariates from the parameters (data.json) and data (info.json) the algorithm will not break but rather impute the "intercept" covariate.
+* In the case of error in matching the strings of covariates from the parameters (data.json) and data (info.json) the algorithm will not break but rather impute the "intercept" covariate.
 * The reference to the [Tricot user guide](https://hdl.handle.net/10568/109942) is added.
 
 
