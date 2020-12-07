@@ -1,5 +1,5 @@
 
-**`r other_traits_list[[i]]$fullname`**
+### `r other_traits_list[[i]]$fullname`
 
 ```{r, include=FALSE, echo=FALSE}
 f1 <- fav_other_traits[[i]][[1]]

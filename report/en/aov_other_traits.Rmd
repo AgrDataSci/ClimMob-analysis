@@ -1,4 +1,4 @@
-**`r other_traits_list[[i]]$fullname`**
+### `r other_traits_list[[i]]$fullname`
 
 
 ```{r}

@@ -45,7 +45,7 @@ If you publish any results generated with ClimMob, you should cite a number of a
 
 # Section 1: Headline results
 
-Overall there were `r nranker` `r rankers` contributing to this project. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of its '`r ovname`'. In addition they also provided rankings for `r nothertraits` additional characteristic(s): 
+Overall there were `r nranker` `r rankers` registered to this project. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of its '`r ovname`'. In addition they also provided rankings for `r nothertraits` additional characteristic(s): 
 
 ```{r characteristics}
 
@@ -106,7 +106,7 @@ if (isTRUE("igraph" %in% class(net))){
 e <- ""
 if (isFALSE(is.null(error))){
   e <- paste("During the execution of the requested analysis",
-             "we also found the following errors that disabled",
+             "we also found the following error(s) that disabled",
              "the production of some outputs.",
              "Please report the error(s) to the ClimMob Team, via the",
              "'Chat bot' in your ClimMob account.")
@@ -331,20 +331,20 @@ if (nothertraits > 0) {
 pls_statement <- ""
 if (isTRUE(dim(arrows)[[1]] > 0)) {
 pls_statement <- 
-    paste("Partial least squares regression was used to determine", 
-          "relationship between the specific characteristics and", 
-          "the characteristic '", ovname , "'. The first two components", 
-          "recombining the specific characteristics",
-          "are able to explain the variability in the '", ovname, "'.",
-          "The dashed line represents the the '", ovname, 
-          "' with an increase in performance as the x and y increase.",
-          "The", option, "positioned close to the dashed line will", 
-          "be performing equally across all characteristics;",
-          "the", option, "positioned further away from the dashed line,",
-          "on either side, will have varying performance",
-          "in different characteristics. Better performance in",
-          "characteristics will correspond with arrows pointing",
-          "in the direction away from the dashed line and worse",
+    paste0("Partial least squares regression was used to determine ", 
+          "relationship between the specific characteristics and ", 
+          "the characteristic '", ovname , "'. The first two components ", 
+          "recombining the specific characteristics ",
+          "are able to explain the variability in the '", ovname, "'. ",
+          "The dashed line represents the characteristic '", ovname, 
+          "' with an increase in performance as the x and y increase. ",
+          "The ", option, " positioned close to the dashed line will ", 
+          "be performing equally across all characteristics; ",
+          "the ", option, " positioned further away from the dashed line, ",
+          "on either side, will have varying performance ",
+          "in different characteristics. Better performance in ",
+          "characteristics will correspond with arrows pointing ",
+          "in the direction away from the dashed line and worse ",
           "performance in characteristics directed on the opposite side.")
 }
 
@@ -402,14 +402,14 @@ if (isTRUE(nrow(fav2) > 0)) {
 
 \
 
-### Other characteristics  
+## Other characteristics  
 
 ```{r fav_other_chars}
 fav_other_chars <- paste0("This report only assessed the characteristic '", ovname, "'.")
 
 if (isTRUE(nothertraits > 0)) {
   fav_other_chars <- 
-  paste0("Net favourability scores are shown below for the", 
+  paste0("Net favourability scores are shown below for the ", 
          "other characteristics assessed in this project.")
 } 
 ```
@@ -449,13 +449,13 @@ plot(cont2)
 
 \
 
-### Other characteristics 
+## Other characteristics 
 
 ```{r cont_other_chars}
 cont_other_chars <- paste0("This report only assessed the characteristic '", ovname, "'.")
 if (isTRUE(nothertraits > 0)) {
   cont_other_chars <-
-  paste0("Results from the pairwise contests of the other", 
+  paste0("Results from the pairwise contests of the other ", 
          "individual characteristics assessed are shown below.")
 } 
 ```
