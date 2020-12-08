@@ -339,7 +339,7 @@ org_covar <- tryCatch({
     }
     
     # find those that are above the threshold of missexp
-    dropit <- (colSums(keep) / nranker) > missexp
+    dropit <- missexp > (colSums(keep) / nranker)
     
     # drop those bellow threshold
     keep <- as.data.frame(keep[, !dropit])

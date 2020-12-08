@@ -1,6 +1,10 @@
 ClimMob-analysis v1.1-2 (2020-12-05)
 =========================
 
+### Improvements 
+
+* Enable the production of reports when registration and data collection are performed at the same time (*e.g.* market testing)
+
 ### Changes in behaviour
 
 * The native characteristic 'overall characteristic' from the ClimMob default library is not required. If not provided the algorithm will use the last characteristic in the parameters file (info.json).
