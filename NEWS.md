@@ -1,17 +1,20 @@
-ClimMob-analysis v1.1-2 (2020-12-05)
+ClimMob-analysis v1.1-2 (2020-12-11)
 =========================
 
 ### Improvements 
 
-* Enable the production of reports when registration and data collection are performed at the same time (*e.g.* market testing)
+* Enable the production of reports when registration and data collection are performed at the same time (*e.g.* market tasting)
 
 ### Changes in behaviour
 
-* The native characteristic 'overall characteristic' from the ClimMob default library is not required. If not provided the algorithm will use the last characteristic in the parameters file (info.json).
-* The reported is adapted to accept this new behaviour.
+* The native characteristic 'overall characteristic' from the ClimMob default library is not required. If not provided the algorithm will use the last characteristic submitted in the file with the parameters for analysis (info.json). The reported is adapted to accept this new behaviour.
 * In the case of error in matching the strings of covariates from the parameters (data.json) and data (info.json) the algorithm will not break but rather impute the "intercept" covariate.
 * The file "climmob.R" executes all the code required to produce the reports. It calls for the other files in "R/" when needed.
-* The reference to the [Tricot user guide](https://hdl.handle.net/10568/109942) is added.
+* The reference to the [Tricot user guide](https://hdl.handle.net/10568/109942) is added to the report.
+
+### Bug fixes
+
+* Fixes an issue in matching the names of explanatory variables by using the string `$` to indicate the end of the pattern. 
 
 
 ClimMob-analysis v1.1-1 (2020-08-14)

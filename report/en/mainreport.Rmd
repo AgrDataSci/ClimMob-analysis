@@ -154,9 +154,9 @@ if (isTRUE(is.na(ps[1]))) {
   
 if (any(na.omit(ps[2:length(ps)]) < sig_level)){
     stat_diff_statement <- paste0(stat_diff_statement,
-                                  ". Statistically significant differences were also ",
-                                 "found in the characteristic(s) ",
-                                 paste(na.omit(trait_full[ps[2:length(ps)] < sig_level]), collapse=", "))
+                                  ". Statistically significant differences were ",
+                                 "found in the characteristic(s) '",
+                                 tolower(paste(na.omit(trait_full[ps[2:length(ps)] < sig_level]), collapse="', '")), "'.")
 }
 ```
 
@@ -284,13 +284,13 @@ relation_other_chrs1 <-
 
 relation_other_chrs2 <- 
   paste0("The characteristic which had the strongest ", 
-        "relationship with '", ovname, "' was ", strongest_link[1], 
-        ". Overall, the rankings for ",  strongest_link[1], 
-        " matched the rankings for '", ovname, "' ",  strongest_link[2],
+        "relationship with '", ovname, "' was '", strongest_link[1], 
+        "'. Overall, the rankings for '",  strongest_link[1], 
+        "' matched the rankings for '", ovname, "' ",  strongest_link[2],
         "% of the time. The characteristic which had the weakest ", 
-        " relationship with '", ovname, "' was ",
-        weakest_link[1], ". Overall the rankings for " , weakest_link[1], 
-        " matched the rankings for '", ovname, "' " , weakest_link[2], 
+        " relationship with '", ovname, "' was '",
+        weakest_link[1], "'. Overall the rankings for '" , weakest_link[1], 
+        "' matched the rankings for '", ovname, "' " , weakest_link[2], 
         "% of the time. The correlation with the other ", 
         "characteristics is also shown in Figure 1.2.")
 

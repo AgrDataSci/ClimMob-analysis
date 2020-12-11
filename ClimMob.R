@@ -146,7 +146,7 @@ dtpars <- tryCatch({
   missper <- 4
   
   # minimum proportion of valid observations in explanatory variables
-  missexp <- 0.8
+  missexp <- 0.4
   
   # minimum split size for tree models
   minsplit <- ceiling(nranker * 0.1)
@@ -325,6 +325,9 @@ org_covar <- tryCatch({
   }
   
   if (all(expvar != "xinterceptx")) {
+    
+    # add the string $ to indicate the end of pattern
+    expvar <- paste0(expvar, "$")
     
     # check for the full names
     for(i in seq_along(expvar)){
