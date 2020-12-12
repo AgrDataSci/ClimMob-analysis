@@ -1,4 +1,4 @@
-### `r other_traits_list[[i]]$fullname`
+### `r other_traits_list[[i]]$code`
 
 ```{r}
 vic_i <- vic_other_traits[[i]]

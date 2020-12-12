@@ -136,6 +136,7 @@ dtpars <- tryCatch({
   nitems <- length(unique(sort(unlist(items))))
   expvar <- pars$expl$vars
   expvar_full <- pars$expl$name
+  expvar_code <- pars$expl$codeQst
   ntrait <- dim(pars$chars)[[1]]
   nothertraits <- dim(pars$chars)[[1]] - 1
   nquest <- pars$chars$n_quest[1]
@@ -193,6 +194,8 @@ org_rank <- tryCatch({
   trait <- pars$chars$char
   
   trait_full <- pars$chars$char_full
+  
+  trait_code <- pars$chars$char
   
   overallVSlocal <- length(pars$perf) > 0
   
@@ -273,6 +276,7 @@ org_rank <- tryCatch({
     result[["keep"]] <- keep
     result[["input"]] <- trait_i
     result[["fullname"]] <- trait_full[i]
+    result[["code"]] <- trait_code[i]
     result[["question"]] <- quest$desc[qi]
     
     trait_list[[trait[i]]] <- result
@@ -291,6 +295,8 @@ org_rank <- tryCatch({
   other_traits <- trait[-1]
   
   other_traits_full <- trait_full[-1]
+  
+  other_traits_code <- trait_code[-1]
   
   other_traits_list <- trait_list[-1]
   
@@ -317,14 +323,14 @@ org_covar <- tryCatch({
   
   expvar_list <- list()
   
-  if (any(expvar == "xinterceptx")) {
-    cmdata$xinterceptx <- rep(0, nranker)
-    expvar_list[["expvar"]] <- "xinterceptx"
+  if (any(expvar == "Intercept")) {
+    cmdata$Intercept <- rep(0, nranker)
+    expvar_list[["expvar"]] <- "Intercept"
     expvar_list[["expvar_full"]] <- "Intercept"
     expvar_list[["keep"]] <- rep(TRUE, nranker)
   }
   
-  if (all(expvar != "xinterceptx")) {
+  if (all(expvar != "Intercept")) {
     
     # add the string $ to indicate the end of pattern
     expvar <- paste0(expvar, "$")
@@ -353,17 +359,20 @@ org_covar <- tryCatch({
     
     expvar <- expvar[!dropit]
     expvar_full <- expvar_full[!dropit]
-    expvar_dropped <- expvar_full[dropit]
+    expvar_code <- expvar_code[!dropit]
+    expvar_dropped <- expvar_code[dropit]
     
     # if no explanatory variable left out put a pseudo variable
     if(isTRUE(length(expvar) == 0)) {
-      cmdata$xinterceptx <- rep(0, nranker)
-      expvar_list[["expvar"]] <- "xinterceptx"
+      cmdata$Intercept <- rep(0, nranker)
+      expvar_list[["expvar"]] <- "Intercept"
       expvar_list[["expvar_full"]] <- "Intercept"
+      expvar_list[["expvar_code"]] <- "Intercept"
       expvar_list[["keep"]] <- rep(TRUE, nranker)
     }else{
       expvar_list[["expvar"]] <- expvar
       expvar_list[["expvar_full"]] <- expvar_full
+      expvar_list[["expvar_code"]] <- expvar_code
       expvar_list[["keep"]] <- keep
     }
     
@@ -379,10 +388,11 @@ if (any_error(org_covar)) {
   
   expvar_list <- list()
   
-  expvar <- "xinterceptx"
-  cmdata$xinterceptx <- rep(0, nranker)
-  expvar_list[["expvar"]] <- "xinterceptx"
+  expvar <- "Intercept"
+  cmdata$Intercept <- rep(0, nranker)
+  expvar_list[["expvar"]] <- "Intercept"
   expvar_list[["expvar_full"]] <- "Intercept"
+  expvar_list[["expvar_code"]] <- "Intercept"
   expvar_list[["keep"]] <- rep(TRUE, nranker)
   
 }
@@ -398,8 +408,14 @@ org_lonlat <- tryCatch({
   geoTRUE <- all(any(lon), any(lat))
   
   if (isTRUE(geoTRUE)) {
-    lon <- which(lon)[1]
-    lat <- which(lat)[1]
+    
+    #find the vector with most completeness 
+    less_nas <- lapply(cmdata[lon], function(x){
+      sum(is.na(x))
+    })
+    
+    lon <- names(which.min(unlist(less_nas)))
+    lat <- gsub("_lon", "_lat", lon)
     
     lonlat <- cmdata[,c(lon,lat)]
     
@@ -409,7 +425,8 @@ org_lonlat <- tryCatch({
     
     if (nlonlat > 0){
       
-      trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = FALSE)
+      trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = TRUE, 
+                            map_provider = "OpenStreetMap.Mapnik")
       
     }
     
@@ -463,11 +480,11 @@ try_freq_tbl <- tryCatch({
     gender_i <- which(grepl("REG_gender", names(cmdata)))
     gender_i <- cmdata[, gender_i]
     
-    nMan <- sum(gender_i == "Man", na.rm = TRUE)
-    nWom <- sum(gender_i == "Woman", na.rm = TRUE)
+    nMan <- sum(gender_i == "Male", na.rm = TRUE)
+    nWom <- sum(gender_i == "Female", na.rm = TRUE)
     
-    dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Man", na.rm = TRUE)), 
-                tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Woman", na.rm = TRUE))) 
+    dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Male", na.rm = TRUE)), 
+                tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Female", na.rm = TRUE))) 
     
     itemtable$m <- dt[, 1]
     
@@ -676,7 +693,7 @@ try_agree <- tryCatch({
     
     agreement <- summarise_agreement(compare_to, 
                                      compare_with, 
-                                     labels = other_traits_full)
+                                     labels = other_traits_code)
     
     strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
                         round(max(agreement$kendall), 0))
@@ -765,7 +782,7 @@ try_pl <- tryCatch({
   aov_mod_overall <- anova.PL(mod_overall)
   aov_mod_overall[, 5] <- paste(format.pval(aov_mod_overall[,5]), 
                                 stars.pval(aov_mod_overall[,5]))
-  aov_mod_overall[2, "model"] <- overall$fullname
+  aov_mod_overall[2, "model"] <- overall$code
   
   
   # Run over the other traits
@@ -814,7 +831,7 @@ try_pl <- tryCatch({
     # organise pvalues
     aov_i[,5] <- paste(format.pval(aov_i[,5]), 
                        stars.pval(aov_i[,5]))
-    aov_i[2, "model"] <- other_traits_full[[i]]
+    aov_i[2, "model"] <- other_traits_code[[i]]
     
     aov_tables[[i]] <- aov_i
     
@@ -863,10 +880,10 @@ try_pl <- tryCatch({
   rownames(coefs) <- rownames(qvcalc(mod_overall)[[2]])
   
   # set col names with title case traits
-  otf <- gsub(" ","_", other_traits_full)
+  otf <- gsub(" ","_", other_traits_code)
   otf <- ClimMobTools:::.title_case(otf)
   
-  ov <- gsub(" ","_", overall$fullname)
+  ov <- gsub(" ","_", overall$code)
   
   names(coefs)[1] <- ov
   names(coefs)[-1] <- otf
@@ -1002,7 +1019,7 @@ try_plt <- tryCatch({
     return(x)
   })
   
-  names(Gdata) <- expvar_list$expvar_full
+  names(Gdata) <- expvar_list$expvar_code
   Gdata <- cbind(G, Gdata)
   
   tree_f <- pltree(G ~ .,
@@ -1216,7 +1233,7 @@ try_head_summ <- tryCatch({
       }
     }
     
-    ptab <- data.frame(Ranking = c(overall$fullname, other_traits_full),
+    ptab <- data.frame(Ranking = c(overall$code, other_traits_code),
                        "Best Ranked" = bests,
                        "Worst Ranked" = worsts,
                        p.value = ps,
@@ -1226,7 +1243,7 @@ try_head_summ <- tryCatch({
   } 
   
   if (isTRUE(nothertraits == 0)) {
-    ptab <- data.frame(Ranking = overall$fullname,
+    ptab <- data.frame(Ranking = overall$code,
                        "Best Ranked" = bests,
                        "Worst Ranked" = worsts,
                        p.value = ps,
@@ -1276,10 +1293,8 @@ try_head_summ <- tryCatch({
       nd <- 0L
     }
     
-    qi <- grepl(pars$chars$quest_1[i], quest$name)
-    
-    d <- data.frame(name = pars$chars[i,"char_full"],
-                    char = quest$desc[qi],
+    d <- data.frame(name = pars$chars[i,"char"],
+                    char = pars$chars[i,"char_full"],
                     n = nd)
     
     tbl_section1 <- rbind(tbl_section1, d)
@@ -1295,8 +1310,8 @@ try_head_summ <- tryCatch({
   multcomp_h <- nitems * 0.6 
   
   # overall name
-  ovname <- tolower(overall$fullname)
-  Ovname <- ClimMobTools:::.title_case(overall$fullname)
+  ovname <- tolower(overall$code)
+  Ovname <- ClimMobTools:::.title_case(overall$code)
   
 }, error = function(cond) {
   return(cond)
