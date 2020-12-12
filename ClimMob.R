@@ -408,8 +408,14 @@ org_lonlat <- tryCatch({
   geoTRUE <- all(any(lon), any(lat))
   
   if (isTRUE(geoTRUE)) {
-    lon <- which(lon)[1]
-    lat <- which(lat)[1]
+    
+    #find the vector with most completeness 
+    less_nas <- lapply(cmdata[lon], function(x){
+      sum(is.na(x))
+    })
+    
+    lon <- names(which.min(unlist(less_nas)))
+    lat <- gsub("_lon", "_lat", lon)
     
     lonlat <- cmdata[,c(lon,lat)]
     
@@ -419,7 +425,8 @@ org_lonlat <- tryCatch({
     
     if (nlonlat > 0){
       
-      trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = FALSE)
+      trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = TRUE, 
+                            map_provider = "OpenStreetMap.Mapnik")
       
     }
     
@@ -473,11 +480,11 @@ try_freq_tbl <- tryCatch({
     gender_i <- which(grepl("REG_gender", names(cmdata)))
     gender_i <- cmdata[, gender_i]
     
-    nMan <- sum(gender_i == "Man", na.rm = TRUE)
-    nWom <- sum(gender_i == "Woman", na.rm = TRUE)
+    nMan <- sum(gender_i == "Male", na.rm = TRUE)
+    nWom <- sum(gender_i == "Female", na.rm = TRUE)
     
-    dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Man", na.rm = TRUE)), 
-                tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Woman", na.rm = TRUE))) 
+    dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Male", na.rm = TRUE)), 
+                tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Female", na.rm = TRUE))) 
     
     itemtable$m <- dt[, 1]
     

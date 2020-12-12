@@ -6,7 +6,7 @@
 #' @param xy index of data for the longitude and latitude coordinates (in that order)
 #' @param make.clusters logical, if TRUE coordinates are aggregated by a defined cluster size
 #' @param cut.tree numeric, to define the cluster size when make.clusters = TRUE
-#' @param map_provider he name of the provider (see http://leaflet-extras.github.io/leaflet-providers/preview/ 
+#' @param map_provider the name of the provider (see http://leaflet-extras.github.io/leaflet-providers/preview/ 
 #'        and https://github.com/leaflet-extras/leaflet-providers)
 #' @param minimap logical, TRUE to add the minimap
 #' @param minimap_position the position of the mini map 
@@ -71,8 +71,8 @@ plot_map <- function(data,
   map <- leaflet::leaflet(data = d, 
                           options = leaflet::leafletOptions(maxZoom = 17))
   
-  map <- leaflet::fitBounds(map = map, lng1 = min(d$lon), lat1 = min(d$lat),
-                            lng2 = max(d$lon), lat2 = max(d$lat))
+  map <- leaflet::fitBounds(map = map, lng1 = min(d$lon)-0.25, lat1 = min(d$lat)-0.25,
+                            lng2 = max(d$lon)+0.25, lat2 = max(d$lat)+0.25)
   
   map <- leaflet::addProviderTiles(map = map, 
                                    provider =  map_provider, 
@@ -84,7 +84,8 @@ plot_map <- function(data,
   
   if (isTRUE(minimap)) {
     
-    map <- leaflet::addMiniMap(map = map, position = minimap_position)
+    map <- leaflet::addMiniMap(map = map, position = minimap_position, 
+                               width = 75, height = 75)
     
   }
   
