@@ -156,7 +156,7 @@ if (any(na.omit(ps[2:length(ps)]) < sig_level)){
     stat_diff_statement <- paste0(stat_diff_statement,
                                   ". Statistically significant differences were ",
                                  "found in the characteristic(s) '",
-                                 tolower(paste(na.omit(trait_full[ps[2:length(ps)] < sig_level]), collapse="', '")), "'.")
+                                 tolower(paste(na.omit(trait_code[ps[2:length(ps)] < sig_level]), collapse="', '")), "'.")
 }
 ```
 
@@ -223,7 +223,7 @@ if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)){
 ```{r drop_covar_statement}
 # make the statement if there is any covariate dropped
 drop_covar_statement <- ""
-if (all(expvar != "xinterceptx")) {
+if (all(expvar != "Intercept")) {
   if (isTRUE(length(expvar_dropped)) > 0) {
     drop_covar_statement <- paste(
       "The covariates(s)", paste(expvar_dropped, collapse = ", "),
@@ -274,23 +274,23 @@ relation_other_chrs2 <- ""
 if (isTRUE(nothertraits > 0)) {
 relation_other_chrs1 <- 
   paste0("Table 1.6 shows, for each characteristic in the project, ", 
-        "the frequency for which the rankings matched with the characteristic '", ovname, 
+        "the frequency for which the rankings matched with the characteristic '", Ovname, 
         "'. Best and worst agreement represents the percentage ", 
         "for which the best and worst ", option, " for the characteristic ", 
-        "matched the best and worst '", ovname, "'. Complete ranking agreement ", 
+        "matched the best and worst '", Ovname, "'. Complete ranking agreement ", 
         "shows the proportion of correlation on the full ranking with the characteristic '", 
-        ovname, "' as baseline using the Kendall correlation ", 
+        Ovname, "' as baseline using the Kendall correlation ", 
         "coefficient [@Kendall1938].")
 
 relation_other_chrs2 <- 
   paste0("The characteristic which had the strongest ", 
-        "relationship with '", ovname, "' was '", strongest_link[1], 
+        "relationship with '", Ovname, "' was '", strongest_link[1], 
         "'. Overall, the rankings for '",  strongest_link[1], 
-        "' matched the rankings for '", ovname, "' ",  strongest_link[2],
+        "' matched the rankings for '", Ovname, "' ",  strongest_link[2],
         "% of the time. The characteristic which had the weakest ", 
-        " relationship with '", ovname, "' was '",
+        " relationship with '", Ovname, "' was '",
         weakest_link[1], "'. Overall the rankings for '" , weakest_link[1], 
-        "' matched the rankings for '", ovname, "' " , weakest_link[2], 
+        "' matched the rankings for '", Ovname, "' " , weakest_link[2], 
         "% of the time. The correlation with the other ", 
         "characteristics is also shown in Figure 1.2.")
 
@@ -489,7 +489,7 @@ The effect of covariates on the rankings of `r options` was explored with Placke
 \
 
 ```{r expvar_table}
-kable(data.frame("Short name" = expvar_list$expvar, 
+kable(data.frame("Short name" = expvar_list$expvar_code, 
                  "Question" = expvar_list$expvar_full, 
                  check.names = FALSE),
       caption = "Table 3.1. Covariates used in this project.")
