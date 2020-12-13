@@ -81,7 +81,7 @@ if (isTRUE(geoTRUE)) {
   if (extension == "html") {
     trial_map
   }else{
-    knitr::include_graphics(paste0(outputpath, projname, "_trial_map.png"))
+    knitr::include_graphics(paste0(outputpath, "/", projname, "_trial_map.png"))
   }
 }
 ```

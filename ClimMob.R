@@ -430,8 +430,8 @@ org_lonlat <- tryCatch({
                             map_provider = "OpenStreetMap.Mapnik")
       
       mapshot(trial_map, 
-              url = paste0(outputpath, projname, "_trial_map.html"),
-              file = paste0(outputpath, projname, "_trial_map.png"))
+              url = paste0(outputpath, "/", projname, "_trial_map.html"),
+              file = paste0(outputpath, "/", projname, "_trial_map.png"))
 
     }
     

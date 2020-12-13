@@ -4,6 +4,7 @@ ClimMob-analysis v1.1-2 (2020-12-13)
 ### Improvements 
 
 * Enable the production of reports when registration and data collection are performed at the same time (*e.g.* market tasting)
+* Variables from multichoice questions in ODK are now decoded and displayed as factors.
 
 ### Changes in behaviour
 
