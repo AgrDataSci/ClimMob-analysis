@@ -64,8 +64,11 @@ kable(tbl_section1,
 trial_map_statement <- ""
 if (isTRUE(geoTRUE)){
   trial_map_statement <- paste("The map below shows the distribution",
-                               "of the trials in this project. To comply with the",
-                               "participants' privacy, the coordinates",
+                               "of the trials in this project. If you registered", 
+                               "more than one GPS location per each", ranker, "the map",
+                               "below shows the GPS registry which had the largest number",
+                               "of valid GPS records. To comply with the",
+                               ranker, "privacy, the coordinates",
                                "were clustered with a 0.05 resolution. You can find",
                                "the original coordinates in your ClimMob data.")
 }
@@ -75,7 +78,11 @@ if (isTRUE(geoTRUE)){
 
 ```{r map, dpi=dpi, out.width = '70%'}
 if (isTRUE(geoTRUE)) {
-  trial_map
+  if (extension == "html") {
+    trial_map
+  }else{
+    knitr::include_graphics(paste0(outputpath, projname, "_trial_map.png"))
+  }
 }
 ```
 
