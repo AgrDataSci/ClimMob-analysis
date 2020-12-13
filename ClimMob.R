@@ -42,6 +42,7 @@ library("ggrepel")
 library("ggparty")
 library("patchwork")
 library("leaflet")
+library("mapview")
 library("multcompView")
 library("png")
 library("plotrix")
@@ -428,6 +429,10 @@ org_lonlat <- tryCatch({
       trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = TRUE, 
                             map_provider = "OpenStreetMap.Mapnik")
       
+      mapshot(trial_map, 
+              url = paste0(outputpath, projname, "_trial_map.html"),
+              file = paste0(outputpath, projname, "_trial_map.png"))
+
     }
     
     if (nlonlat == 0) {

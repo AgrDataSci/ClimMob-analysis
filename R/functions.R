@@ -85,7 +85,7 @@ plot_map <- function(data,
   if (isTRUE(minimap)) {
     
     map <- leaflet::addMiniMap(map = map, position = minimap_position, 
-                               width = 75, height = 75)
+                               width = 100, height = 100)
     
   }
   
