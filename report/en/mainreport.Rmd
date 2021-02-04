@@ -523,7 +523,7 @@ Figure 3.1 shows the estimates of the model coefficients with `r ci_level*100`% 
 Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others; when `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the alpha = `r sig_level`.
 
 ```{r est_plot, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.1. Model coefficients and mean separation of Plackett-Luce model for the characteristic '", ovname, "' with ", ci_level*100, "% confidence intervals.")}
-plot(mod_sum_PL)
+plot(mod_sum_PL, level = ci_level)
 ```
 
 \
@@ -658,7 +658,7 @@ if (isTRUE(length(tree_f) == 1)) {
 `r paste(no_tree, collapse='\n')`
 
 ```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap= paste0("Figure 5.1. Plackett-Luce tree for the characteristic '", ovname, "'. The horizontal axis is the probability of winning. Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of items).")}
-gosset:::plot_tree(tree_f, add.letters = TRUE, threshold = sig_level, adjust = ci_adjust)
+gosset:::plot_tree(tree_f, add.letters = TRUE)
 ```
 
 \

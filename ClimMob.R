@@ -160,7 +160,7 @@ dtpars <- tryCatch({
   sig_level <- 0.1
   
   # method for adjustments for confidence intervals and setting widths for comparison. 
-  ci_adjust <- "BH"
+  ci_adjust <- "none"
   
   # confidence interval level for comparison plots with error bars
   ci_level <- 0.84
@@ -770,10 +770,7 @@ if (any_error(try_agree)) {
 try_pl <- tryCatch({
   mod_overall <- PlackettLuce(R)
   
-  model_summaries <- multcompPL(mod_overall, 
-                                threshold = sig_level, 
-                                ref = reference, 
-                                adjust = ci_adjust)
+  model_summaries <- multcompPL(mod_overall, ref = reference)
   
   fullanova <- anova.PL(mod_overall)
   
@@ -849,10 +846,10 @@ try_pl <- tryCatch({
     aov_tables[[i]] <- aov_i
     
     # This is Table 4.*.2
-    summ_i <- multcompPL(mod_t, ref = reference, threshold = sig_level, adjust = ci_adjust)
+    summ_i <- multcompPL(mod_t, ref = reference)
     # And this is Figure 3.*.2
     summ_i_plot <- 
-      plot(summ_i) + 
+      plot(summ_i, level = ci_level) + 
       theme_classic() +
       theme(axis.text.x = element_text(size = 10, color = "#000000"),
             axis.text.y = element_text(size = 10, color = "#000000"))
@@ -1065,8 +1062,7 @@ try_plt <- tryCatch({
       
       coef_i <- data.frame(node = node_ids[i],
                            rule = partykit:::.list.rules.party(tree_f, node_ids[i]),
-                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object, adjust = ci_adjust,
-                                      ref = reference, threshold = sig_level),
+                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object, ref = reference),
                            n = tree_f[[ node_ids[i] ]]$node$info$nobs,
                            stringsAsFactors = FALSE)
       
