@@ -53,11 +53,6 @@ source(paste0(fullpath, "/R/functions.R"))
 error <- NULL
 done <- TRUE
 
-# Function to validate the class of objects generated in the tryCatch(s)
-any_error <- function(x){
-  isTRUE("error" %in% class(x))
-}
-
 # ................................................................
 # ................................................................
 # Read data #### 
@@ -83,6 +78,8 @@ try_cmdata <- tryCatch({
   cmdata <- jsonlite::fromJSON(outputname)
   class(cmdata) <- union("CM_list", class(cmdata))
   cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
+  
+  projname <- cmdata[1,"package_project_name"]
   
   # read the questions the were made
   quest <- jsonlite::fromJSON(outputname)
@@ -130,7 +127,6 @@ dtpars <- tryCatch({
   Option <-  ClimMobTools:::.title_case(option)
   options <- ClimMobTools:::.pluralize(option)
   rankers <- ClimMobTools:::.pluralize(ranker)
-  projname <- cmdata[1, which(grepl("project_name", names(cmdata)))]
   nranker <- nrow(cmdata)
   itemnames <- names(items)
   items <- unique(sort(unlist(items)))
@@ -482,20 +478,29 @@ try_freq_tbl <- tryCatch({
   if (isTRUE(gender)) {
     dt <- unlist(itemdata)
     
-    gender_i <- which(grepl("REG_gender", names(cmdata)))
+    gender_i <- which(grepl("REG_gender", names(cmdata)))[[1]]
     gender_i <- cmdata[, gender_i]
     
-    nMan <- sum(gender_i == "Male", na.rm = TRUE)
-    nWom <- sum(gender_i == "Female", na.rm = TRUE)
+    gendrs <- unique(gender_i)
     
-    dt <- cbind(tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Male", na.rm = TRUE)), 
-                tapply(rep(gender_i, ncomp), dt, function(x) sum(x == "Female", na.rm = TRUE))) 
+    ngendrs <- rep(NA, length(gendrs))
     
-    itemtable$m <- dt[, 1]
+    for (i in seq_along(gendrs)) {
+      ngendrs[i] <- sum(gender_i == gendrs[i], na.rm = TRUE)
+    }
     
-    itemtable$w <- dt[, 2]
+    gendertbl <- c()
     
-    names(itemtable)[4:5] <- paste0(c("Man (n=","Woman (n="), c(nMan, nWom), ")")
+    for (i in seq_along(gendrs)) {
+      gendertbl <- cbind(gendertbl, 
+                         tapply(rep(gender_i, ncomp), dt, function(x) sum(x == gendrs[i], na.rm = TRUE)))
+    }
+    
+    gendertbl <- as.data.frame(gendertbl)
+    
+    names(gendertbl) <- paste0(gendrs, " (n=", ngendrs, ")")
+    
+    itemtable <- cbind(itemtable, gendertbl)
     
     rm(dt)
     
@@ -765,7 +770,10 @@ if (any_error(try_agree)) {
 try_pl <- tryCatch({
   mod_overall <- PlackettLuce(R)
   
-  model_summaries <- multcompPL(mod_overall, adjust = ci_adjust, ref = reference)
+  model_summaries <- multcompPL(mod_overall, 
+                                threshold = sig_level, 
+                                ref = reference, 
+                                adjust = ci_adjust)
   
   fullanova <- anova.PL(mod_overall)
   
@@ -841,10 +849,10 @@ try_pl <- tryCatch({
     aov_tables[[i]] <- aov_i
     
     # This is Table 4.*.2
-    summ_i <- multcompPL(mod_t, adjust = ci_adjust, ref = reference)
+    summ_i <- multcompPL(mod_t, ref = reference, threshold = sig_level, adjust = ci_adjust)
     # And this is Figure 3.*.2
     summ_i_plot <- 
-      plot(summ_i, level = ci_level) + 
+      plot(summ_i) + 
       theme_classic() +
       theme(axis.text.x = element_text(size = 10, color = "#000000"),
             axis.text.y = element_text(size = 10, color = "#000000"))
@@ -940,27 +948,40 @@ try_pls <- tryCatch({
   
   if (isTRUE(dim(arrows)[[1]] > 0)) {
     
-    pls_plot <- 
-      ggplot(data = arrows,
-             aes(y = Comp.2, 
-                 x = Comp.1, 
-                 label = trait, 
-                 yend = y0, 
-                 xend = x0)) +
+    scores$group <- "item"
+    arrows$group <- "char"
+    
+    sco <- rbind(scores[,c("Comp.1","Comp.2","group")], 
+                 arrows[,c("Comp.1","Comp.2","group")])
+    
+    sco$label <- rownames(sco)
+    
+    pls_plot <-
+      ggplot(sco, 
+           aes(x = Comp.1, y = Comp.2, label = label, group = group, color = group)) +
+      geom_point() +
+      geom_text_repel() +
+      theme_bw() +
+      scale_color_manual(values=c("#f03b20", "black")) +
+      scale_x_continuous(expand = expansion(mult = 0.3)) +
+      scale_y_continuous(expand = expansion(mult = 0.3)) +
+      geom_segment(data = arrows, 
+                   aes(x = Comp.1,
+                       y = Comp.2,
+                       label = trait,
+                       xend = x0, 
+                       yend = y0),
+                   col = "#f03b20", arrow = arrow(length = unit(0.2, "cm"), ends = "first")) +
+      geom_abline(linetype = 2, col = "gray50", slope = (yve[2] - yve[1]) / yve[1], intercept = 0) +
       geom_hline(yintercept = 0) + 
       geom_vline(xintercept = 0) +
-      geom_segment(col = "red", arrow = arrow(length = unit(0.5, "cm"), ends = "first" )) +
-      geom_abline(linetype = 2, col = "gray50", slope = (yve[2] - yve[1]) / yve[1], intercept = 0) +
-      geom_text_repel(fontface = 2, size = 4, col = "red") +
-      geom_text(data = scores, 
-                aes(y = Comp.2,
-                    x = Comp.1, 
-                    label = var), 
-                inherit.aes = FALSE, fontface = 2, size = 3) +
-      theme_bw() +
-      theme(panel.grid.minor = element_blank()) +
+      theme(panel.grid.minor = element_blank(),
+            legend.position = "none") +
       labs(x = paste0("PC1 ", round(yve[1] * 100, 2), "%"),
            y = paste0("PC2 ", round((yve[2]-yve[1]) * 100, 2),"%"))
+      
+      
+    
     
   }
   
@@ -1044,7 +1065,8 @@ try_plt <- tryCatch({
       
       coef_i <- data.frame(node = node_ids[i],
                            rule = partykit:::.list.rules.party(tree_f, node_ids[i]),
-                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object, ref = reference),
+                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object, adjust = ci_adjust,
+                                      ref = reference, threshold = sig_level),
                            n = tree_f[[ node_ids[i] ]]$node$info$nobs,
                            stringsAsFactors = FALSE)
       
@@ -1171,8 +1193,9 @@ try_head_summ <- tryCatch({
   siglist <- unique(siglist)
   
   ps <- fullanova[2, 5]
+  
   if (isTRUE(ps < sig_level)) {
-    bests <- model_summaries$term[grep("a", model_summaries$group)]
+    bests <- as.character(model_summaries$term[grep("a", model_summaries$group)])
     
     if (isTRUE(length(bests) > 3)) {
       bests <- bests[1:3]
@@ -1180,8 +1203,8 @@ try_head_summ <- tryCatch({
     
     bests <- paste(bests, collapse =", ")
     
-    worsts <- rev(model_summaries$term[grepl(model_summaries$group[nrow(model_summaries)],
-                                             model_summaries$group)])
+    worsts <- as.character(rev(model_summaries$term[grepl(model_summaries$group[nrow(model_summaries)],
+                                                          model_summaries$group)]))
     
     if(isTRUE(length(worsts) > 3)) {
       worsts <- worsts[1:3]
@@ -1189,7 +1212,9 @@ try_head_summ <- tryCatch({
     
     worsts <- paste(worsts, collapse = ", ")
     
-  } else {
+  } 
+  
+  if (isTRUE(ps > sig_level)) {
     
     bests <- worsts <- "No significant difference"
     
@@ -1199,9 +1224,9 @@ try_head_summ <- tryCatch({
     
     for(i in seq_along(anovas)){
       
-      ps <- c(ps, anovas[[i]][2,5])
+      ps_i <- anovas[[i]][2,5]
       
-      if (isTRUE(ps[i] < sig_level)) {
+      if (isTRUE(ps_i < sig_level)) {
         
         summ_i <- summaries[[i]]
         
@@ -1230,12 +1255,17 @@ try_head_summ <- tryCatch({
         worsts <- c(worsts, worsts_i)
         
         
-      }else{
+      }
+      
+      if (isTRUE(ps_i > sig_level)) {
         
         bests <- c(bests, "No significant difference")  
         
         worsts <- c(worsts,"No significant difference")  
       }
+      
+      ps <- c(ps, ps_i)
+      
     }
     
     ptab <- data.frame(Ranking = c(overall$code, other_traits_code),
@@ -1261,7 +1291,7 @@ try_head_summ <- tryCatch({
   ptab[,5] <- stars.pval(ptab$p.value)
   names(ptab)[5] <- ""
   
-  ptab$p.value <- format.pval(ptab$p.value)
+  ptab$p.value <- format.pval(ptab$p.value, digits = 3)
   
   
   # This is Table 1.2.1
@@ -1274,7 +1304,7 @@ try_head_summ <- tryCatch({
   
   # And this is Figure 3.1
   mod_sum_PL <-
-    plot(model_summaries, level = ci_level) + 
+    plot(model_summaries) + 
     theme_classic() +
     theme(axis.text.x = element_text(size = 10, color = "#000000"),
           axis.text.y = element_text(size = 10, color = "#000000")) +
@@ -1392,5 +1422,8 @@ if (isFALSE(done)) {
 if (length(error) > 0) {
   print(error)
 }
+
+
+
 
 

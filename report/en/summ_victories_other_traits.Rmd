@@ -6,7 +6,7 @@ vic_i <- vic_other_traits[[i]]
 
 \
 
-```{r,dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap=paste0("2.2.",i, ". Head to head performance for '",tolower(other_traits_list[[i]]$fullname),"'.")}
+```{r,dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap=paste0("2.2.",i, ". Head to head performance for '",tolower(other_traits_list[[i]]$code),"'.")}
 plot(vic_i) + 
   labs(y = "", x = "") + 
   theme_minimal() +  

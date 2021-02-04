@@ -1,3 +1,12 @@
+ClimMob-analysis v1.1-2.0001 (2020-01-20)
+=========================
+
+### Bug fixes
+* Table with number of technologies assessed by gender now is produced based on the aliases of the variable "REG_gender" which makes possible the inclusion of new aliases.
+
+*  
+
+
 ClimMob-analysis v1.1-2 (2020-12-13)
 =========================
 

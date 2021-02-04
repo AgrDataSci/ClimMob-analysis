@@ -6,7 +6,7 @@ aov_ii <- aov_tables[[i]]
 if (length(aov_ii) > 1) {
   kable(aov_ii,
         row.names = FALSE,
-        caption = paste0("Table 4.",i,".1. Likelihood ratio test results from fitted Plackett-Luce model with rankings from '", tolower(other_traits_list[[i]]$fullname), "'."))
+        caption = paste0("Table 4.",i,".1. Likelihood ratio test results from fitted Plackett-Luce model with rankings from '", tolower(other_traits_list[[i]]$code), "'."))
 }
 
 ```
@@ -14,7 +14,7 @@ if (length(aov_ii) > 1) {
 \
 \
 
-```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals.")}
+```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".1. Model coefficients and mean separation of Plackett-Luce model for '", tolower(other_traits_list[[i]]$code),"' with ", ci_level*100, "% confidence intervals.")}
 
 if(length(aov_ii) > 1){
   plot(plot_summaries[[i]])
