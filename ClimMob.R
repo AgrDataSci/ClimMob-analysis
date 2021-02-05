@@ -1332,7 +1332,7 @@ try_head_summ <- tryCatch({
     
   }
   
-  names(tbl_section1) <- c("Characteristic", "Question", "Number of valid answers")
+  names(tbl_section1) <- c("Characteristic", "Question asked", "Number of valid answers")
   
   # define height of plots based on items
   favplot_h <- nitems * 0.4
