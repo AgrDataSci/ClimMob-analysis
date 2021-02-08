@@ -472,14 +472,16 @@ try_freq_tbl <- tryCatch({
   
   names(itemtable) <- c(Option, "Freq", "Relative freq")
   
+  gender_string <- "registration_gender|REG_gender"
   # check if gender is provided so it can be added to the itemtable
-  gender <- any(grepl("REG_gender", names(cmdata)))
+  gender <- any(grepl(gender_string, names(cmdata)))
   
   if (isTRUE(gender)) {
     dt <- unlist(itemdata)
     
-    gender_i <- which(grepl("REG_gender", names(cmdata)))[[1]]
+    gender_i <- which(grepl(gender_string, names(cmdata)))[[1]]
     gender_i <- cmdata[, gender_i]
+    gender_i <- ifelse(is.na(gender_i), "Unstated", gender_i)
     
     gendrs <- unique(gender_i)
     
@@ -666,6 +668,7 @@ if (any_error(try_fav_ot)) {
 # this assess how the other traits agreed with the overall preference
 # build rankings for the other characteristics
 try_agree <- tryCatch({
+  
   if (isTRUE(nothertraits > 0)) {
     
     # filter cmdata so it matches the dims in all traits
@@ -700,6 +703,15 @@ try_agree <- tryCatch({
       
       compare_with[[i]] <- otr
     }
+    
+    # # get the names of all items to be sure that they 
+    # # co-occur in the same network
+    # compare_base <- dimnames(compare_to)[[2]]
+    # compare_other <- lapply(compare_with, function(x){
+    #   dimnames(x)[[2]]
+    # })
+    
+    
     
     agreement <- summarise_agreement(compare_to, 
                                      compare_with, 
@@ -1295,7 +1307,8 @@ try_head_summ <- tryCatch({
   uni_sum$p.value <- as.numeric(uni_sum$p.value)
   uni_sum$Covariate <- rownames(uni_sum)
   uni_sum$p.value <- paste(format.pval(uni_sum$p.value), stars.pval(uni_sum$p.value))
-  uni_sum <- uni_sum[,c("Covariate","p.value")]
+  uni_sum$Question <- expvar_full
+  uni_sum <- uni_sum[,c("Covariate","Question","p.value")]
   rownames(uni_sum) <- NULL
   
   # And this is Figure 3.1

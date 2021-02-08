@@ -63,13 +63,14 @@ kable(tbl_section1,
 ```{r trial_map_statement}
 trial_map_statement <- ""
 if (isTRUE(geoTRUE)){
-  trial_map_statement <- paste("The map below shows the distribution",
-                               "of the trials in this project. If you registered", 
-                               "more than one GPS location per each", ranker, "the map",
-                               "below shows the GPS registry which had the largest number",
-                               "of valid GPS records. To comply with the",
-                               ranker, "privacy, the coordinates",
-                               "were clustered with a 0.05 resolution. You can find",
+  trial_map_statement <- paste0("The map below shows the distribution ",
+                               "of the trials in this project. If you registered ", 
+                               "more than one GPS location per each ", ranker, " the map",
+                               "below shows the GPS registry which had the largest number ",
+                               "of valid GPS records. We used the GPS points from '", 
+                               paste(c(lon,lat), collapse = ", "),"'. To comply with the ",
+                               ranker, " privacy, the coordinates ",
+                               "were clustered with a 0.05 resolution. You can find ",
                                "the original coordinates in your ClimMob data.")
 }
 ```

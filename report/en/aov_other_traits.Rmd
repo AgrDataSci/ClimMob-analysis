@@ -30,7 +30,7 @@ if (length(aov_ii) > 1) {
         digits = 4,
         row.names = FALSE,
         caption = paste0("Table 4.",i,".2. Model coefficients and mean separation of Plackett-Luce model for '",
-                         tolower(other_traits_list[[i]]$fullname),"' with ", ci_level*100, "% confidence intervals."))
+                         tolower(other_traits_list[[i]]$code),"' with ", ci_level*100, "% confidence intervals."))
 }
 ```
 
@@ -42,14 +42,14 @@ if (length(aov_ii) > 1) {
   kable(worths[[i]][,-2],
       row.names = FALSE,
       caption = paste0("Table 4.",i,".3 ","Percetage probability of being highest ranked for '",
-                      tolower(other_traits_list[[i]]$fullname), "'."))
+                      tolower(other_traits_list[[i]]$code), "'."))
   
 }
 ```
 
 \
 
-```{r, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".2. Probability of being the best ranked for '", tolower(other_traits_list[[i]]$fullname),"'.")}
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 4.",i,".2. Probability of being the best ranked for '", tolower(other_traits_list[[i]]$code),"'.")}
 x <- worths[[i]]
 plot_worth_bar(x, value = "Worth", group = Option)
 ```
