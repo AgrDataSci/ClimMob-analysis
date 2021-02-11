@@ -79,13 +79,13 @@ try_cmdata <- tryCatch({
   class(cmdata) <- union("CM_list", class(cmdata))
   cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
   
-  projname <- cmdata[1,"package_project_name"]
+  projname <- cmdata[1, "package_project_name"]
   
   # read the questions the were made
   quest <- jsonlite::fromJSON(outputname)
   quest <- quest[["specialfields"]]
   
-}, error = function(cond) {
+ }, error = function(cond) {
   return(cond)
 }
 )
@@ -131,8 +131,8 @@ dtpars <- tryCatch({
   itemnames <- names(items)
   items <- unique(sort(unlist(items)))
   nitems <- length(unique(sort(unlist(items))))
-  expvar <- pars$expl$vars
-  expvar_full <- pars$expl$name
+  expvar <- pars$expl$varname
+  expvar_description <- paste0(pars$expl$description, " [", pars$expl$assessment_name, "]")
   expvar_code <- pars$expl$codeQst
   ntrait <- dim(pars$chars)[[1]]
   nothertraits <- dim(pars$chars)[[1]] - 1
@@ -297,6 +297,10 @@ org_rank <- tryCatch({
   
   other_traits_list <- trait_list[-1]
   
+  other_traits_code <- paste(other_traits_code, pars$chars$assessment_id[-1], sep = "_")
+  
+  names(other_traits_list) <- other_traits_code
+  
   # refresh number of other traits
   nothertraits <- length(other_traits)
   
@@ -323,7 +327,7 @@ org_covar <- tryCatch({
   if (any(expvar == "Intercept")) {
     cmdata$Intercept <- rep(0, nranker)
     expvar_list[["expvar"]] <- "Intercept"
-    expvar_list[["expvar_full"]] <- "Intercept"
+    expvar_list[["expvar_description"]] <- "Intercept"
     expvar_list[["keep"]] <- rep(TRUE, nranker)
   }
   
@@ -355,20 +359,29 @@ org_covar <- tryCatch({
     keep <- keep == max(keep)
     
     expvar <- expvar[!dropit]
-    expvar_full <- expvar_full[!dropit]
+    expvar_description <- expvar_description[!dropit]
     expvar_code <- expvar_code[!dropit]
     expvar_dropped <- expvar_code[dropit]
+    expvar_assessment_id <- pars$expl$assessment_id[!dropit]
+    
+    # look if the same question was made more than once
+    # if yes, then add the code for the data collection moment 
+    # this is to avoid issues in matching the names later on
+    if(any(duplicated(expvar_code))) {
+      dups <- duplicated(expvar_code)
+      expvar_code[dups] <- paste(expvar_code[dups], expvar_assessment_id[dups], sep = "_")
+    }
     
     # if no explanatory variable left out put a pseudo variable
     if(isTRUE(length(expvar) == 0)) {
       cmdata$Intercept <- rep(0, nranker)
       expvar_list[["expvar"]] <- "Intercept"
-      expvar_list[["expvar_full"]] <- "Intercept"
+      expvar_list[["expvar_description"]] <- "Intercept"
       expvar_list[["expvar_code"]] <- "Intercept"
       expvar_list[["keep"]] <- rep(TRUE, nranker)
     }else{
       expvar_list[["expvar"]] <- expvar
-      expvar_list[["expvar_full"]] <- expvar_full
+      expvar_list[["expvar_description"]] <- expvar_description
       expvar_list[["expvar_code"]] <- expvar_code
       expvar_list[["keep"]] <- keep
     }
@@ -388,7 +401,7 @@ if (any_error(org_covar)) {
   expvar <- "Intercept"
   cmdata$Intercept <- rep(0, nranker)
   expvar_list[["expvar"]] <- "Intercept"
-  expvar_list[["expvar_full"]] <- "Intercept"
+  expvar_list[["expvar_description"]] <- "Intercept"
   expvar_list[["expvar_code"]] <- "Intercept"
   expvar_list[["keep"]] <- rep(TRUE, nranker)
   
@@ -1307,7 +1320,7 @@ try_head_summ <- tryCatch({
   uni_sum$p.value <- as.numeric(uni_sum$p.value)
   uni_sum$Covariate <- rownames(uni_sum)
   uni_sum$p.value <- paste(format.pval(uni_sum$p.value), stars.pval(uni_sum$p.value))
-  uni_sum$Question <- expvar_full
+  uni_sum$Question <- expvar_description
   uni_sum <- uni_sum[,c("Covariate","Question","p.value")]
   rownames(uni_sum) <- NULL
   
@@ -1337,8 +1350,8 @@ try_head_summ <- tryCatch({
       nd <- 0L
     }
     
-    d <- data.frame(name = pars$chars[i,"char"],
-                    char = pars$chars[i,"char_full"],
+    d <- data.frame(name = pars$chars[i,"char_full"],
+                    char = quest$desc[grepl(pars$chars[i,1], quest$name)][1],
                     n = nd)
     
     tbl_section1 <- rbind(tbl_section1, d)
