@@ -275,6 +275,9 @@ org_rank <- tryCatch({
     result[["fullname"]] <- trait_full[i]
     result[["code"]] <- trait_code[i]
     result[["question"]] <- quest$desc[qi]
+    result[["assessment"]] <- gsub("[^0-9A-Za-z///' ]","" , 
+                                   pars$chars$assessment_name[i] ,ignore.case = TRUE)
+    
     
     trait_list[[trait[i]]] <- result
     
@@ -296,10 +299,6 @@ org_rank <- tryCatch({
   other_traits_code <- trait_code[-1]
   
   other_traits_list <- trait_list[-1]
-  
-  other_traits_code <- paste(other_traits_code, pars$chars$assessment_id[-1], sep = "_")
-  
-  names(other_traits_list) <- other_traits_code
   
   # refresh number of other traits
   nothertraits <- length(other_traits)
@@ -717,18 +716,9 @@ try_agree <- tryCatch({
       compare_with[[i]] <- otr
     }
     
-    # # get the names of all items to be sure that they 
-    # # co-occur in the same network
-    # compare_base <- dimnames(compare_to)[[2]]
-    # compare_other <- lapply(compare_with, function(x){
-    #   dimnames(x)[[2]]
-    # })
-    
-    
-    
     agreement <- summarise_agreement(compare_to, 
                                      compare_with, 
-                                     labels = other_traits_code)
+                                     labels = other_traits_full)
     
     strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
                         round(max(agreement$kendall), 0))
@@ -745,10 +735,10 @@ try_agree <- tryCatch({
       x <- paste0(x,"%")
     })
     
-    names(agreement_table) <- c("Characteristic", 
-                                "Complete Ranking Agreement",
-                                "Agreement with Overall Best", 
-                                "Agreement with Overall Worst")
+    names(agreement_table) <- c("Trait", 
+                                "Complete Ranking Agreement (Kendall)",
+                                "Agreement with best", 
+                                "Agreement with worst")
     
     
   } 
@@ -756,7 +746,7 @@ try_agree <- tryCatch({
   if (isTRUE(nothertraits == 0)) {
     strongest_link <- character()
     weakest_link <- character()
-    agreement_table <- data.frame(Option = "Only Overall Performance was used",
+    agreement_table <- data.frame(Option = paste("Only", ovname, "was used"),
                                   X = "",
                                   Y = "",
                                   Z = "")
@@ -1289,7 +1279,7 @@ try_head_summ <- tryCatch({
       
     }
     
-    ptab <- data.frame(Ranking = c(overall$code, other_traits_code),
+    ptab <- data.frame(Trait = c(overall$fullname, other_traits_full),
                        "Best Ranked" = bests,
                        "Worst Ranked" = worsts,
                        p.value = ps,
@@ -1299,7 +1289,7 @@ try_head_summ <- tryCatch({
   } 
   
   if (isTRUE(nothertraits == 0)) {
-    ptab <- data.frame(Ranking = overall$code,
+    ptab <- data.frame(Trait = overall$code,
                        "Best Ranked" = bests,
                        "Worst Ranked" = worsts,
                        p.value = ps,
@@ -1307,19 +1297,18 @@ try_head_summ <- tryCatch({
                        stringsAsFactors = FALSE)
   }
   
-  pval_legend <- attr(stars.pval(ptab$p.value), "legend")
-  
   ptab[,5] <- stars.pval(ptab$p.value)
   names(ptab)[5] <- ""
   
-  ptab$p.value <- format.pval(ptab$p.value, digits = 3)
+  ptab$p.value <- formatC(ptab$p.value, format = "e", digits = 2)
   
   
   # This is Table 1.2.1
   uni_sum <- outtabs[[1]]
   uni_sum$p.value <- as.numeric(uni_sum$p.value)
   uni_sum$Covariate <- rownames(uni_sum)
-  uni_sum$p.value <- paste(format.pval(uni_sum$p.value), stars.pval(uni_sum$p.value))
+  uni_sum$p.value <- paste(formatC(uni_sum$p.value, format = "e", digits = 2),
+                           stars.pval(uni_sum$p.value))
   uni_sum$Question <- expvar_description
   uni_sum <- uni_sum[,c("Covariate","Question","p.value")]
   rownames(uni_sum) <- NULL
@@ -1358,13 +1347,17 @@ try_head_summ <- tryCatch({
     
   }
   
-  names(tbl_section1) <- c("Characteristic", "Question asked", "Number of valid answers")
+  names(tbl_section1) <- c("Trait", "Question asked", "Number of valid answers")
   
   # define height of plots based on items
   favplot_h <- nitems * 0.4
   contest_h <- nitems * 0.4 * 2
   agreem_h <- ntrait * 0.9
   multcomp_h <- nitems * 0.6 
+  
+  if (is.numeric(reference)) {
+    reference <- items[reference]
+  }
   
   # overall name
   ovname <- tolower(overall$code)
