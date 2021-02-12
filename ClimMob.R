@@ -144,7 +144,7 @@ dtpars <- tryCatch({
   missper <- 4
   
   # minimum proportion of valid observations in explanatory variables
-  missexp <- 0.4
+  missexp <- 0.9
   
   # minimum split size for tree models
   minsplit <- ceiling(nranker * 0.1)
@@ -357,18 +357,20 @@ org_covar <- tryCatch({
     keep <- rowSums(keep)
     keep <- keep == max(keep)
     
+    expvar_dropped <- expvar_code[dropit]
     expvar <- expvar[!dropit]
     expvar_description <- expvar_description[!dropit]
     expvar_code <- expvar_code[!dropit]
-    expvar_dropped <- expvar_code[dropit]
     expvar_assessment_id <- pars$expl$assessment_id[!dropit]
     
     # look if the same question was made more than once
     # if yes, then add the code for the data collection moment 
     # this is to avoid issues in matching the names later on
+    # mostly for the pltree
     if(any(duplicated(expvar_code))) {
       dups <- duplicated(expvar_code)
-      expvar_code[dups] <- paste(expvar_code[dups], expvar_assessment_id[dups], sep = "_")
+      ndups <- dups[dups == TRUE]
+      expvar_code[dups] <- paste0(expvar_code[dups], seq_along(ndups))
     }
     
     # if no explanatory variable left out put a pseudo variable
