@@ -144,22 +144,22 @@ win_plot<-function(x){
 
 anova.PL <- function(model){
   if(class(model)!="PlackettLuce"){
-    stop("Model type is not Plackett Luce")
+    stop("Model type is not Plackett-Luce")
   }
   LLs <- c(model$null.loglik, model$loglik)
   dfs <- c(model$df.null, model$df.residual)
   df_diff <- (-1) * diff(dfs)
   df_LL <- (-1) * diff(LLs)
-  p=1-pchisq(-2*df_LL,df_diff)
+  p <- 1 - pchisq(-2 * df_LL, df_diff)
   
   
-  x<-data.frame(model=c("NULL",deparse(substitute(model))),
-                "logLikelihood"=LLs,
-                DF=dfs,
-                "Statistic" = c(NA,-2*df_LL),
-                "Pr(>Chisq)" = c(NA,p),
-                check.names = FALSE,
-                stringsAsFactors = FALSE)
+  x <- data.frame(model = c("NULL", deparse(substitute(model))),
+                  "logLikelihood" = LLs,
+                  DF=dfs,
+                  "Statistic" = c(NA, -2 * df_LL),
+                  "Pr(>Chisq)" = c(NA, p),
+                  check.names = FALSE,
+                  stringsAsFactors = FALSE)
   return(x)
 }
 

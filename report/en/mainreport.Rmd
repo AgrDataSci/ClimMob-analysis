@@ -66,12 +66,12 @@ trial_map_statement <- ""
 if (isTRUE(geoTRUE)){
   trial_map_statement <- paste0("The map below shows the distribution ",
                                "of the trials in this project. If you registered ", 
-                               "more than one GPS location per each ", ranker, " the map ",
+                               "more than one GPS location per ", ranker, " the map ",
                                "shows the GPS registry which had the largest number ",
                                "of valid GPS records. We used the GPS points from '", 
-                               gsub("_lon", "", lon),"'. To comply with the ",
-                               ranker, " privacy, the coordinates ",
-                               "were clustered with a 0.05 resolution. You can find ",
+                               gsub("_lon", "", lon),"'. To comply with ",
+                               ranker, "'s privacy, the coordinates ",
+                               "were clustered with a 0.05 arc-degree resolution. You can find ",
                                "the original coordinates in your ClimMob data.")
 }
 ```
@@ -255,9 +255,9 @@ pls_statement <-
 
 `r paste(pls_statement, collapse='\n')`
 
-```{r pls_plot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.3. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated.")}
+```{r plsplot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.3. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated.")}
 if (isTRUE(dim(arrows)[[1]] > 0)) {
-  try(plot(pls_plot), silent = TRUE)
+  try(plot(plsplot), silent = TRUE)
 }
 ```
 
@@ -267,7 +267,7 @@ if (isTRUE(dim(arrows)[[1]] > 0)) {
 
 ## Assessment of `r options` 
 
-Exploratory analysis within the following section summarises results from the rankings on `r ovname`. Given the structure of a ClimMob trail, where each `r ranker` only assessed `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomisation process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance. Performance of each of the `r options` for '`r ovname`' is summarised in Table 2.1. 
+Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Given the structure of a ClimMob trail, where each `r ranker` only assessed `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomization process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance. Performance of each of the `r options` for '`r ovname`' is summarised in Table 2.1. 
 
 
 ```{r fav_table}
@@ -314,27 +314,13 @@ try(plot(cont2), silent = TRUE)
 
 ## Plackett-Luce Model estimates
 
-The effect of covariates on the rankings of `r options` was explored with Plackett-Luce trees using the following covariates (Table 2.2).
-
 \
 
-```{r expvar_table}
-try(
-  kable(data.frame("Covariate" = expvar_list$expvar_code, 
-                   "Question" = expvar_list$expvar_description, 
-                   check.names = FALSE),
-        caption = paste0("Table 2.2. Covariates used in this project for the Plackett-Luce trees with the trait ",
-                         ovname, ".")),
-  silent = TRUE)
-```
-
-\
-
-Table 2.3 shows the results from the likelihood ratio test from the Plackett-Luce model for the trait '`r ovname`' of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
+Table 2.2 shows the results from the likelihood ratio test from the Plackett-Luce model for the trait '`r ovname`' of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
 
 ```{r, aov1}
 try(kable(aov_mod_overall, 
-      caption = paste0("Table 2.3. Likelihood ratio test results from fitted ", 
+      caption = paste0("Table 2.2. Likelihood ratio test results from fitted ", 
       "Plackett-Luce model with rankings from '", 
       ovname, "'.")),
   silent = TRUE)
@@ -354,7 +340,7 @@ try(
 
 \
 
-The same information in Figure 2.4 is shown in Table 2.4 below.
+The same information in Figure 2.4 is shown in Table 2.3 below.
 
 \
 
@@ -362,7 +348,7 @@ The same information in Figure 2.4 is shown in Table 2.4 below.
 try(kable(model_summaries, 
       digits = 4,
       row.names = FALSE,
-      caption = paste0("Table 2.4. Plackett-Luce Model estimates (log-worth) of tested ", 
+      caption = paste0("Table 2.3. Plackett-Luce Model estimates (log-worth) of tested ", 
                        options, " for '", ovname,"' with ", ci_level*100, 
                        "% confidence intervals. Different letters indicate significant differences at p < ",
                        sig_level ,". The ", option, " ", reference, 
@@ -372,14 +358,14 @@ try(kable(model_summaries,
 
 \
 
-Table 2.5 and Figure 2.5 use the coefficients from the Plackett-Luce model to estimate the probability of each `r option` being considered to be the top ranked `r option` in a direct comparison between all of the possible `r options`.
+Table 2.4 and Figure 2.5 use the coefficients from the Plackett-Luce model to estimate the probability of each `r option` being considered to be the top ranked `r option` in a direct comparison between all of the possible `r options`.
 
 \
 
 ```{r table3.4}
 try(kable(worthscaled[,-2],
       row.names = FALSE,
-      caption = paste0("Table 2.5. Percentage probability of being the best ranked for '",
+      caption = paste0("Table 2.4. Percentage probability of being the best ranked for '",
       ovname, "'.")),
   silent = TRUE)
 ```
@@ -410,7 +396,7 @@ if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)) {
              "was found for: ", 
              paste(paste0(siglist," (p = ", outtabs[[1]][siglist,"p"],")."), collapse=", "), 
              ". A summary of the univariate significance levels for all ",
-             "covariates that were able to be tested is shown in Table 2.6.")
+             "covariates that were able to be tested is shown in Table 2.5.")
   }
   
   if(isFALSE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
@@ -432,12 +418,12 @@ if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) == 0)) {
 ```{r drop_covar_statement}
 # make the statement if there is any covariate dropped
 drop_covar_statement <- ""
-if (all(expvar != "Intercept")) {
+if (all(expvar != "xinterceptx")) {
   if (isTRUE(length(expvar_dropped) > 0)) {
     drop_covar_statement <- paste0(
       "The covariates(s) '", paste(expvar_dropped, collapse = "', '"),
-      "' were removed from the analysis in this report, because of ",
-      "a significant amount of data was missing or we found ",
+      "' were removed from the analysis in this report, because it did not reach ",
+      "the mininum threshold of ", paste0(missexp * 100, "%"), " of valid data or we found ",
       "inconsistencies in the provided data."
     )
   }
@@ -455,7 +441,7 @@ if (all(expvar != "Intercept")) {
 node_statement <- ""
 
 if (isTRUE(length(tree_f) > 1)){
-node_statement <- paste("Table 2.7 shows which", options,
+node_statement <- paste("Table 2.6 shows which", options,
                         "where identified as the best and worst ranked in the", 
                         "subgroups identified by the Plackett-Luce tree for the trait '", 
                         ovname ,"'.")
@@ -469,7 +455,7 @@ node_statement <- paste("Table 2.7 shows which", options,
 if(isTRUE(length(tree_f) > 1)){
   try(
     kable(node_summary, 
-        caption = paste0("Table 2.7. Summary of different subgroups identified",
+        caption = paste0("Table 2.6. Summary of different subgroups identified",
                          " by the Plackett-Luce model.")),
     silent = TRUE)
 }
@@ -485,7 +471,7 @@ effect_covar_statement3 <- ""
 if (isTRUE(length(tree_f) > 1))  {
   if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
     effect_covar_statement2 <- 
-      paste("Table 2.8 shows the p-values for each of the covariates tested,", 
+      paste("Table 2.7 shows the p-values for each of the covariates tested,", 
             "one-by-one, showing whether or not the covariate could be used", 
             "to define sub-groups with significantly different rankings.")
     
@@ -510,7 +496,7 @@ if (isTRUE(length(tree_f) > 1))  {
 ```{r univar_pval}
 if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)){
 try(kable(uni_sum,
-      caption = paste0("Table 2.8. Univariate p-values for first split in ",
+      caption = paste0("Table 2.7. Univariate p-values for first split in ",
                        "Plackett-Luce tree model for the trait '",
                        ovname, "'.")),
   silent = TRUE)
@@ -539,7 +525,12 @@ if (isTRUE(length(tree_f) == 1)) {
 \
 
 ```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap= paste0("Figure 2.6. Plackett-Luce tree for '", ovname, "'. The horizontal axis is the probability of winning. Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")}
-try(gosset:::plot_tree(tree_f, add.letters = TRUE), silent = TRUE)
+try(gosset:::plot_tree(tree_f, 
+                       add.letters = TRUE, 
+                       threshold = 0.05, 
+                       adjust = ci_adjust,
+                       letter.size = 15), 
+    silent = TRUE)
 ```
 
 \
@@ -558,7 +549,7 @@ if (isTRUE(length(tree_f) > 1)) {
 ```{r node_summary}
 if (isTRUE(length(tree_f) > 1)) {
   try(kable(node_summary,
-        caption = "Table 2.9. Summary of performance in each tree node."),
+        caption = "Table 2.8. Summary of performance in each tree node."),
   silent = TRUE)
 }
 ```
@@ -569,7 +560,7 @@ if (isTRUE(length(tree_f) > 1)) {
 pval_nodes_statement <- ""
 if (isTRUE(length(tree_f) > 1)) {
   pval_nodes_statement <- 
-    paste("Table 2.10 outlines the p-values for each covariate at", 
+    paste("Table 2.9 outlines the p-values for each covariate at", 
           "each of the nodes in the tree, outlining whether an", 
           "additional significant split could be determined from", 
           "within the existing sub-group at that node.")
@@ -581,7 +572,7 @@ if (isTRUE(length(tree_f) > 1)) {
 ```{r pval_nodes}
 if (isTRUE(length(tree_f) > 1)) {
   try(kable(pval_nodes,
-        caption = "Table 2.10. Goodnesss-of-fit for the effects of covariate(s) at each node in the Plackett-Luce tree.",
+        caption = "Table 2.9. Goodnesss-of-fit for the effects of covariate(s) at each node in the Plackett-Luce tree.",
         row.names = FALSE),
   silent = TRUE)
 }
