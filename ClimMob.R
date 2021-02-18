@@ -14,8 +14,8 @@ outputpath  <- args[3] # the path where results will be written
 infosheets  <- as.logical(args[4]) # logical, if infosheets should be written TRUE FALSE
 language    <- args[5] # the language to write the report "en" for english and "es" for spanish
 extension   <- args[6] # report file format it can be "docx", "pdf", and "html"
-ranker      <- args[7] # how the system will refer to participants/farmers
-option      <- args[8] # how the system will refer to tested items
+ranker      <- args[7] # how the report will refer to participants/farmers
+option      <- args[8] # how the report will refer to tested technologies
 fullpath    <- args[9] # this is backward path
 reference   <- args[10] # the reference item for the analysis
 if (isTRUE(is.na(reference))) {
@@ -79,11 +79,7 @@ try_cmdata <- tryCatch({
   class(cmdata) <- union("CM_list", class(cmdata))
   cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
   
-  projname <- cmdata[1, "project_name"]
-  
-  # read the questions the were made
-  quest <- jsonlite::fromJSON(outputname)
-  quest <- quest[["specialfields"]]
+  projname <- cmdata[1, "package_project_name"]
   
  }, error = function(cond) {
   return(cond)
@@ -111,19 +107,20 @@ tryCatch({
 dtpars <- tryCatch({
   
   # Get some info from the data and imputed parameters 
-  Option <-  ClimMobTools:::.title_case(option)
-  options <- ClimMobTools:::.pluralize(option)
-  rankers <- ClimMobTools:::.pluralize(ranker)
-  nranker <- nrow(cmdata)
-  items <- cmdata[, grepl("package_item", names(cmdata))]
-  itemnames <- names(items)
-  items <- unique(sort(unlist(items)))
-  nitems <- length(unique(sort(unlist(items))))
-  covar <- pars$covariates
-  ntrait <- dim(pars$traits)[[1]]
+  Option       <-  ClimMobTools:::.title_case(option)
+  options      <- ClimMobTools:::.pluralize(option)
+  rankers      <- ClimMobTools:::.pluralize(ranker)
+  nranker      <- nrow(cmdata)
+  items        <- cmdata[, grepl("package_item", names(cmdata))]
+  itemnames    <- names(items)
+  items        <- unique(sort(unlist(items)))
+  nitems       <- length(unique(sort(unlist(items))))
+  covar        <- pars$covariates
+  covarTRUE    <- isTRUE(length(covar) > 0)
+  ntrait       <- dim(pars$traits)[[1]]
   nothertraits <- ntrait - 1
-  ncomp <- length(itemnames)
-  nquest <- pars$traits$n_quest[1]
+  ncomp        <- length(itemnames)
+  nquest       <- pars$traits$nQst[1]
   # select which function will be used to create the Plackett-Luce rankings
   # it will depends on how many items each participant compares
   if (ncomp == 3) {
@@ -139,7 +136,7 @@ dtpars <- tryCatch({
   missper <- 4
   
   # minimum proportion of valid observations in explanatory variables
-  missexp <- 0.85
+  missexp <- 0.3
   
   # minimum split size for PL Tree models
   minsplit <- ceiling(nranker * 0.1)
@@ -187,18 +184,30 @@ org_rank <- tryCatch({
   
   tricotVSlocal <- length(pars$tricotVSlocal) > 0
   
+  # get a vector with trait names matched with the assessment id
+  # do this because the same trait can be assessed in different data collection moments
+  trait_names <- paste0(trait$codeQst, trait$assessmentId)
+  
+  # find the index for the reference trait, the one that is going to be used 
+  # as main trait for the analysis
+  reference_trait <- which(trait$traitOrder == "referenceTrait")
+  
   # this list will keep the logical vectors to filter the data per 
   # remaining trait, the ones that passed the evaluation on minimal 
   # amount of missing data 
   trait_list <- list()
   
+  # make a vector to register any possible trait to be dropped due to few 
+  # data availability
+  trait_dropped <- character()
+  
   # run over traits to filter NAs and prepare for PlackettLuce rankings
-  for(i in seq_along(trait$codeQst)){
+  for(i in seq_along(trait_names)){
     
     result <- list()
     
     # get the question full name
-    trait_i <- as.character(trait[i, paste0("quest_", seq_len(nquest))])
+    trait_i <- as.character(trait[i, paste0("nameString", seq_len(nquest))])
     
     # look for it in cmdata
     for(j in seq_along(trait_i)) {
@@ -217,13 +226,16 @@ org_rank <- tryCatch({
     dropit <- sum(keep) < missper
     
     # if lower than missper it will be dropped
-    if (isTRUE(dropit)) next
+    if (isTRUE(dropit)) {
+      trait_dropped <- c(trait_dropped, trait$codeQst[i])
+      next
+    } 
     
     # if required, add comparison with local item
     # again, it assumes that overall performance is the first characteristic
-    if (isTRUE(i == 1 & tricotVSlocal)) {
+    if (isTRUE(i == reference_trait & tricotVSlocal)) {
       
-      ovsl <- as.vector(pars$tricotVSlocal[, paste0("quest_", seq_len(pars$tricotVSlocal$n_quest))])
+      ovsl <- as.vector(pars$tricotVSlocal[, paste0("nameString", seq_len(pars$tricotVSlocal$nQst))])
       
       # search for the columns in the data
       for (k in seq_along(ovsl)) {
@@ -257,10 +269,6 @@ org_rank <- tryCatch({
       
     }
     
-    # get the question registered in the survey
-    qi <- grepl(paste(strsplit(trait_i[[1]], "_")[[1]][-c(1:2)], collapse = "_"),
-                quest$name)
-    
     # logical vector to subset the data 
     result[["keep"]]       <- keep  
     # string names to find the data in cmdata
@@ -269,27 +277,51 @@ org_rank <- tryCatch({
     result[["name"]]       <- trait$name[i]
     # the trait code
     result[["code"]]       <- trait$codeQst[i]
-    # the question that was asked (positive)
-    result[["question"]]   <- quest$desc[which(trait$quest_1[i] == quest$name)[1]]
+    # the questions that were asked 
+    result[["question"]]   <- paste(trait[i, paste0("questionAsked", seq_len(nquest))], collapse = ", ")
     # the data collection moment
-    result[["assessment"]] <- trait$assessment_name[i]
+    result[["assessment"]] <- trait$assessmentName[i]
     # days after the beginning of the trail for the data collection momement
-    result[["day"]]        <- trait$assessment_day[i]
+    result[["day"]]        <- trait$assessmentDay[i]
+    # the assessment id
+    result[["assessmentid"]] <- trait$assessmentId[i]
     
     
-    trait_list[[trait$codeQst[i]]] <- result
+    trait_list[[trait_names[i]]] <- result
     
   }
   
   # refresh the number of traits
   ntrait <- length(trait_list)
   
-  # find the index for overall performance
-  # always the first
-  overall <- trait_list[[1]]
+  # refresh the index for the reference trait in case it changed due to 
+  # dropped trait
+  reference_trait <- paste(trait[reference_trait, c("name","assessmentId")], collapse = "")
+  reference_trait <- which(names(trait_list) %in% reference_trait)
   
-  # and the other traits
-  other_traits <- names(trait_list)[-1]
+  # if for some reason the reference trait was dropped, than take the last one
+  if (length(reference_trait) == 0) {
+    reference_trait <- length(trait_list) 
+    # and coerce tricotVSlocal to FALSE to prevent errors in matching strings
+    tricotVSlocal <- FALSE
+  }
+  
+  # get the reference trait as a separated list
+  overall <- trait_list[[reference_trait]]
+  # get the name of the reference trait both in lower and title case
+  ovname <- tolower(overall$name)
+  Ovname <- ClimMobTools:::.title_case(overall$name)
+  
+  # the name of the other traits
+  other_traits <- names(trait_list)[-reference_trait]
+  
+  # and the other traits as a separated list
+  other_traits_list <- trait_list[-reference_trait]
+  
+  # the name of other traits combined with the name of assessments
+  other_traits_names <- as.vector(unlist(lapply(other_traits_list, function(x) {
+    paste0(x$name, " [", x$assessment, "]")
+  })))
   
   # refresh number of other traits
   nothertraits <- length(other_traits)
@@ -312,26 +344,32 @@ if (any_error(org_rank)) {
 # in pltree(), this is to fit the model with the intercept only
 org_covar <- tryCatch({
   
-  covar_list <- list()
-  
-  if (any(covar$codeQst == "xinterceptx")) {
+  if (isFALSE(covarTRUE)) {
+    
     cmdata$Intercept <- rep(0, nranker)
-    covar_list[["covar"]] <- "Intercept"
-    covar_list[["covar_description"]] <- "Intercept"
-    covar_list[["keep"]] <- rep(TRUE, nranker)
+    
+    overall$keep_covariate <- rep(TRUE, nranker)
+    
+    covar <- data.frame(codeQst = "xinterceptx", 
+                        nameString = "Intercept",
+                        name = "Intercept-only model",
+                        questionAsked = "",
+                        assessmentName = "",
+                        assessmentId = "")
   }
   
-  if (all(covar$codeQst != "xinterceptx")) {
+  if (covarTRUE) {
     
     # add the string $ to indicate the end of pattern
-    strings <- paste0(covar$name_string, "$")
+    strings <- paste0(covar$nameString, "$")
     
     # check for the full names
-    for(i in seq_along(covar$name_string)){
-      covar$name_string[i] <- names(cmdata[which(grepl(strings[i], names(cmdata)))])
+    for(i in seq_along(covar$nameString)){
+      covar$nameString[i] <- names(cmdata[which(grepl(strings[i], names(cmdata)))])
     }
     
-    strings <- covar$name_string
+    strings <- covar$nameString
+    
     # check for missing data
     keep <- NULL
     for(i in seq_along(strings)){
@@ -352,30 +390,32 @@ org_covar <- tryCatch({
     covar_dropped <- covar$name[dropit]
     covar <- covar[!dropit, ]
    
-    # # look if the same question was made more than once
-    # # if yes, then add the code for the data collection moment 
-    # # this is to avoid issues in matching the names later on
-    # # mostly for the pltree
-    # if(any(duplicated(covar_code))) {
-    #   dups <- duplicated(covar_code)
-    #   ndups <- dups[dups == TRUE]
-    #   covar_code[dups] <- paste0(covar_code[dups], seq_along(ndups))
-    # }
+    # look if the same question was made more than once
+    # if yes, then add a random number to avoid issues in 
+    # matching the names later on, mostly for the pltree()
+    if(any(duplicated(covar$codeQst))) {
+      dups <- duplicated(covar$codeQst)
+      ndups <- dups[dups == TRUE]
+      covar$codeQst[dups] <- paste0(covar$codeQst[dups], seq_along(ndups))
+      #covar$name[dups] <- paste0(covar$name[dups], seq_along(ndups))
+    }
     
     # if no explanatory variable left out put a pseudo variable
     if(isTRUE(dim(covar)[[1]] == 0)) {
-      covar <- data.frame(codeQst = "xinterceptx",
-                          name_string = "intercept",
-                          name = "Intercept only",
-                          assessment_name = "Registration",
-                          description = "Intercept-only model")
       
-      cmdata$intercept <- rep(0, nranker)
+      cmdata$Intercept <- rep(0, nranker)
       
-      trait_list[[1]]$keep_covariate <- rep(TRUE, nranker)
+      overall$keep_covariate <- rep(TRUE, nranker)
+      
+      covar <- data.frame(codeQst = "xinterceptx", 
+                          nameString = "Intercept",
+                          name = "Intercept-only model",
+                          questionAsked = "",
+                          assessmentName = "",
+                          assessmentId = "")
       
       }else{
-        trait_list[[1]]$keep_covariate <- keep
+        overall$keep_covariate <- keep
     }
     
   }
@@ -390,15 +430,16 @@ if (any_error(org_covar)) {
   
   error <- c(error, e)
   
-  covar <- data.frame(codeQst = "xinterceptx",
-                      name_string = "intercept",
-                      name = "Intercept only",
-                      assessment_name = "Registration",
-                      description = "Intercept-only model")
+  cmdata$Intercept <- rep(0, nranker)
   
-  cmdata$intercept <- rep(0, nranker)
+  overall$keep_covariate <- rep(TRUE, nranker)
   
-  trait_list[[1]]$keep_covariate <- rep(TRUE, nranker)
+  covar <- data.frame(codeQst = "xinterceptx", 
+                      nameString = "Intercept",
+                      name = "Intercept-only model",
+                      questionAsked = "",
+                      assessmentName = "",
+                      assessmentId = "")
   
 }
 
@@ -408,8 +449,8 @@ if (any_error(org_covar)) {
 org_lonlat <- tryCatch({
   
   # Check if lonlat is provided
-  lon <- grepl("_lon", names(cmdata))
-  lat <- grepl("_lat", names(cmdata))
+  lon <- grepl("_longitude", names(cmdata))
+  lat <- grepl("_latitude", names(cmdata))
   
   geoTRUE <- all(any(lon), any(lat))
   
@@ -421,7 +462,7 @@ org_lonlat <- tryCatch({
     })
     
     lon <- names(which.min(unlist(less_nas)))
-    lat <- gsub("_lon", "_lat", lon)
+    lat <- gsub("_longitude", "_latitude", lon)
     
     lonlat <- cmdata[,c(lon,lat)]
     
@@ -553,13 +594,13 @@ try_fav_oa <- tryCatch({
     
   }
   
-  if (isFALSE(overallVSlocal)) {
+  if (isFALSE(tricotVSlocal)) {
     
     keep <- overall$keep
     
     # list of arguments for the function that will be used to 
     # create the rankings
-    a <- list(cmdata[keep, ],
+    a <- list(cmdata[keep, c(itemnames, overall$strings)],
               items = itemnames,
               input = overall$strings)
     
@@ -637,7 +678,7 @@ try_fav_ot <- tryCatch({
       
       a <- list(data = cmdata[other_traits_list[[i]]$keep, ],
                 items = itemnames,
-                input = other_traits_list[[i]]$input)
+                input = other_traits_list[[i]]$strings)
       
       R_i <- do.call(rankwith, args = a)
       
@@ -696,7 +737,7 @@ try_agree <- tryCatch({
     # create the rankings
     a <- list(cmdata[keep, ], 
               items = itemnames,
-              input = overall$input)
+              input = overall$strings)
     
     compare_to <- do.call(rankwith, args = a)
     
@@ -708,7 +749,7 @@ try_agree <- tryCatch({
       
       a <- list(cmdata[keep, ],
                 items = itemnames,
-                input = ot$input)
+                input = ot$strings)
       
       otr <- do.call(rankwith, args = a) 
       
@@ -717,7 +758,7 @@ try_agree <- tryCatch({
     
     agreement <- summarise_agreement(compare_to, 
                                      compare_with, 
-                                     labels = other_traits_full)
+                                     labels = other_traits_names)
     
     strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
                         round(max(agreement$kendall), 0))
@@ -734,8 +775,21 @@ try_agree <- tryCatch({
       x <- paste0(x,"%")
     })
     
+    agrelabels <- lapply(other_traits_list, function(x) {
+      c(x$name, x$assessment)
+    })
+    
+    agrelabels <- do.call("rbind", agrelabels)
+    
+    agreement_table$labels <- agrelabels[,1]
+    
+    agreement_table$collection <- agrelabels[,2]
+    
+    agreement_table <- agreement_table[,c("labels","collection","kendall","first","last")]
+    
     names(agreement_table) <- c("Trait", 
-                                "Complete Ranking Agreement (Kendall)",
+                                "Data collection moment",
+                                "Complete Ranking Agreement (Kendall tau)",
                                 "Agreement with best", 
                                 "Agreement with worst")
     
@@ -749,11 +803,13 @@ try_agree <- tryCatch({
                                   X = "",
                                   Y = "",
                                   Z = "")
-    names(agreement_table)<-c(" ","","  ","   ")
+    names(agreement_table) <- c(" ","","  ","   ")
     agreement <- data.frame(labels = "",
                             kendall = 0,
                             first = 0,
                             last = 0)
+    
+    class(agreement) <- union("gosset_agree", class(agreement))
   }
   
 }, error = function(cond) {
@@ -776,6 +832,8 @@ if (any_error(try_agree)) {
                           kendall = 0,
                           first = 0,
                           last = 0)
+  
+  class(agreement) <- union("gosset_agree", class(agreement))
 }
 
 # .......................................................
@@ -813,7 +871,7 @@ try_pl <- tryCatch({
   aov_mod_overall <- anova.PL(mod_overall)
   aov_mod_overall[, 5] <- paste(formatC(aov_mod_overall[,5], format = "e", digits = 2),
                                 stars.pval(aov_mod_overall[,5]))
-  aov_mod_overall[2, "model"] <- overall$code
+  aov_mod_overall[2, "model"] <- overall$name
   
   
   # Run over the other traits
@@ -825,25 +883,27 @@ try_pl <- tryCatch({
   aov_tables <- list()
   
   for (i in seq_along(other_traits_list)){
+    
     ot <- other_traits_list[[i]]
     
-    if (isTRUE(overallVSlocal)) {
+    if (isTRUE(tricotVSlocal)) {
+      
       keep <- overall$keep2 & ot$keep
       
-      a <- list(cmdata[keep, ],
+      a <- list(cmdata[keep, c(itemnames, ot$strings, overall$ovls)],
                 items = itemnames,
-                input = ot$input,
+                input = ot$strings,
                 additional.rank = cmdata[keep, overall$ovsl])
       
       Rot <- do.call(rankwith, args = a)
     }
     
-    if (isFALSE(overallVSlocal)) {
+    if (isFALSE(tricotVSlocal)) {
       keep <- ot$keep
       
-      a <- list(data  = cmdata[keep, ],
+      a <- list(data  = cmdata[keep, c(itemnames, ot$strings)],
                 items = itemnames,
-                input = ot$input)
+                input = ot$strings)
       
       Rot <- do.call(rankwith, args = a)
       
@@ -862,7 +922,8 @@ try_pl <- tryCatch({
     # organise pvalues
     aov_i[,5] <- paste(formatC(aov_i[,5], format = "e", digits = 2),
                        stars.pval(aov_i[,5]))
-    aov_i[2, "model"] <- other_traits_code[[i]]
+    
+    aov_i[2, "model"] <- other_traits_list[[i]]$name
     
     aov_tables[[i]] <- aov_i
     
@@ -917,13 +978,9 @@ try_pl <- tryCatch({
   rownames(coefs) <- rownames(qvcalc(mod_overall)[[2]])
   
   # set col names with title case traits
-  otf <- gsub(" ","_", other_traits_code)
-  otf <- ClimMobTools:::.title_case(otf)
+  ov <- gsub(" ","_", overall$name)
   
-  ov <- gsub(" ","_", overall$code)
-  
-  names(coefs)[1] <- ov
-  names(coefs)[-1] <- otf
+  names(coefs) <- c(ov, other_traits)
 
 }, error = function(cond) {
   return(cond)
@@ -933,7 +990,7 @@ try_pl <- tryCatch({
 if (any_error(try_pl)) {
   e <- paste("Error 111.", try_pl$message)
   error <- c(error, e)
-  done <- FALSE
+  coefs <- NULL
 }
 
 # .......................................................
@@ -942,7 +999,7 @@ if (any_error(try_pl)) {
 try_pls <- tryCatch({
   
   if (isTRUE(nothertraits > 0)) {
-    fml <- paste(ov, " ~ ", paste(otf, collapse = " + "))
+    fml <- paste(ov, " ~ ", paste(other_traits, collapse = " + "))
     fml <- as.formula(fml)
     
     m2 <- plsr(fml,
@@ -952,7 +1009,7 @@ try_pls <- tryCatch({
     
     if (ncol(m2$projection) > 1 ) {
       arrows <- data.frame((m2$projection)[,1:2],
-                           trait = otf,
+                           trait = other_traits_names,
                            x0 = 0, 
                            y0 = 0, 
                            stringsAsFactors = FALSE)
@@ -973,12 +1030,13 @@ try_pls <- tryCatch({
   if (isTRUE(dim(arrows)[[1]] > 0)) {
     
     scores$group <- "item"
+    scores$label <- rownames(scores)
+    
     arrows$group <- "char"
+    arrows$label <- arrows$trait
     
-    sco <- rbind(scores[,c("Comp.1","Comp.2","group")], 
-                 arrows[,c("Comp.1","Comp.2","group")])
-    
-    sco$label <- rownames(sco)
+    sco <- rbind(scores[,c("Comp.1","Comp.2","group","label")], 
+                 arrows[,c("Comp.1","Comp.2","group","label")])
     
     plsplot <-
       ggplot(sco, 
@@ -992,7 +1050,7 @@ try_pls <- tryCatch({
       geom_segment(data = arrows, 
                    aes(x = Comp.1,
                        y = Comp.2,
-                       label = trait,
+                       label = other_traits_names,
                        xend = x0, 
                        yend = y0),
                    col = "#f03b20", arrow = arrow(length = unit(0.2, "cm"), ends = "first")) +
@@ -1026,14 +1084,14 @@ if (any_error(try_pls)) {
 # Plackett-Luce trees with explanatory variables ####
 try_plt <- tryCatch({
   
-  if (isTRUE(overallVSlocal)) {
+  if (isTRUE(tricotVSlocal)) {
     
-    keep <- overall$keep2 & covar_list$keep
+    keep <- overall$keep2 & overall$keep_covariate
     
-    a <- list(cmdata[keep, ],
+    a <- list(cmdata[keep, c(itemnames, overall$strings, overall$tricotVSlocal)],
               items = itemnames,
-              input = overall$input,
-              additional.rank = cmdata[keep, overall$ovsl], 
+              input = overall$strings,
+              additional.rank = cmdata[keep, overall$tricotVSlocal], 
               group = TRUE)
     
     G <- do.call(rankwith, args = a)
@@ -1041,12 +1099,13 @@ try_plt <- tryCatch({
     
   } 
   
-  if (isFALSE(overallVSlocal)) {
-    keep <- overall$keep & covar_list$keep
+  if (isFALSE(tricotVSlocal)) {
     
-    a <- list(cmdata[keep, ],
+    keep <- overall$keep & overall$keep_covariate
+    
+    a <- list(cmdata[keep, c(itemnames, overall$strings)],
               items = itemnames,
-              input = overall$input, 
+              input = overall$strings, 
               group = TRUE)
     
     G <- do.call(rankwith, args = a)
@@ -1054,8 +1113,8 @@ try_plt <- tryCatch({
   }
   
   # data frame of explanatory variables
-  Gdata <- as.data.frame(cmdata[keep, covar_list$covar], stringsAsFactors = TRUE)
-  nvar <- length(covar_list$covar)
+  Gdata <- as.data.frame(cmdata[keep, covar$nameString], stringsAsFactors = TRUE)
+  nvar <- length(covar$nameString)
   
   # setup the variables
   Gdata[1:nvar] <- lapply(Gdata[1:nvar], function(x){
@@ -1069,15 +1128,16 @@ try_plt <- tryCatch({
     return(x)
   })
   
-  names(Gdata) <- covar_list$covar_code
+  # rename covariates with the name taken from ClimMob
+  names(Gdata) <- covar$codeQst
   Gdata <- cbind(G, Gdata)
   
   tree_f <- pltree(G ~ .,
                    data = Gdata, 
                    minsize = minsplit,
-                   alpha = sig_level,
-                   ref = reference)
-  
+                   alpha = 0.5,
+                   ref = reference, 
+                   gamma = TRUE)
   
   if (anova.PL(mod_overall)[2,5] <= sig_level) {
     ci_adjust <- "BH"
@@ -1298,7 +1358,11 @@ try_head_summ <- tryCatch({
       
     }
     
-    ptab <- data.frame(Trait = c(overall$fullname, other_traits_full),
+    ptabnames <- lapply(trait_list, function(x){c(x$name, x$assessment)})
+    ptabnames <- do.call("rbind", ptabnames)
+    
+    ptab <- data.frame(Trait = ptabnames[,1],
+                       "Data collection moment" = ptabnames[,2],
                        "Best Ranked" = bests,
                        "Worst Ranked" = worsts,
                        p.value = ps,
@@ -1308,7 +1372,8 @@ try_head_summ <- tryCatch({
   } 
   
   if (isTRUE(nothertraits == 0)) {
-    ptab <- data.frame(Trait = overall$code,
+    ptab <- data.frame(Trait = overall$name,
+                       "Data collection moment" = overall$assessment,
                        "Best Ranked" = bests,
                        "Worst Ranked" = worsts,
                        p.value = ps,
@@ -1316,8 +1381,8 @@ try_head_summ <- tryCatch({
                        stringsAsFactors = FALSE)
   }
   
-  ptab[,5] <- stars.pval(ptab$p.value)
-  names(ptab)[5] <- ""
+  ptab[,6] <- stars.pval(ptab$p.value)
+  names(ptab)[6] <- ""
   
   ptab$p.value <- formatC(ptab$p.value, format = "e", digits = 2)
   
@@ -1328,7 +1393,7 @@ try_head_summ <- tryCatch({
   uni_sum$Covariate <- rownames(uni_sum)
   uni_sum$p.value <- paste(formatC(uni_sum$p.value, format = "e", digits = 2),
                            stars.pval(uni_sum$p.value))
-  uni_sum$Question <- covar_description
+  uni_sum$Question <- covar$question
   uni_sum <- uni_sum[,c("Covariate","Question","p.value")]
   rownames(uni_sum) <- NULL
   
@@ -1351,22 +1416,23 @@ try_head_summ <- tryCatch({
   # This is the fist table in Section 1
   tbl_section1 <- data.frame()
   
-  for(i in seq_along(pars$chars[,1])) {
+  for(i in seq_along(trait_list)) {
     
     nd <- try(sum(trait_list[[i]][["keep"]]), silent = TRUE)
     if (isFALSE(is.numeric(nd))){
       nd <- 0L
     }
     
-    d <- data.frame(name = pars$chars[i,"char_full"],
-                    char = quest$desc[grepl(pars$chars[i,1], quest$name)][1],
+    d <- data.frame(name = trait_list[[i]]$name,
+                    collect = trait_list[[i]]$assessment,
+                    quest = trait_list[[i]]$question,
                     n = nd)
     
     tbl_section1 <- rbind(tbl_section1, d)
     
   }
   
-  names(tbl_section1) <- c("Trait", "Question asked", "Number of valid answers")
+  names(tbl_section1) <- c("Trait", "Data collection moment", "Question asked", "Number of valid answers")
   
   # define height of plots based on items
   favplot_h <- nitems * 0.4
@@ -1383,10 +1449,6 @@ try_head_summ <- tryCatch({
   }else{
     ci_adjust <- "BH"
   }
-  
-  # overall name
-  ovname <- tolower(overall$code)
-  Ovname <- ClimMobTools:::.title_case(overall$code)
   
 }, error = function(cond) {
   return(cond)
