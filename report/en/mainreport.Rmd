@@ -184,11 +184,11 @@ relation_other_chrs1 <-
         "coefficient [@Kendall1938].")
 
 relation_other_chrs2 <- 
-  paste0("The trait which had the strongest ", 
+  paste0("The trait that had the strongest ", 
         "relationship with '", ovname, "' was '", tolower(strongest_link[1]), 
         "'. Overall, the rankings for '",   tolower(strongest_link[1]), 
         "' matched the rankings for '", ovname, "' ",   tolower(strongest_link[2]),
-        "% of the time. The trait which had the weakest ", 
+        "% of the time. The trait that had the weakest ", 
         " relationship with '", ovname, "' was '",
          tolower(weakest_link[1]), "'. Overall the rankings for '" ,  
         tolower(weakest_link[1]), "' matched the rankings for '", 
@@ -268,7 +268,7 @@ if (isTRUE(dim(arrows)[[1]] > 0)) {
 
 ## Assessment of `r options` 
 
-Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Given the structure of a ClimMob trail, where each `r ranker` only assessed `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomization process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance. Performance of each of the `r options` for '`r ovname`' is summarised in Table 2.1. 
+Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Given the structure of a ClimMob experiment, where each `r ranker` only assessed `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomization process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance. Performance of each of the `r options` for '`r ovname`' is summarised in Table 2.1. 
 
 
 ```{r fav_table}
@@ -437,44 +437,16 @@ if (covarTRUE) {
 
 `r  paste(drop_covar_statement, collapse='\n')`
 
-```{r node_statement} 
-# node statement
-node_statement <- ""
-
-if (isTRUE(length(tree_f) > 1)){
-node_statement <- paste("Table 2.6 shows which", options,
-                        "where identified as the best and worst ranked in the", 
-                        "subgroups identified by the Plackett-Luce tree for the trait '", 
-                        ovname ,"'.")
-}
-```
-
-`r  paste(node_statement, collapse='\n')`
-
-
-```{r subgroups-found}
-if(isTRUE(length(tree_f) > 1)){
-  try(
-    kable(node_summary, 
-        caption = paste0("Table 2.6. Summary of different subgroups identified",
-                         " by the Plackett-Luce model.")),
-    silent = TRUE)
-}
-
-```
-
-\
-
-
 ```{r}
+effect_covar_statement1 <- ""
 effect_covar_statement2 <- ""
-effect_covar_statement3 <- ""
 if (isTRUE(length(tree_f) > 1))  {
   if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
-    effect_covar_statement2 <- 
-      paste("Table 2.7 shows the p-values for each of the covariates tested,", 
+    effect_covar_statement1 <- 
+      paste("The p-values for each of the covariates tested,", 
             "one-by-one, showing whether or not the covariate could be used", 
-            "to define sub-groups with significantly different rankings.")
+            "to define sub-groups with significantly different rankings are",
+            "shown in Table 2.6")
     
     effect_covar_statement3 <-
       paste("The partitioning of the rankings based on the most significantly", 
@@ -492,12 +464,12 @@ if (isTRUE(length(tree_f) > 1))  {
 }
 ```
 
-`r  paste(effect_covar_statement2, collapse='\n')`
+`r  paste(effect_covar_statement1, collapse='\n')`
 
 ```{r univar_pval}
 if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)){
 try(kable(uni_sum,
-      caption = paste0("Table 2.7. Univariate p-values for first split in ",
+      caption = paste0("Table 2.6. Univariate p-values for first split in ",
                        "Plackett-Luce tree model for the trait '",
                        ovname, "'.")),
   silent = TRUE)
@@ -506,7 +478,35 @@ try(kable(uni_sum,
 
 \
 
-`r  paste(effect_covar_statement3, collapse='\n')`
+```{r node_statement} 
+# node statement
+node_statement <- ""
+
+if (isTRUE(length(tree_f) > 1)){
+node_statement <- paste("Table 2.7 shows which", options,
+                        "where identified as the best and worst ranked in the", 
+                        "subgroups identified by the Plackett-Luce tree for the trait '", 
+                        ovname ,"'.")
+}
+```
+
+`r  paste(node_statement, collapse='\n')`
+
+
+```{r subgroups-found}
+if(isTRUE(length(tree_f) > 1)){
+  try(
+    kable(node_summary, 
+        caption = paste0("Table 2.7. Summary of different subgroups identified",
+                         " by the Plackett-Luce model.")),
+    silent = TRUE)
+}
+
+```
+
+\
+
+`r  paste(effect_covar_statement2, collapse='\n')`
 
 ```{r no_tree}
 no_tree <- ""
@@ -535,49 +535,6 @@ try(gosset:::plot_tree(tree_f,
 ```
 
 \
-
-```{r node_summary_statement}
-node_summary_statement <- ""
-if (isTRUE(length(tree_f) > 1)) {
-  node_summary_statement <- 
-    paste("The highest and lowest performing", option, 
-          "within each sub-group is identified within Table 2.9.")
-}
-```
-
-`r paste(node_summary_statement, collapse='\n')`
-
-```{r node_summary}
-if (isTRUE(length(tree_f) > 1)) {
-  try(kable(node_summary,
-        caption = "Table 2.8. Summary of performance in each tree node."),
-  silent = TRUE)
-}
-```
-
-\
-
-```{r pval_nodes_statement}
-pval_nodes_statement <- ""
-if (isTRUE(length(tree_f) > 1)) {
-  pval_nodes_statement <- 
-    paste("Table 2.9 outlines the p-values for each covariate at", 
-          "each of the nodes in the tree, outlining whether an", 
-          "additional significant split could be determined from", 
-          "within the existing sub-group at that node.")
-}
-```
-
-`r paste(pval_nodes_statement, collapse='\n')`
-
-```{r pval_nodes}
-if (isTRUE(length(tree_f) > 1)) {
-  try(kable(pval_nodes,
-        caption = "Table 2.9. Goodnesss-of-fit for the effects of covariate(s) at each node in the Plackett-Luce tree.",
-        row.names = FALSE),
-  silent = TRUE)
-}
-```
 
 # Section 3: Other traits
 

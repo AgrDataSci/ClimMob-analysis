@@ -136,7 +136,7 @@ dtpars <- tryCatch({
   missper <- 4
   
   # minimum proportion of valid observations in explanatory variables
-  missexp <- 0.3
+  missexp <- 0.85
   
   # minimum split size for PL Tree models
   minsplit <- ceiling(nranker * 0.1)
@@ -1008,8 +1008,11 @@ try_pls <- tryCatch({
                jackknife = TRUE)
     
     if (ncol(m2$projection) > 1 ) {
+      
+      arrowlabels <- unlist(lapply(other_traits_list, function(x){x$code}))
+      
       arrows <- data.frame((m2$projection)[,1:2],
-                           trait = other_traits_names,
+                           trait = arrowlabels,
                            x0 = 0, 
                            y0 = 0, 
                            stringsAsFactors = FALSE)
@@ -1155,7 +1158,8 @@ try_plt <- tryCatch({
       
       coef_i <- data.frame(node = node_ids[i],
                            rule = partykit:::.list.rules.party(tree_f, node_ids[i]),
-                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object, ref = reference,
+                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object, 
+                                      ref = reference,
                                       threshold = 0.05, adjust = ci_adjust),
                            n = tree_f[[ node_ids[i] ]]$node$info$nobs,
                            stringsAsFactors = FALSE)
@@ -1163,6 +1167,8 @@ try_plt <- tryCatch({
       coefs_t <- rbind(coefs_t, coef_i)
       
     }
+    
+    coefs_t$rule <- gsub("%in%","@", coefs_t$rule)
     
     coefs_t$Label <- paste("Node", coefs_t$node, ":", coefs_t$rule,"\n","n=",coefs_t$n)
     
@@ -1188,11 +1194,15 @@ try_plt <- tryCatch({
                            paste(rev(tmp$term[grepl(tmp$group[nrow(tmp)], tmp$group)]), collapse=", ")))
     }
     
+    rules <- strsplit(rules, "@")
+    rules <- do.call("rbind", rules)
+    rules[,2] <- gsub("[(]|[)]| c","", rules[,2])
+    
     node_summary <- data.frame(rules, 
                                best_tree, 
                                stringsAsFactors = FALSE)
     
-    names(node_summary) <- c("Split","Number of Respondents","Best Ranked","Worst Ranked")
+    names(node_summary) <- c("Covariate", "Split", "N", "Best Ranked","Worst Ranked")
     
   }
   
@@ -1394,7 +1404,9 @@ try_head_summ <- tryCatch({
   uni_sum$p.value <- paste(formatC(uni_sum$p.value, format = "e", digits = 2),
                            stars.pval(uni_sum$p.value))
   uni_sum$Question <- covar$question
-  uni_sum <- uni_sum[,c("Covariate","Question","p.value")]
+  uni_sum$collection <- covar$assessmentName
+  uni_sum <- uni_sum[,c("Covariate", "collection", "Question","p.value")]
+  names(uni_sum)[2] <- "Data collection moment"
   rownames(uni_sum) <- NULL
   
   # And this is Figure 3.1
