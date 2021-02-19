@@ -298,6 +298,15 @@ org_rank <- tryCatch({
     
   }
   
+  # if all the traits were removed then make a report and stop the process here 
+  if (length(trait_dropped) == length(trait$name)) {
+    rmarkdown::render(paste0(fullpath, "/report/mainreport_no_traits.Rmd"),
+                      output_dir = outputpath,
+                      output_format = "word_document",
+                      output_file = paste0("climmob_main_report.docx"))
+    quit()
+  }
+  
   # refresh the number of traits
   ntrait <- length(trait_list)
   
@@ -1607,8 +1616,8 @@ if (isTRUE(done)) {
 if (isFALSE(done)) {
   rmarkdown::render(paste0(fullpath, "/report/mainreport_failed.Rmd"),
                     output_dir = outputpath,
-                    output_format = output_format,
-                    output_file = paste0("climmob_main_report", ".", extension))
+                    output_format = "word_document",
+                    output_file = paste0("climmob_main_report.docx"))
 }
 
 if (length(error) > 0) {
