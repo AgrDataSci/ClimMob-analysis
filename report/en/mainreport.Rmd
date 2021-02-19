@@ -60,6 +60,15 @@ silent = TRUE)
 
 \
 
+Figure 1.1 shows the same information in Table 1.1 with the number of valid answers received by each trait in each data collection moment in this project. 
+
+\
+
+```{r progress, dpi=dpi, fig.height=7, fig.width=10, fig.cap=paste0("Figure 1.1. Progress in data collection per data collection moment and trait evaluated in this project.")}
+try(plot_tbl1)
+```
+
+\
 
 ```{r trial_map_statement}
 trial_map_statement <- ""
@@ -100,9 +109,9 @@ try(kable(itemtable,
 
 \
 
-Figure 1.1 shows that the `r length(items)` `r options` are all connected to each other. That means that they all co-occurred at least once in an incomplete block of `r ncomp` `r options`. 
+Figure 1.2 shows that the `r length(items)` `r options` are all connected to each other. That means that they all co-occurred at least once in an incomplete block of `r ncomp` `r options`. 
 
-```{r network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.1. Network representation of ", options, " tested in this project.")}
+```{r network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.2. Network representation of ", options, " tested in this project.")}
 if (isTRUE("igraph" %in% class(net))){
  try(igraph::plot.igraph(net,
                     edge.arrow.size = 0.5), silent = TRUE)
@@ -117,36 +126,36 @@ if (isTRUE("igraph" %in% class(net))){
 # make the statement for the report about the statistical significance
 stat_diff_statement <- paste0("This reports takes the trait '", ovname, 
                               "' as the reference trait for the analysis. ")
-if (isFALSE(is.na(ps[1]))) {
+if (isFALSE(is.na(ps[reference_trait]))) {
     
-    if (isTRUE(ps[1] < sig_level)) {
+    if (isTRUE(ps[reference_trait] < sig_level)) {
       stat_diff_statement <- paste0(stat_diff_statement,
                                     "There were statistically significant ", 
                                     "differences found in the rankings of ",
                                     options ," in the trait '", ovname, "' (p = ",
-                                    ptab$p.value[1], "). The best ranked ",
-                                    options ," overall were ", ptab$`Best Ranked`[1])
+                                    ptab[reference_trait, 5], "). The best ranked ",
+                                    options ," were ", ptab[reference_trait, 3])
     }
     
-    if (isTRUE(ps[1] >= sig_level)) {
+    if (isTRUE(ps[reference_trait] >= sig_level)) {
       stat_diff_statement <- paste0(stat_diff_statement,
                                     "There were no statistically significant ", 
                                     "differences found in the rankings of ", 
                                     options ," in the trait '", ovname, "' (p = ",
-                                    ptab$p.value[1],")")
+                                    ptab[reference_trait, 5],")")
     }
     
 }
   
-if (isTRUE(is.na(ps[1]))) {
+if (isTRUE(is.na(ps[reference_trait]))) {
     stat_diff_statement <- "No statistical model was able to be fitted on this data."
 }
   
-if (any(na.omit(ps[2:length(ps)]) < sig_level)){
+if (any(na.omit(ps[-reference_trait]) < sig_level)){
     stat_diff_statement <- paste0(stat_diff_statement,
                                   ". Statistically significant differences were ",
                                  "found in the trait(s) '",
-                                 tolower(paste(na.omit(other_traits_names[ps[2:length(ps)] < sig_level]), collapse="', '")), "'.")
+                                 paste(tolower(ptab[ps < sig_level, 1][!ptab[ps < sig_level, 1] %in% Ovname]), collapse="', '"), "'.")
 }
 ```
 
@@ -193,7 +202,7 @@ relation_other_chrs2 <-
          tolower(weakest_link[1]), "'. Overall the rankings for '" ,  
         tolower(weakest_link[1]), "' matched the rankings for '", 
         ovname, "' " ,  tolower(weakest_link[2]), "% of the time.",
-        " The correlation with the other traits is also shown in Figure 1.2.")
+        " The correlation with the other traits is also shown in Figure 1.3.")
 
 }
 ```
@@ -215,7 +224,7 @@ try(
 `r paste(relation_other_chrs2, collapse='\n')`
 
 
-```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=12, fig.cap= paste0("Figure 1.2. Correlation between individual traits and ", ovname, ".")}
+```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=12, fig.cap= paste0("Figure 1.3. Correlation between individual traits and ", ovname, ".")}
 if (nothertraits > 0) {
   plot(agreement) +
   theme_minimal() +  
@@ -256,7 +265,7 @@ pls_statement <-
 
 `r paste(pls_statement, collapse='\n')`
 
-```{r plsplot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.3. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated.")}
+```{r plsplot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.4. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated.")}
 if (isTRUE(dim(arrows)[[1]] > 0)) {
   try(plot(plsplot), silent = TRUE)
 }

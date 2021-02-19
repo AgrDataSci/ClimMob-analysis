@@ -1438,13 +1438,62 @@ try_head_summ <- tryCatch({
     d <- data.frame(name = trait_list[[i]]$name,
                     collect = trait_list[[i]]$assessment,
                     quest = trait_list[[i]]$question,
-                    n = nd)
+                    n = nd,
+                    code = trait_list[[i]]$code)
     
     tbl_section1 <- rbind(tbl_section1, d)
     
   }
   
+  # copy this table to make a plot
+  plottbl1 <- tbl_section1
+  
+  tbl_section1 <- tbl_section1[,-5]
+  # rename colunms in the original table
   names(tbl_section1) <- c("Trait", "Data collection moment", "Question asked", "Number of valid answers")
+  
+  # check for duplicates
+  if(any(duplicated(plottbl1$code))) {
+    dups <- duplicated(plottbl1$code)
+    ndups <- dups[dups == TRUE]
+    plottbl1$code[dups] <- paste0(plottbl1$code[dups], seq_along(ndups))
+  }
+  
+  # and force the elements to be factors in the right order
+  plottbl1$code <- factor(plottbl1$code, levels = plottbl1$code)
+  plottbl1$collect <- factor(plottbl1$collect, levels = unique(plottbl1$collect))
+
+  nrects <- length(plottbl1$code)
+  
+  # define rects of data collection moments
+  rects <- data.frame(xstart = seq(0.5, nrects - 0.5, 1),
+                      xend =  seq(1.5, nrects + 0.5, 1), 
+                      col = plottbl1$collect)
+  
+  plot_tbl1 <-
+  ggplot() +
+    geom_line(data = plottbl1, aes(x = code, y = n, group = 1)) +
+    #geom_smooth(data = plottbl1, aes(x = code, y = n, group = 1), method = lm, se = FALSE) +
+    geom_rect(data = rects, aes(xmin = xstart, xmax = xend, 
+                                ymin = 0, ymax = round(max(plottbl1$n) + 50, -1),
+                                fill = col), alpha = 0.3) +
+    scale_fill_grey(name = "Data collection moment") +
+    theme_bw() + 
+    ylim(0, round(max(plottbl1$n) + 50, -1)) +
+    labs(x = "Trait", y = "Number of answers") +
+    theme(axis.text.x = element_text(size = 12, 
+                                     angle = 60, 
+                                     hjust = 1, 
+                                     color = "#000000"),
+          axis.text.y = element_text(size = 12, color = "#000000"),
+          text = element_text(size = 12, color = "#000000"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.position = "bottom")
+  
+  plot_tbl1
+  
+  
   
   # define height of plots based on items
   favplot_h <- nitems * 0.4
