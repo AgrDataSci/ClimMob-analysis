@@ -437,6 +437,8 @@ if (covarTRUE) {
 
 `r  paste(drop_covar_statement, collapse='\n')`
 
+\
+
 ```{r}
 effect_covar_statement1 <- ""
 effect_covar_statement2 <- ""
@@ -492,6 +494,7 @@ node_statement <- paste("Table 2.7 shows which", options,
 
 `r  paste(node_statement, collapse='\n')`
 
+\
 
 ```{r subgroups-found}
 if(isTRUE(length(tree_f) > 1)){
@@ -530,6 +533,7 @@ try(gosset:::plot_tree(tree_f,
                        add.letters = TRUE, 
                        threshold = 0.05, 
                        adjust = ci_adjust,
+                       ci.level = ci_level, 
                        letter.size = 15), 
     silent = TRUE)
 ```

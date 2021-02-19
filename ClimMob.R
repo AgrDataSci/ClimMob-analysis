@@ -789,7 +789,7 @@ try_agree <- tryCatch({
     
     names(agreement_table) <- c("Trait", 
                                 "Data collection moment",
-                                "Complete Ranking Agreement (Kendall tau)",
+                                "Complete ranking agreement (Kendall tau)",
                                 "Agreement with best", 
                                 "Agreement with worst")
     
@@ -1373,8 +1373,8 @@ try_head_summ <- tryCatch({
     
     ptab <- data.frame(Trait = ptabnames[,1],
                        "Data collection moment" = ptabnames[,2],
-                       "Best Ranked" = bests,
-                       "Worst Ranked" = worsts,
+                       "Best ranked" = bests,
+                       "Worst ranked" = worsts,
                        p.value = ps,
                        check.names = FALSE,
                        stringsAsFactors = FALSE)
