@@ -6,7 +6,7 @@
 
 \
 
-Favourability scores are shown for the trait '`r tolower(other_traits_list[[i]]$name)`' which was collected during the data collection moment registered as '`r other_traits_list[[i]]$assessment`'. The `r rankers` were asked to evaluated the best and worst `r option` based on the question: '`r other_traits_list[[i]]$question`'.
+Favorability scores are shown for the trait '`r tolower(other_traits_list[[i]]$name)`' which was collected during the data collection moment registered as '`r other_traits_list[[i]]$assessment`'. The `r rankers` were asked to evaluated the best and worst `r option` based on the question: '`r other_traits_list[[i]]$question`'.
 
 \
 
@@ -15,13 +15,13 @@ f2 <- fav_other_traits[[i]][[2]]
 
 knitr::kable(f2[nrow(f2):1, ],
              row.names = FALSE,
-             caption = paste0("Table 3.", i, ".1. Favourability scores for '",
+             caption = paste0("Table 3.", i, ".1. Favorability scores for '",
                               tolower(other_traits_list[[i]]$name),"'"))
 ```
 
 \
 
-The same information from Table 3.`r i`.1 is shown in Figure 3.`r i`.1.
+Figure 3.`r i`.1. is a graphical representation of the content presented in Table 3.`r i`.1 showing the net favorability scores for the trait '`r tolower(other_traits_list[[i]]$name)`'.
 
 ```{r, include=FALSE, echo=FALSE}
 f1 <- fav_other_traits[[i]][[1]]
@@ -38,7 +38,7 @@ p2 <-
 ```
 
 
-```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 3.", i, ".1. Net favourability scores for '",tolower(other_traits_list[[i]]$name),"'.")}
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 3.", i, ".1. Net favorability scores for '",tolower(other_traits_list[[i]]$name),"'.")}
 p2
 ```
 
@@ -52,12 +52,12 @@ vic_i <- vic_other_traits[[i]]
 
 \
 
-Figure 3.`r i`.2 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r tolower(other_traits_list[[i]]$name)`'. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the panelled `r option` was ranked above the other `r options` shown as bars.
+Figure 3.`r i`.2 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r tolower(other_traits_list[[i]]$name)`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the paneled `r option` was ranked above the other `r options` shown as bars.
 
 
 \
 
-```{r,dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap=paste0("Figure 3.", i, ".2. Head to head performance for '",tolower(other_traits_list[[i]]$name),"'.")}
+```{r,dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap=paste0("Figure 3.", i, ".2. Head-to-head performance for '",tolower(other_traits_list[[i]]$name),"'.")}
 plot(vic_i) + 
   labs(y = "", x = "") + 
   theme_minimal() +  
@@ -131,7 +131,7 @@ if (length(aov_ii) > 1) {
   
   kable(worths[[i]][,-2],
       row.names = FALSE,
-      caption = paste0("Table 3.", i,".4. Percetage probability of being highest ranked for '",
+      caption = paste0("Table 3.", i,".4. Percentage probability of being highest ranked for '",
                       tolower(other_traits_list[[i]]$name), "'."))
   
 }

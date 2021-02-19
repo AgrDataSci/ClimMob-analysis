@@ -45,13 +45,35 @@ If you publish any results generated with ClimMob, you should cite a number of a
 
 # Section 1: Headline results
 
-Overall there were `r nranker` `r rankers` registered to this project. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of its '`r ovname`'. In addition they also provided rankings for `r nothertraits` additional trait(s): 
+Overall, there were `r nranker` `r rankers` registered to this project. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of its '`r ovname`'. In addition, they also provided rankings for `r length(trait$name) -1` additional trait(s). 
+
+```{r trait_drop}
+
+trait_note <- ""
+
+if (length(trait_dropped) > 0) {
+  if(length(trait_dropped) > 1) {
+    verb <- " were "
+    adj <- " traits "
+    noun <- " they "
+  }else{
+    verb <- " was "
+    adj <- " trait "
+    noun <- " it "
+  }
+  
+  trait_note <- paste0("The", adj, paste(trait_dropped, collapse = ", "), verb, "not considered in this report because", noun, "did not surpassed the thresholds of (1) having at least ", missper, " valid entries, and (2) that all the ", options, " are tested at least twice per given trait. Table 1.1. shows the traits analysed in this report.")
+}
+```
+
+`r paste(trait_note, collapse='\n')`
+
+\
 
 ```{r traits}
 try(
 kable(tbl_section1, 
-      caption = paste0("Table 1.1. Summary of traits assessed ", 
-                       "in this project and valid answers used in this report."),
+      caption = paste0("Table 1.1. Summary of traits and valid answers used in this report."),
       row.names = FALSE,
       align = "l"),
 silent = TRUE)
@@ -60,7 +82,7 @@ silent = TRUE)
 
 \
 
-Figure 1.1 shows the same information in Table 1.1 with the number of valid answers received by each trait in each data collection moment in this project. 
+Figure 1.1 is a graphical representation of the information presented in Table 1.1, showing the number of valid answers received by each trait in each data collection moment in this project. 
 
 \
 
@@ -75,7 +97,7 @@ trial_map_statement <- ""
 if (isTRUE(geoTRUE)){
   trial_map_statement <- paste0("The map below shows the distribution ",
                                "of the trials in this project. If you registered ", 
-                               "more than one GPS location per ", ranker, " the map ",
+                               "more than one GPS location per ", ranker, ", the map ",
                                "shows the GPS registry which had the largest number ",
                                "of valid GPS records. We used the GPS points from '", 
                                gsub("_lon", "", lon),"'. To respect ",
@@ -124,7 +146,7 @@ if (isTRUE("igraph" %in% class(net))){
 
 ```{r stat_diff_statement}
 # make the statement for the report about the statistical significance
-stat_diff_statement <- paste0("This reports takes the trait '", ovname, 
+stat_diff_statement <- paste0("This report takes the trait '", ovname, 
                               "' as the reference trait for the analysis. ")
 if (isFALSE(is.na(ps[reference_trait]))) {
     
@@ -161,7 +183,7 @@ if (any(na.omit(ps[-reference_trait]) < sig_level)){
 
 `r paste(stat_diff_statement, collapse='\n')`
 
-A summary of the p-values testing the hypothesis that there were differences in the rankings for each trait, and the list of `r options` which were significantly highest and lowest ranked overall, are summarised in Table 1.3.
+A summary of the p-values testing the hypothesis that there were differences in the rankings for each trait, and the list of `r options` which were significantly highest and lowest ranked overall, are summarized in Table 1.3.
 
 \
 
@@ -199,7 +221,7 @@ relation_other_chrs2 <-
         "' matched the rankings for '", ovname, "' ",   tolower(strongest_link[2]),
         "% of the time. The trait that had the weakest ", 
         " relationship with '", ovname, "' was '",
-         tolower(weakest_link[1]), "'. Overall the rankings for '" ,  
+         tolower(weakest_link[1]), "'. Overall, the rankings for '" ,  
         tolower(weakest_link[1]), "' matched the rankings for '", 
         ovname, "' " ,  tolower(weakest_link[2]), "% of the time.",
         " The correlation with the other traits is also shown in Figure 1.3.")
@@ -214,7 +236,7 @@ if (nothertraits > 0) {
 try(
   kable(agreement_table,
       caption = paste0("Table 1.4. Correlation between '", ovname, 
-                       "' and the others traits assessed in this project.")),
+                       "' and the other traits assessed in this project.")),
   silent = TRUE)
 }
 ```
@@ -265,7 +287,7 @@ pls_statement <-
 
 `r paste(pls_statement, collapse='\n')`
 
-```{r plsplot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.4. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated.")}
+```{r plsplot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.4. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated. The dashed line represents the '", ovname, "' with an increase in performance as the x and y increase.")}
 if (isTRUE(dim(arrows)[[1]] > 0)) {
   try(plot(plsplot), silent = TRUE)
 }
@@ -277,22 +299,22 @@ if (isTRUE(dim(arrows)[[1]] > 0)) {
 
 ## Assessment of `r options` 
 
-Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Given the structure of a ClimMob experiment, where each `r ranker` only assessed `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomization process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance. Performance of each of the `r options` for '`r ovname`' is summarised in Table 2.1. 
+Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Given the structure of a ClimMob experiment, where each `r ranker` only assessed `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomization process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance. Performance of each of the `r options` for '`r ovname`' is summarized in Table 2.1. 
 
 
 ```{r fav_table}
 try(knitr::kable(fav2,
              row.names = FALSE,
-             caption = paste0("Table 2.1. Favourability scores for '", 
+             caption = paste0("Table 2.1. Favorability scores for '", 
                               ovname, "'." )), 
     silent = TRUE)
 ```
 
 \
 
-This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head to head contests' for which the `r option` won and the net *favourability* score (Figure 2.1). A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
+This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head-to-head contests' for which the `r option` won and the net *favorability* score (Figure 2.1). A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
 
-```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favourability scores for '", ovname, "'.")}
+```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favorability scores for '", ovname, "'.")}
 try(plot(fav1), silent = TRUE)
 ```
 
@@ -314,7 +336,7 @@ if (isTRUE(nrow(fav2) > 0)) {
 
 ## Pairwise contests 
 
-Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r ovname`'. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the panelled `r option` was ranked above the other `r options` shown as bars. 
+Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r ovname`'. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the paneled `r option` was ranked above the other `r options` shown as bars. 
 
 ```{r contests_bars, dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap= paste0("Figure 2.3. Head to head performance for '", ovname, "'.")}
 try(plot(cont2), silent = TRUE)
@@ -393,7 +415,7 @@ try(plot_worth_bar(worthscaled, value = "Worth", group = Option),
 
 \
 
-A model-based recursive partitioning method [@Strobl2009] was used to determine which of the covatiates, if any, had significant relationships with the rankings of `r ovname`. This approach identifies sub-groups in the data for which the rankings of the different `r options` are significantly different to each other. This analysis required that all rankings and covariates are completely available for the entire dataset. Here we used `r dim(Gdata)[[1]]` out of `r dim(mod_overall$rankings)[[1]]` valid rankings for `r ovname`.
+A model-based recursive partitioning method [@Strobl2009] was used to determine which of the covariates, if any, had significant relationships with the rankings of `r ovname`. This approach identifies sub-groups in the data for which the rankings of the different `r options` are significantly different to each other. This analysis required that all rankings and covariates are completely available for the entire dataset. Here we used `r dim(Gdata)[[1]]` out of `r dim(mod_overall$rankings)[[1]]` valid rankings for `r ovname`.
 
 ```{r effect_covar_statement}
 effect_covar_statement <- ""
@@ -432,9 +454,8 @@ if (covarTRUE) {
   if (isTRUE(length(covar_dropped) > 0)) {
     drop_covar_statement <- paste0(
       "The covariates(s) '", paste(covar_dropped, collapse = "', '"),
-      "' were removed from the analysis in this report, because it did not reach ",
-      "the mininum threshold of ", paste0(missexp * 100, "%"), " of valid data or we found ",
-      "inconsistencies in the provided data."
+      "' were not used in the analysis, because they did not surpassed ",
+      "the threshold of at least ", paste0(missexp * 100, "%"), " valid entries."
     )
   }
   
@@ -537,7 +558,16 @@ if (isTRUE(length(tree_f) == 1)) {
 
 \
 
-```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap= paste0("Figure 2.6. Plackett-Luce tree for '", ovname, "'. The horizontal axis is the probability of winning. Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")}
+```{r pltree_legend}
+pltree_text <- paste0("Figure 2.6. Plackett-Luce tree for '", ovname, "'. The horizontal axis is the probability of winning. Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")
+
+if (length(tree_f) > 1) {
+  pltree_text <- paste0(pltree_text, " Nodes split by the following covariate and attribute ", paste(paste0("node ", node_ids, " covariate ", tolower(node_summary[,1]), " attribute: " , gsub('["]', "", tolower(node_summary[,2]))), collapse = "; and "), ".")
+}
+
+```
+
+```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = pltree_text}
 try(gosset:::plot_tree(tree_f, 
                        add.letters = TRUE, 
                        threshold = 0.05, 
@@ -571,8 +601,7 @@ if(isTRUE(nothertraits > 0)) {
   
   for(i in seq_along(fav_other_traits)){
     trait_summaries<-c(trait_summaries,
-                       knitr::knit_child(paste0(fullpath, "/report/",
-                                                language, "/other_trait_summaries.Rmd"), 
+                       knitr::knit_child(paste0(fullpath, "/report/other_trait_summaries.Rmd"), 
                                          quiet=TRUE))
 }  
 }

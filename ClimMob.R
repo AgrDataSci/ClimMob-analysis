@@ -95,7 +95,6 @@ if (any_error(try_cmdata)) {
 # ................................................................
 # ................................................................
 # Run analysis ####
-
 # write output directory
 tryCatch({
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
@@ -107,7 +106,7 @@ tryCatch({
 dtpars <- tryCatch({
   
   # Get some info from the data and imputed parameters 
-  Option       <-  ClimMobTools:::.title_case(option)
+  Option       <- ClimMobTools:::.title_case(option)
   options      <- ClimMobTools:::.pluralize(option)
   rankers      <- ClimMobTools:::.pluralize(ranker)
   nranker      <- nrow(cmdata)
@@ -131,9 +130,11 @@ dtpars <- tryCatch({
     rankwith <- "rank_numeric"
   }
   
-  # minimum n of complete data required in a characteristic evaluation
-  # before it is excluded. 
-  missper <- 4
+  # minimum n of complete data required in a trait evaluation
+  # before it is excluded, if less than 10 participants the number
+  # can be at least 5 or that all items are tested at least twice
+  missper <- 5
+  minitem <- 2
   
   # minimum proportion of valid observations in explanatory variables
   missexp <- 0.85
@@ -223,10 +224,16 @@ org_rank <- tryCatch({
     keep <- as.vector(colSums(keep) == 0)
     
     # check if number of missing data is lower than the threshold
-    dropit <- sum(keep) < missper
+    # at least that the number of valid entries is higher than missper (5)
+    cond1 <- sum(keep) > missper
+    
+    # at least that all the items are tested twice
+    cond2 <- all(table(unlist(cmdata[keep,itemnames])) > 1)
+    
+    keepit <- all(cond1, cond2)
     
     # if lower than missper it will be dropped
-    if (isTRUE(dropit)) {
+    if (isFALSE(keepit)) {
       trait_dropped <- c(trait_dropped, trait$codeQst[i])
       next
     } 
@@ -621,8 +628,8 @@ try_fav_oa <- tryCatch({
   
   fav2 <- fav2[,-which(grepl("wins", names(fav2)))]
   
-  names(fav2) <- c(Option,"N","Top Ranked",
-                   "Bottom Ranked", "Net Favourability Score")
+  names(fav2) <- c(Option,"N","Top ranked",
+                   "Bottom ranked", "Net favorability score")
   
   fav1 <- 
     plot(fav1) + 
@@ -691,8 +698,8 @@ try_fav_ot <- tryCatch({
       
       fav2_i <- fav2_i[,-which(grepl("wins", names(fav2_i)))]
       
-      names(fav2_i) <- c(Option,"N","Top Ranked","Bottom Ranked",
-                         "Net Favourability Score")
+      names(fav2_i) <- c(Option,"N","Top ranked","Bottom ranked",
+                         "Net favorability score")
       
       fav_other_traits[[i]] <- list(fav1_i, fav2_i)
       
@@ -1202,7 +1209,7 @@ try_plt <- tryCatch({
                                best_tree, 
                                stringsAsFactors = FALSE)
     
-    names(node_summary) <- c("Covariate", "Split", "N", "Best Ranked","Worst Ranked")
+    names(node_summary) <- c("Covariate", "Split", "N", "Best ranked","Worst ranked")
     
   }
   
@@ -1384,8 +1391,8 @@ try_head_summ <- tryCatch({
   if (isTRUE(nothertraits == 0)) {
     ptab <- data.frame(Trait = overall$name,
                        "Data collection moment" = overall$assessment,
-                       "Best Ranked" = bests,
-                       "Worst Ranked" = worsts,
+                       "Best ranked" = bests,
+                       "Worst ranked" = worsts,
                        p.value = ps,
                        check.names = FALSE,
                        stringsAsFactors = FALSE)
@@ -1452,12 +1459,37 @@ try_head_summ <- tryCatch({
   # rename colunms in the original table
   names(tbl_section1) <- c("Trait", "Data collection moment", "Question asked", "Number of valid answers")
   
+  
+  # fill up the information if any trait was removed
+  trait$key <- paste0(trait$code, trait$assessmentName)
+  plottbl1$key <- paste0(plottbl1$code, plottbl1$collect)
+  
+  # merge datasets
+  plottbl1 <- merge(trait[,c("key","codeQst","assessmentName")], plottbl1, by = "key", all.x = TRUE)
+  
+  plottbl1 <- plottbl1[,c("key","codeQst","assessmentName","n")]
+  
+  # sort values to match with the trait data
+  plottbl1 <- plottbl1[match(trait$key, plottbl1$key), ]
+  
+  plottbl1$n <- ifelse(is.na(plottbl1$n), 1, plottbl1$n)
+  
+  names(plottbl1) <- c("key","code","collect","n")
+  
   # check for duplicates
   if(any(duplicated(plottbl1$code))) {
     dups <- duplicated(plottbl1$code)
     ndups <- dups[dups == TRUE]
     plottbl1$code[dups] <- paste0(plottbl1$code[dups], seq_along(ndups))
   }
+  
+  # add the registration info
+  regsinfo <- data.frame(key = "Registration",
+                         collect = "Registration",
+                         n = nranker,
+                         code = "Registration")
+  
+  plottbl1 <- rbind(regsinfo, plottbl1)
   
   # and force the elements to be factors in the right order
   plottbl1$code <- factor(plottbl1$code, levels = plottbl1$code)
@@ -1472,7 +1504,8 @@ try_head_summ <- tryCatch({
   
   plot_tbl1 <-
   ggplot() +
-    geom_line(data = plottbl1, aes(x = code, y = n, group = 1)) +
+    geom_line(data = plottbl1, aes(x = code, y = n, group = 1), size = 1) +
+    geom_point(data = plottbl1, aes(x = code, y = n, group = 1), size = 1) +
     #geom_smooth(data = plottbl1, aes(x = code, y = n, group = 1), method = lm, se = FALSE) +
     geom_rect(data = rects, aes(xmin = xstart, xmax = xend, 
                                 ymin = 0, ymax = round(max(plottbl1$n) + 50, -1),
@@ -1490,11 +1523,7 @@ try_head_summ <- tryCatch({
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           legend.position = "bottom")
-  
-  plot_tbl1
-  
-  
-  
+
   # define height of plots based on items
   favplot_h <- nitems * 0.4
   contest_h <- nitems * 0.4 * 2
@@ -1557,7 +1586,7 @@ if (all(infosheets, done)) {
 if (isTRUE(done)) {
   # the main report
   try_rep <- tryCatch({
-    rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport.Rmd"),
+    rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
                       output_dir = outputpath,
                       output_format = output_format,
                       output_file = paste0("climmob_main_report", ".", extension))
@@ -1576,7 +1605,7 @@ if (isTRUE(done)) {
 
 # if there was any error in the analysis, produce a error report 
 if (isFALSE(done)) {
-  rmarkdown::render(paste0(fullpath, "/report/", language, "/mainreport_failed.Rmd"),
+  rmarkdown::render(paste0(fullpath, "/report/mainreport_failed.Rmd"),
                     output_dir = outputpath,
                     output_format = output_format,
                     output_file = paste0("climmob_main_report", ".", extension))
