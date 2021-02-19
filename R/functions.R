@@ -1,6 +1,19 @@
 ###Functions for Climmob Reporting Analysis
 
-##List of functions
+
+#' Validate the class of objects generated in the tryCatch(s)
+any_error <- function(x){
+  isTRUE("error" %in% class(x))
+}
+
+#' Runs specific lines of the code
+source2 <- function(file, start, end, ...) {
+  file.lines <- scan(file, what=character(), skip=start-1, nlines=end-start+1, sep='\n')
+  file.lines.collapsed <- paste(file.lines, collapse='\n')
+  source(textConnection(file.lines.collapsed), ...)
+}
+
+
 #' Plot map using leaflet
 #' @param data a data frame
 #' @param xy index of data for the longitude and latitude coordinates (in that order)
@@ -129,21 +142,24 @@ win_plot<-function(x){
   return(p1)
 }
 
-anova.PL<-function(model){
+anova.PL <- function(model){
   if(class(model)!="PlackettLuce"){
-    stop("Model type is not Plackett Luce")
+    stop("Model type is not Plackett-Luce")
   }
-  LLs<-c(model$null.loglik,model$loglik)
-  dfs<-c(model$df.null,model$df.residual)
-  df_diff<-(-1)*diff(dfs)
-  df_LL<-(-1)*diff(LLs)
-  p=1-pchisq(-2*df_LL,df_diff)
+  LLs <- c(model$null.loglik, model$loglik)
+  dfs <- c(model$df.null, model$df.residual)
+  df_diff <- (-1) * diff(dfs)
+  df_LL <- (-1) * diff(LLs)
+  p <- 1 - pchisq(-2 * df_LL, df_diff)
   
   
-  x<-data.frame(model=c("NULL",deparse(substitute(model))),
-                "logLikelihood"=LLs,
-                DF=dfs,"Statistic"=c(NA,-2*df_LL),
-                "Pr(>Chisq)"=c(NA,p),check.names = FALSE,stringsAsFactors = FALSE)
+  x <- data.frame(model = c("NULL", deparse(substitute(model))),
+                  "logLikelihood" = LLs,
+                  DF=dfs,
+                  "Statistic" = c(NA, -2 * df_LL),
+                  "Pr(>Chisq)" = c(NA, p),
+                  check.names = FALSE,
+                  stringsAsFactors = FALSE)
   return(x)
 }
 

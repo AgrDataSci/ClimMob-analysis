@@ -1,0 +1,31 @@
+---
+title: "`r paste('Report of ClimMob project ', projname)`"
+author: "ClimMob.net"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  word_document:
+    reference_docx: word_style_template.docx
+    toc: true
+  html_document:
+    toc: true
+  pdf_document:
+    toc: true
+bibliography: ["climmob.bib"]
+csl: citation_style.csl
+---
+
+```{r setup_opts, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      error = FALSE,
+                      message=FALSE,
+                      warning = FALSE)
+```
+
+
+# Section 1: Headline results
+
+Overall, there were `r nranker` `r rankers` registered to this project. Each `r ranker` assessed `r ncomp` different `r options` for `r length(trait$name)` different traits. Unfortunately, all the `r length(trait$name)` traits assessed in your ClimMob project were not considered for the production of this report as they did not surpassed the thresholds of (1) having at least `r missper` valid entries, and (2) that all the `r options` are tested at least twice per given trait. Please contact the ClimMob Team for support.
+
+
+
+

@@ -589,7 +589,7 @@ for(i in seq_along(partitable$id)){
   
   ranker_description <- paste0(id_i, "_", name)
   
-  rmarkdown::render(paste0(fullpath, "/report/", language, "/participant_report.Rmd"),
+  rmarkdown::render(paste0(fullpath, "/report/participant_report.Rmd"),
                     output_dir = paste0(outputpath, "/participant_report/"),
                     output_format = output_format,
                     output_file = paste0("participant_report_", ranker_description, ".",extension))
