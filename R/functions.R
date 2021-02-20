@@ -759,3 +759,43 @@ plot_coef <- function(object, ...) {
           axis.text.y = element_text(size = 9, colour = "black"))
   
 }
+
+
+#' Rename duplicates
+#' 
+#' Look for duplicated values in a vector and rename them,
+#'  an additional string is added to avoid duplicate and
+#'  get unique values with the same vector length
+#' 
+#' @param x a vector to check and rename duplicated values
+#' @param rename.with choose between numbers and letters
+#' @examples
+#' 
+#' v <- c("Pear", "Apple", "Pear", "Orange", "Apple", "Apple")
+#' 
+#' rename_duplicates(v)
+#' 
+#' @noRd
+rename_duplicates <- function(x, rename.with = "numbers", sep = "") {
+  
+  dups <- duplicated(x)
+  dups <- unique(x[dups])
+  
+  for(i in seq_along(dups)) {
+    
+    dups_i <- x == dups[i]
+    
+    index <- seq_len(sum(dups_i))
+    
+    if (rename.with == "letters") {
+      index <- letters[index]
+    }
+    
+    x[dups_i] <- paste(x[dups_i],  index, sep = sep)
+    
+  }
+  
+  return(x)
+  
+}
+
