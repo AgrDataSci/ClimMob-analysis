@@ -183,6 +183,11 @@ org_rank <- tryCatch({
   
   trait <- pars$traits
   
+  # rename traits to avoid duplicated strings, in case the same 
+  # trait is tested in different data collection moments 
+  trait$codeQst <- rename_duplicates(trait$codeQst)
+  trait$name    <- rename_duplicates(trait$name, sep = " ")
+  
   tricotVSlocal <- length(pars$tricotVSlocal) > 0
   
   # get a vector with trait names matched with the assessment id
@@ -234,7 +239,7 @@ org_rank <- tryCatch({
     
     # if lower than missper it will be dropped
     if (isFALSE(keepit)) {
-      trait_dropped <- c(trait_dropped, trait$codeQst[i])
+      trait_dropped <- c(trait_dropped, trait$name[i])
       next
     } 
     
@@ -376,6 +381,12 @@ org_covar <- tryCatch({
   
   if (covarTRUE) {
     
+    # rename covariates to avoid duplicated strings, in case the same 
+    # question was made in different data collection moments 
+    covar$codeQst <- rename_duplicates(covar$codeQst)
+    covar$name    <- rename_duplicates(covar$name, sep = " ")
+    
+    
     # add the string $ to indicate the end of pattern
     strings <- paste0(covar$nameString, "$")
     
@@ -406,17 +417,7 @@ org_covar <- tryCatch({
     covar_dropped <- covar$name[dropit]
     covar <- covar[!dropit, ]
    
-    # look if the same question was made more than once
-    # if yes, then add a random number to avoid issues in 
-    # matching the names later on, mostly for the pltree()
-    if(any(duplicated(covar$codeQst))) {
-      dups <- duplicated(covar$codeQst)
-      ndups <- dups[dups == TRUE]
-      covar$codeQst[dups] <- paste0(covar$codeQst[dups], seq_along(ndups))
-      #covar$name[dups] <- paste0(covar$name[dups], seq_along(ndups))
-    }
-    
-    # if no explanatory variable left out put a pseudo variable
+    # if no covariate left out put a pseudo variable
     if(isTRUE(dim(covar)[[1]] == 0)) {
       
       cmdata$Intercept <- rep(0, nranker)
@@ -1484,13 +1485,6 @@ try_head_summ <- tryCatch({
   plottbl1$n <- ifelse(is.na(plottbl1$n), 1, plottbl1$n)
   
   names(plottbl1) <- c("key","code","collect","n")
-  
-  # check for duplicates
-  if(any(duplicated(plottbl1$code))) {
-    dups <- duplicated(plottbl1$code)
-    ndups <- dups[dups == TRUE]
-    plottbl1$code[dups] <- paste0(plottbl1$code[dups], seq_along(ndups))
-  }
   
   # add the registration info
   regsinfo <- data.frame(key = "Registration",
