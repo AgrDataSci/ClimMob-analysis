@@ -20,5 +20,3 @@ if(isTRUE(nothertraits > 0)){
 knitr::include_graphics(page2[[i]])
 }
 ```
-
-
