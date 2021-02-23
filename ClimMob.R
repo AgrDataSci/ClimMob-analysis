@@ -136,8 +136,13 @@ dtpars <- tryCatch({
   missper <- 5
   minitem <- 2
   
-  # minimum proportion of valid observations in explanatory variables
+  # minimum proportion of valid entries in explanatory variables
   missexp <- 0.85
+  
+  # minimum proportion of valid entries in tricot vs local
+  # this will be computed based on the valid entries of the reference
+  # trait after validations
+  mintricotVSlocal <- 0.90
   
   # minimum split size for PL Tree models
   minsplit <- ceiling(nranker * 0.1)
@@ -247,7 +252,15 @@ org_rank <- tryCatch({
     # again, it assumes that overall performance is the first characteristic
     if (isTRUE(i == reference_trait & tricotVSlocal)) {
       
-      ovsl <- as.vector(pars$tricotVSlocal[, paste0("nameString", seq_len(pars$tricotVSlocal$nQst))])
+      # some times the user can add this question twice, I still don't have a solution for 
+      # this, so I will use the one that is related to overallperf
+      indexO <- which(grepl("_overalperf", pars$tricotVSlocal$nameString1))
+      
+      if (length(indexO) != 1) {
+        indexO <- 1
+      }
+      
+      ovsl <- as.vector(pars$tricotVSlocal[indexO, paste0("nameString", seq_len(pars$tricotVSlocal$nQst[indexO]))])
       
       # search for the columns in the data
       for (k in seq_along(ovsl)) {
@@ -267,11 +280,14 @@ org_rank <- tryCatch({
       keep2 <- keep & keep2
       
       # check if it has the minimal number of observations
-      dropit2 <- sum(keep2) < missper
+      # this should be combined with the available data in the reference
+      # trait as they will be filtered together
+      dropit2 <- sum(keep2 & keep) / sum(keep) < mintricotVSlocal
       
       # if is below the minimal number of observations then the comparison
       # with the local item is ignored
       if (isTRUE(dropit2)) {
+        trait_dropped <- c(trait_dropped, "Comparison with local")
         tricotVSlocal <- FALSE
       }
       
@@ -304,7 +320,7 @@ org_rank <- tryCatch({
   }
   
   # if all the traits were removed then make a report and stop the process here 
-  if (length(trait_dropped) == length(trait$name)) {
+  if (all(trait$name %in% trait_dropped)) {
     rmarkdown::render(paste0(fullpath, "/report/mainreport_no_traits.Rmd"),
                       output_dir = outputpath,
                       output_format = "word_document",
@@ -317,7 +333,7 @@ org_rank <- tryCatch({
   
   # refresh the index for the reference trait in case it changed due to 
   # dropped trait
-  reference_trait <- paste(trait[reference_trait, c("name","assessmentId")], collapse = "")
+  reference_trait <- paste(trait[reference_trait, c("codeQst","assessmentId")], collapse = "")
   reference_trait <- which(names(trait_list) %in% reference_trait)
   
   # if for some reason the reference trait was dropped, than take the last one
@@ -866,7 +882,7 @@ try_pl <- tryCatch({
     ci_adjust <- "BH"
   }
   
-  model_summaries <- multcompPL(mod_overall, ref = reference, threshold = 0.05, adjust = ci_adjust)
+  model_summaries <- multcompPL(mod_overall, ref = reference, threshold = 0.1, adjust = ci_adjust)
   
   fullanova <- anova.PL(mod_overall)
   
@@ -903,19 +919,20 @@ try_pl <- tryCatch({
     
     ot <- other_traits_list[[i]]
     
-    if (isTRUE(tricotVSlocal)) {
-      
-      keep <- overall$keep2 & ot$keep
-      
-      a <- list(cmdata[keep, c(itemnames, ot$strings, overall$ovls)],
-                items = itemnames,
-                input = ot$strings,
-                additional.rank = cmdata[keep, overall$ovsl])
-      
-      Rot <- do.call(rankwith, args = a)
-    }
-    
-    if (isFALSE(tricotVSlocal)) {
+    # if (isTRUE(tricotVSlocal)) {
+    #   
+    #   keep <- overall$keep2 & ot$keep
+    #   
+    #   a <- list(cmdata[keep, c(itemnames, ot$strings, overall$tricotVSlocal)],
+    #             items = itemnames,
+    #             input = ot$strings,
+    #             additional.rank = cmdata[keep, overall$tricotVSlocal])
+    #   
+    #   Rot <- do.call(rankwith, args = a)
+    #   
+    # }
+    # 
+    # if (isFALSE(tricotVSlocal)) {
       keep <- ot$keep
       
       a <- list(data  = cmdata[keep, c(itemnames, ot$strings)],
@@ -924,7 +941,7 @@ try_pl <- tryCatch({
       
       Rot <- do.call(rankwith, args = a)
       
-    }
+    #}
     
     mod_t <- PlackettLuce(Rot)
     
@@ -983,6 +1000,15 @@ try_pl <- tryCatch({
   # .......................................................
   # PlackettLuce combining traits together ####
   coefs <- qvcalc(mod_overall, ref = reference)[[2]]$estimate
+  names(coefs) <- rownames(qvcalc(mod_overall)[[2]])
+  
+  # take the local item out of this analysis
+  if (tricotVSlocal) {
+    rmvlocal <- which(dimnames(R)[[2]] == "Local")
+    coefs <- PlackettLuce(R[,-rmvlocal])
+    coefs <- qvcalc(coefs, ref = reference)[[2]]$estimate
+    names(coefs) <- dimnames(R[,-rmvlocal])[[2]]
+  }
   
   for(i in seq_along(other_traits)){
     coefs <- cbind(coefs, 
@@ -990,9 +1016,6 @@ try_pl <- tryCatch({
   }
   
   coefs <- as.data.frame(coefs)
-  
-  # add item names as rows
-  rownames(coefs) <- rownames(qvcalc(mod_overall)[[2]])
   
   # set col names with title case traits
   ov <- gsub(" ","_", overall$name)
@@ -1024,7 +1047,7 @@ try_pls <- tryCatch({
                validation = "LOO", 
                jackknife = TRUE)
     
-    if (ncol(m2$projection) > 1 ) {
+    if (ncol(m2$projection) > 1) {
       
       arrowlabels <- unlist(lapply(other_traits_list, function(x){x$code}))
       
@@ -1185,7 +1208,9 @@ try_plt <- tryCatch({
       
     }
     
+    # remove the strings %in% " and c() from rules 
     coefs_t$rule <- gsub("%in%","@", coefs_t$rule)
+    coefs_t$rule <- gsub("[(]|[)]| c","", coefs_t$rule)
     
     coefs_t$Label <- paste("Node", coefs_t$node, ":", coefs_t$rule,"\n","n=",coefs_t$n)
     
@@ -1203,23 +1228,27 @@ try_plt <- tryCatch({
     best_tree <- NULL
     for(i in seq_along(rules)){
       
-      tmp <- subset(coefs_t, rule==rules[i])
+      tmp <- subset(coefs_t, rule == rules[i])
       
       best_tree <- rbind(best_tree,
                          c(tmp$n[1], 
-                           paste(tmp$term[grepl("a", tmp$group)], collapse=", "),
+                           paste(tmp$term[tmp$group %in% "a"], collapse=", "),
                            paste(rev(tmp$term[grepl(tmp$group[nrow(tmp)], tmp$group)]), collapse=", ")))
     }
     
-    rules <- strsplit(rules, "@")
-    rules <- do.call("rbind", rules)
-    rules[,2] <- gsub("[(]|[)]| c","", rules[,2])
+    # rules <- strsplit(rules, "@")
+    # rules <- do.call("rbind", rules)
+    
+    rules <- cbind("Covariate", rules)
+    rules[,2] <- gsub("@", " Attribute ", rules[,2])
+    rules[,2] <- gsub("&", " & Covariate ", rules[,2])
+    rules <- paste(rules[,1], rules[,2])
     
     node_summary <- data.frame(rules, 
                                best_tree, 
                                stringsAsFactors = FALSE)
     
-    names(node_summary) <- c("Covariate", "Split", "N", "Best ranked","Worst ranked")
+    names(node_summary) <- c("Split rule", "N", "Best ranked","Worst ranked")
     
   }
   
@@ -1308,6 +1337,7 @@ try_head_summ <- tryCatch({
   }
   
   siglist <- unique(siglist)
+  siglist <- na.omit(siglist)
   
   ps <- fullanova[2, 5]
   
@@ -1343,7 +1373,7 @@ try_head_summ <- tryCatch({
       
       ps_i <- anovas[[i]][2,5]
       
-      if (isTRUE(ps_i < sig_level)) {
+      if (isTRUE(ps_i <= sig_level)) {
         
         summ_i <- summaries[[i]]
         
@@ -1436,9 +1466,7 @@ try_head_summ <- tryCatch({
   
   
   # This is Table 3.3
-  model_summaries$items <- row.names(model_summaries)  
-  rownames(model_summaries) <- NULL
-  model_summaries <- model_summaries[, c("items", "estimate","quasiSE","group")]
+  model_summaries <- model_summaries[, c("term", "estimate","quasiSE","group")]
   names(model_summaries) <- c(Option, "Estimate","quasiSE","Group")
   
   

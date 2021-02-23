@@ -1,6 +1,6 @@
 # ................................................................
 # ................................................................
-# Summarise the results for the farmers reports
+# Summarise the results for the participant reports
 # ................................................................
 # ................................................................
 # ................................................................
@@ -17,14 +17,14 @@ cmdata[, itemnames] <- lapply(cmdata[, itemnames], function(x){
 })
 
 # make the rank without the Local item
-overall <- trait_list[[1]]
+overall <- trait_list[[reference_trait]]
 keep <- overall$keep
 
 # list of arguments for the function that will be used to 
 # create the rankings
 a <- list(cmdata[keep, ],
           items = itemnames,
-          input = overall$input)
+          input = overall$strings)
 
 R <- do.call(rankwith, args = a)
 
@@ -61,6 +61,10 @@ infotable <- data.frame(item = order_items,
 infotable[is.na(infotable)] <- 0
 
 infotable <- infotable[order(infotable$rank), ]
+
+# take the question asked
+
+question_asked <- try(trait[reference_trait, "questionAsked1"], silent = TRUE)
 
 # ................................................................
 # ................................................................
@@ -104,13 +108,19 @@ if(isTRUE(nothertraits > 0)){
   
   otr <- list()
   
+  otrnames <- lapply(other_traits_list, function(x){
+    x$name
+  })
+  
+  otrnames <- as.vector(unlist(otrnames))
+  
   for(i in seq_along(other_traits_list)){
     
     ot <- other_traits_list[[i]]
     
     a <- list(cmdata[ot$keep, ],
               items = itemnames,
-              input = ot$input)
+              input = ot$strings)
     
     R <- do.call(rankwith, args = a)
     
@@ -159,11 +169,12 @@ if(isTRUE(nothertraits > 0)){
       
     }
     
-    # combine it with the main ranking for overall performance
-    x <- rbind(partitable[i, paste0("Position", 1:ncomp) ], x)
-    
+  
     # add the question that was made
-    x <- cbind(Question = tbl_section1$Question, x)
+    x <- cbind(Trait = otrnames, 
+               x)
+    
+    x <- as.data.frame(x)
     
     # change names of order based on the number of comparisons 
     # used in the trail
@@ -297,7 +308,7 @@ global_ranking_colors <- rgb(colorRamp(text_colors)(rev(scale01(infotable$rank))
 # ................................................................
 # ................................................................
 # create a black arrow, saved as external file
-png(paste0(outputpath, "/participant_report/png/mask.png"))
+png(paste0(outputpath, "participant_report/png/mask.png"))
 ytmp1 <- max(y[length(y)],-35)
 ytmp2 <- y[3]
 grid.polygon(
@@ -320,7 +331,7 @@ dev.off()
 # ................................................................
 # ................................................................
 # read back in the arrow as colour matrix
-m <- readPNG(paste0(outputpath, "/participant_report/png/mask.png"), native=FALSE)
+m <- readPNG(paste0(outputpath, "participant_report/png/mask.png"), native=FALSE)
 mask <- matrix(rgb(m[,,1],m[,,2],m[,,3]),
                nrow=nrow(m))
 rmat <- matrix(grey(seq(0,1,length=nrow(m))),
@@ -350,7 +361,7 @@ for(i in seq_along(partitable$id)){
   width_yours <- global_width[match(your_ranking, infotable$item)] 
   
   # make the result png file
-  pngpath1 <- paste0(outputpath, "/participant_report/png/", 
+  pngpath1 <- paste0(outputpath, "participant_report/png/", 
                      partitable$id[i], ".png")
   
   page1[[i]] <- pngpath1
@@ -426,8 +437,7 @@ for(i in seq_along(partitable$id)){
   
   text(xtitle[2], 
        y["title"], 
-       paste("Overall, which", option, 
-             "you prefer most?"), 
+       question_asked, 
        adj=c(0.5,NA), 
        font=2, 
        cex=textsize_3, 
@@ -540,44 +550,45 @@ for(i in seq_along(partitable$id)){
   dev.off()
   
   if(isTRUE(nothertraits > 0)){
-  # make the result png file
-  pngpath2 <- paste0(outputpath, "/participant_report/png/", 
-                     partitable$id[i], "page2.png")
-  
-  page2[[i]] <- pngpath2
-  
-  png(pngpath2, width= 21, height= 29, units="cm", res=300)
-  par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5))
-  plot.new()
-  plot.window(ylim=c(-35,0), xlim=c(xstart, xend))
-  
-  # top_box
-  rect(xleft=xstart, 
-       ybottom=ytopbox[2], 
-       xright = xend, 
-       ytop = ytopbox[1], 
-       col=NA, 
-       border = grey_col,
-       lty = 2, lwd=boxwidth)
-  
-  text(x=xtop, 
-       y=ytop[1], 
-       paste("This is how you ranked the", 
-             ncomp, options, "that you received,"), 
-       cex=textsize_3, 
-       adj=c(0, NA))
-  
-  text(x=xtop,y=ytop[3], 
-       paste("based on the other", nothertraits, 
-             "characteristics evaluated in this trial:"),
-       cex=textsize_3, 
-       adj=c(0, NA))
-  
-  grid.table(otrp[[i]], rows = NULL)
-  
-  dev.off()
-  
+    # make the result png file
+    pngpath2 <- paste0(outputpath, "participant_report/png/", 
+                       partitable$id[i], "page2.png")
+    
+    page2[[i]] <- pngpath2
+    
+    png(pngpath2, width= 21, height= 29, units="cm", res=300)
+    par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5))
+    plot.new()
+    plot.window(ylim=c(-35,0), xlim=c(xstart, xend))
+    
+    # top_box
+    rect(xleft=xstart, 
+         ybottom=ytopbox[2], 
+         xright = xend, 
+         ytop = ytopbox[1], 
+         col=NA, 
+         border = grey_col,
+         lty = 2, lwd=boxwidth)
+    
+    text(x=xtop, 
+         y=ytop[1], 
+         paste("This is how you ranked the", 
+               ncomp, options, "that you received,"), 
+         cex=textsize_3, 
+         adj=c(0, NA))
+    
+    text(x=xtop,y=ytop[3], 
+         paste("based on the other", nothertraits, 
+               "traits evaluated in this trial:"),
+         cex=textsize_3, 
+         adj=c(0, NA))
+    
+    grid.table(otrp[[i]], rows = NULL)
+    
+    dev.off()
+    
   }
+  
 }
 
 # create all the feedback reports, by looping over all the ranker.ids
@@ -592,7 +603,7 @@ for(i in seq_along(partitable$id)){
   rmarkdown::render(paste0(fullpath, "/report/participant_report.Rmd"),
                     output_dir = paste0(outputpath, "/participant_report/"),
                     output_format = output_format,
-                    output_file = paste0("participant_report_", ranker_description, ".",extension))
+                    output_file = paste0("participant_report_", ranker_description, ".", extension))
   
 }
 

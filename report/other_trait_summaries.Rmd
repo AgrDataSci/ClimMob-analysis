@@ -98,7 +98,8 @@ Figure 3.`r i`.3 shows the estimates of the model coefficients with `r paste0(ci
 ```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.", i,".3. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", tolower(other_traits_list[[i]]$name),"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
 
 if(length(aov_ii) > 1){
-  plot(plot_summaries[[i]])
+plot_summaries[[i]] +
+    labs(y = Option)
 }
 ```
 
