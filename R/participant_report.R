@@ -17,14 +17,14 @@ cmdata[, itemnames] <- lapply(cmdata[, itemnames], function(x){
 })
 
 # make the rank without the Local item
-overall <- trait_list[[1]]
+overall <- trait_list[[reference_trait]]
 keep <- overall$keep
 
 # list of arguments for the function that will be used to 
 # create the rankings
 a <- list(cmdata[keep, ],
           items = itemnames,
-          input = overall$input)
+          input = overall$strings)
 
 R <- do.call(rankwith, args = a)
 
@@ -110,7 +110,7 @@ if(isTRUE(nothertraits > 0)){
     
     a <- list(cmdata[ot$keep, ],
               items = itemnames,
-              input = ot$input)
+              input = ot$strings)
     
     R <- do.call(rankwith, args = a)
     
