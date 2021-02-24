@@ -1,18 +1,18 @@
-ClimMob-analysis v1.2 (2021-02-20)
+ClimMob-analysis v1.2 (2021-02-24)
 =========================
 
 ### Improvements
 
-* New structure to organise the sections. First an overview of the ClimMob project. Then the analysis of the main trait and followed by the other traits independently. Sections are now organised by trait and not but the type of analysis.
-* The main trait (reference trait) is selected based on the availability of the most common main traits, first the algorithm looks for the overall performance, then yield, than taste. If none of those are found, the algorithm selects the last trait assessed in the project, as provided by the arguments in the file `data.json`.
-* The algorithm accepts trait/covariates assessed more than once if in different data collection moments. To avoid issues in factor levels, we add an additional string with sequential numbers per each duplicated trait/covariate.
-* A new chart showing the number of valid answers received for each trait in the data collection moments.
-* Table with number of technologies assessed by gender now is produced based on the aliases of the variable "REG_gender" which makes possible the inclusion of new aliases.
-* Information on the data collection moment is provided and linked to their respective traits and covariates.
-* An alpha of 0.5 is used in the Plackett-Luce tree for the main trait. This is to enable the creation of trees even with a small sample size. The algorithm still prints the message if the tree has significant groups with an alpha of 0.1 (standard for the analysis).
-* Filtering trait entries follows the criteria of (1) having at least 5 valid entries, and (2) that all the technologies are tested at least twice per given trait. 
+* New criteria in filtering the trait entries (participants' responses): (1) having at least 5 valid entries (no NA's, both positive and negative answered), and (2) that all the technologies are tested at least twice per given trait. 
 * If no trait passes these criteria, then a report with the message is generated.
-* The main script is revised in its structure and documentation to increase readability and improve bug fixes.
+* The main script is revised in its structure and documentation to increase readability and improve bug fixes. The new structure to organise the sections follows, first an overview of the ClimMob project. Then the analysis of the main trait, followed by the other traits independently. Sections are now organised by trait and not but the type of analysis.
+* The main trait (reference trait) is selected based on the availability of the most common reference traits, first the algorithm looks for the overall performance (or overall preference), then yield, then taste. If none of these traits are found, the algorithm selects the last trait assessed in the project, as provided by the arguments in the file `data.json`.
+* The algorithm deals trait/covariates assessed more than once if in different data collection moments. To avoid issues in factor levels, we add an additional string with sequential numbers per each duplicated trait/covariate. Check function `rename_duplicates()` [here](https://github.com/agrobioinfoservices/ClimMob-analysis/blob/41cbb89934407480272318b8b09fe28e3ab7e0a9/R/functions.R#L764).
+* We added a new chart showing the number of valid answers received for each trait in the data collection moments. Even those removed for the analysis due to few data available.
+* Table with number of technologies assessed by gender now is produced based on the aliases of the variable "REG_gender" which makes possible the inclusion of new aliases.
+* Information on the data collection moment is provided and linked to their respective traits and covariates. This will help the reader to find out which trait/covariate belongs to the data collection moment, mostly when the trait/covariate is collected in more than one data collection moment.
+* An alpha of 0.5 is used in the Plackett-Luce tree for the main trait. This is to enable the creation of trees even with a small sample size. The algorithm still prints the message if the tree has significant groups with an alpha of 0.1 (default for the analysis).
+* Minor improvements in sorting the traits for the participants' reports and how traits and question asked are displayed.
 
 ### BUG FIXES
 

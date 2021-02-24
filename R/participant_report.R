@@ -18,6 +18,9 @@ cmdata[, itemnames] <- lapply(cmdata[, itemnames], function(x){
 
 # make the rank without the Local item
 overall <- trait_list[[reference_trait]]
+# take the question asked
+question_asked <- strsplit(overall$question, "[?,]")[[1]][1]
+# the vector to filter the data
 keep <- overall$keep
 
 # list of arguments for the function that will be used to 
@@ -62,10 +65,6 @@ infotable[is.na(infotable)] <- 0
 
 infotable <- infotable[order(infotable$rank), ]
 
-# take the question asked
-
-question_asked <- try(trait[reference_trait, "questionAsked1"], silent = TRUE)
-
 # ................................................................
 # ................................................................
 # Get the info from the participants ####
@@ -87,7 +86,7 @@ ord <- as.data.frame(ord)
 names(ord) <- paste0("Position", 1:ncomp)
 
 # empty matrix to expand values from ord so it can fit partitable
-# in case of missing data
+# in case of missing data when participants did not replied the reference trait
 x <- matrix(NA, 
             ncol = ncomp, 
             nrow = length(cmdata$id),
@@ -174,16 +173,20 @@ if(isTRUE(nothertraits > 0)){
     x <- cbind(Trait = otrnames, 
                x)
     
+    # add the reference trait at the top of the table
+    x <- rbind(unlist(c(overall$name, partitable[i, paste0("Position", 1:ncomp)])),
+               x)
+    
     x <- as.data.frame(x)
     
     # change names of order based on the number of comparisons 
     # used in the trail
     if (isTRUE(ncomp == 3)){
-      names(x)[-1] <- c("First","Middle","Last")
+      names(x) <- c("Trait","First","Middle","Last")
     }
     
     if (isTRUE(ncomp > 3)) {
-      names(x)[-1] <- paste("Position", 1:ncomp)
+      names(x) <- c("Trait", paste("Position", 1:ncomp))
     }
     
     otrp[[i]] <- x
@@ -428,7 +431,7 @@ for(i in seq_along(partitable$id)){
     y["title"] + textsize_3 * .8,
     paste(nranker, rankers,
           "(including you) were asked to rank the", ncomp, 
-          options, "they got, to answer the question:"),
+          options, "randomly assigned, to answer the question:"),
     adj = c(0.5, NA),
     font = 1,
     cex = textsize_1,
