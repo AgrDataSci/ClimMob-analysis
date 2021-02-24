@@ -1272,10 +1272,13 @@ try_plt <- tryCatch({
       
       outtabs[[j]]$p <- format.pval(outtabs[[j]]$p.value)
     }else{
-      outtabs[[j]] <- data.frame(Node = j, 
-                                 Message = "No further splits possible", 
-                                 p.value = NA,
+      outtabs[[j]] <- data.frame(Node = rep(j, length(covar$codeQst)), 
+                                 statistic = rep(NA, length(covar$codeQst)),
+                                 p.value = rep(NA, length(covar$codeQst)),
                                  stringsAsFactors = FALSE)
+      
+      rownames(outtabs[[j]]) <- covar$codeQst
+      
     }
   }
   
