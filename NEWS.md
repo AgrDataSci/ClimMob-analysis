@@ -12,7 +12,7 @@ ClimMob-analysis v1.2 (2021-02-24)
 * Table with number of technologies assessed by gender now is produced based on the aliases of the variable "REG_gender" which makes possible the inclusion of new aliases.
 * Information on the data collection moment is provided and linked to their respective traits and covariates. This will help the reader to find out which trait/covariate belongs to the data collection moment, mostly when the trait/covariate is collected in more than one data collection moment.
 * An alpha of 0.5 is used in the Plackett-Luce tree for the main trait. This is to enable the creation of trees even with a small sample size. The algorithm still prints the message if the tree has significant groups with an alpha of 0.1 (default for the analysis).
-
+* Minor improvements in sorting the traits for the participants' reports and how traits and question asked are displayed.
 
 ### BUG FIXES
 
