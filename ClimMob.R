@@ -227,6 +227,20 @@ org_rank <- tryCatch({
       
     }
     
+    # replace Not observed entries with NA
+    rpl <- cmdata[trait_i]
+    rpl[rpl == "Not observed"] <- NA
+    # rpl[rpl == "Tie"] <- NA
+    cmdata[trait_i] <- rpl
+    
+    # if all the three items are tied than set this entry as NA
+    # as it results in issues on PlackettLuce its S3 methods
+    tied <- as.vector(apply(cmdata[trait_i], 1, function(x) {
+      all(x == "Tie") & all(!is.na(x))
+    }))
+    
+    cmdata[tied, trait_i] <- NA
+    
     # check for data completeness in this trait
     # should return a vector with TRUE, FALSE, 
     # where TRUE = complete, FALSE = missing
@@ -919,29 +933,13 @@ try_pl <- tryCatch({
     
     ot <- other_traits_list[[i]]
     
-    # if (isTRUE(tricotVSlocal)) {
-    #   
-    #   keep <- overall$keep2 & ot$keep
-    #   
-    #   a <- list(cmdata[keep, c(itemnames, ot$strings, overall$tricotVSlocal)],
-    #             items = itemnames,
-    #             input = ot$strings,
-    #             additional.rank = cmdata[keep, overall$tricotVSlocal])
-    #   
-    #   Rot <- do.call(rankwith, args = a)
-    #   
-    # }
-    # 
-    # if (isFALSE(tricotVSlocal)) {
-      keep <- ot$keep
+    keep <- ot$keep
       
-      a <- list(data  = cmdata[keep, c(itemnames, ot$strings)],
-                items = itemnames,
-                input = ot$strings)
-      
-      Rot <- do.call(rankwith, args = a)
-      
-    #}
+    a <- list(data  = cmdata[keep, c(itemnames, ot$strings)],
+              items = itemnames,
+              input = ot$strings)
+    
+    Rot <- do.call(rankwith, args = a)
     
     mod_t <- PlackettLuce(Rot)
     
