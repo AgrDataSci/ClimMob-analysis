@@ -230,7 +230,6 @@ org_rank <- tryCatch({
     # replace Not observed entries with NA
     rpl <- cmdata[trait_i]
     rpl[rpl == "Not observed"] <- NA
-    # rpl[rpl == "Tie"] <- NA
     cmdata[trait_i] <- rpl
     
     # if all the three items are tied than set this entry as NA
