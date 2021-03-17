@@ -26,5 +26,3 @@ This repository contains the code used in the workflow to analyse data and creat
   - The [Tricot user guide](https://hdl.handle.net/10568/109942) shows how the experimental method inside the ClimMob platform
   - The [ClimMob](https://climmob.net/) platform is an free on-line software for experimental trials with the tricot citizen-science approach
   
-  
-  
