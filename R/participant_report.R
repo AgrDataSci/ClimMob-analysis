@@ -27,11 +27,15 @@ keep <- overall$keep
 # create the rankings
 a <- list(cmdata[keep, ],
           items = itemnames,
-          input = overall$strings)
+          input = overall$strings, 
+          full.output = TRUE)
 
 R <- do.call(rankwith, args = a)
 
-order_items <- coef(PlackettLuce(R), ref = reference)
+order_items <- coef(PlackettLuce(R[["PLranking"]]), ref = reference)
+
+# do this to remove ties
+order_items <- order_items[names(order_items) %in% items]
 
 rank_items <- gosset:::.rank_decimal(order_items)$rank
 
@@ -39,21 +43,10 @@ order_items <- names(order_items)
 
 freq_items <- table(unlist(itemdata))
 
-R <- R[1:nrow(R),, as.rankings = FALSE]
-R[R == 0] <- NA
+ordering <- R[["myrank"]]
 
-first <- apply(R, 1, function(x){
-  i <- which.min(x)
-  names(x)[i]
-}) 
-
-last <- apply(R, 1, function(x){
-  i <- which.max(x)
-  names(x)[i]
-}) 
-
-first_items <- table(first)
-last_items  <- table(last)
+first_items <- table(ordering[,1])
+last_items  <- table(ordering[,3])
 
 infotable <- data.frame(item = order_items,
                         rank = rank_items,
@@ -73,18 +66,6 @@ partitable <- cmdata[, sel]
 
 names(partitable) <- gsub("package_|farmer", "", names(partitable))
 
-# now get the items that where ranked from first to last by 
-# each participant
-ord <- t(apply(R, 1, function(x){
-  x <- na.omit(x)
-  x <- sort(x)
-  names(x)
-}))
-
-ord <- as.data.frame(ord)
-
-names(ord) <- paste0("Position", 1:ncomp)
-
 # empty matrix to expand values from ord so it can fit partitable
 # in case of missing data when participants did not replied the reference trait
 x <- matrix(NA, 
@@ -94,7 +75,7 @@ x <- matrix(NA,
 
 partitable <- cbind(partitable, x)
 
-partitable[keep, paste0("Position", 1:ncomp)] <- ord
+partitable[keep, paste0("Position", 1:ncomp)] <- ordering
 
 # fill NAs with "Not replied" in the first case and then with an empty character
 partitable$Position1[is.na(partitable$Position1)] <- "Not replied"
@@ -119,19 +100,10 @@ if(isTRUE(nothertraits > 0)){
     
     a <- list(cmdata[ot$keep, ],
               items = itemnames,
-              input = ot$strings)
+              input = ot$strings,
+              full.output = TRUE)
     
-    R <- do.call(rankwith, args = a)
-    
-    R <- R[1:nrow(R),, as.rankings = FALSE]
-    
-    R[R == 0] <- NA
-    
-    R <- t(apply(R, 1, function(x){
-      x <- na.omit(x)
-      x <- sort(x)
-      names(x)
-    }))
+    R <- do.call(rankwith, args = a)[["myrank"]]
     
     # expand the rankings (in rows) so it can fit with the full
     # information to include those participants who did not replied the
@@ -385,11 +357,12 @@ for(i in seq_along(partitable$id)){
   
   text(x=xtop, 
        y=ytop[1], 
-       paste0(name, "'s Certificate of Participation in a ClimMob Experiment"), 
+       paste0("Certificate of Participation in a ClimMob Experiment"), 
        cex=textsize_2, 
        adj=c(0, NA))
-  
-  text(x=xtop,y=ytop[3], 
+
+  text(x=xtop,
+       y=ytop[3], 
        paste(nranker, rankers, "contributed to this experiment."), 
        cex=textsize_1, 
        adj=c(0, NA))
@@ -411,7 +384,7 @@ for(i in seq_along(partitable$id)){
   
   text(x=xtop,
        y=ytop[7], 
-       "Thank you for your participation!", 
+       paste("Thank you", name, "for your participation!"), 
        font=2, 
        cex=textsize_1, 
        adj=c(0, NA))
