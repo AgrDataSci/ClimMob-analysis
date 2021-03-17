@@ -283,7 +283,7 @@ global_ranking_colors <- rgb(colorRamp(text_colors)(rev(scale01(infotable$rank))
 # ................................................................
 # ................................................................
 # create a black arrow, saved as external file
-png(paste0(outputpath, "participant_report/png/mask.png"))
+png(paste0(outputpath, "/participant_report/png/mask.png"))
 ytmp1 <- max(y[length(y)],-35)
 ytmp2 <- y[3]
 grid.polygon(
@@ -306,7 +306,7 @@ dev.off()
 # ................................................................
 # ................................................................
 # read back in the arrow as colour matrix
-m <- readPNG(paste0(outputpath, "participant_report/png/mask.png"), native=FALSE)
+m <- readPNG(paste0(outputpath, "/participant_report/png/mask.png"), native=FALSE)
 mask <- matrix(rgb(m[,,1],m[,,2],m[,,3]),
                nrow=nrow(m))
 rmat <- matrix(grey(seq(0,1,length=nrow(m))),
@@ -336,7 +336,7 @@ for(i in seq_along(partitable$id)){
   width_yours <- global_width[match(your_ranking, infotable$item)] 
   
   # make the result png file
-  pngpath1 <- paste0(outputpath, "participant_report/png/", 
+  pngpath1 <- paste0(outputpath, "/participant_report/png/", 
                      partitable$id[i], ".png")
   
   page1[[i]] <- pngpath1
@@ -527,7 +527,7 @@ for(i in seq_along(partitable$id)){
   
   if(isTRUE(nothertraits > 0)){
     # make the result png file
-    pngpath2 <- paste0(outputpath, "participant_report/png/", 
+    pngpath2 <- paste0(outputpath, "/participant_report/png/", 
                        partitable$id[i], "page2.png")
     
     page2[[i]] <- pngpath2
