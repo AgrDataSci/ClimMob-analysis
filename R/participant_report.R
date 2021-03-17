@@ -360,14 +360,7 @@ for(i in seq_along(partitable$id)){
        paste0("Certificate of Participation in a ClimMob Experiment"), 
        cex=textsize_2, 
        adj=c(0, NA))
-  
-  text(x=xtop,
-       y=ytop[2], 
-       paste0("Participant ", name), 
-       font=2, 
-       cex=textsize_1, 
-       adj=c(0, NA))
-  
+
   text(x=xtop,
        y=ytop[3], 
        paste(nranker, rankers, "contributed to this experiment."), 
@@ -391,7 +384,7 @@ for(i in seq_along(partitable$id)){
   
   text(x=xtop,
        y=ytop[7], 
-       "Thank you for your participation!", 
+       paste("Thank you", name, "for your participation!"), 
        font=2, 
        cex=textsize_1, 
        adj=c(0, NA))
