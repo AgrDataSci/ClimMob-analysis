@@ -581,13 +581,7 @@ if (length(tree_f) > 1) {
 ```
 
 ```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = pltree_text}
-try(gosset:::plot_tree(tree_f, 
-                       add.letters = TRUE, 
-                       threshold = 0.05, 
-                       adjust = ci_adjust,
-                       ci.level = ci_level, 
-                       letter.size = 15), 
-    silent = TRUE)
+try(plottree, silent = TRUE)
 ```
 
 \

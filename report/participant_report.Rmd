@@ -1,22 +1,39 @@
----
-#geometry: left=0cm,right=0cm,top=-1cm,bottom=-1cm
-output:
-  pdf_document: default
-  word_document:
-    reference_docx: word_style_infosheet.docx
-  html_document:
-    df_print: paged
----
-```{r setup_opts, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, error = FALSE,message=FALSE,warning = FALSE)
+# `r paste(reporttext[1, 2])`
+
+`r paste(thanks)`
+
+`r paste0(reporttext[3,2])`
+
+```{r, fig.width=4, fig.height=1,dpi=150}
+plot(podium_i)
 ```
 
-```{r image-ref-for-in-text, echo = FALSE, message=FALSE, fig.align='center', out.width='.99\\linewidth', fig.pos='H'}
-knitr::include_graphics(page1[[i]])
+`r paste(reporttext[4,2])`
+
+```{r, fig.width=2, fig.height=2, dpi=150}
+plot(poverp)
 ```
 
-```{r other_chars2}
+\pagebreak
+
+```{r}
+otr_text <- ""
 if(isTRUE(nothertraits > 0)){
-knitr::include_graphics(page2[[i]])
+otr_text <- reporttext[5,2]
 }
 ```
+
+`r paste0(otr_text)`
+
+\n
+
+```{r}
+if(isTRUE(nothertraits > 0)){
+kable(otrp[[i]], 
+      caption = "",
+      row.names = FALSE,
+      align = "l")
+}
+```
+
+\pagebreak
