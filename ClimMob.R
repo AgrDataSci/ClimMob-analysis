@@ -137,12 +137,12 @@ dtpars <- tryCatch({
   minitem <- 2
   
   # minimum proportion of valid entries in explanatory variables
-  missexp <- 0.85
+  missexp <- 0.95
   
   # minimum proportion of valid entries in tricot vs local
   # this will be computed based on the valid entries of the reference
   # trait after validations
-  mintricotVSlocal <- 0.90
+  mintricotVSlocal <- 0.95
   
   # minimum split size for PL Tree models
   minsplit <- ceiling(nranker * 0.1)
@@ -262,7 +262,6 @@ org_rank <- tryCatch({
     } 
     
     # if required, add comparison with local item
-    # again, it assumes that overall performance is the first characteristic
     if (isTRUE(i == reference_trait & tricotVSlocal)) {
       
       # some times the user can add this question twice, I still don't have a solution for 
@@ -322,7 +321,7 @@ org_rank <- tryCatch({
     result[["question"]]   <- paste(trait[i, paste0("questionAsked", seq_len(nquest))], collapse = ", ")
     # the data collection moment
     result[["assessment"]] <- trait$assessmentName[i]
-    # days after the beginning of the trail for the data collection momement
+    # days after the beginning of the trail for the data collection moment
     result[["day"]]        <- trait$assessmentDay[i]
     # the assessment id
     result[["assessmentid"]] <- trait$assessmentId[i]
@@ -1175,7 +1174,7 @@ try_plt <- tryCatch({
   tree_f <- pltree(G ~ .,
                    data = Gdata, 
                    minsize = minsplit,
-                   alpha = 0.8,
+                   alpha = 0.5,
                    ref = reference, 
                    gamma = TRUE)
   
@@ -1202,7 +1201,7 @@ try_plt <- tryCatch({
     tree_f <- pltree(G ~ .,
                      data = Gdata, 
                      minsize = nrow(Gdata),
-                     alpha = 0.8,
+                     alpha = 0.5,
                      ref = reference, 
                      gamma = TRUE)
     
@@ -1642,17 +1641,16 @@ if (all(infosheets, done)) {
     
     # replace fields with info from ClimMob
     notreplied <- reporttext[match("notreplied", reporttext[,1]), 2]
-    ranker     <- reporttext[match("partictag", reporttext[,1]), 2]
-    rankers    <- reporttext[match("partictag2", reporttext[,1]), 2]
-    option     <- reporttext[match("techtag", reporttext[,1]), 2]
-    Option     <- ClimMobTools:::.title_case(option)
-    options    <- reporttext[match("techtag2", reporttext[,1]), 2]
+    rranker     <- reporttext[match("partictag", reporttext[,1]), 2]
+    rrankers    <- reporttext[match("partictag2", reporttext[,1]), 2]
+    roption     <- reporttext[match("techtag", reporttext[,1]), 2]
+    roptions    <- reporttext[match("techtag2", reporttext[,1]), 2]
     
-    reporttext[,2] <- gsub("r rankers", rankers, reporttext[,2])
+    reporttext[,2] <- gsub("r rankers", rrankers, reporttext[,2])
     reporttext[,2] <- gsub("r nranker", nranker, reporttext[,2])
     reporttext[,2] <- gsub("r question_asked", question_asked, reporttext[,2])
     reporttext[,2] <- gsub("r nitems", nitems, reporttext[,2])
-    reporttext[,2] <- gsub("r options", options, reporttext[,2])
+    reporttext[,2] <- gsub("r options", roptions, reporttext[,2])
     reporttext[,2] <- gsub("r nothertraits", nothertraits, reporttext[,2])
     reporttext[,2] <- gsub("r ncomp", ncomp, reporttext[,2])
     
