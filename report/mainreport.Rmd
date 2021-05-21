@@ -588,7 +588,7 @@ try(plottree, silent = TRUE)
 
 # Section 3: Other traits
 
-```{r fav_other_chars}
+```{r other_chars}
 other_chars <- paste0("This report only assessed the trait '", ovname, "'.")
 
 if (isTRUE(nothertraits > 0)) {
@@ -602,7 +602,7 @@ if (isTRUE(nothertraits > 0)) {
 
 \
 
-```{r, fav_other_chars_plots}
+```{r, other_chars_analysis}
 trait_summaries <- ""
 if(isTRUE(nothertraits > 0)) {
   
@@ -615,7 +615,7 @@ if(isTRUE(nothertraits > 0)) {
 
 ```
 
-```{r fav_include, echo=FALSE, results="asis", message=FALSE, warning=FALSE}
+```{r other_chars_include, echo=FALSE, results="asis", message=FALSE, warning=FALSE}
 cat(paste(trait_summaries, collapse = '\n'))
 ```
 

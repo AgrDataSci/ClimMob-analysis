@@ -38,7 +38,6 @@ library("pls")
 library("gtools")
 library("ggplot2")
 library("igraph")
-library("ggimage")
 library("ggrepel")
 library("ggparty")
 library("patchwork")
@@ -328,7 +327,6 @@ org_rank <- tryCatch({
     # the assessment id
     result[["assessmentid"]] <- trait$assessmentId[i]
     
-    
     trait_list[[trait_names[i]]] <- result
     
   }
@@ -607,7 +605,7 @@ try_freq_tbl <- tryCatch({
     
   }
   
-  itemtable$Abbreviation <- gosset:::.reduce(as.character(itemtable[,Option]))
+  itemtable$Abbreviation <- gosset:::.reduce(as.character(itemtable[, Option]))
   
   itemtable <- itemtable[union(c(Option, "Abbreviation"), names(itemtable))]
   
@@ -1184,7 +1182,7 @@ try_plt <- tryCatch({
   names(Gdata) <- covar$codeQst
   Gdata <- cbind(G, Gdata)
   
-  # do a kind of forward selection as pltree() sometimes don't split 
+  # perform a forward selection as pltree() sometimes don't split 
   # the tree when G ~ . is used
   var_keep <- character(0L)
   best <- TRUE
@@ -1206,6 +1204,7 @@ try_plt <- tryCatch({
       validations <- data.frame(nnodes = length(nodeids(t_i, terminal = TRUE)),
                                 AIC = AIC(t_i),
                                 noerror = !"try-error" %in% class(try(plot(t_i), silent = TRUE)))
+      
       models <- rbind(models, validations)
       
     }
@@ -1232,17 +1231,21 @@ try_plt <- tryCatch({
     
   }
   
+  if (length(var_keep) == 0) {
+    var_keep <- names(Gdata)[2]
+    minsplit <- nrow(Gdata)
+  }
+  
+  treeformula <- as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
+  
   # now fit the tree with the selected covariates
-  tree_f <- pltree(as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + "))),
+  tree_f <- pltree(treeformula,
                    data = Gdata,
                    minsize = minsplit,
                    alpha = sig_level_tree,
-                   ref = reference,
-                   gamma = TRUE)
+                   ref = reference)
   
-  # try to plot the tree if some error is returned this means that there 
-  # is an issue in one of the dependencies (party, psychotree, qvcalc, etc)
-  # then we do not produce the tree to avoid further errors
+  # plot the tree (if any)
   plottree <- gosset:::plot_tree(tree_f)
   
   # if the tree has splits, extract coeffs from nodes
@@ -1915,8 +1918,4 @@ if (isFALSE(done)) {
 if (length(error) > 0) {
   print(error)
 }
-
-
-
-
 
