@@ -38,6 +38,7 @@ library("pls")
 library("gtools")
 library("ggplot2")
 library("igraph")
+library("ggimage")
 library("ggrepel")
 library("ggparty")
 library("patchwork")
@@ -156,6 +157,7 @@ dtpars <- tryCatch({
   
   # Set alpha
   sig_level <- 0.1
+  sig_level_tree <- 0.5
   
   # method for adjustments for confidence intervals and setting widths for comparison. 
   ci_adjust <- "none"
@@ -894,7 +896,10 @@ try_pl <- tryCatch({
     ci_adjust <- "BH"
   }
   
-  model_summaries <- multcompPL(mod_overall, ref = reference, threshold = 0.1, adjust = ci_adjust)
+  model_summaries <- multcompPL(mod_overall,
+                                ref = reference, 
+                                threshold = sig_level, 
+                                adjust = ci_adjust)
   
   fullanova <- anova.PL(mod_overall)
   
@@ -958,14 +963,18 @@ try_pl <- tryCatch({
     aov_tables[[i]] <- aov_i
     
     if (anova.PL(mod_t)[2,5] <= sig_level) {
-      ci_adjust <- "BH"
+      ci_adjust_i <- "BH"
     }else{
-      ci_adjust <- "none"
+      ci_adjust_i <- "none"
     }
     
-    # This is Table 4.*.2
-    summ_i <- multcompPL(mod_t, ref = reference, threshold = sig_level, adjust = ci_adjust)
-    # And this is Figure 3.*.2
+    # this is Table 4.*.2
+    summ_i <- multcompPL(mod_t, 
+                         ref = reference,
+                         threshold = sig_level, 
+                         adjust = ci_adjust_i)
+    
+    # and this is Figure 3.*.2
     summ_i_plot <- 
       plot(summ_i, level = ci_level) + 
       theme_classic() +
@@ -1035,8 +1044,12 @@ if (any_error(try_pl)) {
 try_pls <- tryCatch({
   
   if (isTRUE(nothertraits > 0)) {
-    fml <- paste(ov, " ~ ", paste(other_traits, collapse = " + "))
+    # remove special characters to produce the formula
+    fml <- gsub("[[:punct:]]", "", c(ov, other_traits))
+    fml <- paste(fml[1], " ~ ", paste(fml[-1], collapse = " + "))
     fml <- as.formula(fml)
+    
+    names(coefs) <- gsub("[[:punct:]]", "", names(coefs))
     
     m2 <- plsr(fml,
                data = coefs,
@@ -1155,12 +1168,12 @@ try_plt <- tryCatch({
   Gdata <- as.data.frame(cmdata[keep, covar$nameString], stringsAsFactors = TRUE)
   nvar <- length(covar$nameString)
   
-  # setup the variables
+  # setup the variables, round numeric for 3 digits
+  # and coerce the characters as factor
   Gdata[1:nvar] <- lapply(Gdata[1:nvar], function(x){
     if(is.numeric(x)) {
       x <- round(x, 3)
     }
-    
     if(is.character(x)) {
       x <- as.factor(x)
     }
@@ -1171,41 +1184,66 @@ try_plt <- tryCatch({
   names(Gdata) <- covar$codeQst
   Gdata <- cbind(G, Gdata)
   
-  tree_f <- pltree(G ~ .,
-                   data = Gdata, 
+  # do a kind of forward selection as pltree() sometimes don't split 
+  # the tree when G ~ . is used
+  var_keep <- character(0L)
+  best <- TRUE
+  counter <- 1
+  exp_var <- covar$codeQst
+  
+  while (best) {
+    
+    fs <- length(exp_var)
+    models <- data.frame()
+    for(i in seq_len(fs)){
+      t_i <- pltree(as.formula(paste0("G ~ ", paste(c(var_keep, exp_var[i]), collapse = " + "))),
+                    data = Gdata,
+                    minsize = minsplit,
+                    alpha = sig_level_tree,
+                    ref = reference,
+                    gamma = TRUE)
+      
+      validations <- data.frame(nnodes = length(nodeids(t_i, terminal = TRUE)),
+                                AIC = AIC(t_i),
+                                noerror = !"try-error" %in% class(try(plot(t_i), silent = TRUE)))
+      models <- rbind(models, validations)
+      
+    }
+    
+    counter <- counter + 1
+    
+    if (length(exp_var) == 0) {
+      best <- FALSE
+    }
+    
+    if (best) {
+      # update vector with covariates to keep only those with no error
+      # and those with no split
+      exp_var <- exp_var[models$noerror & models$nnodes > 1]
+      # also take out from the models data frame
+      models <- models[models$noerror == TRUE & models$nnodes > 1, ]
+      # find the index for the best model, the one with lowest AIC
+      index_bext <- which.min(models$AIC)
+      # and the best model
+      best_model <- exp_var[index_bext]
+      exp_var <- exp_var[-index_bext]
+      var_keep <- c(var_keep, best_model)
+    }
+    
+  }
+  
+  # now fit the tree with the selected covariates
+  tree_f <- pltree(as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + "))),
+                   data = Gdata,
                    minsize = minsplit,
-                   alpha = 0.5,
-                   ref = reference, 
+                   alpha = sig_level_tree,
+                   ref = reference,
                    gamma = TRUE)
   
-  if (anova.PL(mod_overall)[2,5] <= sig_level) {
-    ci_adjust <- "BH"
-  }else{
-    ci_adjust <- "none"
-  }
-  
-  plottree <- try(gosset:::plot_tree(tree_f, 
-                                     add.letters = TRUE, 
-                                     threshold = 0.05, 
-                                     adjust = ci_adjust,
-                                     ci.level = ci_level, 
-                                     letter.size = 15),
-                  silent = TRUE)
-  
-  tree_error <- "try-error" %in% class(plottree)
-  
-  if(tree_error) {
-    
-    plottree <- try(gosset:::plot_tree(tree_f, qve = FALSE), silent = TRUE)
-    
-    tree_f <- pltree(G ~ .,
-                     data = Gdata, 
-                     minsize = nrow(Gdata),
-                     alpha = 0.5,
-                     ref = reference, 
-                     gamma = TRUE)
-    
-  }
+  # try to plot the tree if some error is returned this means that there 
+  # is an issue in one of the dependencies (party, psychotree, qvcalc, etc)
+  # then we do not produce the tree to avoid further errors
+  plottree <- gosset:::plot_tree(tree_f)
   
   # if the tree has splits, extract coeffs from nodes
   if (isTRUE(length(tree_f) > 1)) { 
@@ -1254,9 +1292,6 @@ try_plt <- tryCatch({
                            paste(tmp$term[tmp$group %in% "a"], collapse=", "),
                            paste(rev(tmp$term[grepl(tmp$group[nrow(tmp)], tmp$group)]), collapse=", ")))
     }
-    
-    # rules <- strsplit(rules, "@")
-    # rules <- do.call("rbind", rules)
     
     rules <- cbind("Covariate", rules)
     rules[,2] <- gsub("@", " Attribute ", rules[,2])
@@ -1469,13 +1504,12 @@ try_head_summ <- tryCatch({
   # This is Table 1.2.1
   uni_sum <- outtabs[[1]]
   uni_sum$p.value <- as.numeric(uni_sum$p.value)
-  uni_sum$Covariate <- rownames(uni_sum)
+  uni_sum$codeQst <- rownames(uni_sum)
   uni_sum$p.value <- paste(formatC(uni_sum$p.value, format = "e", digits = 2),
                            stars.pval(uni_sum$p.value))
-  uni_sum$Question <- covar$question
-  uni_sum$collection <- covar$assessmentName
-  uni_sum <- uni_sum[,c("Covariate", "collection", "Question","p.value")]
-  names(uni_sum)[2] <- "Data collection moment"
+  uni_sum <- merge(uni_sum, covar[,c("codeQst", "questionAsked","assessmentName")], by = "codeQst")
+  uni_sum <- uni_sum[,c("codeQst","assessmentName","questionAsked","p.value")]
+  names(uni_sum) <- c("Covariate", "Data collection moment", "Question","p.value")
   rownames(uni_sum) <- NULL
   
   # And this is Figure 3.1
@@ -1585,12 +1619,6 @@ try_head_summ <- tryCatch({
   
   if (is.numeric(reference)) {
     reference <- items[reference]
-  }
-  
-  if (anova.PL(mod_overall)[2,5] <= sig_level) {
-    ci_adjust <- "none"
-  }else{
-    ci_adjust <- "BH"
   }
   
 }, error = function(cond) {
@@ -1816,7 +1844,8 @@ if (all(infosheets, done)) {
       theme(element_blank(),
             axis.text.x = element_blank(),
             axis.text.y = element_text(size = 5),
-            panel.background = element_blank())
+            panel.background = element_blank(),
+            plot.margin=grid::unit(c(0,0,0,0), "mm"))
     
     # make a template of ggplot to assemble a podium
     podium <- data.frame(label = factor(c("1st", "2nd", "3rd"), levels = c("2nd", "1st", "3rd")),
@@ -1832,7 +1861,8 @@ if (all(infosheets, done)) {
       theme(element_blank(),
             axis.text.y = element_blank(),
             axis.text.x = element_text(size = 8),
-            panel.background = element_blank())
+            panel.background = element_blank(),
+            plot.margin=grid::unit(c(0,0,0,0), "mm"))
     
     
     rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
@@ -1841,7 +1871,7 @@ if (all(infosheets, done)) {
                       output_file = paste0("participants_report", ".", extension))
     
     
-  }, error = function(cond) {
+   }, error = function(cond) {
     return(cond)
   }
   )

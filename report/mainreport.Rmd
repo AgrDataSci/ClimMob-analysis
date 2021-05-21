@@ -309,7 +309,7 @@ if (isTRUE(dim(arrows)[[1]] > 0)) {
 
 ## Assessment of `r options` 
 
-Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Given the structure of a ClimMob experiment, where each `r ranker` only assessed `r ncomp` of the `r nitems` possible `r options` these results may be skewed if certain `r options` were randomly assigned to face worse `r options` than others. This is particularly a potential issue within a smaller trial, as due to the randomization process the potential for an unbalanced assignment decreases as the sample size increases. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020], to adjust for any imbalance. Performance of each of the `r options` for '`r ovname`' is summarized in Table 2.1. 
+Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020]. Performance of each of the `r options` for '`r ovname`' is summarized in Table 2.1. 
 
 
 ```{r fav_table}
@@ -431,7 +431,7 @@ A model-based recursive partitioning method [@Strobl2009] was used to determine 
 ```{r effect_covar_statement}
 effect_covar_statement <- ""
 if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)) {
-  if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
+  if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level_tree))) {
     effect_covar_statement <- 
       paste0("Statistically significant relationship to '", ovname,
              "' was found for ", length(siglist), 
@@ -442,11 +442,11 @@ if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)) {
              "covariates that were able to be tested is shown in Table 2.5.")
   }
   
-  if(isFALSE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
+  if(isFALSE(any(na.omit(outtabs[[1]]$p.value) < sig_level_tree))) {
     effect_covar_statement <- 
       paste0("None of the covariates tested were found to have a ",
       "statistically significant relationship to '", ovname, 
-      "' with an alpha = ", sig_level, ".")
+      "' with an alpha = ", sig_level_tree, ".")
   }
 }
 
@@ -484,7 +484,7 @@ if (covarTRUE) {
 effect_covar_statement1 <- ""
 effect_covar_statement2 <- ""
 if (isTRUE(length(tree_f) > 1))  {
-  if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level))) {
+  if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level_tree))) {
     effect_covar_statement1 <- 
       paste("The p-values for each of the covariates tested,", 
             "one-by-one, showing whether or not the covariate could be used", 
@@ -494,7 +494,7 @@ if (isTRUE(length(tree_f) > 1))  {
     effect_covar_statement3 <-
       paste("The partitioning of the rankings based on the most significantly", 
         "sub-groups which were identified from the data using an alpha =", 
-        sig_level, "is shown in Figure 12. At the top of the tree is the", 
+        sig_level_tree, "is shown in Figure 12. At the top of the tree is the", 
         "full dataset, then working down through the different levels of", 
         "the tree shows the combinations of variables which define each", 
         "subgroup. The model parameters are shown for the final subgroups", 
@@ -561,7 +561,7 @@ if (isTRUE(length(tree_f) == 1)) {
     paste0("No split was found for the Plackett-Luce tree using the selected ",
     "covariates. Figure 8 shows the model for the rankings provided in this ",
     "project, showing that none of the tested covariates had a clear influence on ",
-    "the rankings of '", ovname, "' whith an alpha = ", sig_level,".")
+    "the rankings of '", ovname, "' with an alpha = ", sig_level_tree,".")
 }
 ```
 
