@@ -1388,92 +1388,79 @@ if (any_error(try_plt)) {
 # ....................................................................
 # Build headline summaries ####
 try_head_summ <- tryCatch({
-  siglist <- NULL
-  for(i in seq_along(outtabs)){
-    if (dim(outtabs[[i]])[[2]] > 3) {
-      siglist <- c(siglist,
-                   rownames(outtabs[[i]])[outtabs[[i]]$p.value < sig_level])
-    }
-  }
-  
-  siglist <- unique(siglist)
-  siglist <- na.omit(siglist)
   
   ps <- fullanova[2, 5]
   
-  if (isTRUE(ps < sig_level)) {
-    bests <- as.character(model_summaries$term[grep("a", model_summaries$group)])
-    
-    if (isTRUE(length(bests) > 3)) {
-      bests <- bests[1:3]
-    }
-    
-    bests <- paste(bests, collapse =", ")
-    
-    worsts <- as.character(rev(model_summaries$term[grepl(model_summaries$group[nrow(model_summaries)],
-                                                          model_summaries$group)]))
-    
-    if(isTRUE(length(worsts) > 3)) {
-      worsts <- worsts[1:3]
-    }
-    
-    worsts <- paste(worsts, collapse = ", ")
-    
-  } 
+  bests <- as.character(model_summaries$term[grep("a", model_summaries$group)])
   
-  if (isTRUE(ps > sig_level)) {
-    
-    bests <- worsts <- "No significant difference"
-    
+  if (isTRUE(length(bests) > 4)) {
+    bests <- bests[1:4]
   }
   
+  worsts <- as.character(rev(model_summaries$term[grepl(model_summaries$group[nrow(model_summaries)],
+                                                        model_summaries$group)]))
+  
+  if(isTRUE(length(worsts) > 4)) {
+    worsts <- worsts[1:4]
+  }
+  
+  # avoid best and worst to be displayed in twice, this when the 
+  # project tests a very few items < 6
+  b <- bests[!bests %in% worsts]
+  w <- worsts[!worsts %in% bests]
+  
+  bests <- paste(b, collapse =", ")
+  worsts <- paste(w, collapse = ", ")
+  
   if (isTRUE(nothertraits > 0)) {
+    
+    ps_ot <- numeric()
+    bests_ot <- character()
+    worsts_ot <- character()
     
     for(i in seq_along(anovas)){
       
       ps_i <- anovas[[i]][2,5]
       
-      if (isTRUE(ps_i <= sig_level)) {
-        
-        summ_i <- summaries[[i]]
-        
-        # take the best three items from this comparison
-        bests_i <- as.character(summ_i[, Option][grepl("a", summ_i[,"Group"])])
-        # if more than three, subset to get only three
-        if (isTRUE(length(bests_i) > 3)) {
-          bests_i <- bests_i[1:3]
-        }
-        
-        bests_i <- paste(bests_i, collapse = ", ")
-        
-        # put it together with the bests for overall performance
-        bests <- c(bests, bests_i)
-        
-        # get the three worst items
-        worsts_i <- as.character(rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option]))
-        
-        # if more than three, subset to get only three
-        if (isTRUE(length(worsts_i) > 3)) {
-          worsts_i <- worsts_i[1:3]
-        }
-        
-        worsts_i <- paste(worsts_i, collapse=", ")
-        
-        worsts <- c(worsts, worsts_i)
-        
-        
+      summ_i <- summaries[[i]]
+      
+      # take the best three items from this comparison
+      bests_i <- as.character(summ_i[, Option][grepl("a", summ_i[,"Group"])])
+      # if more than three, subset to get only three
+      if (isTRUE(length(bests_i) > 3)) {
+        bests_i <- bests_i[1:3]
       }
       
-      if (isTRUE(ps_i > sig_level)) {
-        
-        bests <- c(bests, "No significant difference")  
-        
-        worsts <- c(worsts,"No significant difference")  
+      # get the three worst items
+      worsts_i <- as.character(rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option]))
+      
+      # if more than three, subset to get only three
+      if (isTRUE(length(worsts_i) > 3)) {
+        worsts_i <- worsts_i[1:3]
       }
       
-      ps <- c(ps, ps_i)
+      b <- bests_i[!bests_i %in% worsts_i]
+      w <- worsts_i[!worsts_i %in% bests_i]
+      
+      bests_i <- paste(b, collapse =", ")
+      worsts_i <- paste(w, collapse = ", ")
+      
+      bests_i <- paste(bests_i, collapse = ", ")
+      
+      worsts_i <- paste(worsts_i, collapse=", ")
+      
+      # put it together with the bests for overall performance
+      bests_ot <- c(bests_ot, bests_i)
+      
+      worsts_ot <- c(worsts_ot, worsts_i)
+      
+      ps_ot <- c(ps_ot, ps_i)
       
     }
+    
+    bests <- c(bests_ot, bests)
+    worsts <- c(worsts_ot, worsts)
+    ps <- c(ps_ot, ps)
     
     ptabnames <- lapply(trait_list, function(x){c(x$name, x$assessment)})
     ptabnames <- do.call("rbind", ptabnames)
@@ -1503,7 +1490,6 @@ try_head_summ <- tryCatch({
   
   ptab$p.value <- formatC(ptab$p.value, format = "e", digits = 2)
   
-  
   # This is Table 1.2.1
   uni_sum <- outtabs[[1]]
   uni_sum$p.value <- as.numeric(uni_sum$p.value)
@@ -1527,7 +1513,6 @@ try_head_summ <- tryCatch({
   # This is Table 3.3
   model_summaries <- model_summaries[, c("term", "estimate","quasiSE","group")]
   names(model_summaries) <- c(Option, "Estimate","quasiSE","Group")
-  
   
   # This is the fist table in Section 1
   tbl_section1 <- data.frame()
@@ -1555,7 +1540,6 @@ try_head_summ <- tryCatch({
   tbl_section1 <- tbl_section1[,-5]
   # rename colunms in the original table
   names(tbl_section1) <- c("Trait", "Data collection moment", "Question asked", "Number of valid answers")
-  
   
   # fill up the information if any trait was removed
   trait$key <- paste0(trait$code, trait$assessmentName)

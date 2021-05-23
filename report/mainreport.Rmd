@@ -156,43 +156,14 @@ if (isTRUE("igraph" %in% class(net))){
 ```{r stat_diff_statement}
 # make the statement for the report about the statistical significance
 stat_diff_statement <- paste0("This report takes the trait '", ovname, 
-                              "' as the reference trait for the analysis. ")
-if (isFALSE(is.na(ps[reference_trait]))) {
-    
-    if (isTRUE(ps[reference_trait] < sig_level)) {
-      stat_diff_statement <- paste0(stat_diff_statement,
-                                    "There were statistically significant ", 
-                                    "differences found in the rankings of ",
-                                    options ," in the trait '", ovname, "' (p = ",
-                                    ptab[reference_trait, 5], "). The best ranked ",
-                                    options ," were ", ptab[reference_trait, 3])
-    }
-    
-    if (isTRUE(ps[reference_trait] >= sig_level)) {
-      stat_diff_statement <- paste0(stat_diff_statement,
-                                    "There were no statistically significant ", 
-                                    "differences found in the rankings of ", 
-                                    options ," in the trait '", ovname, "' (p = ",
-                                    ptab[reference_trait, 5],")")
-    }
-    
-}
-  
-if (isTRUE(is.na(ps[reference_trait]))) {
-    stat_diff_statement <- "No statistical model was able to be fitted on this data."
-}
-  
-if (any(na.omit(ps[-reference_trait]) < sig_level)){
-    stat_diff_statement <- paste0(stat_diff_statement,
-                                  ". Statistically significant differences were ",
-                                 "found in the trait(s) '",
-                                 paste(tolower(ptab[ps < sig_level, 1][!ptab[ps < sig_level, 1] %in% Ovname]), collapse="', '"), "'.")
-}
+                              "' as the reference trait for the analysis.",
+                              " A summary of the p-values testing the hypothesis ",
+                              "that there were differences in the rankings for each ",
+                              "trait, and the list of ", options, " which showed significant ",
+                              "best and worst performance, are summarized in Table 1.3.")
 ```
 
 `r paste(stat_diff_statement, collapse='\n')`
-
-A summary of the p-values testing the hypothesis that there were differences in the rankings for each trait, and the list of `r options` which were significantly highest and lowest ranked overall, are summarized in Table 1.3.
 
 \
 
@@ -427,36 +398,6 @@ try(plot_worth_bar(worthscaled, value = "Worth", group = Option),
 \
 
 A model-based recursive partitioning method [@Strobl2009] was used to determine which of the covariates, if any, had significant relationships with the rankings of `r ovname`. This approach identifies sub-groups in the data for which the rankings of the different `r options` are significantly different to each other. This analysis required that all rankings and covariates are completely available for the entire dataset. Here we used `r dim(Gdata)[[1]]` out of `r dim(mod_overall$rankings)[[1]]` valid rankings for `r ovname`.
-
-```{r effect_covar_statement}
-effect_covar_statement <- ""
-if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)) {
-  if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level_tree))) {
-    effect_covar_statement <- 
-      paste0("Statistically significant relationship to '", ovname,
-             "' was found for ", length(siglist), 
-             " of the covariates tested. The significant relationship ", 
-             "was found for: ", 
-             paste(paste0(siglist," (p ", outtabs[[1]][siglist,"p"],")."), collapse=", "), 
-             ". A summary of the univariate significance levels for all ",
-             "covariates that were able to be tested is shown in Table 2.5.")
-  }
-  
-  if(isFALSE(any(na.omit(outtabs[[1]]$p.value) < sig_level_tree))) {
-    effect_covar_statement <- 
-      paste0("None of the covariates tested were found to have a ",
-      "statistically significant relationship to '", ovname, 
-      "' with an alpha = ", sig_level_tree, ".")
-  }
-}
-
-if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) == 0)) {
-    effect_covar_statement <- 
-      "No model to test covariates were successfully fitted in this report."
-}
-```
-
-`r paste(effect_covar_statement, collapse='\n')`
 
 ```{r drop_covar_statement}
 # make the statement if there is any covariate dropped
