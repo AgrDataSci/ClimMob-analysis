@@ -56,7 +56,7 @@ done <- TRUE
 # ................................................................
 # ................................................................
 # Read data #### 
-# Read data with selected traits and explanatory variables to be analysed
+# with selected traits and explanatory variables to be analysed
 try_pars <- tryCatch({
   pars <- jsonlite::fromJSON(infoname)
   pars <- ClimMobTools:::.decode_pars(pars)
@@ -104,7 +104,6 @@ tryCatch({
 # ................................................................
 # Dataset parameters ####
 dtpars <- tryCatch({
-  
   # Get some info from the data and imputed parameters 
   Option       <- ClimMobTools:::.title_case(option)
   options      <- ClimMobTools:::.pluralize(option)
@@ -121,7 +120,7 @@ dtpars <- tryCatch({
   ncomp        <- length(itemnames)
   nquest       <- pars$traits$nQst[1]
   # select which function will be used to create the Plackett-Luce rankings
-  # it will depends on how many items each participant compares
+  # it will depend on how many items each participant compares
   if (ncomp == 3) {
     rankwith <- "rank_tricot"
   }
@@ -131,8 +130,8 @@ dtpars <- tryCatch({
   }
   
   # minimum n of complete data required in a trait evaluation
-  # before it is excluded, if less than 10 participants the number
-  # can be at least 5 or that all items are tested at least twice
+  # before it is excluded, it can be at least 5 or 
+  # that all items are tested at least twice
   missper <- 5
   minitem <- 2
   
@@ -188,7 +187,6 @@ if (any_error(dtpars)) {
 org_rank <- tryCatch({
   
   trait <- pars$traits
-  
   # rename traits to avoid duplicated strings, in case the same 
   # trait is tested in different data collection moments 
   trait$codeQst <- rename_duplicates(trait$codeQst)
@@ -198,7 +196,7 @@ org_rank <- tryCatch({
   
   # get a vector with trait names matched with the assessment id
   # do this because the same trait can be assessed in different data collection moments
-  trait_names <- paste0(trait$codeQst, trait$assessmentId)
+  trait_names <- trait$codeQst
   
   # find the index for the reference trait, the one that is going to be used 
   # as main trait for the analysis
@@ -356,24 +354,30 @@ org_rank <- tryCatch({
   }
   
   # get the reference trait as a separated list
-  overall <- trait_list[[reference_trait]]
+  # overall <- trait_list[[reference_trait]]
   # get the name of the reference trait both in lower and title case
-  ovname <- tolower(overall$name)
-  Ovname <- ClimMobTools:::.title_case(overall$name)
+  ovname <- tolower(trait_list[[reference_trait]]$name)
+  Ovname <- ClimMobTools:::.title_case(trait_list[[reference_trait]]$name)
   
   # the name of the other traits
-  other_traits <- names(trait_list)[-reference_trait]
+  # other_traits <- names(trait_list)[-reference_trait]
   
   # and the other traits as a separated list
-  other_traits_list <- trait_list[-reference_trait]
+  # other_traits_list <- trait_list[-reference_trait]
   
   # the name of other traits combined with the name of assessments
-  other_traits_names <- as.vector(unlist(lapply(other_traits_list, function(x) {
+  traits_names <- as.vector(unlist(lapply(trait_list, function(x) {
     paste0(x$name, " [", x$assessment, "]")
   })))
   
+  code_trait <- as.vector(unlist(lapply(trait_list, function(x) {
+    x$code
+  })))
+  
+  code_trait <- gsub("[[:punct:]]", "", code_trait)
+  
   # refresh number of other traits
-  nothertraits <- length(other_traits)
+  nothertraits <- length(trait_list) - 1
   
 }, error = function(cond) {
   return(cond)
@@ -407,7 +411,7 @@ org_covar <- tryCatch({
                         assessmentId = "")
   }
   
-  if (covarTRUE) {
+  if (isTRUE(covarTRUE)) {
     
     # rename covariates to avoid duplicated strings, in case the same 
     # question was made in different data collection moments 
@@ -450,7 +454,7 @@ org_covar <- tryCatch({
       
       cmdata$Intercept <- rep(0, nranker)
       
-      overall$keep_covariate <- rep(TRUE, nranker)
+      trait_list[[reference_trait]]$keep_covariate <- rep(TRUE, nranker)
       
       covar <- data.frame(codeQst = "xinterceptx", 
                           nameString = "Intercept",
@@ -460,7 +464,7 @@ org_covar <- tryCatch({
                           assessmentId = "")
       
       }else{
-        overall$keep_covariate <- keep
+        trait_list[[reference_trait]]$keep_covariate <- keep
     }
     
   }
@@ -477,7 +481,7 @@ if (any_error(org_covar)) {
   
   cmdata$Intercept <- rep(0, nranker)
   
-  overall$keep_covariate <- rep(TRUE, nranker)
+  trait_list[[reference_trait]]$keep_covariate <- rep(TRUE, nranker)
   
   covar <- data.frame(codeQst = "xinterceptx", 
                       nameString = "Intercept",
@@ -624,128 +628,66 @@ if (any_error(try_freq_tbl)) {
 # .......................................................
 # Favourability Analysis ####
 # first for overall performance
-try_fav_oa <- tryCatch({
+try_fav <- tryCatch({
   
-  if (isTRUE(tricotVSlocal)) {
-    
-    keep <- overall$keep2 & overall$keep
-    
-    a <- list(cmdata[keep, c(itemnames, overall$strings, overall$tricotVSlocal)],
-              items = itemnames,
-              input = overall$strings,
-              additional.rank = cmdata[keep, overall$tricotVSlocal])
-    
-    R <- do.call(rankwith, args = a)
-    
-  }
+  fav_traits <- list()
   
-  if (isFALSE(tricotVSlocal)) {
+  vic_traits <- list()
+  
+  dom_traits <- list()
+  
+  for (i in seq_along(trait_list)) {
     
-    keep <- overall$keep
+    keep <- trait_list[[i]]$keep
     
     # list of arguments for the function that will be used to 
     # create the rankings
-    a <- list(cmdata[keep, c(itemnames, overall$strings)],
+    a <- list(cmdata[keep, c(itemnames, trait_list[[i]]$strings)],
               items = itemnames,
-              input = overall$strings)
+              input = trait_list[[i]]$strings)
     
     R <- do.call(rankwith, args = a)
     
-  }
-  
-  # get the network of items evaluated in the project
-  net <- network(R)
-  
-  fav1 <- summarise_favourite(R) 
-  
-  fav2 <- fav1
-  
-  fav2$best <- paste0(round(fav2$best, 1), "%")
-  fav2$worst <- paste0(round(fav2$worst, 1), "%")
-  fav2$fav_score <- round(fav2$fav_score, 1)
-  
-  fav2 <- fav2[,-which(grepl("wins", names(fav2)))]
-  
-  names(fav2) <- c(Option,"N","Top ranked",
-                   "Bottom ranked", "Net favorability score")
-  
-  fav1 <- 
-    plot(fav1) + 
-    xlab("") +
-    theme_minimal() +
-    theme(axis.text.x = element_text(size = 10, color = "#000000"),
-          axis.text.y = element_text(size = 10, color = "#000000"),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          legend.position = "none")
-  
-  # Contest Plots
-  cont1 <- summarise_dominance(R)
-  
-  cont2 <- summarise_victories(R)
-  
-  cont2 <-
-    plot(cont2) + 
-    labs(y = "", x = "") + 
-    theme_minimal() +  
-    theme(axis.text.x = element_text(size = 10, color = "#000000"),
-          axis.text.y = element_text(size = 10, color = "#000000"),
-          strip.text.x = element_text(size = 11, color = "#000000", face = "bold"),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          legend.position = "none")
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(try_fav_oa)) {
-  e <- paste("Error 108.", try_fav_oa$message)
-  error <- c(error, e)
-  done <- FALSE
-}
-
-# .......................................................
-# .......................................................
-# run the same for the other characteristics
-try_fav_ot <- tryCatch({
-  
-  if (isTRUE(nothertraits > 0)) {
-    
-    fav_other_traits <- list()
-    
-    vic_other_traits <- list()
-    
-    dom_other_traits <- list()
-    
-    for(i in seq_along(other_traits_list)){
+    # get the network of items evaluated in the project
+    if (i == reference_trait) {
       
-      a <- list(data = cmdata[other_traits_list[[i]]$keep, ],
-                items = itemnames,
-                input = other_traits_list[[i]]$strings)
+      net <- network(R)
       
-      R_i <- do.call(rankwith, args = a)
-      
-      fav1_i <- summarise_favorite(R_i)
-      fav2_i <- fav1_i
-      
-      fav2_i$best <- paste0(round(fav2_i$best, 1), "%")
-      fav2_i$worst <- paste0(round(fav2_i$worst, 1), "%")
-      fav2_i$fav_score <- round(fav2_i$fav_score, 1)
-      
-      fav2_i <- fav2_i[,-which(grepl("wins", names(fav2_i)))]
-      
-      names(fav2_i) <- c(Option,"N","Top ranked","Bottom ranked",
-                         "Net favorability score")
-      
-      fav_other_traits[[i]] <- list(fav1_i, fav2_i)
-      
-      vic_other_traits[[i]] <- summarise_victories(R_i)
-      
-      dom_other_traits[[i]] <- summarise_dominance(R_i)
+      if (isTRUE(tricotVSlocal)) {
+        
+        keep <- trait_list[[i]]$keep2 & trait_list[[i]]$keep
+        
+        a <- list(cmdata[keep, c(itemnames, 
+                                 trait_list[[i]]$strings, 
+                                 trait_list[[i]]$tricotVSlocal)],
+                  items = itemnames,
+                  input = trait_list[[i]]$strings,
+                  additional.rank = cmdata[keep, trait_list[[i]]$tricotVSlocal])
+        
+        R <- do.call(rankwith, args = a)
+        
+      }
       
     }
+    
+    fav1_i <- summarise_favorite(R)
+    fav2_i <- fav1_i
+    
+    fav2_i$best <- paste0(round(fav2_i$best, 1), "%")
+    fav2_i$worst <- paste0(round(fav2_i$worst, 1), "%")
+    fav2_i$fav_score <- round(fav2_i$fav_score, 1)
+    
+    fav2_i <- fav2_i[,-which(grepl("wins", names(fav2_i)))]
+    
+    names(fav2_i) <- c(Option,"N","Top ranked","Bottom ranked",
+                       "Net favorability score")
+    
+    fav_traits[[i]] <- list(fav1_i, fav2_i)
+    
+    vic_traits[[i]] <- summarise_victories(R)
+    
+    dom_traits[[i]] <- summarise_dominance(R)
+    
   }
   
 }, error = function(cond) {
@@ -753,8 +695,8 @@ try_fav_ot <- tryCatch({
 }
 )
 
-if (any_error(try_fav_ot)) {
-  e <- paste("Error 109.", try_fav_ot$message)
+if (any_error(try_fav)) {
+  e <- paste("Error 108.", try_fav_ot$message)
   error <- c(error, e)
   done <- FALSE
 }
@@ -778,32 +720,24 @@ try_agree <- tryCatch({
     keep <- rowSums(keep)
     keep <- keep == length(trait_list)
     
-    # list of arguments for the function that will be used to 
-    # create the rankings
-    a <- list(cmdata[keep, ], 
-              items = itemnames,
-              input = overall$strings)
-    
-    compare_to <- do.call(rankwith, args = a)
-    
+    # list of rankings
     compare_with <- list()
     
-    for (i in seq_along(other_traits_list)) {
-      
-      ot <- other_traits_list[[i]]
+    for (i in seq_along(trait_list)) {
       
       a <- list(cmdata[keep, ],
                 items = itemnames,
-                input = ot$strings)
+                input = trait_list[[i]]$strings)
       
       otr <- do.call(rankwith, args = a) 
       
       compare_with[[i]] <- otr
+      
     }
     
-    agreement <- summarise_agreement(compare_to, 
-                                     compare_with, 
-                                     labels = other_traits_names)
+    agreement <- summarise_agreement(compare_with[[reference_trait]], 
+                                     compare_with[-reference_trait], 
+                                     labels = traits_names[-reference_trait])
     
     strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
                         round(max(agreement$kendall), 0))
@@ -820,20 +754,7 @@ try_agree <- tryCatch({
       x <- paste0(x,"%")
     })
     
-    agrelabels <- lapply(other_traits_list, function(x) {
-      c(x$name, x$assessment)
-    })
-    
-    agrelabels <- do.call("rbind", agrelabels)
-    
-    agreement_table$labels <- agrelabels[,1]
-    
-    agreement_table$collection <- agrelabels[,2]
-    
-    agreement_table <- agreement_table[,c("labels","collection","kendall","first","last")]
-    
     names(agreement_table) <- c("Trait", 
-                                "Data collection moment",
                                 "Complete ranking agreement (Kendall tau)",
                                 "Agreement with best", 
                                 "Agreement with worst")
@@ -863,12 +784,12 @@ try_agree <- tryCatch({
 )
 
 if (any_error(try_agree)) {
-  e <- paste("Error 110.", try_agree$message)
+  e <- paste("Error 109.", try_agree$message)
   error <- c(error, e)
   
   strongest_link <- character()
   weakest_link <- character()
-  agreement_table <- data.frame(Option = "Only Overall Performance was used",
+  agreement_table <- data.frame(Option = "",
                                 X = "",
                                 Y = "",
                                 Z = "")
@@ -886,42 +807,6 @@ if (any_error(try_agree)) {
 # PlackettLuce Model ####
 try_pl <- tryCatch({
   
-  mod_overall <- PlackettLuce(R)
-  
-  if (anova.PL(mod_overall)[2,5] <= sig_level) {
-    ci_adjust <- "none"
-  }else{
-    ci_adjust <- "BH"
-  }
-  
-  model_summaries <- multcompPL(mod_overall,
-                                ref = reference, 
-                                threshold = sig_level, 
-                                adjust = ci_adjust)
-  
-  fullanova <- anova.PL(mod_overall)
-  
-  worthscaled <- rev(sort(exp(coef(mod_overall)) / sum(exp(coef(mod_overall)))))
-  
-  worthscaled <- data.frame(label = factor(names(worthscaled),
-                                           (names(worthscaled))),
-                            worth = worthscaled,
-                            prob = paste0(round(worthscaled * 100, 1), "%"), 
-                            check.names = FALSE)
-  
-  # Get Table 3.4
-  worthscaled <- worthscaled[, c("label", "worth", "prob")]
-  row.names(worthscaled) <- NULL
-  names(worthscaled) <- c(Option, c("Worth", "Win probability"))
-  
-  
-  # Get the aov Table 1.1
-  aov_mod_overall <- anova.PL(mod_overall)
-  aov_mod_overall[, 5] <- paste(formatC(aov_mod_overall[,5], format = "e", digits = 2),
-                                stars.pval(aov_mod_overall[,5]))
-  aov_mod_overall[2, "model"] <- overall$name
-  
-  
   # Run over the other traits
   mods <- list()
   summaries <- list()
@@ -930,49 +815,48 @@ try_pl <- tryCatch({
   anovas <- list()
   aov_tables <- list()
   
-  for (i in seq_along(other_traits_list)){
+  for (i in seq_along(trait_list)) {
     
-    ot <- other_traits_list[[i]]
+    keep <- trait_list[[i]]$keep
     
-    keep <- ot$keep
-      
-    a <- list(data  = cmdata[keep, c(itemnames, ot$strings)],
+    # list of arguments for the function that will be used to 
+    # create the rankings
+    a <- list(cmdata[keep, c(itemnames, trait_list[[i]]$strings)],
               items = itemnames,
-              input = ot$strings)
+              input = trait_list[[i]]$strings)
     
-    Rot <- do.call(rankwith, args = a)
+    R <- do.call(rankwith, args = a)
     
-    mod_t <- PlackettLuce(Rot)
+    mod_i <- PlackettLuce(R)
     
-    mods[[i]] <- mod_t
+    if (anova.PL(mod_i)[2,5] <= sig_level) {
+      ci_adjust <- "none"
+    }else{
+      ci_adjust <- "BH"
+    }
     
-    # aov tables for other characteristics in Section 4. Table 4.*.1
-    aov_i <- anova.PL(mod_t)
+    mods[[i]] <- mod_i
     
-    # this is to be used later for Table 1.1
+    aov_i <- anova.PL(mod_i)
+    
+    # aov tables 
     anovas[[i]] <- aov_i
     
     # organise pvalues
     aov_i[,5] <- paste(formatC(aov_i[,5], format = "e", digits = 2),
                        stars.pval(aov_i[,5]))
     
-    aov_i[2, "model"] <- other_traits_list[[i]]$name
+    aov_i[2, "model"] <- trait_list[[i]]$name
     
     aov_tables[[i]] <- aov_i
     
-    if (anova.PL(mod_t)[2,5] <= sig_level) {
-      ci_adjust_i <- "BH"
-    }else{
-      ci_adjust_i <- "none"
-    }
-    
-    # this is Table 4.*.2
-    summ_i <- multcompPL(mod_t, 
+    # table with multicomparison analysis 
+    summ_i <- multcompPL(mod_i, 
                          ref = reference,
                          threshold = sig_level, 
-                         adjust = ci_adjust_i)
+                         adjust = ci_adjust)
     
-    # and this is Figure 3.*.2
+    # and this is the chart with multicomparion analysis
     summ_i_plot <- 
       plot(summ_i, level = ci_level) + 
       theme_classic() +
@@ -988,7 +872,7 @@ try_pl <- tryCatch({
     plot_summaries[[i]] <- summ_i_plot
     
     # This is Table 4.*.3
-    worths_i <- rev(sort(coef(mod_t, log = FALSE)))
+    worths_i <- rev(sort(coef(mod_i, log = FALSE)))
     worths_i <- data.frame(label = factor(names(worths_i),
                                           (names(worths_i))),
                            worth = worths_i,
@@ -1001,29 +885,19 @@ try_pl <- tryCatch({
   
   # .......................................................
   # .......................................................
-  # PlackettLuce combining traits together ####
-  coefs <- qvcalc(mod_overall, ref = reference)[[2]]$estimate
-  names(coefs) <- rownames(qvcalc(mod_overall)[[2]])
+  # Plackett-Luce combining traits together ####
   
-  # take the local item out of this analysis
-  if (tricotVSlocal) {
-    rmvlocal <- which(dimnames(R)[[2]] == "Local")
-    coefs <- PlackettLuce(R[,-rmvlocal])
-    coefs <- qvcalc(coefs, ref = reference)[[2]]$estimate
-    names(coefs) <- dimnames(R[,-rmvlocal])[[2]]
-  }
-  
-  for(i in seq_along(other_traits)){
+  coefs <- numeric()
+  for(i in seq_along(mods)){
     coefs <- cbind(coefs, 
                    scale(qvcalc(mods[[i]], ref = reference)[[2]]$estimate))
   }
   
   coefs <- as.data.frame(coefs)
   
-  # set col names with title case traits
-  ov <- gsub(" ","_", overall$name)
+  names(coefs) <- code_trait
   
-  names(coefs) <- c(ov, other_traits)
+  rownames(coefs) <- names(coef(mods[[1]]))
 
 }, error = function(cond) {
   return(cond)
@@ -1042,9 +916,10 @@ if (any_error(try_pl)) {
 try_pls <- tryCatch({
   
   if (isTRUE(nothertraits > 0)) {
+    
     # remove special characters to produce the formula
-    fml <- gsub("[[:punct:]]", "", c(ov, other_traits))
-    fml <- paste(fml[1], " ~ ", paste(fml[-1], collapse = " + "))
+    fml <- paste(code_trait[reference_trait], " ~ ", 
+                 paste(code_trait[-reference_trait], collapse = " + "))
     fml <- as.formula(fml)
     
     names(coefs) <- gsub("[[:punct:]]", "", names(coefs))
@@ -1465,6 +1340,9 @@ try_head_summ <- tryCatch({
     ptabnames <- lapply(trait_list, function(x){c(x$name, x$assessment)})
     ptabnames <- do.call("rbind", ptabnames)
     
+    # reorder table to put the reference trait in the right place
+    
+    
     ptab <- data.frame(Trait = ptabnames[,1],
                        "Data collection moment" = ptabnames[,2],
                        "Best ranked" = bests,
@@ -1539,14 +1417,18 @@ try_head_summ <- tryCatch({
   
   tbl_section1 <- tbl_section1[,-5]
   # rename colunms in the original table
-  names(tbl_section1) <- c("Trait", "Data collection moment", "Question asked", "Number of valid answers")
+  names(tbl_section1) <- c("Trait", "Data collection moment", 
+                           "Question asked", "Number of valid answers")
   
   # fill up the information if any trait was removed
   trait$key <- paste0(trait$code, trait$assessmentName)
   plottbl1$key <- paste0(plottbl1$code, plottbl1$collect)
   
   # merge datasets
-  plottbl1 <- merge(trait[,c("key","codeQst","assessmentName")], plottbl1, by = "key", all.x = TRUE)
+  plottbl1 <- merge(trait[,c("key","codeQst","assessmentName")], 
+                    plottbl1, 
+                    by = "key", 
+                    all.x = TRUE)
   
   plottbl1 <- plottbl1[,c("key","codeQst","assessmentName","n")]
   
