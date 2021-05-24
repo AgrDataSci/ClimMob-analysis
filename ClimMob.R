@@ -343,7 +343,7 @@ org_rank <- tryCatch({
   
   # refresh the index for the reference trait in case it changed due to 
   # dropped trait
-  reference_trait <- paste(trait[reference_trait, c("codeQst","assessmentId")], collapse = "")
+  reference_trait <- trait[reference_trait, "codeQst"]
   reference_trait <- which(names(trait_list) %in% reference_trait)
   
   # if for some reason the reference trait was dropped, than take the last one
@@ -370,11 +370,12 @@ org_rank <- tryCatch({
     paste0(x$name, " [", x$assessment, "]")
   })))
   
-  code_trait <- as.vector(unlist(lapply(trait_list, function(x) {
+  traits_code <- as.vector(unlist(lapply(trait_list, function(x) {
     x$code
   })))
   
-  code_trait <- gsub("[[:punct:]]", "", code_trait)
+  # remove any potential special character
+  traits_code <- gsub("[[:punct:]]", "", traits_code)
   
   # refresh number of other traits
   nothertraits <- length(trait_list) - 1
@@ -861,7 +862,8 @@ try_pl <- tryCatch({
       plot(summ_i, level = ci_level) + 
       theme_classic() +
       theme(axis.text.x = element_text(size = 10, color = "#000000"),
-            axis.text.y = element_text(size = 10, color = "#000000"))
+            axis.text.y = element_text(size = 10, color = "#000000")) +
+      labs(y = Option, x = "Estimate")
     
     summ_i <- summ_i[, c("term", "estimate","quasiSE","group")]
     
@@ -886,7 +888,6 @@ try_pl <- tryCatch({
   # .......................................................
   # .......................................................
   # Plackett-Luce combining traits together ####
-  
   coefs <- numeric()
   for(i in seq_along(mods)){
     coefs <- cbind(coefs, 
@@ -895,7 +896,7 @@ try_pl <- tryCatch({
   
   coefs <- as.data.frame(coefs)
   
-  names(coefs) <- code_trait
+  names(coefs) <- traits_code
   
   rownames(coefs) <- names(coef(mods[[1]]))
 
@@ -918,11 +919,9 @@ try_pls <- tryCatch({
   if (isTRUE(nothertraits > 0)) {
     
     # remove special characters to produce the formula
-    fml <- paste(code_trait[reference_trait], " ~ ", 
-                 paste(code_trait[-reference_trait], collapse = " + "))
+    fml <- paste(traits_code[reference_trait], " ~ ", 
+                 paste(traits_code[-reference_trait], collapse = " + "))
     fml <- as.formula(fml)
-    
-    names(coefs) <- gsub("[[:punct:]]", "", names(coefs))
     
     m2 <- plsr(fml,
                data = coefs,
@@ -931,7 +930,7 @@ try_pls <- tryCatch({
     
     if (ncol(m2$projection) > 1) {
       
-      arrowlabels <- unlist(lapply(other_traits_list, function(x){x$code}))
+      arrowlabels <- traits_code[-reference_trait]
       
       arrows <- data.frame((m2$projection)[,1:2],
                            trait = arrowlabels,
@@ -975,7 +974,7 @@ try_pls <- tryCatch({
       geom_segment(data = arrows, 
                    aes(x = Comp.1,
                        y = Comp.2,
-                       label = other_traits_names,
+                       label = arrowlabels,
                        xend = x0, 
                        yend = y0),
                    col = "#f03b20", arrow = arrow(length = unit(0.2, "cm"), ends = "first")) +
@@ -1011,12 +1010,13 @@ try_plt <- tryCatch({
   
   if (isTRUE(tricotVSlocal)) {
     
-    keep <- overall$keep2 & overall$keep_covariate
+    keep <- trait_list[[reference_trait]]$keep2 & trait_list[[reference_trait]]$keep_covariate
     
-    a <- list(cmdata[keep, c(itemnames, overall$strings, overall$tricotVSlocal)],
+    a <- list(cmdata[keep, c(itemnames, trait_list[[reference_trait]]$strings, 
+                             trait_list[[reference_trait]]$tricotVSlocal)],
               items = itemnames,
-              input = overall$strings,
-              additional.rank = cmdata[keep, overall$tricotVSlocal], 
+              input = trait_list[[reference_trait]]$strings,
+              additional.rank = cmdata[keep, trait_list[[reference_trait]]$tricotVSlocal], 
               group = TRUE)
     
     G <- do.call(rankwith, args = a)
@@ -1026,11 +1026,11 @@ try_plt <- tryCatch({
   
   if (isFALSE(tricotVSlocal)) {
     
-    keep <- overall$keep & overall$keep_covariate
+    keep <- trait_list[[reference_trait]]$keep & trait_list[[reference_trait]]$keep_covariate
     
-    a <- list(cmdata[keep, c(itemnames, overall$strings)],
+    a <- list(cmdata[keep, c(itemnames, trait_list[[reference_trait]]$strings)],
               items = itemnames,
-              input = overall$strings, 
+              input = trait_list[[reference_trait]]$strings, 
               group = TRUE)
     
     G <- do.call(rankwith, args = a)
@@ -1264,104 +1264,58 @@ if (any_error(try_plt)) {
 # Build headline summaries ####
 try_head_summ <- tryCatch({
   
-  ps <- fullanova[2, 5]
+  ps <- numeric()
+  bests <- character()
+  worsts <- character()
   
-  bests <- as.character(model_summaries$term[grep("a", model_summaries$group)])
-  
-  if (isTRUE(length(bests) > 4)) {
-    bests <- bests[1:4]
-  }
-  
-  worsts <- as.character(rev(model_summaries$term[grepl(model_summaries$group[nrow(model_summaries)],
-                                                        model_summaries$group)]))
-  
-  if(isTRUE(length(worsts) > 4)) {
-    worsts <- worsts[1:4]
-  }
-  
-  # avoid best and worst to be displayed in twice, this when the 
-  # project tests a very few items < 6
-  b <- bests[!bests %in% worsts]
-  w <- worsts[!worsts %in% bests]
-  
-  bests <- paste(b, collapse =", ")
-  worsts <- paste(w, collapse = ", ")
-  
-  if (isTRUE(nothertraits > 0)) {
+  for(i in seq_along(anovas)){
     
-    ps_ot <- numeric()
-    bests_ot <- character()
-    worsts_ot <- character()
+    ps_i <- anovas[[i]][2,5]
     
-    for(i in seq_along(anovas)){
-      
-      ps_i <- anovas[[i]][2,5]
-      
-      summ_i <- summaries[[i]]
-      
-      # take the best three items from this comparison
-      bests_i <- as.character(summ_i[, Option][grepl("a", summ_i[,"Group"])])
-      # if more than three, subset to get only three
-      if (isTRUE(length(bests_i) > 3)) {
-        bests_i <- bests_i[1:3]
-      }
-      
-      # get the three worst items
-      worsts_i <- as.character(rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], summ_i[, "Group"]), Option]))
-      
-      # if more than three, subset to get only three
-      if (isTRUE(length(worsts_i) > 3)) {
-        worsts_i <- worsts_i[1:3]
-      }
-      
-      b <- bests_i[!bests_i %in% worsts_i]
-      w <- worsts_i[!worsts_i %in% bests_i]
-      
-      bests_i <- paste(b, collapse =", ")
-      worsts_i <- paste(w, collapse = ", ")
-      
-      bests_i <- paste(bests_i, collapse = ", ")
-      
-      worsts_i <- paste(worsts_i, collapse=", ")
-      
-      # put it together with the bests for overall performance
-      bests_ot <- c(bests_ot, bests_i)
-      
-      worsts_ot <- c(worsts_ot, worsts_i)
-      
-      ps_ot <- c(ps_ot, ps_i)
-      
+    summ_i <- summaries[[i]]
+    
+    # take the best three items from this comparison
+    bests_i <- as.character(summ_i[, Option][grepl("a", summ_i[,"Group"])])
+    # if more than three, subset to get only three
+    if (isTRUE(length(bests_i) > 3)) {
+      bests_i <- bests_i[1:3]
     }
     
-    bests <- c(bests_ot, bests)
-    worsts <- c(worsts_ot, worsts)
-    ps <- c(ps_ot, ps)
+    # get the three worst items
+    worsts_i <- as.character(rev(summ_i[grepl(summ_i[nrow(summ_i),"Group"], 
+                                              summ_i[, "Group"]), Option]))
     
-    ptabnames <- lapply(trait_list, function(x){c(x$name, x$assessment)})
-    ptabnames <- do.call("rbind", ptabnames)
+    # if more than three, subset to get only three
+    if (isTRUE(length(worsts_i) > 3)) {
+      worsts_i <- worsts_i[1:3]
+    }
     
-    # reorder table to put the reference trait in the right place
+    # avoit bests and worsts in the same column, this when very few items are tested
+    b <- bests_i[!bests_i %in% worsts_i]
+    w <- worsts_i[!worsts_i %in% bests_i]
     
+    bests_i <- paste(b, collapse =", ")
+    worsts_i <- paste(w, collapse = ", ")
     
-    ptab <- data.frame(Trait = ptabnames[,1],
-                       "Data collection moment" = ptabnames[,2],
-                       "Best ranked" = bests,
-                       "Worst ranked" = worsts,
-                       p.value = ps,
-                       check.names = FALSE,
-                       stringsAsFactors = FALSE)
+    # put it together with the bests for overall performance
+    bests <- c(bests, bests_i)
     
-  } 
-  
-  if (isTRUE(nothertraits == 0)) {
-    ptab <- data.frame(Trait = overall$name,
-                       "Data collection moment" = overall$assessment,
-                       "Best ranked" = bests,
-                       "Worst ranked" = worsts,
-                       p.value = ps,
-                       check.names = FALSE,
-                       stringsAsFactors = FALSE)
+    worsts <- c(worsts, worsts_i)
+    
+    ps <- c(ps, ps_i)
+    
   }
+  
+  ptabnames <- lapply(trait_list, function(x){c(x$name, x$assessment)})
+  ptabnames <- do.call("rbind", ptabnames)
+  
+  ptab <- data.frame(Trait = ptabnames[,1],
+                     "Data collection moment" = ptabnames[,2],
+                     "Best ranked" = bests,
+                     "Worst ranked" = worsts,
+                     p.value = ps,
+                     check.names = FALSE,
+                     stringsAsFactors = FALSE)
   
   ptab[,6] <- stars.pval(ptab$p.value)
   names(ptab)[6] <- ""
@@ -1379,19 +1333,7 @@ try_head_summ <- tryCatch({
   names(uni_sum) <- c("Covariate", "Data collection moment", "Question","p.value")
   rownames(uni_sum) <- NULL
   
-  # And this is Figure 3.1
-  mod_sum_PL <-
-    plot(model_summaries) + 
-    theme_classic() +
-    theme(axis.text.x = element_text(size = 10, color = "#000000"),
-          axis.text.y = element_text(size = 10, color = "#000000")) +
-    labs(y = Option, x = "Estimate")
-  
-  
-  # This is Table 3.3
-  model_summaries <- model_summaries[, c("term", "estimate","quasiSE","group")]
-  names(model_summaries) <- c(Option, "Estimate","quasiSE","Group")
-  
+ 
   # This is the fist table in Section 1
   tbl_section1 <- data.frame()
   
@@ -1613,21 +1555,21 @@ if (all(infosheets, done)) {
     # If any other trait, do the same ####
     if(isTRUE(nothertraits > 0)){
       
+      otr_list <- trait_list[-reference_trait]
+      
       otr <- list()
       
-      otrnames <- lapply(other_traits_list, function(x){
+      otrnames <- lapply(otr_list, function(x){
         x$name
       })
       
       otrnames <- as.vector(unlist(otrnames))
       
-      for(i in seq_along(other_traits_list)){
+      for(i in seq_along(otr_list)){
         
-        ot <- other_traits_list[[i]]
-        
-        a <- list(cmdata[ot$keep, ],
+        a <- list(cmdata[otr_list[[i]]$keep, ],
                   items = itemnames,
-                  input = ot$strings,
+                  input = otr_list[[i]]$strings,
                   full.output = TRUE)
         
         R <- do.call(rankwith, args = a)[["myrank"]]
@@ -1641,7 +1583,7 @@ if (all(infosheets, done)) {
                        dimnames = list(partitable$id, 
                                        paste0("Position", 1:ncomp)))
         
-        Rexp[ot$keep, ] <- R
+        Rexp[otr_list[[i]]$keep, ] <- R
         
         R <- Rexp
         
@@ -1661,7 +1603,7 @@ if (all(infosheets, done)) {
         
         # combine (by rows) the response for the participant i 
         # across all the j other traits
-        for(j in seq_along(other_traits_list)){
+        for(j in seq_along(otr_list)){
           
           x <- rbind(x, otr[[j]][i, ])
           
@@ -1698,7 +1640,7 @@ if (all(infosheets, done)) {
     
     # use the coefficients from the overall model and plot it as bar plot
     # to show the overall evaluation compared to the farmer evaluation
-    pover <- coef(mod_overall, log = FALSE)
+    pover <- coef(mods[[reference_trait]], log = FALSE)
     pover <- sort(pover)
     pover <- data.frame(items = factor(names(pover), levels = names(pover)),
                         pw = as.vector(pover))

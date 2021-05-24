@@ -1,4 +1,4 @@
-## `r other_traits_list[[i]]$name`: Data summary and exploratory analysis
+## `r trait_list[[i]]$name`: Data summary and exploratory analysis
 
 \
 
@@ -6,25 +6,25 @@
 
 \
 
-Favorability scores are shown for the trait '`r tolower(other_traits_list[[i]]$name)`' which was collected during the data collection moment registered as '`r other_traits_list[[i]]$assessment`'. The `r rankers` were asked to evaluated the best and worst `r option` based on the question: '`r other_traits_list[[i]]$question`'.
+Favorability scores are shown for the trait '`r tolower(trait_list[[i]]$name)`' which was collected during the data collection moment registered as '`r trait_list[[i]]$assessment`'. The `r rankers` were asked to evaluated the best and worst `r option` based on the question: '`r trait_list[[i]]$question`'.
 
 \
 
 ```{r}
-f2 <- fav_other_traits[[i]][[2]]
+f2 <- fav_traits[[i]][[2]]
 
 knitr::kable(f2[nrow(f2):1, ],
              row.names = FALSE,
              caption = paste0("Table 3.", i, ".1. Favorability scores for '",
-                              tolower(other_traits_list[[i]]$name),"'"))
+                              tolower(trait_list[[i]]$name),"'"))
 ```
 
 \
 
-Figure 3.`r i`.1. is a graphical representation of the content presented in Table 3.`r i`.1 showing the net favorability scores for the trait '`r tolower(other_traits_list[[i]]$name)`'.
+Figure 3.`r i`.1. is a graphical representation of the content presented in Table 3.`r i`.1 showing the net favorability scores for the trait '`r tolower(trait_list[[i]]$name)`'.
 
 ```{r, include=FALSE, echo=FALSE}
-f1 <- fav_other_traits[[i]][[1]]
+f1 <- fav_traits[[i]][[1]]
 p2 <- 
   plot(f1) +
   xlab("") +
@@ -38,7 +38,7 @@ p2 <-
 ```
 
 
-```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 3.", i, ".1. Net favorability scores for '",tolower(other_traits_list[[i]]$name),"'.")}
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 3.", i, ".1. Net favorability scores for '",tolower(trait_list[[i]]$name),"'.")}
 p2
 ```
 
@@ -47,17 +47,17 @@ p2
 ### Pairwise contests
 
 ```{r}
-vic_i <- vic_other_traits[[i]]
+vic_i <- vic_traits[[i]]
 ```
 
 \
 
-Figure 3.`r i`.2 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r tolower(other_traits_list[[i]]$name)`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the paneled `r option` was ranked above the other `r options` shown as bars.
+Figure 3.`r i`.2 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r tolower(trait_list[[i]]$name)`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the panelled `r option` was ranked above the other `r options` shown as bars.
 
 
 \
 
-```{r,dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap=paste0("Figure 3.", i, ".2. Head-to-head performance for '",tolower(other_traits_list[[i]]$name),"'.")}
+```{r,dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap=paste0("Figure 3.", i, ".2. Head-to-head performance for '",tolower(trait_list[[i]]$name),"'.")}
 plot(vic_i) + 
   labs(y = "", x = "") + 
   theme_minimal() +  
@@ -75,7 +75,7 @@ plot(vic_i) +
 ### Plackett-Luce Model estimates
 
 \
-Table 3.`r i`.2 shows the results from the likelihood ratio test from the Plackett-Luce model for '`r tolower(other_traits_list[[i]]$name)`'. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
+Table 3.`r i`.2 shows the results from the likelihood ratio test from the Plackett-Luce model for '`r tolower(trait_list[[i]]$name)`'. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
 
 \
 
@@ -84,7 +84,7 @@ aov_ii <- aov_tables[[i]]
 if (length(aov_ii) > 1) {
   kable(aov_ii,
         row.names = FALSE,
-        caption = paste0("Table 3.", i,".2. Likelihood ratio test results from fitted Plackett-Luce model with rankings for '", tolower(other_traits_list[[i]]$name), "'."))
+        caption = paste0("Table 3.", i,".2. Likelihood ratio test results from fitted Plackett-Luce model with rankings for '", tolower(trait_list[[i]]$name), "'."))
 }
 
 ```
@@ -95,7 +95,7 @@ Figure 3.`r i`.3 shows the estimates of the model coefficients with `r paste0(ci
 
 \
 
-```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.", i,".3. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", tolower(other_traits_list[[i]]$name),"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
+```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.", i,".3. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", tolower(trait_list[[i]]$name),"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
 
 if(length(aov_ii) > 1){
 plot_summaries[[i]] +
@@ -116,13 +116,13 @@ if (length(aov_ii) > 1) {
         digits = 4,
         row.names = FALSE,
         caption = paste0("Table 3.", i,".3. Model coefficients and mean separation of Plackett-Luce model for '",
-                         tolower(other_traits_list[[i]]$name),"' with ", ci_level*100, "% confidence intervals."))
+                         tolower(trait_list[[i]]$name),"' with ", ci_level*100, "% confidence intervals."))
 }
 ```
 
 \
 
-Table 3.`r i`.4 and Figure 3.`r i`.4 use the coefficients from the Plackett-Luce model of rankings from the evaluation on '`r tolower(other_traits_list[[i]]$name)`' to estimate the probability of each `r option` being considered to be the top ranked `r option` in a direct comparison between all of the possible `r options`.
+Table 3.`r i`.4 and Figure 3.`r i`.4 use the coefficients from the Plackett-Luce model of rankings from the evaluation on '`r tolower(trait_list[[i]]$name)`' to estimate the probability of each `r option` being considered to be the top ranked `r option` in a direct comparison between all of the possible `r options`.
 
 \
 
@@ -133,14 +133,14 @@ if (length(aov_ii) > 1) {
   kable(worths[[i]][,-2],
       row.names = FALSE,
       caption = paste0("Table 3.", i,".4. Percentage probability of being highest ranked for '",
-                      tolower(other_traits_list[[i]]$name), "'."))
+                      tolower(trait_list[[i]]$name), "'."))
   
 }
 ```
 
 \
 
-```{r, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.", i,".4. Probability of being the best ranked for '", tolower(other_traits_list[[i]]$name),"'.")}
+```{r, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.", i,".4. Probability of being the best ranked for '", tolower(trait_list[[i]]$name),"'.")}
 x <- worths[[i]]
 plot_worth_bar(x, value = "Worth", group = Option)
 ```
