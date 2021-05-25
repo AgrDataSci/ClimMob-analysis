@@ -8,7 +8,7 @@
 pkg <- c("remotes", "PlackettLuce", "partykit", "qvcalc", "psychotools", "jsonlite", 
          "knitr", "rmarkdown", "pls", "gtools", "ggplot2", "leaflet", "mapview",
          "igraph", "ggrepel", "patchwork", "ggparty", "multcompView",
-         "png", "plotrix","gridExtra")
+         "png", "plotrix", "gridExtra", "ggimage")
 
 
 install.packages(pkg)

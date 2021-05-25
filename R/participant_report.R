@@ -10,7 +10,6 @@
 # table with the worth parameters from overall performance
 # number of times each item was tested
 # and how many times it was ranked first or last
-
 # check if items have more than 20 characters and make it shorter
 cmdata[, itemnames] <- lapply(cmdata[, itemnames], function(x){
   abbreviate(x, minlength = 20)
@@ -19,9 +18,33 @@ cmdata[, itemnames] <- lapply(cmdata[, itemnames], function(x){
 # make the rank without the Local item
 overall <- trait_list[[reference_trait]]
 # take the question asked
-question_asked <- strsplit(overall$question, "[?,]")[[1]][1]
+question_asked <- overall$question
 # the vector to filter the data
 keep <- overall$keep
+
+# multilanguage text
+reporttext <- read.csv(paste0(fullpath, 
+                              "/report/participant_report_multilanguage_text.csv"))
+
+
+# pick the vector with the language
+reporttext <- reporttext[, c(1, match(language, names(reporttext)))]
+
+# replace fields with info from ClimMob
+notreplied <- reporttext[match("notreplied", reporttext[,1]), 2]
+ranker     <- reporttext[match("partictag", reporttext[,1]), 2]
+rankers    <- reporttext[match("partictag2", reporttext[,1]), 2]
+option     <- reporttext[match("techtag", reporttext[,1]), 2]
+Option     <- ClimMobTools:::.title_case(option)
+options    <- reporttext[match("techtag2", reporttext[,1]), 2]
+
+reporttext[,2] <- gsub("r rankers", rankers, reporttext[,2])
+reporttext[,2] <- gsub("r nranker", nranker, reporttext[,2])
+reporttext[,2] <- gsub("r question_asked", question_asked, reporttext[,2])
+reporttext[,2] <- gsub("r nitems", nitems, reporttext[,2])
+reporttext[,2] <- gsub("r options", options, reporttext[,2])
+reporttext[,2] <- gsub("r nothertraits", nothertraits, reporttext[,2])
+reporttext[,2] <- gsub("r ncomp", ncomp, reporttext[,2])
 
 # list of arguments for the function that will be used to 
 # create the rankings
@@ -78,7 +101,7 @@ partitable <- cbind(partitable, x)
 partitable[keep, paste0("Position", 1:ncomp)] <- ordering
 
 # fill NAs with "Not replied" in the first case and then with an empty character
-partitable$Position1[is.na(partitable$Position1)] <- "Not replied"
+partitable$Position1[is.na(partitable$Position1)] <- notreplied
 partitable[is.na(partitable)] <- ""
 
 # ................................................................
@@ -118,7 +141,7 @@ if(isTRUE(nothertraits > 0)){
     
     R <- Rexp
     
-    R[is.na(R[, 1]), 1] <- "Not replied"
+    R[is.na(R[, 1]), 1] <- notreplied
     
     R[is.na(R)] <- ""
     
@@ -154,7 +177,9 @@ if(isTRUE(nothertraits > 0)){
     # change names of order based on the number of comparisons 
     # used in the trail
     if (isTRUE(ncomp == 3)){
-      names(x) <- c("Trait","First","Middle","Last")
+      nmx <- reporttext[match("tabletitle", reporttext[,1]), 2]
+      nmx <- strsplit(nmx, ";")[[1]]
+      names(x) <- nmx
     }
     
     if (isTRUE(ncomp > 3)) {
@@ -167,419 +192,39 @@ if(isTRUE(nothertraits > 0)){
   
 }
 
-# ................................................................
-# ................................................................
-# define colours, line widths, styles etc. - you can safely play with all of it
-grey_col <- colors()[230]
-grey_col1 <- colors()[235]
-grey_col2 <- colors()[240]
-grey_col3 <- colors()[245]
-grey_dark <- colors()[190]
-grey_dark2 <- colors()[205]
-grey_dark2 <- grey_dark
-text_colors <- c(red = "#B2182B",
-                 grey = colors()[200],
-                 blue = "#2166AC")
-emoji_colors <- c(red = "#e7b9bf", grey = grey_col2, blue = "#bcd1e6")
-text_colors <- c(red = colors()[205],
-                 grey = colors()[195],
-                 blue = "#2166AC")
-emoji_colors <- c(red = grey_col2, grey = grey_col2, blue = "#bcd1e6")
-text_colors <- c(red = colors()[195],
-                 grey = grey_dark,
-                 blue = "black")
-emoji_colors <- c(red = grey_col2, grey = grey_col1, blue = grey_col)
-emoji_colors <- c(red = grey_col, grey = grey_col, blue = grey_col)
-textsize_1 <- 0.6
-textsize_2 <- 1.1
-textsize_3 <- 1.3
-arrowsize <- 3
-arrowlength <- 0.07
-boxwidth <- 1
-emojiradius <- 0.4
-color4you <- TRUE
-transparency <- 1
-smiley_thickness <- 1
+# use the coefficients from the overall model and plot it as bar plot
+# to show the overall evaluation compared to the farmer evaluation
+pover <- coef(mod_overall, log = FALSE)
+pover <- sort(pover)
+pover <- data.frame(items = factor(names(pover), levels = names(pover)),
+                    pw = as.vector(pover))
 
+poverp <- ggplot(pover, aes(x = pw,
+                           y = items,
+                           fill = pw)) +
+  geom_bar(stat = "identity",
+           position = "dodge",
+           show.legend = FALSE) +
+  labs(x = "", y = "") +
+  theme(element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 5),
+        panel.background = element_blank())
 
-# ................................................................
-# ................................................................
-# some position parameters to play with the style of the form
+# make a template of ggplot to assemble a podium
+podium <- data.frame(label = factor(c("1st", "2nd", "3rd"), levels = c("2nd", "1st", "3rd")),
+                     values = (3:1))
 
-# vertical parameters
-n_toplines <- 7 #How many lines in the top box
-yspace_top <- 0.6 #line height in the top box
-yspace_box <- 3 #space between top box and title
-yspace_title <- 4 #space between title and ranking info
-yspace_header <- 1.5 #space between header and ranking info (for the item sheet)
-yspace <- 1 #line height in the ranking info
-htitle <- 3.5 #height of the title box
+ggpodium <- 
+  ggplot(data = podium, 
+       aes(y = values, x = label, fill = label)) +
+  geom_bar(stat = "identity", position = "dodge", show.legend = FALSE) +
+  labs(x = "", 
+       y = "") +
+  scale_fill_manual(values = c("#C0C0C0", "#FFD700", "#cd7f32")) +
+  theme(element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 8),
+        panel.background = element_blank())
 
-# modify parameters to deal with high number of items
-if (isTRUE(nitems > 23)) {
-  yspace <- 0.5
-  textsize_2 = 0.8
-  emojiradius = 0.3
-  
-  if (isTRUE(nitems > 43)) {
-    yspace <- 0.3
-    textsize_2 = 0.5
-    emojiradius = 0.2
-    if (isTRUE(nitems > 73)) {
-      yspace <- 0.15
-      textsize_2 = 0.27
-      textsize_1 = 0.4
-    }
-  }
-}
-
-
-# horizontal parameters
-xstart <- 0
-xend <- 25
-xtop <- 0.5
-xtitle <- c(12.5, 12.5)
-xsmileys <- 4.8
-xarrowVtext <- 2.2
-xarrowV <- 5.5
-xranking <- 7
-xarrowH <- c(15, 17)
-xsmiley <- 18
-xranking2 <- 18.8
-charperunit <- (xend - xstart) / (70)
-xinfo <- 10 
-
-
-# ................................................................
-# ................................................................
-# function to calculate the position of the items/varieties in relation to the title
-make_y_bloc <- function(nb_items){
-  return(c(title = 0,
-           header = -yspace_title + yspace_header, 
-           -yspace_title - (0:(nb_items - 1)) * yspace))
-}
-
-# ................................................................
-# ................................................................
-# preparing the design of the form
-
-# vertical positioning
-# positions of the lines in the box
-ytop <- -(1:n_toplines) * yspace_top 
-# position of the box top and bottom
-ytopbox <-rev(range(ytop)) + c(yspace_top, -yspace_top) 
-# position of the items/varieties in the ranking
-y <- ytopbox[2] - yspace_box + make_y_bloc(nitems) 
-# position of the items in the info list for items sheet
-y2 <- -yspace_box + make_y_bloc(nrow(infotable)) 
-# nb of characters of each item - used to calculate the 
-# approximate width of the ranker's items arrows
-global_width <- nchar(as.character(items))
-
-# colors of the items/varieties
-global_ranking_colors <- rgb(colorRamp(text_colors)(rev(scale01(infotable$rank))), 
-                             max = 255)
-
-# ................................................................
-# ................................................................
-# create a black arrow, saved as external file
-png(paste0(outputpath, "/participant_report/png/mask.png"))
-ytmp1 <- max(y[length(y)],-35)
-ytmp2 <- y[3]
-grid.polygon(
-  c(-.3, .3, .3, .5, 0,-.5,-.3),
-  c(
-    ytmp1,
-    ytmp1,
-    ytmp2 - yspace / 2,
-    ytmp2 - yspace / 2 * 1.2,
-    ytmp2,
-    ytmp2 - yspace / 2 * 1.2,
-    ytmp2 - yspace / 2
-  ),
-  gp = gpar(fill = "black"),
-  def = "native",
-  vp = viewport(xs = c(-.5, .5), ys = c(ytmp1, ytmp2))
-)
-dev.off()
-
-# ................................................................
-# ................................................................
-# read back in the arrow as colour matrix
-m <- readPNG(paste0(outputpath, "/participant_report/png/mask.png"), native=FALSE)
-mask <- matrix(rgb(m[,,1],m[,,2],m[,,3]),
-               nrow=nrow(m))
-rmat <- matrix(grey(seq(0,1,length=nrow(m))),
-               nrow=nrow(m), 
-               ncol=ncol(m))
-rmat[mask == "#FFFFFF"] <- NA
-
-# ................................................................
-# ................................................................
-# make all the personalized results ####
-# png files, by looping over all the ids
-page1 <- list()
-page2 <- list()
-for(i in seq_along(partitable$id)){
-  
-  # name of ranker
-  name <- partitable$name[i]
-  
-  # items ranked by the ranker, ordered
-  your_ranking <- as.vector(unlist(partitable[i, paste0("Position", 1:ncomp)]))
-  your_ranking <- your_ranking[1:3]
-  
-  # ranker parameters
-  # position of the ranker's items
-  y_yours <- y[-(1:2)][match(your_ranking, infotable$item)] 
-  #approximate width of the ranker's items - for the sizes of the arrows
-  width_yours <- global_width[match(your_ranking, infotable$item)] 
-  
-  # make the result png file
-  pngpath1 <- paste0(outputpath, "/participant_report/png/", 
-                     partitable$id[i], ".png")
-  
-  page1[[i]] <- pngpath1
-  
-  png(pngpath1, width= 21, height= 29, units="cm", res=300)
-  par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5))
-  plot.new()
-  plot.window(ylim=c(-35,0), xlim=c(xstart, xend))
-  
-  # top_box
-  rect(xleft=xstart, 
-       ybottom=ytopbox[2], 
-       xright = xend, 
-       ytop = ytopbox[1], 
-       col=NA, 
-       border = grey_col,
-       lty = 2, lwd=boxwidth)
-  
-  text(x=xtop, 
-       y=ytop[1], 
-       paste0("Certificate of Participation in a ClimMob Experiment"), 
-       cex=textsize_2, 
-       adj=c(0, NA))
-
-  text(x=xtop,
-       y=ytop[3], 
-       paste(nranker, rankers, "contributed to this experiment."), 
-       cex=textsize_1, 
-       adj=c(0, NA))
-  
-  text(x=xtop,
-       y=ytop[4], 
-       paste("Each of these", rankers, "evaluated", ncomp, 
-             options, "out of", nitems, options,
-             "of the experiment."),
-       cex=textsize_1, 
-       adj=c(0, NA))
-  
-  text(x=xtop, 
-       y=ytop[5], 
-       paste0("You ranked these ", ncomp, " ", options,": ", 
-              paste(sort(as.character(your_ranking)), collapse=", ")),
-       cex=textsize_1, 
-       adj=c(0, NA))
-  
-  text(x=xtop,
-       y=ytop[7], 
-       paste("Thank you", name, "for your participation!"), 
-       font=2, 
-       cex=textsize_1, 
-       adj=c(0, NA))
-  
-  # title
-  rect(
-    xleft = xstart,
-    ybottom = y[1] - htitle * 1 / 2,
-    xright = xend,
-    ytop = y[1] + htitle / 2,
-    col = grey_dark,
-    border = NA
-  )
-  
-  text(
-    xtitle[2],
-    y["title"] + textsize_3 * .8,
-    paste(nranker, rankers,
-          "(including you) were asked to rank the", ncomp, 
-          options, "randomly assigned, to answer the question:"),
-    adj = c(0.5, NA),
-    font = 1,
-    cex = textsize_1,
-    col = "white"
-  )
-  
-  text(xtitle[2], 
-       y["title"], 
-       question_asked, 
-       adj=c(0.5,NA), 
-       font=2, 
-       cex=textsize_3, 
-       col="white")
-  
-  
-  text(xtitle[2], 
-       y["title"]-textsize_3*.8, 
-       "Adding up all the responses resulted in the following ranking:", 
-       adj=c(0.5,NA), 
-       font=1, 
-       cex=textsize_1, 
-       col="white")
-  
-  # global ranking left text
-  text(xarrowVtext,
-       y[3]+.6, 
-       "most often favourite", 
-       adj=c(.5,NA), 
-       cex=textsize_1*1.2, font=2)
-  
-  text(xarrowVtext,y[3], 
-       paste(infotable[1, "first"], "out of", 
-             infotable[1, "freq"], rankers, "who evaluated"), 
-       adj=c(.5,NA), 
-       cex=textsize_1*.8)
-  
-  text(xarrowVtext,
-       y[3]-.4, 
-       paste("this", option, "ranked it as the best"), 
-       adj=c(.5,NA), 
-       cex=textsize_1*.8)
-  
-  text(xarrowVtext,
-       y[length(y)]+.6, 
-       "least often favourite", 
-       adj=c(.5,NA), 
-       cex=textsize_1*1.2, 
-       col=grey_dark2,
-       font=2)
-  
-  text(xarrowVtext,
-       y[length(y)],
-       paste(infotable[nrow(infotable), "first"], "out of", 
-             infotable[nrow(infotable), "freq"], rankers, "who evaluated"), 
-       adj=c(.5,NA), 
-       cex=textsize_1*.8, 
-       col=grey_dark2)
-  
-  text(xarrowVtext, 
-       y[length(y)]-.4, 
-       paste("this", option, "ranked it as the best"), 
-       adj=c(.5,NA), 
-       cex=textsize_1*.8, 
-       col=grey_dark2)
-  
-  # global ranking arrow
-  rasterImage(rmat,
-              xarrowV+.5, 
-              y[length(y)]+1,
-              xarrowV-.5, y[3]-1)
-  
-  draw.emojis(xsmileys+c(0.3,.8,1,1.5),
-              y[3]+c(-.1,.4,-.3,.2),
-              radius=emojiradius*0.8,
-              type="happy",
-              border=grey_dark, 
-              thickness=smiley_thickness, 
-              col=emoji_colors["blue"])
-  
-  
-  draw.emojis(xsmileys+c(0.3,.8,1,1.5),
-              y[length(y)]+c(-.1,.4,-.3,.2), 
-              radius=emojiradius*0.8,
-              type="sad",
-              border=grey_dark2, 
-              thickness=smiley_thickness, 
-              col=emoji_colors["red"])
-  
-  # global ranking
-  text(xranking,y[-(1:2)], infotable$item, 
-       adj=c(0,NA), 
-       col=global_ranking_colors, 
-       cex=textsize_2)
-  
-  # ranker's own ranking
-  arrows(rep(xarrowH[2],3), 
-         y0 = y_yours, 
-         x1=xranking+width_yours*charperunit*(textsize_2)+1, 
-         y1=y_yours,  
-         lwd=arrowsize,
-         length=arrowlength,
-         col = if(color4you) rev(emoji_colors) else grey_col2)
-  
-  draw.emojis(xsmiley,y_yours, 
-              radius=emojiradius, 
-              type=c("happy", "neutral", "sad"),
-              col= if(color4you) rev(emoji_colors) else emoji_colors["grey"], 
-              border=grey_dark, 
-              thickness=smiley_thickness)
-  
-  text(xranking2,
-       y_yours,
-       paste("You ranked this",
-             option, c("as the top one", "second", "third")), 
-       adj=c(0,NA), 
-       cex=textsize_1, 
-       col=if(color4you) rev(text_colors) else text_colors["grey"])
-  
-  dev.off()
-  
-  if(isTRUE(nothertraits > 0)){
-    # make the result png file
-    pngpath2 <- paste0(outputpath, "/participant_report/png/", 
-                       partitable$id[i], "page2.png")
-    
-    page2[[i]] <- pngpath2
-    
-    png(pngpath2, width= 21, height= 29, units="cm", res=300)
-    par(mai=c(0,0,0,0), omi=c(.8,.5,.8,.5))
-    plot.new()
-    plot.window(ylim=c(-35,0), xlim=c(xstart, xend))
-    
-    # top_box
-    rect(xleft=xstart, 
-         ybottom=ytopbox[2], 
-         xright = xend, 
-         ytop = ytopbox[1], 
-         col=NA, 
-         border = grey_col,
-         lty = 2, lwd=boxwidth)
-    
-    text(x=xtop, 
-         y=ytop[1], 
-         paste("This is how you ranked the", 
-               ncomp, options, "that you received,"), 
-         cex=textsize_3, 
-         adj=c(0, NA))
-    
-    text(x=xtop,y=ytop[3], 
-         paste("based on the other", nothertraits, 
-               "traits evaluated in this trial:"),
-         cex=textsize_3, 
-         adj=c(0, NA))
-    
-    grid.table(otrp[[i]], rows = NULL)
-    
-    dev.off()
-    
-  }
-  
-}
-
-# create all the feedback reports, by looping over all the ranker.ids
-for(i in seq_along(partitable$id)){
-  # ranker description
-  id_i <- partitable$id[i]
-  name <- partitable$name[i]
-  name <- gsub(" ", "_", tolower(name))
-  
-  ranker_description <- paste0(id_i, "_", name)
-  
-  rmarkdown::render(paste0(fullpath, "/report/participant_report.Rmd"),
-                    output_dir = paste0(outputpath, "/participant_report/"),
-                    output_format = output_format,
-                    output_file = paste0("participant_report_", ranker_description, ".", extension))
-  
-}
 

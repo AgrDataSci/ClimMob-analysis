@@ -1,0 +1,60 @@
+---
+output:
+  pdf_document: default
+  word_document:
+    reference_docx: participant_report.docx
+  html_document:
+    df_print: paged
+---
+```{r setup_opts, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, error = FALSE,message=FALSE,warning = FALSE)
+```
+
+```{r}
+partic_reports <- ""
+
+for(i in seq_along(partitable$id)){
+  # ranker description
+  id_i <- partitable$id[i]
+  name <- partitable$name[i]
+  name <- paste0("**", name,  "**")
+  thanks <- reporttext[match("thanks", reporttext[,1]), 2]
+  thanks <- gsub("r name", name, thanks)
+  your_items <- sort(as.vector(unlist(partitable[i, paste0("item_", LETTERS[1:ncomp])])))
+  your_ranking <- as.vector(unlist(partitable[i, paste0("Position", 1:ncomp)]))
+  yourpackage <- as.vector(unlist(partitable[i, paste0("item_", LETTERS[1:3])]))
+  yourpackage <- paste(paste(yourpackage, paste0("(", LETTERS[1:3], ")")), collapse = ", ")
+  
+  reporttext_i <- gsub("r yourpackage", yourpackage, reporttext[3,2])
+  
+  rankplace_i <- match(your_ranking, items)
+  
+  poverp_i <- poverp
+  
+  # poverp_i <- 
+  #   poverp + 
+  #   geom_image(aes(image = paste0(fullpath, "/report/happy_face.png"), 
+  #                  x = 0.1, y = rankplace_i[1])) +
+  #   geom_image(aes(image = paste0(fullpath, "/report/neutral_face.png"),
+  #                  x = 0.1, y = rankplace_i[2])) + 
+  #   geom_image(aes(image = paste0(fullpath, "/report/frowning_face.png"), 
+  #                  x = 0.1, y = rankplace_i[3]))
+  # 
+
+  podium_i <- 
+    ggpodium +
+    annotate("text", 2, 2, label = your_ranking[1], size = 2) +
+    annotate("text", 1, 1, label = your_ranking[2], size = 2) +
+    annotate("text", 3, 0.5, label = your_ranking[3], size = 2)
+  
+  partic_reports <- c(partic_reports,
+                      knitr::knit_child(paste0(fullpath, "/report/participant_report.Rmd"), 
+                                        quiet=TRUE))
+  
+}
+```
+
+```{r, echo=FALSE, results="asis", message=FALSE, warning=FALSE}
+cat(paste(partic_reports, collapse = '\n'))
+```
+

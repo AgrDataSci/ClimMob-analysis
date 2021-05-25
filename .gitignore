@@ -4,6 +4,7 @@
 *.DS_Store
 *.html
 *.log
+Rplots.pdf
 
 # Session Data files
 .RData
