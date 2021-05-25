@@ -264,7 +264,7 @@ org_rank <- tryCatch({
     if (isTRUE(i == reference_trait & tricotVSlocal)) {
       
       # some times the user can add this question twice, I still don't have a solution for 
-      # this, so I will use the one that is related to overallperf
+      # this, so I will use the one that is related to the reference trait
       indexO <- which(grepl("_overalperf", pars$tricotVSlocal$nameString1))
       
       if (length(indexO) != 1) {
@@ -286,8 +286,7 @@ org_rank <- tryCatch({
       keep2 <- apply(cmdata[ovsl], 1, is.na)
       keep2 <- as.vector(colSums(keep2) == 0)
       
-      # combine with the vector from the first iteration in the i loop
-      # which is the overall performance
+      # combine with the vector of reference trait
       keep2 <- keep & keep2
       
       # check if it has the minimal number of observations
@@ -353,17 +352,9 @@ org_rank <- tryCatch({
     tricotVSlocal <- FALSE
   }
   
-  # get the reference trait as a separated list
-  # overall <- trait_list[[reference_trait]]
   # get the name of the reference trait both in lower and title case
   ovname <- tolower(trait_list[[reference_trait]]$name)
   Ovname <- ClimMobTools:::.title_case(trait_list[[reference_trait]]$name)
-  
-  # the name of the other traits
-  # other_traits <- names(trait_list)[-reference_trait]
-  
-  # and the other traits as a separated list
-  # other_traits_list <- trait_list[-reference_trait]
   
   # the name of other traits combined with the name of assessments
   traits_names <- as.vector(unlist(lapply(trait_list, function(x) {
@@ -402,7 +393,7 @@ org_covar <- tryCatch({
     
     cmdata$Intercept <- rep(0, nranker)
     
-    overall$keep_covariate <- rep(TRUE, nranker)
+    trait_list[[reference_trait]]$keep_covariate <- rep(TRUE, nranker)
     
     covar <- data.frame(codeQst = "xinterceptx", 
                         nameString = "Intercept",
@@ -628,7 +619,6 @@ if (any_error(try_freq_tbl)) {
 # .......................................................
 # .......................................................
 # Favourability Analysis ####
-# first for overall performance
 try_fav <- tryCatch({
   
   fav_traits <- list()
@@ -705,7 +695,7 @@ if (any_error(try_fav)) {
 # .......................................................
 # .......................................................
 # Agreement analysis ####
-# this assess how the other traits agreed with the overall preference
+# this assess how the other traits agreed with the reference trait
 # build rankings for the other characteristics
 try_agree <- tryCatch({
   
@@ -1297,7 +1287,7 @@ try_head_summ <- tryCatch({
     bests_i <- paste(b, collapse =", ")
     worsts_i <- paste(w, collapse = ", ")
     
-    # put it together with the bests for overall performance
+    # put it together with the bests for the reference trait
     bests <- c(bests, bests_i)
     
     worsts <- c(worsts, worsts_i)
@@ -1455,7 +1445,7 @@ if (all(infosheets, done)) {
   
   try_infosheet <- tryCatch({
     
-    # table with the worth parameters from overall performance
+    # table with the worth parameters from the reference trait
     # number of times each item was tested
     # and how many times it was ranked first or last
     # check if items have more than 20 characters and make it shorter
@@ -1638,7 +1628,7 @@ if (all(infosheets, done)) {
       
     }
     
-    # use the coefficients from the overall model and plot it as bar plot
+    # use the coefficients from the reference trait model and plot it as bar plot
     # to show the overall evaluation compared to the farmer evaluation
     pover <- coef(mods[[reference_trait]], log = FALSE)
     pover <- sort(pover)
