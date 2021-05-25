@@ -8,11 +8,12 @@
 pkg <- c("remotes", "PlackettLuce", "partykit", "qvcalc", "psychotools", "jsonlite", 
          "knitr", "rmarkdown", "pls", "gtools", "ggplot2", "leaflet", "mapview",
          "igraph", "ggrepel", "patchwork", "ggparty", "multcompView",
-         "png", "plotrix", "gridExtra", "ggimage")
+         "png", "plotrix", "gridExtra", "webshot")
 
 
 install.packages(pkg)
 
+webshot::install_phantomjs(force = TRUE)
 
 remotes::install_github("agrobioinfoservices/ClimMobTools",
                         upgrade = "never",
