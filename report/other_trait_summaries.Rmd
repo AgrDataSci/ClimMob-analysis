@@ -6,7 +6,7 @@
 
 \
 
-Favorability scores are shown for the trait '`r tolower(trait_list[[i]]$name)`' which was collected during the data collection moment registered as '`r trait_list[[i]]$assessment`'. The `r rankers` were asked to evaluated the best and worst `r option` based on the question: '`r trait_list[[i]]$question`'.
+Favorability scores are shown for the trait '`r tolower(trait_list[[i]]$name)`' which was collected during the data collection moment '`r trait_list[[i]]$assessment`'. The `r rankers` were asked to evaluate the best and worst `r option` based on your pre-defined questions: '`r trait_list[[i]]$question`'. The table below shows the number of times each `r option` was tested and the proportion of times it was ranked as the best or worst. Net favorability score is the different between the best and worst ranks for each `r option``.
 
 \
 
@@ -26,7 +26,7 @@ Figure 3.`r i`.1. is a graphical representation of the content presented in Tabl
 ```{r, include=FALSE, echo=FALSE}
 f1 <- fav_traits[[i]][[1]]
 p2 <- 
-  plot(f1) +
+  plot(f1, abbreviate = FALSE) +
   xlab("") +
   theme_minimal() +
   theme(axis.text.x = element_text(size = 10, color = "#000000"),
@@ -52,7 +52,7 @@ vic_i <- vic_traits[[i]]
 
 \
 
-Figure 3.`r i`.2 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r tolower(trait_list[[i]]$name)`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the panelled `r option` was ranked above the other `r options` shown as bars.
+Figure 3.`r i`.2 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r tolower(trait_list[[i]]$name)`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the `r option` was ranked above the other `r options` shown as bars.
 
 
 \
