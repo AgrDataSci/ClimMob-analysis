@@ -21,8 +21,9 @@ reference   <- args[10] # the reference item for the analysis
 minN        <- args[11] # minimum n of complete data required in a trait evaluation before it is excluded
 minitem     <- args[12] # minimum n of items tested, e.g. that all items are tested at least twice
 mincovar    <- args[13] # minimum proportion of covariates compared to total valid n
-sig_level_tree <- args[14] # significance level for the tree
-minsplit    <- args[15] # minimum n in each tree node
+sig_level   <- args[14] # significance level for the standard PL model
+sig_level_tree  <-  args[15] # significance level for the tree
+minsplit    <- args[16] # minimum n in each tree node
 if (isTRUE(is.na(reference))) {
   reference <- 1
 }
@@ -39,8 +40,12 @@ if (isTRUE(is.na(mincovar))) {
   mincovar <- 0.95
 }
 
+if (isTRUE(is.na(sig_level))) {
+  sig_level <- 0.1
+}
+
 if (isTRUE(is.na(sig_level_tree))) {
-  sig_level_tree <- 0.5
+  sig_level_tree <- sig_level
 }
 
 if (isTRUE(is.na(minsplit))) {
@@ -119,7 +124,7 @@ if (any_error(try_cmdata)) {
 
 # ................................................................
 # ................................................................
-# Run analysis ####
+# 1. Run analysis ####
 # write output directory
 tryCatch({
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
@@ -158,9 +163,6 @@ dtpars <- tryCatch({
   # this will be computed based on the valid entries of the reference
   # trait after validations
   mintricotVSlocal <- 0.95
-  
-  # Set alpha
-  sig_level <- 0.1
   
   # method for adjustments for confidence intervals and setting widths for comparison. 
   ci_adjust <- "none"
@@ -1068,8 +1070,9 @@ try_plt <- tryCatch({
   counter <- 1
   exp_var <- covar$codeQst
   
+  cat("Selecting the best covariate for Plackett-Luce trees \n")
+
   while (best) {
-    
     fs <- length(exp_var)
     models <- data.frame()
     for(i in seq_len(fs)){
@@ -1161,6 +1164,7 @@ try_plt <- tryCatch({
     # remove the strings %in% " and c() from rules 
     coefs_t$rule <- gsub("%in%","@", coefs_t$rule)
     coefs_t$rule <- gsub("[(]|[)]| c","", coefs_t$rule)
+    coefs_t$rule <- gsub('"NA",',"", coefs_t$rule)
     
     coefs_t$Label <- paste("Node", coefs_t$node, ":", coefs_t$rule,"\n","n=",coefs_t$n)
     
@@ -1545,8 +1549,10 @@ if (all(infosheets, done)) {
     # ................................................................
     # ................................................................
     # Get the info from the participants ####
-    sel <- c("id", "package_farmername", paste0("package_item_", LETTERS[1:ncomp]))
+    sel <- c("id", paste0("package_item_", LETTERS[1:ncomp]))
     partitable <- cmdata[, sel]
+    
+    partitable$name <- cmdata[,which(grepl("package_participant_name|package_farmername", names(cmdata)))]
     
     names(partitable) <- gsub("package_|farmer", "", names(partitable))
     
@@ -1741,4 +1747,6 @@ if (isFALSE(done)) {
 if (length(error) > 0) {
   print(error)
 }
+
+# End of analysis
 
