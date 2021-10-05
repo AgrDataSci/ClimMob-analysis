@@ -62,7 +62,7 @@ if (length(trait_dropped) > 0) {
     noun <- " it "
   }
   
-  trait_note <- paste0("The", adj, paste(trait_dropped, collapse = ", "), verb, "not considered in this report because", noun, "did not surpass the thresholds of (1) having at least ", missper, " valid entries, and (2) that all the ", options, " are tested at least twice per given trait. Table 1.1. shows the traits analysed in this report.")
+  trait_note <- paste0("The", adj, paste(trait_dropped, collapse = ", "), verb, "not considered in this report because", noun, "did not surpass the thresholds of (1) having at least ", minN, " valid entries, and (2) that all the ", options, " are tested at least ", minitem, " times twice per given trait. Table 1.1. shows the traits analysed in this report.")
 }
 ```
 
@@ -280,7 +280,7 @@ if (isTRUE(dim(arrows)[[1]] > 0)) {
 
 ## Assessment of `r options` 
 
-Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020]. Performance of each of the `r options` for '`r ovname`' is summarized in Table 2.1. 
+Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020]. Performance of each of the `r options` for '`r ovname`' is summarized in Table 2.1. The table below shows the number of times each `r option` was tested and the proportion of times it was ranked as the best or worst. Net favorability score is the different between the best and worst ranks for each `r option`. A score of +100 indicates that the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
 
 
 ```{r fav_table}
@@ -293,10 +293,10 @@ try(knitr::kable(fav_traits[[reference_trait]][[2]],
 
 \
 
-This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head-to-head contests' for which the `r option` won and the net *favorability* score (Figure 2.1). A score of +100 indicates the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
+This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head-to-head contests' for which the `r option` won and the net favorability score (Figure 2.1). 
 
 ```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favorability scores for '", ovname, "'.")}
-plot(fav_traits[[reference_trait]][[1]]) +
+plot(fav_traits[[reference_trait]][[1]], abbreviate = FALSE) +
   xlab("") +
   theme_minimal() +
   theme(axis.text.x = element_text(size = 10, color = "#000000"),
@@ -325,7 +325,7 @@ if (isTRUE(nrow(fav_traits[[reference_trait]][[2]]) > 0)) {
 
 ## Pairwise contests 
 
-Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r ovname`'. Each panel shows the performance of one `r option` against all the other `r options`, and shows the percentage of the times in which the paneled `r option` was ranked above the other `r options` shown as bars. 
+Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r ovname`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the `r option` was ranked above the other `r options` shown as bars. 
 
 ```{r contests_bars, dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap= paste0("Figure 2.3. Head to head performance for '", ovname, "'.")}
 plot(vic_traits[[reference_trait]]) +
@@ -401,130 +401,74 @@ try(kable(worths[[reference_trait]][,-2],
 \
 
 ```{r rankedfirst, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap= paste0("Figure 2.5. Probability of being the best ranked for '", ovname, "'.")}
-try(plot_worth_bar(worths[[reference_trait]], value = "Worth", group = Option),
+try(plot_worth_bar(worths[[reference_trait]], value = "Worth", group = Option, nchars = 30),
   silent = TRUE)
 ```
 
 \
 
-## Plackett-Luce Model with covariates for `r ovname`  
+## Plackett-Luce Tree  
 
-\
+A model-based recursive partitioning method [@Strobl2009] was used to determine the effect of covariates in the rankings of `r ovname`. This approach identifies sub-groups in the data for which the rankings are significantly different to each other. This analysis required that all rankings and covariates are completely available for the entire data set. Here we used `r dim(Gdata)[[1]]` out of `r sum(trait_list[[reference_trait]]$keep)` valid rankings for `r ovname`. 
 
-A model-based recursive partitioning method [@Strobl2009] was used to determine which of the covariates, if any, had significant relationships with the rankings of `r ovname`. This approach identifies sub-groups in the data for which the rankings of the different `r options` are significantly different to each other. This analysis required that all rankings and covariates are completely available for the entire dataset. Here we used `r dim(Gdata)[[1]]` out of `r sum(trait_list[[reference_trait]]$keep)` valid rankings for `r ovname`.
-
-```{r drop_covar_statement}
+```{r covar_statement}
 # make the statement if there is any covariate dropped
-drop_covar_statement <- ""
+covar_statement <- paste0("You provided the covariate(s): ", paste(sort(covar$codeQst), collapse = ", "), ". ")
 if (covarTRUE) {
   if (isTRUE(length(covar_dropped) > 0)) {
-    drop_covar_statement <- paste0(
-      "The covariates(s) '", paste(covar_dropped, collapse = "', '"),
+    covar_statement <- paste0(covar_statement,
+      "However, the covariates(s) '", paste(covar_dropped, collapse = "', '"),
       "' were not used in the analysis, because they did not surpass ",
-      "the threshold of at least ", paste0(missexp * 100, "%"), " valid entries."
+      "the threshold of at least ", paste0(mincovar * 100, "%"), " valid entries."
     )
   }
-  
-  if (isTRUE(length(covar_dropped) == 0)) {
-    drop_covar_statement <- ""
-  }
 }
 ```
 
-`r  paste(drop_covar_statement, collapse='\n')`
+`r  paste(covar_statement, collapse='\n')`
 
-\
+To select the covariate(s) that best represent the data set, a stepwise regression based on the forward selection approach was used. The procedure begins by fitting each covariate individually and adding new covariates one by one when it makes a single best improvement to the model based on the Akaike Information Criterion (AIC). The AIC estimates the relative amount of information lost by a given model, the less information a model loses, the higher the quality of that model. In the Plackett-Luce trees, the AIC is obtained by adding the maximized log likelihood ($L$) to the degrees of freedom ($\nu$). 
+
+Equation [1]
+$$AIC = -2L +  2\nu$$
 
 ```{r}
-effect_covar_statement1 <- ""
-effect_covar_statement2 <- ""
-if (isTRUE(length(tree_f) > 1))  {
-  if (isTRUE(any(na.omit(outtabs[[1]]$p.value) < sig_level_tree))) {
-    effect_covar_statement1 <- 
-      paste("The p-values for each of the covariates tested,", 
-            "one-by-one, showing whether or not the covariate could be used", 
-            "to define sub-groups with significantly different rankings are",
-            "shown in Table 2.6")
-    
-    effect_covar_statement3 <-
-      paste("The partitioning of the rankings based on the most significantly", 
-        "sub-groups which were identified from the data using an alpha =", 
-        sig_level_tree, "is shown in Figure 12. At the top of the tree is the", 
-        "full dataset, then working down through the different levels of", 
-        "the tree shows the combinations of variables which define each", 
-        "subgroup. The model parameters are shown for the final subgroups", 
-        "in the plot at the bottom of the tree. The model quasi-variance", 
-        "estimates, along with", ci_level*100, "% confidence intervals are", 
-        "provided. This will help identification of which", options, 
-        "were better suited to particular sub-groups identified by the analysis.")
-  }
-  
+best_covar <- ""
+if (length(tree_f) > 1) {
+  best_covar <- paste0("Based on this method, the covariate(s) ", paste(var_keep, collapse = ", and "),
+                       " were identified as the most representative to the rankings. The table below ", 
+                       "shows the subgroups identified with the selected covariate(s).")
 }
 ```
 
-`r  paste(effect_covar_statement1, collapse='\n')`
-
-```{r univar_pval}
-if (isTRUE(length(na.omit(outtabs[[1]]$p.value)) > 0)){
-try(kable(uni_sum,
-      caption = paste0("Table 2.6. Univariate p-values for first split in ",
-                       "Plackett-Luce tree model for the trait '",
-                       ovname, "'."),
-      row.names = FALSE),
-  silent = TRUE)
-}
-```
-
-\
-
-```{r node_statement} 
-# node statement
-node_statement <- ""
-
-if (isTRUE(length(tree_f) > 1)){
-node_statement <- paste("Table 2.7 shows which", options,
-                        "where identified as the best and worst ranked in the", 
-                        "subgroups identified by the Plackett-Luce tree for the trait '", 
-                        ovname ,"'.")
-}
-```
-
-`r  paste(node_statement, collapse='\n')`
-
-\
+`r  paste(best_covar, collapse='\n')`
 
 ```{r subgroups-found}
 if(isTRUE(length(tree_f) > 1)){
   try(
     kable(node_summary, 
-        caption = paste0("Table 2.7. Summary of different subgroups identified",
-                         " by the Plackett-Luce model."),
+        caption = paste0("Table 2.5. Summary of subgroups identified",
+                         " by the Plackett-Luce tree."),
         row.names = FALSE),
     silent = TRUE)
 }
 
 ```
 
-\
-
-`r  paste(effect_covar_statement2, collapse='\n')`
 
 ```{r no_tree}
 no_tree <- ""
 if (isTRUE(length(tree_f) == 1)) {
   no_tree <- 
     paste0("No split was found for the Plackett-Luce tree using the selected ",
-    "covariates. Figure 8 shows the model for the rankings provided in this ",
+    "covariates. Figure 2.6 shows the model for the rankings provided in this ",
     "project, showing that none of the tested covariates had a clear influence on ",
-    "the rankings of '", ovname, "' with an alpha = ", sig_level_tree,".")
+    "the rankings of '", ovname, "'.")
 }
 ```
 
-\
-
 `r paste(no_tree, collapse='\n')`
 
-\
 
 ```{r pltree_legend}
 pltree_text <- paste0("Figure 2.6. Plackett-Luce tree for '", ovname, "'. The horizontal axis is the probability of winning. Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")

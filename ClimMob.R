@@ -18,8 +18,38 @@ ranker      <- args[7] # how the report will refer to participants/farmers
 option      <- args[8] # how the report will refer to tested technologies
 fullpath    <- args[9] # this is backward path
 reference   <- args[10] # the reference item for the analysis
+minN        <- args[11] # minimum n of complete data required in a trait evaluation before it is excluded
+minitem     <- args[12] # minimum n of items tested, e.g. that all items are tested at least twice
+mincovar    <- args[13] # minimum proportion of covariates compared to total valid n
+sig_level   <- args[14] # significance level for the standard PL model
+sig_level_tree  <-  args[15] # significance level for the tree
+minsplit    <- args[16] # minimum n in each tree node
 if (isTRUE(is.na(reference))) {
   reference <- 1
+}
+
+if (isTRUE(is.na(minN))) {
+  minN <- 5
+}
+
+if (isTRUE(is.na(minitem))) {
+  minitem <- 2
+}
+
+if (isTRUE(is.na(mincovar))) {
+  mincovar <- 0.95
+}
+
+if (isTRUE(is.na(sig_level))) {
+  sig_level <- 0.1
+}
+
+if (isTRUE(is.na(sig_level_tree))) {
+  sig_level_tree <- sig_level
+}
+
+if (isTRUE(is.na(minsplit))) {
+  minsplit <- 10
 }
 
 # # ................................................................
@@ -94,7 +124,7 @@ if (any_error(try_cmdata)) {
 
 # ................................................................
 # ................................................................
-# Run analysis ####
+# 1. Run analysis ####
 # write output directory
 tryCatch({
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
@@ -129,33 +159,10 @@ dtpars <- tryCatch({
     rankwith <- "rank_numeric"
   }
   
-  # minimum n of complete data required in a trait evaluation
-  # before it is excluded, it can be at least 5 or 
-  # that all items are tested at least twice
-  missper <- 5
-  minitem <- 2
-  
-  # minimum proportion of valid entries in explanatory variables
-  missexp <- 0.95
-  
   # minimum proportion of valid entries in tricot vs local
   # this will be computed based on the valid entries of the reference
   # trait after validations
   mintricotVSlocal <- 0.95
-  
-  # minimum split size for PL Tree models
-  minsplit <- ceiling(nranker * 0.1)
-  if (isTRUE(minsplit < 10)) {
-    minsplit <- 10
-  }
-  
-  if (isFALSE(is.numeric(minsplit))) {
-    minsplit <- 10
-  }
-  
-  # Set alpha
-  sig_level <- 0.1
-  sig_level_tree <- 0.5
   
   # method for adjustments for confidence intervals and setting widths for comparison. 
   ci_adjust <- "none"
@@ -247,10 +254,10 @@ org_rank <- tryCatch({
     
     # check if number of missing data is lower than the threshold
     # at least that the number of valid entries is higher than missper (5)
-    cond1 <- sum(keep) > missper
+    cond1 <- sum(keep) > minN
     
     # at least that all the items are tested twice
-    cond2 <- all(table(unlist(cmdata[keep,itemnames])) > 1)
+    cond2 <- all(table(unlist(cmdata[keep, itemnames])) >= minitem)
     
     keepit <- all(cond1, cond2)
     
@@ -429,7 +436,7 @@ org_covar <- tryCatch({
     }
     
     # find those that are above the threshold of missexp
-    dropit <- missexp > (colSums(keep) / nranker)
+    dropit <- mincovar > (colSums(keep) / nranker)
     
     # drop those bellow threshold
     keep <- as.data.frame(keep[, !dropit])
@@ -878,18 +885,25 @@ try_pl <- tryCatch({
   # .......................................................
   # .......................................................
   # Plackett-Luce combining traits together ####
-  coefs <- numeric()
+  # take first for the reference trait
+  coefs <- matrix(NA, 
+                  ncol = length(traits_code), 
+                  nrow = length(items),
+                  dimnames = list(items, traits_code))
+  
   for(i in seq_along(mods)){
-    coefs <- cbind(coefs, 
-                   scale(qvcalc(mods[[i]], ref = reference)[[2]]$estimate))
+    coef_i <- scale(qvcalc(mods[[i]], ref = reference)[[2]]$estimate)
+    coef_i <- as.vector(coef_i)
+    names(coef_i) <- rownames(qvcalc(mods[[i]], ref = reference)[[2]])
+    
+    ind_i <- which(dimnames(coefs)[[1]] %in% names(coef_i))
+    
+    coefs[ind_i, traits_code[i]] <- coef_i
+    
   }
   
   coefs <- as.data.frame(coefs)
   
-  names(coefs) <- traits_code
-  
-  rownames(coefs) <- names(coef(mods[[1]]))
-
 }, error = function(cond) {
   return(cond)
 }
@@ -1046,6 +1060,8 @@ try_plt <- tryCatch({
   # rename covariates with the name taken from ClimMob
   names(Gdata) <- covar$codeQst
   Gdata <- cbind(G, Gdata)
+  nG <- nrow(Gdata)
+  rownames(Gdata) <- 1:nG
   
   # perform a forward selection as pltree() sometimes don't split 
   # the tree when G ~ . is used
@@ -1054,21 +1070,29 @@ try_plt <- tryCatch({
   counter <- 1
   exp_var <- covar$codeQst
   
+  cat("Selecting the best covariate for Plackett-Luce trees \n")
+
   while (best) {
-    
     fs <- length(exp_var)
     models <- data.frame()
     for(i in seq_len(fs)){
-      t_i <- pltree(as.formula(paste0("G ~ ", paste(c(var_keep, exp_var[i]), collapse = " + "))),
-                    data = Gdata,
-                    minsize = minsplit,
-                    alpha = sig_level_tree,
-                    ref = reference,
-                    gamma = TRUE)
       
-      validations <- data.frame(nnodes = length(nodeids(t_i, terminal = TRUE)),
-                                AIC = AIC(t_i),
-                                noerror = !"try-error" %in% class(try(plot(t_i), silent = TRUE)))
+      t_i <- try(pltree(as.formula(paste0("G ~ ", paste(c(var_keep, exp_var[i]), collapse = " + "))),
+                        data = Gdata,
+                        minsize = minsplit,
+                        alpha = sig_level_tree,
+                        ref = reference,
+                        gamma = TRUE), silent = TRUE)
+      
+      if (isFALSE("try-error" %in% class(t_i))) {
+        validations <- data.frame(nnodes = length(nodeids(t_i, terminal = TRUE)),
+                                  AIC = AIC(t_i),
+                                  noerror = !"try-error" %in% class(try(plot(t_i), silent = TRUE)))
+      }else{
+        validations <- data.frame(nnodes = NA,
+                                  AIC = NA,
+                                  noerror = FALSE)
+      }
       
       models <- rbind(models, validations)
       
@@ -1094,11 +1118,15 @@ try_plt <- tryCatch({
       var_keep <- c(var_keep, best_model)
     }
     
+    if (length(exp_var) == 0) {
+      best <- FALSE
+    }
+    
   }
   
   if (length(var_keep) == 0) {
     var_keep <- names(Gdata)[2]
-    minsplit <- nrow(Gdata)
+    minsplit <- nG
   }
   
   treeformula <- as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
@@ -1111,7 +1139,7 @@ try_plt <- tryCatch({
                    ref = reference)
   
   # plot the tree (if any)
-  plottree <- gosset:::plot_tree(tree_f)
+  plottree <- gosset:::plot_tree(tree_f, ci.level = 0.84)
   
   # if the tree has splits, extract coeffs from nodes
   if (isTRUE(length(tree_f) > 1)) { 
@@ -1136,6 +1164,7 @@ try_plt <- tryCatch({
     # remove the strings %in% " and c() from rules 
     coefs_t$rule <- gsub("%in%","@", coefs_t$rule)
     coefs_t$rule <- gsub("[(]|[)]| c","", coefs_t$rule)
+    coefs_t$rule <- gsub('"NA",',"", coefs_t$rule)
     
     coefs_t$Label <- paste("Node", coefs_t$node, ":", coefs_t$rule,"\n","n=",coefs_t$n)
     
@@ -1520,8 +1549,10 @@ if (all(infosheets, done)) {
     # ................................................................
     # ................................................................
     # Get the info from the participants ####
-    sel <- c("id", "package_farmername", paste0("package_item_", LETTERS[1:ncomp]))
+    sel <- c("id", paste0("package_item_", LETTERS[1:ncomp]))
     partitable <- cmdata[, sel]
+    
+    partitable$name <- cmdata[,which(grepl("package_participant_name|package_farmername", names(cmdata)))]
     
     names(partitable) <- gsub("package_|farmer", "", names(partitable))
     
@@ -1716,4 +1747,6 @@ if (isFALSE(done)) {
 if (length(error) > 0) {
   print(error)
 }
+
+# End of analysis
 

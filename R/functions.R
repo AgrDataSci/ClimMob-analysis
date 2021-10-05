@@ -675,7 +675,7 @@ summary.btdata <- function(object, ...){
 # @param object a data.frame with worth parameters
 # @param value an integer for index in object for the column with values to plot
 # @param group an integer for index in object to the colunm with values to group with
-plot_worth_bar <- function(object, value, group, palette = NULL){
+plot_worth_bar <- function(object, value, group, palette = NULL, ...){
   
   if(is.null(palette)) {
     palette <- grDevices::colorRampPalette(c("#FFFF80", "#38E009","#1A93AB", "#0C1078"))
@@ -688,7 +688,7 @@ plot_worth_bar <- function(object, value, group, palette = NULL){
   
   object$group <- as.character(object$group)
   
-  object$group <- gosset:::.reduce(object$group)
+  object$group <- gosset:::.reduce(object$group, ...)
   
   object <- object[rev(order(object$value)), ] 
   
