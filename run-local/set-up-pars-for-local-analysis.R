@@ -1,9 +1,9 @@
-# This script is used to prepared a group of ClimMob data to run the analysis 
-# locally. You can use this for example to add environmental variables and/or 
+# This script is used to prepare the tricot data to run the analysis locally.
+# You can use this for example to add environmental variables and/or 
 # combine results from different projects. All the process is manual and you need to 
-# adapt some parts if this scripts depending on the type of data that you are dealing with. 
+# adapt some parts of this script depending on the type of data that you are dealing with. 
 # Mostly depending on how you designed your tricot project(s) and how similar they are to
-# each other in terms of data structure and behaviour
+# each other in terms of data structure and behaviour.
 # Good luck and contact me if you need support and/or advice
 # Kauê de Sousa
 
