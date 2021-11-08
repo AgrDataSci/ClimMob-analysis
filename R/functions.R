@@ -795,3 +795,17 @@ source2 <- function(file, start, end, ...) {
   source(textConnection(file.lines.collapsed), ...)
 }
 
+
+#'Get colour
+#'
+col_pallet <- function(x, ...) {
+  
+  p <- c('#d73027','#4575b4', '#f46d43','#74add1', '#fdae61','#abd9e9', '#fee090')
+  
+  v <- p[1:x]
+  
+  return(v)
+  
+}
+
+
