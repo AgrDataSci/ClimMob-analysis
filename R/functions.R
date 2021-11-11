@@ -273,9 +273,13 @@ draw.emojis <- Vectorize(draw.emojis)
 #' @return an igraph plot
 network <- function(object, ...) {
   
+  if (class(object) == "grouped_rankings") {
+    object <- as.rankings(object)
+  }
+  
   R <- object 
   
-  adj <- adjacency(R)
+  adj <- PlackettLuce::adjacency(R)
   
   adj <- as.vector(adj)
   
@@ -800,7 +804,10 @@ source2 <- function(file, start, end, ...) {
 #'
 col_pallet <- function(x, ...) {
   
-  p <- c('#d73027','#4575b4', '#f46d43','#74add1', '#fdae61','#abd9e9', '#fee090')
+  p <- c('#d73027','#4575b4', '#f46d43','#74add1', 
+         '#fdae61','#abd9e9', '#fee090', '#762a83',
+         '#a6dba0','#9970ab','#5aae61', '#c2a5cf', 
+         '#1b7837')
   
   v <- p[1:x]
   
@@ -808,4 +815,41 @@ col_pallet <- function(x, ...) {
   
 }
 
+#' Get node rules 
+#' 
+#' Get the node rules from a party object
+#' 
+#' @param x an object of class party
+node_rules <- function(x, ...){
+  
+  node_ids <- partykit::nodeids(x, terminal = TRUE)
+  
+  result <- data.frame()
+  
+  for (i in seq_along(node_ids)) {
+    r <- data.frame(node = node_ids[i],
+                    rules = partykit:::.list.rules.party(x, node_ids[i]))
+    
+    result <- rbind(result, r)
+    
+  }
+  
+  rule <- result$rules
+  rule <- gsub("%in%","@", rule)
+  rule <- gsub("[(]|[)]| c","", rule)
+  rule <- gsub('"NA",',"", rule)
+  rule <- gsub(",", "COMMA", rule)
+  rule <- gsub("@", "EQUAL", rule)
+  rule <- gsub("&", " AND ", rule)
+  rule <- gsub("[[:punct:]]", "", rule)
+  rule <- gsub("  ", " ", rule)
+  rule <- gsub("EQUAL", "= ", rule)
+  rule <- gsub("AND", "&", rule)
+  rule <- gsub("COMMA", ",", rule)
+  
+  result$rules <- rule
+  
+  return(result)
+  
+}
 
