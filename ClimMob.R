@@ -297,7 +297,7 @@ org_rank <- tryCatch({
       ovsl <- as.character(ovsl)
       
       # check for data completeness
-      keep2 <- apply(cmdata[ovsl], 1, is.na)
+      keep2 <- apply(cmdata[c(itemnames, ovsl)], 1, is.na)
       keep2 <- as.vector(colSums(keep2) == 0)
       
       # combine with the vector of reference trait
@@ -400,8 +400,29 @@ if (any_error(org_rank)) {
 # .......................................................
 # Prepare summary tables / charts
 org_summ <- tryCatch({
+  
+  #...........................................................
+  # This is the fist table in Section 1
+  # it shows the traits that were assessed in the project 
+  # and the number of answers used in the analysis
+  
+  tbl_section1 <- lapply(trait_list, function(x){
+    data.frame(name = x$name,
+               collect = ClimMobTools:::.title_case(x$assessment),
+               quest = x$question,
+               n = sum(x$keep))
+  })
+
+  tbl_section1 <- do.call(rbind, tbl_section1)  
+  
+  # rename columns in the original table
+  names(tbl_section1) <- c("Trait", "Data collection moment", 
+                           "Question asked", "Number of valid answers")
  
+  #...........................................................
   # Number of items tested
+  # This table show the frequencies where items were tested
+  # and how these frequencies were tested among groups, if any
   itemtable <- cmdata[, grepl("package_item", names(cmdata))]
   
   itemtable <- data.frame(table(unlist(itemtable)))
@@ -446,7 +467,11 @@ org_summ <- tryCatch({
   
   rownames(itemtable) <- 1:nrow(itemtable)
   
+  #...........................................................
   # Participation during trial (response rate)
+  # it is a plot showing the rate of response in each 
+  # data collection moment, it takes the larger N response
+  # for each data collection moment
   participation <- data.frame(n = as.vector(table(cmdata$group)),
                               n_tot = as.vector(table(cmdata$group)),
                               group = names(table(cmdata$group)),
@@ -511,6 +536,7 @@ if (any_error(org_summ)) {
   
   partiplot <- 0L
   itemtable <- data.frame()
+  tbl_section1 <- data.frame()
   
 }
 
@@ -654,6 +680,11 @@ org_kendall <- tryCatch({
     weakest_link   <- c(agreement[[which.min(agreement$kendall), "labels"]],
                         round(min(agreement$kendall), 3))
     
+    agreement <- agreement[,-5]
+    
+    agreement[c(3:4)] <- lapply(agreement[c(3:4)], function(x) round(x, 1))
+    
+    names(agreement) <- c("Trait", "Kendall tau", "Agreement with best (%)", "Agreement with worst (%)")
     
   } 
   
@@ -661,6 +692,7 @@ org_kendall <- tryCatch({
     strongest_link <- character()
     weakest_link <- character()
     pagreement <- 0L
+    agreement <- data.frame()
  }
   
 }, error = function(cond) {
@@ -675,6 +707,7 @@ if (any_error(org_kendall)) {
   strongest_link <- character()
   weakest_link <- character()
   pagreement <- 0L
+  agreement <- data.frame()
 }
 
 # .......................................................
@@ -686,14 +719,203 @@ if (any_error(org_kendall)) {
 # and a table showing statistical differences for each trait 
 org_pl <- tryCatch({
   
+  #...........................................................
+  # first a list with rankings
+  R <- list()
+  
+  for (i in seq_along(trait_list)) {
+    
+    keep <- trait_list[[i]]$keep
+    
+    # list of arguments for the function that will be used to 
+    # create the rankings
+    a <- list(cmdata[keep, c(itemnames, trait_list[[i]]$strings)],
+              items = itemnames,
+              input = trait_list[[i]]$strings)
+    
+    R[[i]] <- do.call(rankwith, args = a)
+    
+  }
+  
+  #...........................................................
+  # Favorability scores showing a summary of the most 
+  # voted items
+  fav_tbl <- lapply(R, function(x){
+    summarise_favorite(x)
+  })
+  
+  fav_plot <- lapply(fav_tbl, function(x){
+    plot(x, abbreviate = FALSE) +
+      xlab("") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(size = 10, color = "grey20"),
+            axis.text.y = element_text(size = 10, color = "grey20"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            legend.position = "none")
+  })
+  
+  # Change the tables to be report friendly 
+  fav_tbl <- lapply(fav_tbl, function(x){
+    
+    x$best <- paste0(round(x$best, 1), "%")
+    x$worst <- paste0(round(x$worst, 1), "%")
+    x$fav_score <- round(x$fav_score, 1)
+    
+    x <- x[,-which(grepl("wins", names(x)))]
+    
+    names(x) <- c(Option,"N","Top ranked","Bottom ranked",
+                       "Net favorability score")
+    
+    x
+    
+  })
+  
+  fav_traits <- list(fav_tbl, fav_plot)
+  
+  #...........................................................
+  # Fit Plackett-Luce model 
+  mod <- lapply(R, function(x){
+    PlackettLuce(x)
+  })
+  
+  #...........................................................
+  # Analysis of variance
+  anovas <- lapply(mod, function(x){
+    a <- anova.PL(x)
+    a
+  })
+  
+  # and the tables with rounded p-values and sig stars
+  aov_tbl <- list()
+  for (i in seq_along(trait_list)) {
+    a <- anovas[[i]]
+    a[2, "model"] <- trait_list[[i]]$name
+    a[,5] <- paste(formatC(a[,5], format = "e", digits = 2),
+                   stars.pval(a[,5]))
+    aov_tbl[[i]] <- a
+  }
+  
+  # Plot with log-worth and multi comparison analysis 
+  logworth_plot <- lapply(mod, function(x){
+    
+    # table with multi comparison analysis 
+    summ <- multcompPL(x,
+                       ref = reference,
+                       threshold = sig_level, 
+                       adjust = ci_adjust)
+    
+    # and this is the chart with multi comparison analysis
+    plot(summ, level = ci_level) + 
+      theme_classic() +
+      theme(text = element_text(color = "grey20"),
+            axis.text.x = element_text(size = 10, color = "grey20"),
+            axis.text.y = element_text(size = 10, color = "grey20")) +
+      labs(y = Option, x = "Log-worth")
+    
+  })
+  
+  #...........................................................
+  # Bar plot with worth parameters for each trait
+  worth_plot <- lapply(mod, function(x){
+    plot_worth(x)
+  })
+  
+  #...........................................................
+  # Table summarizing the best and worst items per trait
+  # and their respective level of statistical significance
+  overview_mod <- lapply(mod, function(x) {
+    ps <- anova.PL(x)[2,5]
+    
+    summ <- multcompPL(x,
+                       ref = reference,
+                       threshold = sig_level, 
+                       adjust = ci_adjust)
+    
+    # take the best three items from this comparison
+    bests <- as.character(summ[, "term"][grepl("a", summ[,"group"])])
+    # if more than three, subset to get only three
+    if (isTRUE(length(bests) > 3)) {
+      bests <- bests[1:3]
+    }
+    
+    # get the three worst items
+    worsts <- as.character(rev(summ[grepl(summ[nrow(summ),"group"], 
+                                            summ[, "group"]), "term"]))
+    
+    # if more than three, subset to get only three
+    if (isTRUE(length(worsts) > 3)) {
+      worsts <- worsts[1:3]
+    }
+    
+    # avoid bests and worst in the same column, this when very few items are tested
+    b <- bests[!bests %in% worsts]
+    w <- worsts[!worsts %in% bests]
+    
+    bests <- paste(b, collapse =", ")
+    worsts <- paste(w, collapse = ", ")
+    
+    tbl <- data.frame(trait = "",
+                      dc = "",
+                      b = bests,
+                      w = worsts,
+                      p = ps)
+    
+  })
+  
+  for (i in seq_along(trait_list)) {
+    overview_mod[[i]][,1] <- ClimMobTools:::.title_case(trait_list[[i]]$name)
+    overview_mod[[i]][,2] <- ClimMobTools:::.title_case(trait_list[[i]]$assessment)
+  }
+  
+  overview_mod <- do.call("rbind", overview_mod)
+  
+  overview_mod[,6] <- stars.pval(overview_mod[,5])
+  
+  overview_mod[,5] <- formatC(overview_mod[,5], format = "e", digits = 2)
+  
+  names(overview_mod) <- c("Trait", "Data collection moment", 
+                           "Best performance", "Worst performance", 
+                           "p.value", "")
+  
 }, error = function(cond) {
   return(cond)
 }
 )
 
+if (any_error(org_pl)) {
+  e <- org_pl$message
+  error <- c(error, e)
+  
+  logworth_plot <- list()
+  mod <- list()
+  worth_plot <- list()
+  anovas <- list()
+  aov_tbl <- list()
+  
+}
+
 # .......................................................
 # .......................................................
 # Fit PLADMM model ####
+# this will try to fit a simple PLDMM for the overall trait
+# using the log-worth from the other traits as a reference
+org_pladmm <- tryCatch({
+  
+  
+}, error = function(cond) {
+  return(cond)
+}
+)
+
+if (any_error(org_pladmm)) {
+  
+  e <- org_pladmm$message
+  
+  error <- c(error, e)
+
+}
+
 
 # .......................................................
 # .......................................................
@@ -795,7 +1017,6 @@ org_pltree <- tryCatch({
                         assessmentName = "",
                         assessmentId = "")
   }
-  
   
   if (isTRUE(tricotVSlocal)) {
     

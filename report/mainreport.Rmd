@@ -45,7 +45,7 @@ If you publish any results generated with ClimMob, you should cite a number of a
 
 # Section 1: Headline results
 
-Overall, there were `r nranker` `r rankers` registered to this project. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of its '`r ovname`'. In addition, they also provided rankings for `r length(trait$name) -1` additional trait(s). 
+Overall, there were `r nranker` `r rankers` registered to this project. Each `r ranker` assessed `r ncomp` different `r options` and ranked them in order of its '`r Ovname`'. In addition, they also provided rankings for `r length(trait$name) -1` additional trait(s). 
 
 ```{r trait_drop}
 
@@ -155,7 +155,7 @@ if (isTRUE("igraph" %in% class(net))){
 
 ```{r stat_diff_statement}
 # make the statement for the report about the statistical significance
-stat_diff_statement <- paste0("This report takes the trait '", ovname, 
+stat_diff_statement <- paste0("This report takes the trait '", Ovname, 
                               "' as the reference trait for the analysis.",
                               " A summary of the p-values testing the hypothesis ",
                               "that there were differences in the rankings for each ",
@@ -169,8 +169,8 @@ stat_diff_statement <- paste0("This report takes the trait '", ovname,
 
 ```{r summ_differences}
 try(
-  kable(ptab, 
-      caption = paste0("Table 1.3. Summary of differences found in ",options," by trait."),
+  kable(overview_mod, 
+      caption = paste0("Table 1.3. Summary of ",options," with best and worst performance by trait and data collection moment. The table shows up to three ", options, " with best and worst performance based on the log-worth estimated by the Plackett-Luce model based on the evaluations given by the participants in this experiment."),
       row.names = FALSE),
   silent = TRUE)
 ```
@@ -178,33 +178,36 @@ try(
 
 \
 
-## Correlation between the `r ovname` and the other traits
+## Correlation between the `r Ovname` and the other traits
 
 ```{r relation_other_chrs} 
-relation_other_chrs1 <- paste0("This report only assessed the trait '", ovname, "'.")
+relation_other_chrs1 <- paste0("This report only assessed the trait '", Ovname, "'.")
 relation_other_chrs2 <- ""
 if (isTRUE(nothertraits > 0)) {
 relation_other_chrs1 <- 
   paste0("Table 1.4 shows, for each trait evaluated in the project, ", 
-        "the frequency for which the rankings matched with the trait '", ovname, 
+        "the frequency for which the rankings matched with the trait '", Ovname, 
         "'. Best and worst agreement represent the percentage ", 
         "for which the best and worst ", option, " for the trait ", 
-        "matched the best and worst '", ovname, "'. Complete ranking agreement ", 
-        "shows the proportion of correlation on the full ranking with the trait '", 
-        ovname, "' as reference using the Kendall correlation ", 
-        "coefficient [@Kendall1938].")
+        "matched the best and worst '", Ovname, 
+        "'. Kendall tau shows the complete ranking agreement ", 
+        "on the ranking with the trait '", 
+        Ovname, "' as reference using the Kendall correlation ", 
+        "coefficient [@Kendall1938]. The coefficient is an equivalent of a Pearson ", 
+        "correlation designed for ranking data, ranging from 0 to 1, where 1 means a high correlation.")
 
 relation_other_chrs2 <- 
   paste0("The trait that had the strongest ", 
-        "relationship with '", ovname, "' was '", tolower(strongest_link[1]), 
-        "'. Overall, the rankings for '",   tolower(strongest_link[1]), 
-        "' matched the rankings for '", ovname, "' ",   tolower(strongest_link[2]),
-        "% of the time. The trait that had the weakest ", 
-        " relationship with '", ovname, "' was '",
-         tolower(weakest_link[1]), "'. Overall, the rankings for '" ,  
-        tolower(weakest_link[1]), "' matched the rankings for '", 
-        ovname, "' " ,  tolower(weakest_link[2]), "% of the time.",
-        " The correlation with the other traits is also shown in Figure 1.3.")
+        "correlation with '", Ovname, "' was '", ClimMobTools:::.title_case(strongest_link[1]), 
+        "'. The rankings for '", ClimMobTools:::.title_case(strongest_link[1]), 
+        "' correlate with '", Ovname, "' with a Kendall tau of ",
+        strongest_link[2],
+        ". The trait that had the lowest correlation with ", Ovname,
+        "' was '",  ClimMobTools:::.title_case(weakest_link[1]), 
+        "'. The rankings for '" ,  
+        ClimMobTools:::.title_case(weakest_link[1]), "' had a Kendall tau of ", 
+        weakest_link[2], " when compared to '",  Ovname, 
+        "'. The correlation with the other traits is also shown in Figure 1.3.")
 
 }
 ```
@@ -214,9 +217,9 @@ relation_other_chrs2 <-
 ```{r agreement_table}
 if (nothertraits > 0) {
 try(
-  kable(agreement_table,
-      caption = paste0("Table 1.4. Correlation between '", ovname, 
-                       "' and the other traits assessed in this project."),
+  kable(agreement,
+      caption = paste0("Table 1.4. Correlation between '", Ovname, 
+                       "' and the other traits assessed in this project." ),
       row.names = FALSE),
   silent = TRUE)
 }
@@ -227,7 +230,7 @@ try(
 `r paste(relation_other_chrs2, collapse='\n')`
 
 
-```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=12, fig.cap= paste0("Figure 1.3. Correlation between individual traits and ", ovname, ".")}
+```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=12, fig.cap= paste0("Figure 1.3. Correlation between individual traits and ", Ovname, ".")}
 if (nothertraits > 0) {
   plot(agreement) +
   theme_minimal() +  
@@ -249,10 +252,10 @@ if (isTRUE(dim(arrows)[[1]] > 0)) {
 pls_statement <- 
     paste0("Partial least squares regression was used to determine ", 
           "relationship between the other traits and ", 
-          "'", ovname , "'. The first two components ", 
+          "'", Ovname , "'. The first two components ", 
           "recombining the specific traits ",
-          "are able to explain the variability in '", ovname, "'. ",
-          "The dashed line represents the '", ovname, 
+          "are able to explain the variability in '", Ovname, "'. ",
+          "The dashed line represents the '", Ovname, 
           "' with an increase in performance as the x and y increase. ",
           "The ", option, " positioned close to the dashed line will ", 
           "be performing equally across all traits. ",
@@ -268,7 +271,7 @@ pls_statement <-
 
 `r paste(pls_statement, collapse='\n')`
 
-```{r plsplot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.4. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated. The dashed line represents the '", ovname, "' with an increase in performance as the x and y increase.")}
+```{r plsplot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.4. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated. The dashed line represents the '", Ovname, "' with an increase in performance as the x and y increase.")}
 if (isTRUE(dim(arrows)[[1]] > 0)) {
   try(plot(plsplot), silent = TRUE)
 }
@@ -280,14 +283,14 @@ if (isTRUE(dim(arrows)[[1]] > 0)) {
 
 ## Assessment of `r options` 
 
-Exploratory analysis within the following section summarises results from the rankings on '`r ovname`'. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020]. Performance of each of the `r options` for '`r ovname`' is summarized in Table 2.1. The table below shows the number of times each `r option` was tested and the proportion of times it was ranked as the best or worst. Net favorability score is the different between the best and worst ranks for each `r option`. A score of +100 indicates that the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
+Exploratory analysis within the following section summarises results from the rankings on '`r Ovname`'. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020]. Performance of each of the `r options` for '`r Ovname`' is summarized in Table 2.1. The table below shows the number of times each `r option` was tested and the proportion of times it was ranked as the best or worst. Net favorability score is the different between the best and worst ranks for each `r option`. A score of +100 indicates that the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
 
 
 ```{r fav_table}
 try(knitr::kable(fav_traits[[reference_trait]][[2]],
              row.names = FALSE,
              caption = paste0("Table 2.1. Favorability scores for '", 
-                              ovname, "'." )), 
+                              Ovname, "'." )), 
     silent = TRUE)
 ```
 
@@ -295,15 +298,8 @@ try(knitr::kable(fav_traits[[reference_trait]][[2]],
 
 This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head-to-head contests' for which the `r option` won and the net favorability score (Figure 2.1). 
 
-```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favorability scores for '", ovname, "'.")}
-plot(fav_traits[[reference_trait]][[1]], abbreviate = FALSE) +
-  xlab("") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(size = 10, color = "#000000"),
-        axis.text.y = element_text(size = 10, color = "#000000"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        legend.position = "none")
+```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favorability scores for '", Ovname, "'.")}
+
 ```
 
 \
@@ -313,7 +309,7 @@ best_items <- ""
 if (isTRUE(nrow(fav_traits[[reference_trait]][[2]]) > 0)) {
   best_items <-
   paste("The", option, fav_traits[[reference_trait]][[2]][[1,1]], "was the 'best'", option, 
-  " for the trait ", ovname, " being ranked highest by", 
+  " for the trait ", Ovname, " being ranked highest by", 
   fav_traits[[reference_trait]][[2]][[1,3]], "of the" , 
   nranker, rankers, "who assessed this", option, ".")
 }
@@ -325,9 +321,9 @@ if (isTRUE(nrow(fav_traits[[reference_trait]][[2]]) > 0)) {
 
 ## Pairwise contests 
 
-Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r ovname`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the `r option` was ranked above the other `r options` shown as bars. 
+Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r Ovname`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the `r option` was ranked above the other `r options` shown as bars. 
 
-```{r contests_bars, dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap= paste0("Figure 2.3. Head to head performance for '", ovname, "'.")}
+```{r contests_bars, dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap= paste0("Figure 2.3. Head to head performance for '", Ovname, "'.")}
 plot(vic_traits[[reference_trait]]) +
   labs(x = "", y = "") +
   theme_minimal() +
@@ -345,13 +341,13 @@ plot(vic_traits[[reference_trait]]) +
 
 \
 
-Table 2.2 shows the results from the likelihood ratio test from the Plackett-Luce model for the trait '`r ovname`' of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
+Table 2.2 shows the results from the likelihood ratio test from the Plackett-Luce model for the trait '`r Ovname`' of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
 
 ```{r, aov1}
 try(kable(aov_tables[[reference_trait]], 
       caption = paste0("Table 2.2. Likelihood ratio test results from fitted ", 
       "Plackett-Luce model with rankings from '", 
-      ovname, "'."),
+      Ovname, "'."),
       row.names = FALSE),
   silent = TRUE)
 ```
@@ -360,9 +356,9 @@ try(kable(aov_tables[[reference_trait]],
 
 Figure 2.4 shows the estimates of the model coefficients with `r ci_level*100`% confidence intervals. The purpose of this graph is to be able to best distinguish between the relative strength of each of the `r options` assessed. As such the coefficient estimates themselves are not directly interpretable, but it can be concluded that a higher value for the coefficient indicates that a `r option` has been ranked as best more often. The `r ci_level*100`% confidence width is chosen so that non-overlapping confidence intervals could be interpreted as indicating significant differences at the alpha = `r sig_level`. This may not match exactly with the mean separation groupings, as these groupings also take into account multiple testing through the Benjamini and Hochberg adjustment [@BHtest].
 
-Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others in terms of '`r ovname`'. When `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the alpha = `r sig_level`.
+Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others in terms of '`r Ovname`'. When `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the alpha = `r sig_level`.
 
-```{r est_plot, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 2.4. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", ovname,"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
+```{r est_plot, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 2.4. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", Ovname,"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
 try(plot_summaries[[reference_trait]],  silent = TRUE)
 ```
 
@@ -377,7 +373,7 @@ try(kable(summaries[[reference_trait]],
       digits = 4,
       row.names = FALSE,
       caption = paste0("Table 2.3. Plackett-Luce Model estimates (log-worth) of tested ", 
-                       options, " for '", ovname,"' with ", ci_level*100, 
+                       options, " for '", Ovname,"' with ", ci_level*100, 
                        "% confidence intervals. Different letters indicate significant differences at p < ",
                        sig_level ,". The ", option, " ", reference, 
                        " is set as reference (log-worth arbitrarily set to zero).")),
@@ -394,13 +390,13 @@ Table 2.4 and Figure 2.5 use the coefficients from the Plackett-Luce model to es
 try(kable(worths[[reference_trait]][,-2],
       row.names = FALSE,
       caption = paste0("Table 2.4. Probability of being the best ranked for '",
-      ovname, "'.")),
+      Ovname, "'.")),
   silent = TRUE)
 ```
 
 \
 
-```{r rankedfirst, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap= paste0("Figure 2.5. Probability of being the best ranked for '", ovname, "'.")}
+```{r rankedfirst, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap= paste0("Figure 2.5. Probability of being the best ranked for '", Ovname, "'.")}
 try(plot_worth_bar(worths[[reference_trait]], value = "Worth", group = Option, nchars = 30),
   silent = TRUE)
 ```
@@ -409,7 +405,7 @@ try(plot_worth_bar(worths[[reference_trait]], value = "Worth", group = Option, n
 
 ## Plackett-Luce Tree  
 
-A model-based recursive partitioning method [@Strobl2009] was used to determine the effect of covariates in the rankings of `r ovname`. This approach identifies sub-groups in the data for which the rankings are significantly different to each other. This analysis required that all rankings and covariates are completely available for the entire data set. Here we used `r dim(Gdata)[[1]]` out of `r sum(trait_list[[reference_trait]]$keep)` valid rankings for `r ovname`. 
+A model-based recursive partitioning method [@Strobl2009] was used to determine the effect of covariates in the rankings of `r Ovname`. This approach identifies sub-groups in the data for which the rankings are significantly different to each other. This analysis required that all rankings and covariates are completely available for the entire data set. Here we used `r dim(Gdata)[[1]]` out of `r sum(trait_list[[reference_trait]]$keep)` valid rankings for `r Ovname`. 
 
 ```{r covar_statement}
 # make the statement if there is any covariate dropped
@@ -463,7 +459,7 @@ if (isTRUE(length(tree_f) == 1)) {
     paste0("No split was found for the Plackett-Luce tree using the selected ",
     "covariates. Figure 2.6 shows the model for the rankings provided in this ",
     "project, showing that none of the tested covariates had a clear influence on ",
-    "the rankings of '", ovname, "'.")
+    "the rankings of '", Ovname, "'.")
 }
 ```
 
@@ -471,7 +467,7 @@ if (isTRUE(length(tree_f) == 1)) {
 
 
 ```{r pltree_legend}
-pltree_text <- paste0("Figure 2.6. Plackett-Luce tree for '", ovname, "'. The horizontal axis is the probability of winning. Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")
+pltree_text <- paste0("Figure 2.6. Plackett-Luce tree for '", Ovname, "'. The horizontal axis is the probability of winning (worth). Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")
 
 if (length(tree_f) > 1) {
   pltree_text <- paste0(pltree_text, " Nodes split by the following covariate and attribute ", paste(paste("Node ", node_ids, node_summary[,1]), collapse = ", and "), ".")
@@ -488,7 +484,7 @@ try(plottree, silent = TRUE)
 # Section 3: Other traits
 
 ```{r other_chars}
-other_chars <- paste0("This report only assessed the trait '", ovname, "'.")
+other_chars <- paste0("This report only assessed the trait '", Ovname, "'.")
 
 if (isTRUE(nothertraits > 0)) {
   other_chars <- 
@@ -506,12 +502,11 @@ trait_summaries <- ""
 if(isTRUE(nothertraits > 0)) {
   
   trait_list <- trait_list[-reference_trait]
-  fav_traits <- fav_traits[-reference_trait]
-  vic_traits <- vic_traits[-reference_trait]
-  aov_tables <- aov_tables[-reference_trait]
-  plot_summaries <- plot_summaries[-reference_trait]
-  summaries <- summaries[-reference_trait]
-  worths <- worths[-reference_trait]
+  fav_traits <- fav_traits[[1]][-reference_trait]
+  fav_traits <- fav_traits[[2]][-reference_trait]
+  aov_tbl    <- aov_tbl[-reference_trait]
+  logworth_plot <- logworth_plot[-reference_trait]
+  worth_plot <- worth_plot[-reference_trait]
   
   for(i in seq_len(nothertraits)){
     trait_summaries<-c(trait_summaries,

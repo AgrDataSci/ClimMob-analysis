@@ -663,24 +663,19 @@ summary.btdata <- function(object, ...){
 # @param object a data.frame with worth parameters
 # @param value an integer for index in object for the column with values to plot
 # @param group an integer for index in object to the colunm with values to group with
-plot_worth_bar <- function(object, value, group, palette = NULL, ...){
+plot_worth <- function(x, palette = NULL, ...){
   
   if(is.null(palette)) {
     palette <- grDevices::colorRampPalette(c("#FFFF80", "#38E009","#1A93AB", "#0C1078"))
   }
   
-  object <- object[,c(group, value)]
-  names(object) <- c("group", "value")
+  object <- itempar(x, vcov = FALSE)
+  object <- data.frame(group = names(object),
+                       value = as.vector(object))
   
   nr <- dim(object)[[1]]
   
-  object$group <- as.character(object$group)
-  
-  object$group <- gosset:::.reduce(object$group, ...)
-  
   object <- object[rev(order(object$value)), ] 
-  
-  object$value <- round(object$value * 100, 0)
   
   # get order of players based on their performance
   player_levels <- rev(gosset:::.player_order(object, "group", "value"))
@@ -690,9 +685,9 @@ plot_worth_bar <- function(object, value, group, palette = NULL, ...){
   value <- object$value
   group <- object$group
   
-  maxv <- round(max(value) + 10, -1)
+  maxv <- gosset:::.round5(round(max(value) + .1, 2), 0.05)
   
-  ggplot2::ggplot(data = object, 
+  p <- ggplot2::ggplot(data = object, 
                   ggplot2::aes(x = value,
                                y = "", 
                                fill = group)) +
@@ -702,18 +697,20 @@ plot_worth_bar <- function(object, value, group, palette = NULL, ...){
                       width = 1, 
                       color = "#ffffff") + 
     scale_fill_manual(values = palette(nr)) + 
-    ggplot2::scale_x_continuous(labels = paste0(seq(0, maxv, by = 10), "%"),
-                                breaks = seq(0, maxv, by = 10),
+    ggplot2::scale_x_continuous(labels = paste0(seq(0, maxv, by = 0.05)),
+                                breaks = seq(0, maxv, by = 0.05),
                                 limits = c(0, maxv)) +
     ggplot2::theme_minimal() +
     ggplot2::theme(legend.position="bottom",
                    legend.text = element_text(size = 9),
                    panel.grid.major = element_blank(),
-                   axis.text.x = element_text(color = "#000000")) +
+                   axis.text.x = element_text(color = "grey20")) +
     ggplot2::labs(y = "",
                   x = "") + 
     ggplot2::geom_text(aes(label = group), 
                        position = position_dodge(width = 1), hjust = -.1)
+  
+  return(p)
   
 }
 
