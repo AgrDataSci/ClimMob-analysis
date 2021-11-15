@@ -850,3 +850,80 @@ node_rules <- function(x, ...){
   
 }
 
+
+#' Get table with estimates out of a PLADMM
+#' @param x a PLADMM object
+pladmm_coeffs <- function(object, ...) {
+  coefs <- coef(object)
+  coefficients <- matrix(NA, nrow = length(coefs), ncol = 4L, 
+                         dimnames = list(names(coefs), c("Estimate", "Std. Error", 
+                                                         "z value", "Pr(>|z|)")))
+  coefficients[, 1L] <- coefs
+  se <- sqrt(diag(vcov(object)))
+  coefficients[names(se), 2L] <- se
+  coefficients[, 3L] <- coefficients[, 1L]/coefficients[, 2L]
+  coefficients[, 4L] <- 2L * pnorm(-abs(coefficients[, 3L]))
+  
+  coefficients <- as.data.frame(coefficients)
+  
+  coefficients[, 5] <- stars.pval(coefficients[, 4])
+  
+  coefficients[, 4] <- formatC(coefficients[, 4], format = "e", digits = 2)
+  
+  coefficients[, 6] <- rownames(coefficients)
+  
+  rownames(coefficients) <- 1:nrow(coefficients)
+  
+  coefficients <- coefficients[,c(6, 1:5)]
+  
+  names(coefficients)[c(1, 6)] <- ""
+  
+  coefficients
+  
+}
+
+#' Paste strings and put a final conjunction in the string
+#' @param a vector with characters
+#' @param lan the language, choose between c("en", "pt", "fr", "es", "sw", "no")
+#' @param ... additional passed to methods
+#' @examples 
+#' paste3(LETTERS[1:5])
+#' 
+#' paste3(LETTERS[1])
+#' 
+#' paste3(LETTERS[1:2], lan = "fr")
+#' 
+paste3 <- function(x, lan = "en", ...) {
+  
+  if (length(x) == 1) {
+    return(x)
+  }
+  
+  idiom <- c("en", "pt", "fr", "es", "sw", "no")
+  conj <- c(" and ", " e ", " et ", " y ", " na ", " og ")
+  
+  index <- which(idiom %in% lan)
+  
+  if (length(index) == 0) {
+    index <- 1
+  }
+  
+  conj <- conj[index]
+  
+  x1 <- x[1:length(x)-1]
+  x2 <- x[length(x)]
+  
+  x1 <- paste(x1, collapse = ", ")
+  
+  result <- paste(x1, conj, x2)
+  
+  return(result)
+
+}
+
+
+
+
+
+
+

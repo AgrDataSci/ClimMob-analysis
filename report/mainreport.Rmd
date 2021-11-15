@@ -30,16 +30,16 @@ Citizen science is based on the cooperation of 'citizen scientists' or observers
 
 ## ClimMob
 
-The primary goal of ClimMob is to support the selection of innovative technologies (*e.g.* new crop varieties, management, new product). ClimMob serves to prepare and analyze citizen science experiments in which a large number of participants observe and compare different technological options under a wide range of conditions [@vanEtten2019tricot]. 
+The primary goal of ClimMob is to support the selection of innovative technologies (*e.g.* new crop varieties, management, new products). ClimMob serves to prepare and analyze citizen science experiments in which a large number of participants observe and compare different technological options under a wide range of conditions [@vanEtten2019tricot]. 
  
-ClimMob software assigns a limited number of items (typically 3) to each participant, who will compare their performance. Each participant gets a different combination of items drawn from a much larger set of items (typically 15-25). Comparisons of this kind are thought to be a very reliable way to obtain data. Once the results of the small tasks have been collected, ClimMob builds an image of the whole set of assigned objects, combining all observations. ClimMob not only reconstructs the overall ordering of items, but also takes into account differences and similarities between participants and the conditions under which they observe (e.g. socio-economic and plot environmental traits). It assigns similar participants to groups that each corresponds among different group profiles. Groups are created on the basis of whichever items which have been collected, that are found to be significantly linked to the observed rankings.
+ClimMob software assigns a limited number of items (typically 3) to each participant, who will compare their performance. Each participant gets a different combination of items drawn from a much larger set of items (typically 15-25). Once the results of the small tasks have been collected, ClimMob builds a data base of the whole set of tested technologies, combining all observations. ClimMob not only reconstructs the overall ordering of items, but also takes into account differences and similarities between participants and the conditions under which they observe (e.g. socio-economic and plot environmental traits). It assigns similar participants to groups that each corresponds among different group profiles. Groups are created on the basis of whichever items which have been collected, that are found to be significantly linked to the observed rankings.
  
-ClimMob uses Plackett-Luce models to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls].
+ClimMob applies the Plackett-Luce model to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls].
  
 
 ## How to cite
 
-If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. The crowdsourcing philosophy behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. It is important to mention that ClimMob is implemented in R, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the Plackett-Luce tree results, you should mention that ClimMob applies the Plackett-Luce model published by Turner et al. 2020 [@Turner2020]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2021) [@climmobanalysis].
+If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. The crowdsourcing philosophy behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. It is important to mention that ClimMob is implemented in R, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the Plackett-Luce tree results, you should mention that ClimMob applies the Plackett-Luce model, jointly attributed to Luce (1959)[@Luce1959] and Plackett (1975) [@Plackett1975], and implemented in R by Turner et al. 2020 [@Turner2020]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2021) [@climmobanalysis].
 
 \pagebreak
 
@@ -62,7 +62,7 @@ if (length(trait_dropped) > 0) {
     noun <- " it "
   }
   
-  trait_note <- paste0("The", adj, paste(trait_dropped, collapse = ", "), verb, "not considered in this report because", noun, "did not surpass the thresholds of (1) having at least ", minN, " valid entries, and (2) that all the ", options, " are tested at least ", minitem, " times twice per given trait. Table 1.1. shows the traits analysed in this report.")
+  trait_note <- paste0("The", adj, paste3(trait_dropped), verb, "not considered in this report because", noun, "did not surpass the thresholds of (1) having at least ", minN, " valid entries, and (2) that all the ", options, " are tested at least ", minitem, " times twice per given trait. Table 1.1. shows the traits analysed in this report.")
 }
 ```
 
@@ -73,7 +73,7 @@ if (length(trait_dropped) > 0) {
 ```{r traits}
 try(
 kable(tbl_section1, 
-      caption = paste0("Table 1.1. Summary of traits and valid answers used in this report."),
+      caption = paste0("Table 1.1. Summary of traits and number of observations (answers) per trait used in this report."),
       row.names = FALSE,
       align = "l"),
 silent = TRUE)
@@ -82,11 +82,11 @@ silent = TRUE)
 
 \
 
-Figure 1.1 is a graphical representation of the information presented in Table 1.1, showing the number of valid answers received by each trait in each data collection moment in this project. 
+The rate of response in each trial stage (data collection moment) is presented in Figure 1.1. This gives an illustration of the level of participation during the experiment and any attrition (when participants leave the experiment). 
 
 \
 
-```{r progress, dpi=dpi, fig.height=7, fig.width=10, fig.cap=paste0("Figure 1.1. Progress in data collection per data collection moment and trait evaluated in this project.")}
+```{r progress, dpi=dpi, fig.height=7, fig.width=10, fig.cap=paste0("Figure 1.1. Rate of response during trial stages (data collection moment) in this project.")}
 try(plot_tbl1)
 ```
 
@@ -124,16 +124,16 @@ if (isTRUE(geoTRUE)) {
 ```{r local}
 usedlocal <- ""
 if(tricotVSlocal) {
-  usedlocal <- paste0("Additionally, ", rankers, " were asked to compare the ", length(items), " ", options, " against the local ", option, " currently used by them.")
+  usedlocal <- paste0("Additionally, ", rankers, " were asked to compare the ", length(items), " ", options, " against the ", option, " currently used by them.")
 }
 ```
 
 
-Table 1.2 shows the `r length(items)` `r options` assessed within this project, with the frequency and percentage of `r rankers` who assessed each `r option`. `r usedlocal` If the `r options` have large names (> 10 characters) an abbreviation was applied across the figures in this report.
+Table 1.2 shows the `r length(items)` `r options` assessed in this experiment, with the frequency and percentage of `r rankers` who assessed each `r option`. `r usedlocal` If the `r options` have large names (> 10 characters) an abbreviation was applied across the figures in this report.
 
 ```{r itemtable}
 try(kable(itemtable, 
-          caption = paste0("Table 1.2. Frequency of ", options," assessed."),
+          caption = paste0("Table 1.2. Frequency of ", options," assessed in this experiment."),
           align = "l",
           row.names = FALSE), silent = TRUE)
 ```
@@ -142,10 +142,10 @@ try(kable(itemtable,
 
 Figure 1.2 shows that the `r options` are all connected to each other. That means that they all co-occurred at least once in an incomplete block of `r ncomp` `r options`. 
 
-```{r network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.2. Network representation of ", options, " tested in this project.")}
+```{r network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.2. Network representation of ", options, " tested in this experiment.")}
 if (isTRUE("igraph" %in% class(net))){
  try(igraph::plot.igraph(net,
-                    edge.arrow.size = 0.5), silent = TRUE)
+                         edge.arrow.size = 0.5), silent = TRUE)
 }
 ```
 
@@ -170,7 +170,7 @@ stat_diff_statement <- paste0("This report takes the trait '", Ovname,
 ```{r summ_differences}
 try(
   kable(overview_mod, 
-      caption = paste0("Table 1.3. Summary of ",options," with best and worst performance by trait and data collection moment. The table shows up to three ", options, " with best and worst performance based on the log-worth estimated by the Plackett-Luce model based on the evaluations given by the participants in this experiment."),
+      caption = paste0("Table 1.3. Summary of ",options," with best and worst performance by trait and data collection moment. The table shows up to three ", options, " with best and worst performance based on the log-worth estimated by the Plackett-Luce model from the evaluations given by the participants in this experiment."),
       row.names = FALSE),
   silent = TRUE)
 ```
@@ -183,6 +183,7 @@ try(
 ```{r relation_other_chrs} 
 relation_other_chrs1 <- paste0("This report only assessed the trait '", Ovname, "'.")
 relation_other_chrs2 <- ""
+relation_other_chrs3 <- ""
 if (isTRUE(nothertraits > 0)) {
 relation_other_chrs1 <- 
   paste0("Table 1.4 shows, for each trait evaluated in the project, ", 
@@ -209,6 +210,13 @@ relation_other_chrs2 <-
         weakest_link[2], " when compared to '",  Ovname, 
         "'. The correlation with the other traits is also shown in Figure 1.3.")
 
+if (isPLADMM) {
+  relation_other_chrs3 <- 
+  paste0("Additionally, we used the Alternating Directions Method of Multipliers (ADMM) algorithm proposed by Yildiz (2020) [@Yildiz2020] which models the log-worth as a linear function of item covariates. ",
+         "In this report, the log-worth of the ", nothertraits, " other traits were used as a item covariate,  or the intrinsic characteristics of the tested ", options, " to check  which trait (if any) has a significant influence to the rankings of the reference trait (", ovname, ").", 
+         " The log-worth of ", trait_to_overall, " showed statistical correlation in explaining the performance of the ", options, " tested in this experiment. A full description of the log-worth estimates for each trait is presented in Table 1.5." )
+}
+
 }
 ```
 
@@ -219,7 +227,7 @@ if (nothertraits > 0) {
 try(
   kable(agreement,
       caption = paste0("Table 1.4. Correlation between '", Ovname, 
-                       "' and the other traits assessed in this project." ),
+                       "' and the other traits assessed in this experiment." ),
       row.names = FALSE),
   silent = TRUE)
 }
@@ -230,52 +238,28 @@ try(
 `r paste(relation_other_chrs2, collapse='\n')`
 
 
-```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=12, fig.cap= paste0("Figure 1.3. Correlation between individual traits and ", Ovname, ".")}
+```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=12, fig.cap= paste0("Figure 1.3. Kendall tau correlation between traits and ", Ovname, ".")}
 if (nothertraits > 0) {
-  plot(agreement) +
-  theme_minimal() +  
-  theme(axis.text.x = element_text(size = 10, color = "#000000"),
-        axis.text.y = element_text(size = 10, color = "#000000"),
-        strip.text.x = element_text(size = 11, color = "#000000", face = "bold"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()) +
-  scale_fill_manual(values = c('#66c2a5','#fc8d62','#8da0cb'))
+  pagreement
 }
 ```
 
 \
 
-```{r pls_statement}
-# partial least squares statement
-pls_statement <- ""
-if (isTRUE(dim(arrows)[[1]] > 0)) {
-pls_statement <- 
-    paste0("Partial least squares regression was used to determine ", 
-          "relationship between the other traits and ", 
-          "'", Ovname , "'. The first two components ", 
-          "recombining the specific traits ",
-          "are able to explain the variability in '", Ovname, "'. ",
-          "The dashed line represents the '", Ovname, 
-          "' with an increase in performance as the x and y increase. ",
-          "The ", option, " positioned close to the dashed line will ", 
-          "be performing equally across all traits. ",
-          "The ", option, " positioned further away from the dashed line, ",
-          "on either side, will have varying performance ",
-          "in different traits. Better performance in a given ",
-          "trait will correspond with arrows pointing ",
-          "in the direction away from the dashed line and worse ",
-          "performance in traits directed on the opposite side.")
-}
 
-```
+`r paste(relation_other_chrs3, collapse='\n')`
 
-`r paste(pls_statement, collapse='\n')`
-
-```{r plsplot, dpi=dpi,fig.height=6, fig.width=6, fig.cap= paste0("Figure 1.4. Partial least squares biplot of relationship between the tested ", options, " and the traits evaluated. The dashed line represents the '", Ovname, "' with an increase in performance as the x and y increase.")}
-if (isTRUE(dim(arrows)[[1]] > 0)) {
-  try(plot(plsplot), silent = TRUE)
+```{r agreement_table}
+if (isPLADMM) {
+try(
+  kable(plad1,
+      caption = paste0("Table 1.5. Model coefficients (log-worth) by item covariates estimated by the Alternating Directions Method of Multipliers (ADMM) algorithm to represent their influence to the rankings given to '", Ovname  , "'." ),
+      row.names = FALSE),
+  silent = TRUE)
 }
 ```
+
+
 
 \pagebreak
 
@@ -287,7 +271,7 @@ Exploratory analysis within the following section summarises results from the ra
 
 
 ```{r fav_table}
-try(knitr::kable(fav_traits[[reference_trait]][[2]],
+try(knitr::kable(fav_traits[[1]][[reference_trait]],
              row.names = FALSE,
              caption = paste0("Table 2.1. Favorability scores for '", 
                               Ovname, "'." )), 
@@ -299,7 +283,7 @@ try(knitr::kable(fav_traits[[reference_trait]][[2]],
 This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head-to-head contests' for which the `r option` won and the net favorability score (Figure 2.1). 
 
 ```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favorability scores for '", Ovname, "'.")}
-
+fav_traits[[2]][[reference_trait]]
 ```
 
 \
@@ -319,24 +303,6 @@ if (isTRUE(nrow(fav_traits[[reference_trait]][[2]]) > 0)) {
 
 \
 
-## Pairwise contests 
-
-Figure 2.3 shows the outcomes of all pairwise contests between the `r options` included in the project for '`r Ovname`'. Each panel shows the performance of one `r option` against all the other `r options` and shows the percentage of the times in which the `r option` was ranked above the other `r options` shown as bars. 
-
-```{r contests_bars, dpi=dpi, fig.height=contest_h, fig.width=9, fig.cap= paste0("Figure 2.3. Head to head performance for '", Ovname, "'.")}
-plot(vic_traits[[reference_trait]]) +
-  labs(x = "", y = "") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(size = 10, color = "#000000"),
-        axis.text.y = element_text(size = 10, color = "#000000"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        legend.position = "none")
-  
-```
-
-\
-
 ## Plackett-Luce Model estimates
 
 \
@@ -344,7 +310,7 @@ plot(vic_traits[[reference_trait]]) +
 Table 2.2 shows the results from the likelihood ratio test from the Plackett-Luce model for the trait '`r Ovname`' of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
 
 ```{r, aov1}
-try(kable(aov_tables[[reference_trait]], 
+try(kable(aov_tbl[[reference_trait]], 
       caption = paste0("Table 2.2. Likelihood ratio test results from fitted ", 
       "Plackett-Luce model with rankings from '", 
       Ovname, "'."),
@@ -354,50 +320,23 @@ try(kable(aov_tables[[reference_trait]],
 
 \
 
-Figure 2.4 shows the estimates of the model coefficients with `r ci_level*100`% confidence intervals. The purpose of this graph is to be able to best distinguish between the relative strength of each of the `r options` assessed. As such the coefficient estimates themselves are not directly interpretable, but it can be concluded that a higher value for the coefficient indicates that a `r option` has been ranked as best more often. The `r ci_level*100`% confidence width is chosen so that non-overlapping confidence intervals could be interpreted as indicating significant differences at the alpha = `r sig_level`. This may not match exactly with the mean separation groupings, as these groupings also take into account multiple testing through the Benjamini and Hochberg adjustment [@BHtest].
+Figure 2.2 shows the estimated log-worth with `r ci_level*100`% confidence intervals. The purpose of this graph is to be able to best distinguish between the relative strength of each of the `r options` assessed. As such the log-worth are not directly interpretable, but it can be concluded that a higher value for the coefficient indicates that a `r option` has a higher probability of being the `r option` with higher performance. The `r ci_level*100`% confidence width is chosen so that non-overlapping confidence intervals could be interpreted as indicating significant differences at the alpha = `r sig_level`. This may not match exactly with the mean separation groupings, as these groupings also take into account multiple testing through the Benjamini and Hochberg adjustment [@BHtest].
 
 Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others in terms of '`r Ovname`'. When `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the alpha = `r sig_level`.
 
-```{r est_plot, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 2.4. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", Ovname,"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
-try(plot_summaries[[reference_trait]],  silent = TRUE)
+```{r est_plot, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 2.2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", Ovname,"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
+try(logworth_plot[[reference_trait]],  silent = TRUE)
 ```
 
 \
 
-The same information in Figure 2.4 is shown in Table 2.3 below.
+
+Figure 2.3 shows the worth parameters (probability of being the best) from the Plackett-Luce model in a direct comparison between all of the possible `r options`.
 
 \
 
-```{r est_table}
-try(kable(summaries[[reference_trait]], 
-      digits = 4,
-      row.names = FALSE,
-      caption = paste0("Table 2.3. Plackett-Luce Model estimates (log-worth) of tested ", 
-                       options, " for '", Ovname,"' with ", ci_level*100, 
-                       "% confidence intervals. Different letters indicate significant differences at p < ",
-                       sig_level ,". The ", option, " ", reference, 
-                       " is set as reference (log-worth arbitrarily set to zero).")),
-  silent = TRUE)
-```
-
-\
-
-Table 2.4 and Figure 2.5 use the coefficients from the Plackett-Luce model to estimate the probability of each `r option` being considered to be the top ranked `r option` in a direct comparison between all of the possible `r options`.
-
-\
-
-```{r table3.4}
-try(kable(worths[[reference_trait]][,-2],
-      row.names = FALSE,
-      caption = paste0("Table 2.4. Probability of being the best ranked for '",
-      Ovname, "'.")),
-  silent = TRUE)
-```
-
-\
-
-```{r rankedfirst, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap= paste0("Figure 2.5. Probability of being the best ranked for '", Ovname, "'.")}
-try(plot_worth_bar(worths[[reference_trait]], value = "Worth", group = Option, nchars = 30),
+```{r rankedfirst, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap= paste0("Figure 2.3. Worth parameters (probability of being the best ranked) for '", Ovname, "'.")}
+try(worth_plot[[reference_trait]],
   silent = TRUE)
 ```
 
@@ -409,11 +348,12 @@ A model-based recursive partitioning method [@Strobl2009] was used to determine 
 
 ```{r covar_statement}
 # make the statement if there is any covariate dropped
-covar_statement <- paste0("You provided the covariate(s): ", paste(sort(covar$codeQst), collapse = ", "), ". ")
+covar_statement <- ""
 if (covarTRUE) {
+  covar_statement <- paste0("You provided the covariate(s): ", paste3(sort(covar$codeQst), lan = language), ". ")
   if (isTRUE(length(covar_dropped) > 0)) {
     covar_statement <- paste0(covar_statement,
-      "However, the covariates(s) '", paste(covar_dropped, collapse = "', '"),
+      "However, the covariates(s) '", paste3(covar_dropped, lan = language),
       "' were not used in the analysis, because they did not surpass ",
       "the threshold of at least ", paste0(mincovar * 100, "%"), " valid entries."
     )
@@ -423,7 +363,7 @@ if (covarTRUE) {
 
 `r  paste(covar_statement, collapse='\n')`
 
-To select the covariate(s) that best represent the data set, a stepwise regression based on the forward selection approach was used. The procedure begins by fitting each covariate individually and adding new covariates one by one when it makes a single best improvement to the model based on the Akaike Information Criterion (AIC). The AIC estimates the relative amount of information lost by a given model, the less information a model loses, the higher the quality of that model. In the Plackett-Luce trees, the AIC is obtained by adding the maximized log likelihood ($L$) to the degrees of freedom ($\nu$). 
+To select the covariate(s) that best represent the data set, a stepwise regression based on the forward selection approach was used. The procedure begins by fitting each covariate individually and adding new covariates one by one when it makes a single best improvement to the model based on the Akaike Information Criterion (AIC) [@Sakamoto1986]. The AIC estimates the relative amount of information lost by a given model, the less information a model loses, the higher the quality of that model. In the Plackett-Luce trees, the AIC is obtained by adding the maximized log likelihood ($L$) to the degrees of freedom ($\nu$). 
 
 Equation [1]
 $$AIC = -2L +  2\nu$$
@@ -431,9 +371,9 @@ $$AIC = -2L +  2\nu$$
 ```{r}
 best_covar <- ""
 if (length(tree_f) > 1) {
-  best_covar <- paste0("Based on this method, the covariate(s) ", paste(var_keep, collapse = ", and "),
+  best_covar <- paste0("Based on this method, the covariate(s) ", paste3(var_keep, lan = language),
                        " were identified as the most representative to the rankings. The table below ", 
-                       "shows the subgroups identified with the selected covariate(s).")
+                       "shows the sub-groups (tree nodes) identified with the selected covariate(s).")
 }
 ```
 
@@ -443,8 +383,8 @@ if (length(tree_f) > 1) {
 if(isTRUE(length(tree_f) > 1)){
   try(
     kable(node_summary, 
-        caption = paste0("Table 2.5. Summary of subgroups identified",
-                         " by the Plackett-Luce tree."),
+        caption = paste0("Table 2.3. Summary of sub-groups (tree nodes) identified",
+                         " by the model-based recursive partitioning tree applied to the Plackett-Luce rankings."),
         row.names = FALSE),
     silent = TRUE)
 }
@@ -457,9 +397,7 @@ no_tree <- ""
 if (isTRUE(length(tree_f) == 1)) {
   no_tree <- 
     paste0("No split was found for the Plackett-Luce tree using the selected ",
-    "covariates. Figure 2.6 shows the model for the rankings provided in this ",
-    "project, showing that none of the tested covariates had a clear influence on ",
-    "the rankings of '", Ovname, "'.")
+    "covariates. You can refer to Figure 2.2 to check the performance of the tested ", options, " in this experiment.")
 }
 ```
 
@@ -467,16 +405,18 @@ if (isTRUE(length(tree_f) == 1)) {
 
 
 ```{r pltree_legend}
-pltree_text <- paste0("Figure 2.6. Plackett-Luce tree for '", Ovname, "'. The horizontal axis is the probability of winning (worth). Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")
+pltree_text <- paste0("Figure 2.4. Plackett-Luce tree for '", Ovname, "'. The horizontal axis is the probability of winning (worth). Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")
 
 if (length(tree_f) > 1) {
-  pltree_text <- paste0(pltree_text, " Nodes split by the following covariate and attribute ", paste(paste("Node ", node_ids, node_summary[,1]), collapse = ", and "), ".")
+  pltree_text <- paste0(pltree_text, " Nodes split by the following covariate and attribute ", paste(paste("Node", node_summary[,1], node_summary[,5]), collapse = ", and "), ".")
 }
 
 ```
 
 ```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = pltree_text}
+if (length(tree_f) > 1) {
 try(plottree, silent = TRUE)
+}
 ```
 
 \

@@ -54,6 +54,10 @@ if (isTRUE(is.na(minsplit))) {
   minsplit <- 10
 }
 
+if (isTRUE(is.na(language))) {
+  language <- "en"
+}
+
 # # ................................................................
 # # ................................................................
 ## Packages ####
@@ -902,6 +906,61 @@ if (any_error(org_pl)) {
 # using the log-worth from the other traits as a reference
 org_pladmm <- tryCatch({
   
+  if (nothertraits > 0) {
+    
+    features <- lapply(mod, function(x){
+      x <- itempar(x, log = TRUE, vcov = FALSE)
+    })
+    
+    features <- do.call(cbind, features)
+    
+    # remove features corresponding to the reference trait
+    features <- as.data.frame(features)
+    
+    features <- features[,-reference_trait]
+    
+    otn <- trait_names[-reference_trait]
+    
+    names(features) <- otn
+    
+    features <- cbind(items = rownames(features), features)
+    
+    rownames(features) <- 1:nrow(features)
+    
+    # cormat <- cor(features[-1])
+    # 
+    # cormat <- findCorrelation(cormat, cutoff = 0.7)
+    
+    # if too many traits, take the last 10
+    # this to prevent issues with singularity, which can be 
+    # handled with cor() but still difficult to implement in this 
+    # context
+    if (length(otn) > 10) {
+      otn <- otn[rev(length(otn):(length(otn)-10))]
+    }
+    
+    f <- as.formula(paste("~ ", paste(otn, collapse =" + ")))
+    
+    plad1 <- pladmm(R[[reference_trait]], f, data = features)
+    
+    plad1 <- pladmm_coeffs(plad1)
+    
+    # get the names of traits with significant influence to the main trait
+    trait_to_overall <- suppressWarnings(as.numeric(plad1[,5]) <= sig_level)
+    
+    trait_to_overall[is.na(trait_to_overall)] <- FALSE
+    
+    trait_to_overall <- plad1[trait_to_overall, 1]
+    
+    trait_to_overall <- paste3(trait_to_overall)
+    
+    isPLADMM <- TRUE
+    
+  }else{
+    isPLADMM <- FALSE
+  }
+  
+  
   
 }, error = function(cond) {
   return(cond)
@@ -913,6 +972,8 @@ if (any_error(org_pladmm)) {
   e <- org_pladmm$message
   
   error <- c(error, e)
+  
+  isPLADMM <- FALSE
 
 }
 
