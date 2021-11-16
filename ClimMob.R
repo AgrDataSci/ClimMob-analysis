@@ -153,7 +153,7 @@ try_data <- tryCatch({
   multcomp_h <- nitems * 0.6 
   
   if (favplot_h < 5) favplot_h <- 5
-  if (agreem_h < 7)  agreem_h <- 7
+  if (agreem_h < 6)  agreem_h <- 6
   if (multcomp_h < 6) multcomp_h <- 6
   
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)

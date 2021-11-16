@@ -1025,7 +1025,7 @@ winprob_map <- function(object, traits, best = FALSE, ...) {
                                       label = as.character(round(winprob2, 2)))) +
     ggplot2::geom_tile(show.legend = FALSE) + 
     ggplot2::geom_text(size = 3, fontface = 1) +
-    ggplot2::scale_x_discrete(position = "top") +
+    #ggplot2::scale_x_discrete(position = "top") +
     ggplot2::scale_fill_gradient2(limits = c(cutoff, 1),
                                   low =  "#c6dbef",
                                   mid = "#6baed6",
@@ -1036,11 +1036,11 @@ winprob_map <- function(object, traits, best = FALSE, ...) {
     theme(plot.background = element_blank(),
           axis.text = element_text(color = "grey20"),
           strip.text.x = element_text(color = "grey20"),
+          axis.text.x = element_text(angle = 40, vjust = 1, hjust=1),
           panel.grid = element_blank()) +
     ggplot2::labs(x = "", 
                   y = "",
                   fill = "")
-  
   
   return(p)
   
