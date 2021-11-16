@@ -83,6 +83,7 @@ library("multcompView")
 library("png")
 library("plotrix")
 library("gridExtra")
+library("caret")
 source(paste0(fullpath, "/R/functions.R"))
 
 # Two objects to begin with that will be used to verify the process
@@ -91,7 +92,7 @@ done <- TRUE
 
 # ................................................................
 # ................................................................
-# Read data #### 
+# 1. Read data #### 
 try_data <- tryCatch({
   # call pars sent by ClimMob
   pars <- jsonlite::fromJSON(infoname)
@@ -124,7 +125,7 @@ try_data <- tryCatch({
   # select which function will be used to create the Plackett-Luce rankings
   # it will depend on how many items each participant compares
   if (ncomp == 3) {
-    rankwith <- "rank_tricot"
+    rankwith <- "rankTricot"
   }
   
   if (ncomp > 3) {
@@ -134,7 +135,7 @@ try_data <- tryCatch({
   # minimum proportion of valid entries in tricot vs local
   # this will be computed based on the valid entries of the reference
   # trait after validations
-  mintricotVSlocal <- 0.95
+  mintricotVSlocal <- 0.90
   
   # method for adjustments for confidence intervals and setting widths for comparison. 
   ci_adjust <- "none"
@@ -143,12 +144,12 @@ try_data <- tryCatch({
   ci_level <- 0.84
   
   # resolution of display items
-  dpi <- 250
+  dpi <- 400
   out_width <- "100%"
   
   # define height of plots based on items
   favplot_h <- nitems * 0.4
-  agreem_h <- ntrait * 0.9
+  agreem_h <- ntrait * 0.6
   multcomp_h <- nitems * 0.6 
   
   if (favplot_h < 5) favplot_h <- 5
@@ -170,7 +171,7 @@ if (any_error(try_data)) {
 
 # ................................................................
 # ................................................................
-# 1. Organise the rankings ####
+# 2. Organise the rankings ####
 # This is to check for missing data and create a vector
 # for each characteristic that will be used to filter 
 # inconsistent data
@@ -212,6 +213,16 @@ org_rank <- tryCatch({
       cmdata$group <- NA
     }
     
+    # if more than 9 groups
+    # then the groups will not be considered
+    if (length(unique(cmdata$group)) > 9) {
+      cmdata$group <- NA
+    }
+    
+    if (length(groups) == 0) {
+      cmdata$group <- NA
+    }
+    
   }else{
     cmdata$group <- NA
   }
@@ -219,6 +230,10 @@ org_rank <- tryCatch({
   groups <- sort(unique(cmdata$group))
   
   if (any(is.na(groups))) {
+    groups <- character()
+  }
+  
+  if (length(groups) == 0) {
     groups <- character()
   }
   
@@ -336,11 +351,8 @@ org_rank <- tryCatch({
         result[["tricotVSlocal"]] <- ovsl
         
       }else{
-        
       tricotVSlocal <- FALSE
-      
       result[["keep2"]] <- rep(FALSE, nranker)
-      
       result[["tricotVSlocal"]] <- character()
     }
     }
@@ -396,7 +408,7 @@ org_rank <- tryCatch({
   
   # the name of other traits combined with the name of assessments
   traits_names <- as.vector(unlist(lapply(trait_list, function(x) {
-    paste0(x$name, " [", x$assessment, "]")
+    paste0(x$name, " [", ClimMobTools:::.title_case(x$assessment), "]")
   })))
   
   traits_code <- as.vector(unlist(lapply(trait_list, function(x) {
@@ -422,7 +434,7 @@ if (any_error(org_rank)) {
 
 # .......................................................
 # .......................................................
-# Prepare summary tables / charts
+# 3. Prepare summary tables / charts
 org_summ <- tryCatch({
   
   #...........................................................
@@ -495,26 +507,48 @@ org_summ <- tryCatch({
   # it is a plot showing the rate of response in each 
   # data collection moment, it takes the larger N response
   # for each data collection moment
-  participation <- data.frame(n = as.vector(table(cmdata$group)),
-                              n_tot = as.vector(table(cmdata$group)),
-                              group = names(table(cmdata$group)),
+  participation <- data.frame(n = nrow(cmdata),
+                              n_tot = nrow(cmdata),
+                              group = "Whole group",
                               dc = "Registration")
   
   for(i in seq_along(trait_list)) {
     
-    n <- table(cmdata[trait_list[[i]]$keep, "group"])
-    
-    p <- data.frame(group = groups,
-                    dc = trait_list[[i]]$assessment)
-    
-    part <- data.frame(n = as.vector(n),
-                       n_tot = as.vector(table(cmdata$group)),
-                       group = names(n))
-    
-    part <- merge(p, part, by = "group", all.x = TRUE)
-    
+    part <- data.frame(n = sum(trait_list[[i]]$keep),
+                       n_tot = nrow(cmdata),
+                       group = "Whole group",
+                       dc = trait_list[[i]]$assessment)
+
     participation <- rbind(participation, part)
     
+  }
+  
+  if (length(groups) > 0) {
+    
+    participation2 <- data.frame(n = as.vector(table(cmdata$group)),
+                                 n_tot = as.vector(table(cmdata$group)),
+                                 group = names(table(cmdata$group)),
+                                 dc = "Registration")
+    
+    for(i in seq_along(trait_list)) {
+      
+      n <- table(cmdata[trait_list[[i]]$keep, "group"])
+      
+      p <- data.frame(group = groups,
+                      dc = trait_list[[i]]$assessment)
+      
+      part <- data.frame(n = as.vector(n),
+                         n_tot = as.vector(table(cmdata$group)),
+                         group = names(n))
+      
+      part <- merge(p, part, by = "group", all.x = TRUE)
+      
+      participation2 <- rbind(participation2, part)
+      
+    }
+    
+    participation <- rbind(participation, participation2)
+  
   }
   
   # get the highest value in each data collection moment
@@ -530,15 +564,20 @@ org_summ <- tryCatch({
   # transform into proportion to make it easier to visualize
   participation$value_perc <- participation$n / participation$n_tot
   
+  participation$dc <- ClimMobTools:::.title_case(participation$dc)
+  
   participation$dc <- factor(participation$dc, levels = c("Registration", 
-                                                          unique(trait$assessmentName)))
+                                                          ClimMobTools:::.title_case(unique(trait$assessmentName))))
+  
+  participation$group <- factor(participation$group, levels = c("Whole group",
+                                                                unique(groups)))
   
   partiplot <- 
     ggplot(participation, aes(x = dc, y = value_perc, 
                               group = group, color = group)) +
     geom_line(size = 1) +
     scale_y_continuous(limits = c(0, 1)) +
-    scale_colour_manual(values = col_pallet(length(groups)), 
+    scale_colour_manual(values = col_pallet(length(unique(participation$group))), 
                         name = "") +
     theme_bw() +
     theme(panel.background = element_blank(),
@@ -565,7 +604,7 @@ if (any_error(org_summ)) {
 
 # .......................................................
 # .......................................................
-# Make map ####
+# 4. Make map ####
 org_lonlat <- tryCatch({
   
   # Check if lonlat is provided
@@ -626,7 +665,7 @@ if (any_error(org_lonlat)) {
 
 # .......................................................
 # .......................................................
-# Correlation between traits and the reference #####
+# 5. Correlation between traits and the reference #####
 org_kendall <- tryCatch({
   
   if (isTRUE(nothertraits > 0)) {
@@ -668,9 +707,11 @@ org_kendall <- tryCatch({
     
     agreement <- do.call(rbind, agreement)
     
-    agreement$group <- rep(c("All", groups), each = nothertraits)
+    agreement$group <- rep(c("Whole group", groups), each = nothertraits)
     
-    agreement$group <- factor(agreement$group, levels = c("All", groups))
+    agreement$group <- factor(agreement$group, levels = c("Whole group", groups))
+    
+    agreement$labels <- factor(agreement$labels, levels = traits_names[-reference_trait])
     
     # Plot kendall tau
     agreement$kendall[agreement$kendall < 0] <- 0
@@ -686,15 +727,15 @@ org_kendall <- tryCatch({
                          limits = c(0, 1)) +
       labs(x = "", y = "") +
       theme_minimal() +  
-      theme(legend.text = element_text(size = 10, color = "grey20"),
-            axis.text = element_text(size = 10, color = "grey20"),
-            strip.text.x = element_text(size = 10, color = "grey20"),
+      theme(legend.text = element_text(color = "grey20"),
+            axis.text = element_text(color = "grey20"),
+            strip.text.x = element_text(color = "grey20"),
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
       scale_fill_manual(values = col_pallet(length(groups) + 1))
     
     
-    agreement <- agreement[agreement$group == "All", ]
+    agreement <- agreement[agreement$group == "Whole group", ]
     
     strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
                         round(max(agreement$kendall), 3))
@@ -737,7 +778,7 @@ if (any_error(org_kendall)) {
 
 # .......................................................
 # .......................................................
-# Fit PlackettLuce model ####
+# 6. Fit PlackettLuce model ####
 # This will use the rankings from each trait 
 # to fit a PlackettLuce model and do
 # some exploratory analysis like favorability
@@ -761,23 +802,23 @@ org_pl <- tryCatch({
     R[[i]] <- do.call(rankwith, args = a)
     
     # get the network of items evaluated in the project
-    if (i == reference_trait) {
+    #if (i == reference_trait) {
       
       if (isTRUE(tricotVSlocal)) {
         
-        keep <- trait_list[[i]]$keep2 & trait_list[[i]]$keep
+        keep <- trait_list[[reference_trait]]$keep2 & trait_list[[i]]$keep
         
         a <- list(cmdata[keep, c(itemnames, 
                                  trait_list[[i]]$strings, 
-                                 trait_list[[i]]$tricotVSlocal)],
+                                 trait_list[[reference_trait]]$tricotVSlocal)],
                   items = itemnames,
                   input = trait_list[[i]]$strings,
-                  additional.rank = cmdata[keep, trait_list[[i]]$tricotVSlocal])
+                  additional.rank = cmdata[keep, trait_list[[reference_trait]]$tricotVSlocal])
         
         R[[i]] <- do.call(rankwith, args = a)
         
       }
-    }
+    #}
   }
   
   #...........................................................
@@ -849,7 +890,7 @@ org_pl <- tryCatch({
                        adjust = ci_adjust)
     
     # and this is the chart with multi comparison analysis
-    plot(summ, level = ci_level) + 
+    plot_logworth(summ, level = ci_level) + 
       theme_classic() +
       theme(text = element_text(color = "grey20"),
             axis.text.x = element_text(size = 10, color = "grey20"),
@@ -919,7 +960,14 @@ org_pl <- tryCatch({
   
   names(overview_mod) <- c("Trait", "Data collection moment", 
                            "Best performance", "Worst performance", 
-                           "p.value", "")
+                           "Pr(>Chisq)", "")
+  
+  #...........................................................
+  # Head to head visualization of each item by trait
+  worthmap <- winprob_map(mod[-reference_trait],
+                          traits = traits_names[-reference_trait])
+  
+  
   
 }, error = function(cond) {
   return(cond)
@@ -935,12 +983,13 @@ if (any_error(org_pl)) {
   worth_plot <- list()
   anovas <- list()
   aov_tbl <- list()
+  worthmap <- 0L
   
 }
 
 # .......................................................
 # .......................................................
-# Fit PLADMM model ####
+# 7. Fit PLADMM model ####
 # this will try to fit a simple PLDMM for the overall trait
 # using the log-worth from the other traits as a reference
 org_pladmm <- tryCatch({
@@ -958,27 +1007,28 @@ org_pladmm <- tryCatch({
     
     features <- features[,-reference_trait]
     
-    otn <- trait_names[-reference_trait]
+    otn <- rename_duplicates(trait_names[-reference_trait])
     
+    # add name of features
     names(features) <- otn
     
+    # add column with item names
     features <- cbind(items = rownames(features), features)
     
     rownames(features) <- 1:nrow(features)
     
-    # cormat <- cor(features[-1])
-    # 
-    # cormat <- findCorrelation(cormat, cutoff = 0.7)
+    # remove traits with high correlation
+    cormat <- cor(features[-1])
+    
+    rmcor <- findCorrelation(cormat, cutoff = 0.7)
     
     # if too many traits, take the last 10
-    # this to prevent issues with singularity, which can be 
-    # handled with cor() but still difficult to implement in this 
-    # context
+    # this to prevent issues with time out
     if (length(otn) > 10) {
       otn <- otn[rev(length(otn):(length(otn)-10))]
     }
     
-    f <- as.formula(paste("~ ", paste(otn, collapse =" + ")))
+    f <- as.formula(paste("~ ", paste(otn[-rmcor], collapse =" + ")))
     
     plad1 <- pladmm(R[[reference_trait]], f, data = features)
     
@@ -999,8 +1049,6 @@ org_pladmm <- tryCatch({
     isPLADMM <- FALSE
   }
   
-  
-  
 }, error = function(cond) {
   return(cond)
 }
@@ -1019,7 +1067,7 @@ if (any_error(org_pladmm)) {
 
 # .......................................................
 # .......................................................
-# Fit pltree ####
+# 8. Fit pltree ####
 # organize covariates and prepate to fit pltree()
 # outputs of pltree(), if any, are also processed for further insights
 org_pltree <- tryCatch({
@@ -1245,7 +1293,7 @@ org_pltree <- tryCatch({
   if (isTREE) { 
     
     # plot the tree (if any)
-    plottree <- gosset:::plot_tree(tree_f, ci.level = 0.84)
+    plottree <- gosset:::plot_tree(tree_f, ci.level = ci_level)
     
     node_ids <- nodeids(tree_f, terminal = TRUE)
     
@@ -1315,7 +1363,7 @@ if (any_error(org_pltree)) {
 
 # ................................................................
 # ................................................................
-# Write outputs ####
+# 9. Write outputs ####
 #determine format based on extensions
 output_format <- ifelse(extension == "docx","word_document", 
                         paste0(extension,"_document"))

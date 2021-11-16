@@ -895,6 +895,8 @@ pladmm_coeffs <- function(object, ...) {
 #' 
 paste3 <- function(x, lan = "en", ...) {
   
+  x <- x[!is.na(x)]
+  
   if (length(x) == 1) {
     return(x)
   }
@@ -923,7 +925,126 @@ paste3 <- function(x, lan = "en", ...) {
 
 
 
+#' Plot log-worth
+#' @param x a multicomp dataframe
+#' @param level the confidence interval level
+#' @param abbreviate logical to abbreviate labels in the chart
+plot_logworth <- function(x, level = 0.95, abbreviate = FALSE, ...){
+  
+  if (abbreviate == TRUE) {
+    x$term <- gosset:::.reduce(as.character(x$term), ...)
+  }
+  items <- rev(sort(unique(x$term)))
+  x$term <- factor(x$term, levels = items)
+  
+  estimate <- x$estimate
+  term <- x$term
+  group <- x$group
+  quasiSE <- x$quasiSE
+  
+  p <- ggplot2::ggplot(data = x,
+                       ggplot2::aes(x = estimate, 
+                                    y = term,
+                                    label = group, 
+                                    xmax = estimate + stats::qnorm(1-(1-level)/2) * quasiSE,
+                                    xmin = estimate - stats::qnorm(1-(1-level)/2) * quasiSE)) +
+    ggplot2::geom_vline(xintercept = 0, 
+                        colour = "#E5E7E9", size = 0.8) +
+    ggplot2::geom_point() +
+    ggplot2::geom_errorbar(width = 0.1) +
+    ggplot2::geom_text(vjust = 1.2) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(panel.grid.major = ggplot2::element_blank()) +
+    ggplot2::labs(x = "Estimate", y = "Item")
+  
+  node <- x$node
+  
+  if (isFALSE(is.null(node))) {
+    p <- 
+      p +
+      ggplot2::facet_grid(. ~ node)
+  }
+  
+  return(p)
+  
+}
 
-
+#' Plot a map of winning probs
+#' 
+#' this highlights where each item is better for each trait
+#' 
+#' @param object a list of PlackettLuce models
+#' @param traits a vector with name of traits
+#' @param best logical, to highlight only the best variety per trait
+winprob_map <- function(object, traits, best = FALSE, ...) {
+  
+  winprobs <- lapply(object, function(x){
+    itempar(x, log = FALSE, vcov = FALSE)
+  })
+  
+  winprobs <- do.call(cbind, winprobs)
+  
+  winprobs <- as.data.frame(winprobs)
+  
+  # add name of features
+  names(winprobs) <- traits
+  
+  winprobs <- data.frame(items = rep(dimnames(winprobs)[[1]], times = ncol(winprobs)),
+                         traits = rep(dimnames(winprobs)[[2]], each = nrow(winprobs)),
+                         winprob = as.numeric(unlist(winprobs)))
+  
+  winprobs$traits <- factor(winprobs$traits, levels = traits)
+  
+  # cut off point with the most important items, based on 1 / nitems
+  cutoff <- (1 / length(unique(winprobs$items)))
+  
+  winprobs$winprob2 <- ifelse(winprobs$winprob < cutoff, 
+                              NA, winprobs$winprob)
+  
+  if (best) {
+    winprobs <- split(winprobs, winprobs$traits)
+    
+    winprobs <- lapply(winprobs, function(x){
+      x[-which.max(x$winprob2), "winprob2"] <- NA
+      x
+    })
+    
+    winprobs <- do.call(rbind, winprobs)
+    
+    winprobs$traits <- factor(winprobs$traits, levels = traits)
+  }
+  
+  items <- winprobs$items
+  winprob <- winprobs$winprob
+  winprob2 <- winprobs$winprob2
+  
+  p <-   ggplot2::ggplot(winprobs, 
+                         ggplot2::aes(x = items, 
+                                      y = traits,
+                                      fill = winprob2,
+                                      label = as.character(round(winprob2, 2)))) +
+    ggplot2::geom_tile(show.legend = FALSE) + 
+    ggplot2::geom_text(size = 3, fontface = 1) +
+    ggplot2::scale_x_discrete(position = "top") +
+    ggplot2::scale_fill_gradient2(limits = c(cutoff, 1),
+                                  low =  "#c6dbef",
+                                  mid = "#6baed6",
+                                  midpoint = cutoff / max(winprob2, na.rm = TRUE),
+                                  high =  "#2171b5",
+                                  na.value = "white") +
+    theme_bw() +
+    theme(plot.background = element_blank(),
+          axis.text = element_text(color = "grey20"),
+          strip.text.x = element_text(color = "grey20"),
+          panel.grid = element_blank()) +
+    ggplot2::labs(x = "", 
+                  y = "",
+                  fill = "")
+  
+  
+  return(p)
+  
+  
+}
 
 

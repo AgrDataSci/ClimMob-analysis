@@ -39,7 +39,7 @@ ClimMob applies the Plackett-Luce model to analyze ranking data with the R [@RCo
 
 ## How to cite
 
-If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. The crowdsourcing philosophy behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. It is important to mention that ClimMob is implemented in R, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the Plackett-Luce tree results, you should mention that ClimMob applies the Plackett-Luce model, jointly attributed to Luce (1959)[@Luce1959] and Plackett (1975) [@Plackett1975], and implemented in R by Turner et al. 2020 [@Turner2020]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2021) [@climmobanalysis].
+If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. The crowdsourcing philosophy behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. It is important to mention that ClimMob is implemented in R, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the Plackett-Luce tree results, you should mention that ClimMob applies the Plackett-Luce model, jointly attributed to Luce (1959) [@Luce1959] and Plackett (1975) [@Plackett1975], and implemented in R by Turner et al. 2020 [@Turner2020]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2021) [@climmobanalysis].
 
 \pagebreak
 
@@ -184,6 +184,7 @@ try(
 relation_other_chrs1 <- paste0("This report only assessed the trait '", Ovname, "'.")
 relation_other_chrs2 <- ""
 relation_other_chrs3 <- ""
+relation_other_chrs4 <- ""
 if (isTRUE(nothertraits > 0)) {
 relation_other_chrs1 <- 
   paste0("Table 1.4 shows, for each trait evaluated in the project, ", 
@@ -210,11 +211,27 @@ relation_other_chrs2 <-
         weakest_link[2], " when compared to '",  Ovname, 
         "'. The correlation with the other traits is also shown in Figure 1.3.")
 
+if (length(worthmap) > 0) {
+  relation_other_chrs3 <- paste0("The worth (probability of winning) by trait of each ",
+                                 option, 
+                                 " tested in this experiment is highlighted in Figure 1.4.",
+                                 " The chart shows in which trait the ", options, 
+                                 " have higher performance based on the ", rankers, 
+                                 " evaluations.")
+    
+}
+
 if (isPLADMM) {
-  relation_other_chrs3 <- 
-  paste0("Additionally, we used the Alternating Directions Method of Multipliers (ADMM) algorithm proposed by Yildiz (2020) [@Yildiz2020] which models the log-worth as a linear function of item covariates. ",
-         "In this report, the log-worth of the ", nothertraits, " other traits were used as a item covariate,  or the intrinsic characteristics of the tested ", options, " to check  which trait (if any) has a significant influence to the rankings of the reference trait (", ovname, ").", 
+  relation_other_chrs4 <- 
+  paste0("Additionally, the Alternating Directions Method of Multipliers (ADMM) algorithm [@Yildiz2020] was applied to each model log-worth as a linear function of item covariates. ",
+         "In this report, the log-worth of the ", nothertraits, " other traits were used as a item covariate,  or the intrinsic characteristics of the tested ", options, " to check  whether any if these traits have a significant influence to the rankings of the reference trait (", ovname, ").", 
          " The log-worth of ", trait_to_overall, " showed statistical correlation in explaining the performance of the ", options, " tested in this experiment. A full description of the log-worth estimates for each trait is presented in Table 1.5." )
+  
+  if (length(rmcor) > 2) {
+    relation_other_chrs4 <- paste0(relation_other_chrs4, 
+                                   " The traits ", paste3(otn[rmcor], lan = language), " were not used in this analysis due to multicollinearity.")
+  }
+  
 }
 
 }
@@ -238,7 +255,7 @@ try(
 `r paste(relation_other_chrs2, collapse='\n')`
 
 
-```{r correspondence, dpi=dpi,fig.height=agreem_h, fig.width=12, fig.cap= paste0("Figure 1.3. Kendall tau correlation between traits and ", Ovname, ".")}
+```{r agreementplot, dpi=dpi,fig.height=agreem_h, fig.width=agreem_h, fig.cap= paste0("Figure 1.3. Kendall tau correlation between traits and ", Ovname, ".")}
 if (nothertraits > 0) {
   pagreement
 }
@@ -246,8 +263,20 @@ if (nothertraits > 0) {
 
 \
 
-
 `r paste(relation_other_chrs3, collapse='\n')`
+
+
+```{r worthmap, dpi=dpi,fig.height=agreem_h, fig.width=agreem_h, fig.cap= paste0("Figure 1.4. Worth parameters (probability of winning) by traits of ", options, " tested in this experiment. The chart highlights the ", options, " with performance above a cut-off point of 1/N items.")}
+if (length(worthmap) > 0) {
+  worthmap
+}
+```
+
+
+\
+
+
+`r paste(relation_other_chrs4, collapse='\n')`
 
 ```{r pladmm}
 if (isPLADMM) {
@@ -402,8 +431,8 @@ if(isTREE){
 no_tree <- ""
 if (!isTREE) {
   no_tree <- 
-    paste0("No split was found for the Plackett-Luce tree using the selected ",
-    "covariates. You can refer to Figure 2.2 to check the performance of the tested ", options, " in this experiment.")
+    paste0("No split was found for the Plackett-Luce rankings using the selected ",
+    "covariates. You may refer to Figure 2.2 and Figure 2.3 to check the performance of the tested ", options, " for '",  Ovname, "' in this experiment.")
 }
 ```
 
