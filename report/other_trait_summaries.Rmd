@@ -6,7 +6,7 @@
 
 \
 
-Favorability scores are shown for the trait '`r tolower(trait_list[[i]]$name)`' which was collected during the data collection moment '`r trait_list[[i]]$assessment`'. The `r rankers` were asked to evaluate the best and worst `r option` based on your pre-defined questions: '`r trait_list[[i]]$question`'. The table below shows the number of times each `r option` was tested and the proportion of times it was ranked as the best or worst. Net favorability score is the difference between the best and worst ranks for each `r option``.
+Favorability scores are shown for the trait '`r ClimMobTools:::.title_case(trait_list[[i]]$name)`' which was collected during the data collection moment '`r trait_list[[i]]$assessment`'. The `r rankers` were asked to evaluate the best and worst `r option` based on your pre-defined questions: '`r trait_list[[i]]$question`'. The table below shows the number of times each `r option` was tested and the proportion of times it was ranked as the best or worst. Net favorability score is the difference between the best and worst ranks for each `r option``.
 
 \
 
@@ -44,7 +44,7 @@ Table 3.`r i`.2 shows the results from the likelihood ratio test from the Placke
 \
 
 ```{r}
-aov_ii <- aov_tables[[i]]
+aov_ii <- aov_tbl[[i]]
 if (length(aov_ii) > 1) {
   kable(aov_ii,
         row.names = FALSE,
@@ -55,21 +55,20 @@ if (length(aov_ii) > 1) {
 
 \
 
-Figure 3.`r i`.2 shows the estimates of the model coefficients with `r paste0(ci_level * 100, "%")` confidence intervals.  
+Figure 3.`r i`.2 shows the log-worth estimates of the model with a `r paste0(ci_level * 100, "%")` confidence intervals.  
 
 \
 
 ```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.", i,".2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", ClimMobTools:::.title_case(trait_list[[i]]$name),"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
 
 if(length(aov_ii) > 1){
-plot_summaries[[i]] +
-    labs(y = Option)
+logworth_plot[[i]]
 }
 ```
 
 \
 
-The probability of each `r option` being considered to be the top ranked `r option` (worth parameter) in a direct comparison between all the possible `r options` for '`r ClimMobTools:::.title_case(trait_list[[i]]$name)`' is presented in Figure 3.`r i`.3.
+The worth parameters of each `r option` being the best `r option` for '`r ClimMobTools:::.title_case(trait_list[[i]]$name)`' is presented in Figure 3.`r i`.3.
 
 \
 

@@ -87,7 +87,7 @@ The rate of response in each trial stage (data collection moment) is presented i
 \
 
 ```{r progress, dpi=dpi, fig.height=7, fig.width=10, fig.cap=paste0("Figure 1.1. Rate of response during trial stages (data collection moment) in this project.")}
-try(plot_tbl1)
+try(partiplot)
 ```
 
 \
@@ -249,7 +249,7 @@ if (nothertraits > 0) {
 
 `r paste(relation_other_chrs3, collapse='\n')`
 
-```{r agreement_table}
+```{r pladmm}
 if (isPLADMM) {
 try(
   kable(plad1,
@@ -290,12 +290,18 @@ fav_traits[[2]][[reference_trait]]
 
 ```{r best_items}
 best_items <- ""
-if (isTRUE(nrow(fav_traits[[reference_trait]][[2]]) > 0)) {
+if (isTRUE(nrow(fav_traits[[1]][[reference_trait]]) > 0)) {
   best_items <-
-  paste("The", option, fav_traits[[reference_trait]][[2]][[1,1]], "was the 'best'", option, 
-  " for the trait ", Ovname, " being ranked highest by", 
-  fav_traits[[reference_trait]][[2]][[1,3]], "of the" , 
-  nranker, rankers, "who assessed this", option, ".")
+  try(paste("The", option, fav_traits[[1]][[reference_trait]][1,1], "was the top ranked", option, 
+  " for the trait ", ovname, " being ranked highest by", 
+  fav_traits[[1]][[reference_trait]][1,3], "of the" , 
+  itemtable[itemtable$Variety %in% fav_traits[[1]][[reference_trait]][1,1], 3], 
+  rankers, "who assessed this", option, "."), silent = TRUE)
+  
+  if ("try-error" %in% class(best_items)){
+    best_items  <- ""
+  }
+  
 }
 ```
 
@@ -370,7 +376,7 @@ $$AIC = -2L +  2\nu$$
 
 ```{r}
 best_covar <- ""
-if (length(tree_f) > 1) {
+if (isTREE) {
   best_covar <- paste0("Based on this method, the covariate(s) ", paste3(var_keep, lan = language),
                        " were identified as the most representative to the rankings. The table below ", 
                        "shows the sub-groups (tree nodes) identified with the selected covariate(s).")
@@ -380,7 +386,7 @@ if (length(tree_f) > 1) {
 `r  paste(best_covar, collapse='\n')`
 
 ```{r subgroups-found}
-if(isTRUE(length(tree_f) > 1)){
+if(isTREE){
   try(
     kable(node_summary, 
         caption = paste0("Table 2.3. Summary of sub-groups (tree nodes) identified",
@@ -394,7 +400,7 @@ if(isTRUE(length(tree_f) > 1)){
 
 ```{r no_tree}
 no_tree <- ""
-if (isTRUE(length(tree_f) == 1)) {
+if (!isTREE) {
   no_tree <- 
     paste0("No split was found for the Plackett-Luce tree using the selected ",
     "covariates. You can refer to Figure 2.2 to check the performance of the tested ", options, " in this experiment.")
@@ -407,14 +413,14 @@ if (isTRUE(length(tree_f) == 1)) {
 ```{r pltree_legend}
 pltree_text <- paste0("Figure 2.4. Plackett-Luce tree for '", Ovname, "'. The horizontal axis is the probability of winning (worth). Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")
 
-if (length(tree_f) > 1) {
+if (isTREE) {
   pltree_text <- paste0(pltree_text, " Nodes split by the following covariate and attribute ", paste(paste("Node", node_summary[,1], node_summary[,5]), collapse = ", and "), ".")
 }
 
 ```
 
 ```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = pltree_text}
-if (length(tree_f) > 1) {
+if (isTREE) {
 try(plottree, silent = TRUE)
 }
 ```
@@ -442,8 +448,8 @@ trait_summaries <- ""
 if(isTRUE(nothertraits > 0)) {
   
   trait_list <- trait_list[-reference_trait]
-  fav_traits <- fav_traits[[1]][-reference_trait]
-  fav_traits <- fav_traits[[2]][-reference_trait]
+  fav_traits[[1]] <- fav_traits[[1]][-reference_trait]
+  fav_traits[[2]] <- fav_traits[[2]][-reference_trait]
   aov_tbl    <- aov_tbl[-reference_trait]
   logworth_plot <- logworth_plot[-reference_trait]
   worth_plot <- worth_plot[-reference_trait]

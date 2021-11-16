@@ -146,6 +146,15 @@ try_data <- tryCatch({
   dpi <- 250
   out_width <- "100%"
   
+  # define height of plots based on items
+  favplot_h <- nitems * 0.4
+  agreem_h <- ntrait * 0.9
+  multcomp_h <- nitems * 0.6 
+  
+  if (favplot_h < 5) favplot_h <- 5
+  if (agreem_h < 7)  agreem_h <- 7
+  if (multcomp_h < 6) multcomp_h <- 6
+  
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
   
 }, error = function(cond) {
@@ -170,15 +179,31 @@ org_rank <- tryCatch({
   # check whether a request to split the data by groups (gender, location, etc.) is provided
   if (length(groups) > 0) {
     
+    group_index <- integer()
+    for(i in seq_along(groups)) {
+      group_index <- c(group_index, which(grepl(groups[i], names(cmdata)))[1])
+    }
+    
+    group_index <- group_index[!is.na(group_index)]
+    
+    groups <- names(cmdata)[group_index]
+    
     if (length(groups) > 1) {
+      
       keep <- rowSums(apply(cmdata[,groups], 2, function(x) {is.na(x)})) == 0
+      
       cmdata <- cmdata[keep, ]
+      
       cmdata$group <- apply(cmdata[,groups], 1, function(x) {paste(x, collapse = " - ")})
+      
     }
     
     if (length(groups) == 1) {
+      
       cmdata <- cmdata[!is.na(cmdata[,groups]), ]
+      
       cmdata$group <- cmdata[,groups]
+      
     }
     
     # if any of the groups has less than 15% of the total data
@@ -283,46 +308,41 @@ org_rank <- tryCatch({
       
       # some times the user can add this question twice, I still don't have a solution for 
       # this, so I will use the one that is related to the reference trait
-      indexO <- which(grepl("_overalperf", pars$tricotVSlocal$nameString1))
+      ovsl <- which(names(cmdata) %in% pars$tricotVSlocal[1:3])
       
-      if (length(indexO) != 1) {
-        indexO <- 1
-      }
-      
-      ovsl <- as.vector(pars$tricotVSlocal[indexO, paste0("nameString", seq_len(pars$tricotVSlocal$nQst[indexO]))])
-      
-      # search for the columns in the data
-      for (k in seq_along(ovsl)) {
+      if (length(ovsl) == 3) {
+        ovsl <- names(cmdata)[ovsl]
+        # check for data completeness
+        keep2 <- apply(cmdata[c(itemnames, ovsl)], 1, is.na)
+        keep2 <- as.vector(colSums(keep2) == 0)
         
-        ovsl[k] <- names(cmdata[which(grepl(ovsl[k], names(cmdata)))])
+        # combine with the vector of reference trait
+        keep2 <- keep & keep2
         
-      }
+        # check if it has the minimal number of observations
+        # this should be combined with the available data in the reference
+        # trait as they will be filtered together
+        dropit2 <- sum(keep2 & keep) / sum(keep) < mintricotVSlocal
+        
+        # if is below the minimal number of observations then the comparison
+        # with the local item is ignored
+        if (isTRUE(dropit2)) {
+          trait_dropped <- c(trait_dropped, "Comparison with local")
+          tricotVSlocal <- FALSE
+        }
+        
+        result[["keep2"]] <- keep2
+        
+        result[["tricotVSlocal"]] <- ovsl
+        
+      }else{
+        
+      tricotVSlocal <- FALSE
       
-      ovsl <- as.character(ovsl)
+      result[["keep2"]] <- rep(FALSE, nranker)
       
-      # check for data completeness
-      keep2 <- apply(cmdata[c(itemnames, ovsl)], 1, is.na)
-      keep2 <- as.vector(colSums(keep2) == 0)
-      
-      # combine with the vector of reference trait
-      keep2 <- keep & keep2
-      
-      # check if it has the minimal number of observations
-      # this should be combined with the available data in the reference
-      # trait as they will be filtered together
-      dropit2 <- sum(keep2 & keep) / sum(keep) < mintricotVSlocal
-      
-      # if is below the minimal number of observations then the comparison
-      # with the local item is ignored
-      if (isTRUE(dropit2)) {
-        trait_dropped <- c(trait_dropped, "Comparison with local")
-        tricotVSlocal <- FALSE
-      }
-      
-      result[["keep2"]] <- keep2
-      
-      result[["tricotVSlocal"]] <- ovsl
-      
+      result[["tricotVSlocal"]] <- character()
+    }
     }
     
     # logical vector to subset the data 
@@ -409,7 +429,6 @@ org_summ <- tryCatch({
   # This is the fist table in Section 1
   # it shows the traits that were assessed in the project 
   # and the number of answers used in the analysis
-  
   tbl_section1 <- lapply(trait_list, function(x){
     data.frame(name = x$name,
                collect = ClimMobTools:::.title_case(x$assessment),
@@ -686,7 +705,9 @@ org_kendall <- tryCatch({
     
     agreement <- agreement[,-5]
     
-    agreement[c(3:4)] <- lapply(agreement[c(3:4)], function(x) round(x, 1))
+    agreement[c(3:4)] <- lapply(agreement[c(3:4)], function(x) as.character(round(x, 1)))
+    
+    agreement[,2] <- as.character(round(agreement[,2], 3))
     
     names(agreement) <- c("Trait", "Kendall tau", "Agreement with best (%)", "Agreement with worst (%)")
     
@@ -739,6 +760,24 @@ org_pl <- tryCatch({
     
     R[[i]] <- do.call(rankwith, args = a)
     
+    # get the network of items evaluated in the project
+    if (i == reference_trait) {
+      
+      if (isTRUE(tricotVSlocal)) {
+        
+        keep <- trait_list[[i]]$keep2 & trait_list[[i]]$keep
+        
+        a <- list(cmdata[keep, c(itemnames, 
+                                 trait_list[[i]]$strings, 
+                                 trait_list[[i]]$tricotVSlocal)],
+                  items = itemnames,
+                  input = trait_list[[i]]$strings,
+                  additional.rank = cmdata[keep, trait_list[[i]]$tricotVSlocal])
+        
+        R[[i]] <- do.call(rankwith, args = a)
+        
+      }
+    }
   }
   
   #...........................................................
@@ -1274,9 +1313,293 @@ if (any_error(org_pltree)) {
 }
 
 
+# ................................................................
+# ................................................................
+# Write outputs ####
+#determine format based on extensions
+output_format <- ifelse(extension == "docx","word_document", 
+                        paste0(extension,"_document"))
 
 
-# End of analysis 
+if (all(infosheets, done)) {
+  
+  try_infosheet <- tryCatch({
+    
+    # table with the worth parameters from the reference trait
+    # number of times each item was tested
+    # and how many times it was ranked first or last
+    # check if items have more than 20 characters and make it shorter
+    cmdata[, itemnames] <- lapply(cmdata[, itemnames], function(x){
+      abbreviate(x, minlength = 20)
+    })
+    
+    # make the rank without the Local item
+    overall <- trait_list[[reference_trait]]
+    # take the question asked
+    question_asked <- overall$question
+    # the vector to filter the data
+    keep <- overall$keep
+    
+    # multilanguage text
+    reporttext <- read.csv(paste0(fullpath, 
+                                  "/report/participant_report_multilanguage_text.csv"))
+    
+    
+    # pick the vector with the language
+    reporttext <- reporttext[, c(1, match(language, names(reporttext)))]
+    
+    # replace fields with info from ClimMob
+    notreplied <- reporttext[match("notreplied", reporttext[,1]), 2]
+    rranker     <- reporttext[match("partictag", reporttext[,1]), 2]
+    rrankers    <- reporttext[match("partictag2", reporttext[,1]), 2]
+    roption     <- reporttext[match("techtag", reporttext[,1]), 2]
+    roptions    <- reporttext[match("techtag2", reporttext[,1]), 2]
+    
+    reporttext[,2] <- gsub("r rankers", rrankers, reporttext[,2])
+    reporttext[,2] <- gsub("r nranker", nranker, reporttext[,2])
+    reporttext[,2] <- gsub("r question_asked", question_asked, reporttext[,2])
+    reporttext[,2] <- gsub("r nitems", nitems, reporttext[,2])
+    reporttext[,2] <- gsub("r options", roptions, reporttext[,2])
+    reporttext[,2] <- gsub("r nothertraits", nothertraits, reporttext[,2])
+    reporttext[,2] <- gsub("r ncomp", ncomp, reporttext[,2])
+    
+    # list of arguments for the function that will be used to 
+    # create the rankings
+    a <- list(cmdata[keep, ],
+              items = itemnames,
+              input = overall$strings, 
+              full.output = TRUE)
+    
+    R <- do.call(rankwith, args = a)
+    
+    order_items <- coef(PlackettLuce(R[["PLranking"]]), ref = reference)
+    
+    # do this to remove ties
+    order_items <- order_items[names(order_items) %in% items]
+    
+    rank_items <- gosset:::.rank_decimal(order_items)$rank
+    
+    order_items <- names(order_items)
+    
+    freq_items <- table(unlist(itemdata))
+    
+    ordering <- R[["myrank"]]
+    
+    first_items <- table(ordering[,1])
+    last_items  <- table(ordering[,3])
+    
+    infotable <- data.frame(item = order_items,
+                            rank = rank_items,
+                            freq = as.vector(freq_items[order_items]),
+                            first = as.vector(first_items[order_items]),
+                            last = as.vector(last_items[order_items]))
+    
+    infotable[is.na(infotable)] <- 0
+    
+    infotable <- infotable[order(infotable$rank), ]
+    # ................................................................
+    # ................................................................
+    # Get the info from the participants ####
+    sel <- c("id", paste0("package_item_", LETTERS[1:ncomp]))
+    partitable <- cmdata[, sel]
+    
+    partitable$name <- cmdata[,which(grepl("package_participant_name|package_farmername", names(cmdata)))]
+    
+    names(partitable) <- gsub("package_|farmer", "", names(partitable))
+    
+    # empty matrix to expand values from ord so it can fit partitable
+    # in case of missing data when participants did not replied the reference trait
+    x <- matrix(NA, 
+                ncol = ncomp, 
+                nrow = length(cmdata$id),
+                dimnames = list(seq_along(cmdata$id), paste0("Position", 1:ncomp)))
+    
+    partitable <- cbind(partitable, x)
+    
+    partitable[keep, paste0("Position", 1:ncomp)] <- ordering
+    
+    # fill NAs with "Not replied" in the first case and then with an empty character
+    partitable$Position1[is.na(partitable$Position1)] <- notreplied
+    partitable[is.na(partitable)] <- ""
+    
+    # ................................................................
+    # ................................................................
+    # If any other trait, do the same ####
+    if(isTRUE(nothertraits > 0)){
+      
+      otr_list <- trait_list[-reference_trait]
+      
+      otr <- list()
+      
+      otrnames <- lapply(otr_list, function(x){
+        x$name
+      })
+      
+      otrnames <- as.vector(unlist(otrnames))
+      
+      for(i in seq_along(otr_list)){
+        
+        a <- list(cmdata[otr_list[[i]]$keep, ],
+                  items = itemnames,
+                  input = otr_list[[i]]$strings,
+                  full.output = TRUE)
+        
+        R <- do.call(rankwith, args = a)[["myrank"]]
+        
+        # expand the rankings (in rows) so it can fit with the full
+        # information to include those participants who did not replied the
+        # question 
+        Rexp <- matrix(NA, 
+                       nrow = nrow(partitable), 
+                       ncol = ncomp, 
+                       dimnames = list(partitable$id, 
+                                       paste0("Position", 1:ncomp)))
+        
+        Rexp[otr_list[[i]]$keep, ] <- R
+        
+        R <- Rexp
+        
+        R[is.na(R[, 1]), 1] <- notreplied
+        
+        R[is.na(R)] <- ""
+        
+        otr[[i]] <- R
+        
+      }
+      
+      # now put all together by participants ids
+      otrp <- list()
+      for(i in  seq_along(partitable$id)){
+        
+        x <- NULL
+        
+        # combine (by rows) the response for the participant i 
+        # across all the j other traits
+        for(j in seq_along(otr_list)){
+          
+          x <- rbind(x, otr[[j]][i, ])
+          
+        }
+        
+        
+        # add the question that was made
+        x <- cbind(Trait = otrnames, 
+                   x)
+        
+        # add the reference trait at the top of the table
+        x <- rbind(unlist(c(overall$name, partitable[i, paste0("Position", 1:ncomp)])),
+                   x)
+        
+        x <- as.data.frame(x)
+        
+        # change names of order based on the number of comparisons 
+        # used in the trail
+        if (isTRUE(ncomp == 3)){
+          nmx <- reporttext[match("tabletitle", reporttext[,1]), 2]
+          nmx <- strsplit(nmx, ";")[[1]]
+          names(x) <- nmx
+        }
+        
+        if (isTRUE(ncomp > 3)) {
+          names(x) <- c("Trait", paste("Position", 1:ncomp))
+        }
+        
+        otrp[[i]] <- x
+        
+      }
+      
+    }
+    
+    # use the coefficients from the reference trait model and plot it as bar plot
+    # to show the overall evaluation compared to the farmer evaluation
+    pover <- coef(mods[[reference_trait]], log = FALSE)
+    pover <- sort(pover)
+    pover <- data.frame(items = factor(names(pover), levels = names(pover)),
+                        pw = as.vector(pover))
+    
+    poverp <- ggplot(pover, aes(x = pw,
+                                y = items,
+                                fill = pw)) +
+      geom_bar(stat = "identity",
+               position = "dodge",
+               show.legend = FALSE) +
+      labs(x = "", y = "") +
+      theme(element_blank(),
+            axis.text.x = element_blank(),
+            axis.text.y = element_text(size = 5),
+            panel.background = element_blank(),
+            plot.margin=grid::unit(c(0,0,0,0), "mm"))
+    
+    # make a template of ggplot to assemble a podium
+    podium <- data.frame(label = factor(c("1st", "2nd", "3rd"), levels = c("2nd", "1st", "3rd")),
+                         values = (3:1))
+    
+    ggpodium <- 
+      ggplot(data = podium, 
+             aes(y = values, x = label, fill = label)) +
+      geom_bar(stat = "identity", position = "dodge", show.legend = FALSE) +
+      labs(x = "", 
+           y = "") +
+      scale_fill_manual(values = c("#C0C0C0", "#FFD700", "#cd7f32")) +
+      theme(element_blank(),
+            axis.text.y = element_blank(),
+            axis.text.x = element_text(size = 8),
+            panel.background = element_blank(),
+            plot.margin=grid::unit(c(0,0,0,0), "mm"))
+    
+    
+    rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
+                      output_dir = outputpath,
+                      output_format = output_format,
+                      output_file = paste0("participants_report", ".", extension))
+    
+    
+  }, error = function(cond) {
+    return(cond)
+  }
+  )
+  
+  if (any_error(try_infosheet)) {
+    e <- paste("Error 115. Participant(s) report. ", try_infosheet$message)
+    error <- c(error, e)
+  }
+  
+}
 
+# produce the main report
+if (isTRUE(done)) {
+  
+  # the main report
+  try_rep <- tryCatch({
+    rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
+                      output_dir = outputpath,
+                      output_format = output_format,
+                      output_file = paste0("climmob_main_report", ".", extension))
+  }, error = function(cond) {
+    return(cond)
+  }
+  )
+  
+  if (any_error(try_rep)) {
+    e <- paste("Error 116.", try_rep$message)
+    error <- c(error, e)
+    done <- FALSE
+  }
+  
+}
+
+# if there was any error in the analysis, produce a error report 
+if (isFALSE(done)) {
+  rmarkdown::render(paste0(fullpath, "/report/mainreport_failed.Rmd"),
+                    output_dir = outputpath,
+                    output_format = "word_document",
+                    output_file = paste0("climmob_main_report.docx"))
+}
+
+if (length(error) > 0) {
+  print(error)
+}
+
+# End of analysis
 
 
