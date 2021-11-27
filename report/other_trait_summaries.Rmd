@@ -59,7 +59,7 @@ Figure 3.`r i`.2 shows the log-worth estimates of the model with a `r paste0(ci_
 
 \
 
-```{r dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap=paste0("Figure 3.", i,".2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", ClimMobTools:::.title_case(trait_list[[i]]$name),"' with ", ci_level*100, "% confidence intervals. Different letters indicate significant differences at p < ", sig_level ,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero).")}
+```{r dpi=dpi, fig.height=multcomp_h, fig.width=6, fig.cap=paste0("Figure 3.", i,".2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", ClimMobTools:::.title_case(trait_list[[i]]$name), ". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
 
 if(length(aov_ii) > 1){
 logworth_plot[[i]]

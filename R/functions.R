@@ -929,41 +929,43 @@ paste3 <- function(x, lan = "en", ...) {
 #' @param x a multicomp dataframe
 #' @param level the confidence interval level
 #' @param abbreviate logical to abbreviate labels in the chart
-plot_logworth <- function(x, level = 0.95, abbreviate = FALSE, ...){
+plot_logworth <- function(x, intervalWidth = 2, ...) {
   
-  if (abbreviate == TRUE) {
-    x$term <- gosset:::.reduce(as.character(x$term), ...)
-  }
-  items <- rev(sort(unique(x$term)))
-  x$term <- factor(x$term, levels = items)
+  frame <- qvcalc(x, ...)$qvframe
   
-  estimate <- x$estimate
-  term <- x$term
-  group <- x$group
-  quasiSE <- x$quasiSE
+  faclevels <- factor(row.names(frame), levels = row.names(frame))
   
-  p <- ggplot2::ggplot(data = x,
-                       ggplot2::aes(x = estimate, 
-                                    y = term,
-                                    label = group, 
-                                    xmax = estimate + stats::qnorm(1-(1-level)/2) * quasiSE,
-                                    xmin = estimate - stats::qnorm(1-(1-level)/2) * quasiSE)) +
-    ggplot2::geom_vline(xintercept = 0, 
-                        colour = "#E5E7E9", size = 0.8) +
-    ggplot2::geom_point() +
-    ggplot2::geom_errorbar(width = 0.1) +
-    ggplot2::geom_text(vjust = 1.2) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(panel.grid.major = ggplot2::element_blank()) +
-    ggplot2::labs(x = "Estimate", y = "Item")
+  xvalues <- seq(along = faclevels)
   
-  node <- x$node
+  est <- frame$estimate
   
-  if (isFALSE(is.null(node))) {
-    p <- 
-      p +
-      ggplot2::facet_grid(. ~ node)
-  }
+  se <- frame$quasiSE
+  
+  tops <- est + (intervalWidth * se)
+  
+  tails <- est - (intervalWidth * se)
+  
+  range <- max(tops) - min(tails)
+  
+  x <- data.frame(est, se, faclevels, tops, tails)
+  
+  p <- ggplot(data = x,
+              aes(x = faclevels, 
+                  y = est,
+                  ymax = tops,
+                  ymin = tails)) +
+    geom_hline(yintercept = 0, 
+               colour = "#E5E7E9", size = 0.8) +
+    geom_point() +
+    geom_errorbar(width = 0.1) +
+    #geom_text(vjust = 1.2) +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(),
+          axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,
+                                     size = 10, color = "grey20"),
+          axis.text.y = element_text(size = 10, color = "grey20"),
+          text = element_text(color = "grey20")) +
+    labs(x = "Log-worth", y = "Item")
   
   return(p)
   
@@ -975,16 +977,9 @@ plot_logworth <- function(x, level = 0.95, abbreviate = FALSE, ...){
 #' 
 #' @param object a list of PlackettLuce models
 #' @param traits a vector with name of traits
-#' @param best logical, to highlight only the best variety per trait
-winprob_map <- function(object, traits, best = FALSE, ...) {
+winprob_map <- function(object, traits, ...) {
   
-  winprobs <- lapply(object, function(x){
-    itempar(x, log = FALSE, vcov = FALSE)
-  })
-  
-  winprobs <- do.call(cbind, winprobs)
-  
-  winprobs <- as.data.frame(winprobs)
+  winprobs <- combine_coeffs(object, log = TRUE, vcov = FALSE)
   
   # add name of features
   names(winprobs) <- traits
@@ -995,48 +990,31 @@ winprob_map <- function(object, traits, best = FALSE, ...) {
   
   winprobs$traits <- factor(winprobs$traits, levels = traits)
   
-  # cut off point with the most important items, based on 1 / nitems
-  cutoff <- (1 / length(unique(winprobs$items)))
-  
-  winprobs$winprob2 <- ifelse(winprobs$winprob < cutoff, 
-                              NA, winprobs$winprob)
-  
-  if (best) {
-    winprobs <- split(winprobs, winprobs$traits)
-    
-    winprobs <- lapply(winprobs, function(x){
-      x[-which.max(x$winprob2), "winprob2"] <- NA
-      x
-    })
-    
-    winprobs <- do.call(rbind, winprobs)
-    
-    winprobs$traits <- factor(winprobs$traits, levels = traits)
-  }
-  
   items <- winprobs$items
   winprob <- winprobs$winprob
-  winprob2 <- winprobs$winprob2
   
-  p <-   ggplot2::ggplot(winprobs, 
-                         ggplot2::aes(x = items, 
-                                      y = traits,
-                                      fill = winprob2,
-                                      label = as.character(round(winprob2, 2)))) +
-    ggplot2::geom_tile(show.legend = FALSE) + 
-    ggplot2::geom_text(size = 3, fontface = 1) +
-    #ggplot2::scale_x_discrete(position = "top") +
-    ggplot2::scale_fill_gradient2(limits = c(cutoff, 1),
-                                  low =  "#c6dbef",
-                                  mid = "#6baed6",
-                                  midpoint = cutoff / max(winprob2, na.rm = TRUE),
-                                  high =  "#2171b5",
-                                  na.value = "white") +
+  lims <- max(abs(winprob)) * c(-1, 1)
+  
+  angle <- 0
+  if (any(nchar(traits) > 30)) {
+    angle <- 40  
+  }
+  
+  p <- ggplot(winprobs, 
+              aes(x = items, 
+                  y = traits,
+                  fill = winprob,
+                  label = as.character(round(winprob, 2)))) +
+    geom_tile() + 
+    scale_fill_distiller(palette = "RdBu", limit = lims,
+                         direction = 1,
+                         na.value = "white") +
     theme_bw() +
     theme(plot.background = element_blank(),
           axis.text = element_text(color = "grey20"),
           strip.text.x = element_text(color = "grey20"),
           axis.text.x = element_text(angle = 40, vjust = 1, hjust=1),
+          axis.text.y = element_text(angle = angle, vjust = 1, hjust=1),
           panel.grid = element_blank()) +
     ggplot2::labs(x = "", 
                   y = "",
@@ -1047,4 +1025,37 @@ winprob_map <- function(object, traits, best = FALSE, ...) {
   
 }
 
+#'Combine coefficients from PlackettLuce models
+#' 
+#' This function helps in combining coefficients 
+#' from different models when not all the items 
+#' are available for all models
+#' 
+#' @param x a list with PlackettLuce models
+#' @param na.replace logical, to replace or keep NAs
+#' @param ... further arguments passed to methods
 
+combine_coeffs <- function(x, na.replace = TRUE, ...) {
+  
+  coeffs <- lapply(x, function(y) {psychotools::itempar(y, ...)})
+  
+  items <- unique(unlist(lapply(coeffs, names)))
+  
+  r <- data.frame(items)
+  
+  rownames(r) <- items
+  
+  r <- r[,-1]
+  
+  for(i in seq_along(coeffs)) {
+    c_i <- coeffs[[i]]
+    r[names(c_i),i] <- c_i
+  }
+  
+  if (isTRUE(na.replace)) {
+    r[is.na(r)] <- 0
+  }
+  
+  r
+  
+}

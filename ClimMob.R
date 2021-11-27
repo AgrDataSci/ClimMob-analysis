@@ -138,7 +138,7 @@ try_data <- tryCatch({
   mintricotVSlocal <- 0.90
   
   # method for adjustments for confidence intervals and setting widths for comparison. 
-  ci_adjust <- "none"
+  ci_adjust <- "BH"
   
   # confidence interval level for comparison plots with error bars
   ci_level <- 0.84
@@ -150,11 +150,18 @@ try_data <- tryCatch({
   # define height of plots based on items
   favplot_h <- nitems * 0.4
   agreem_h <- ntrait * 0.6
-  multcomp_h <- nitems * 0.6 
+  multcomp_h <- 4
+  worthmap_h <- ntrait
+  worthmap_w <- ntrait + 0.5
   
   if (favplot_h < 5) favplot_h <- 5
+  if (favplot_h > 8) favplot_h <- 7.5
   if (agreem_h < 6)  agreem_h <- 6
-  if (multcomp_h < 6) multcomp_h <- 6
+  if (agreem_h > 8)  agreem_h <- 7.5
+  if (worthmap_h < 7)  worthmap_h <- 7
+  if (worthmap_h > 8)  worthmap_h <- 8
+  if (worthmap_w < 7)  worthmap_w <- worthmap_h + 0.5
+  if (worthmap_w > 8)  worthmap_w <- worthmap_h + 0.5
   
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
   
@@ -407,9 +414,20 @@ org_rank <- tryCatch({
   Ovname <- ClimMobTools:::.title_case(trait_list[[reference_trait]]$name)
   
   # the name of other traits combined with the name of assessments
-  traits_names <- as.vector(unlist(lapply(trait_list, function(x) {
-    paste0(x$name, " [", ClimMobTools:::.title_case(x$assessment), "]")
-  })))
+  if (length(unique(trait$assessmentName)) > 1) {
+    
+    traits_names <- as.vector(unlist(lapply(trait_list, function(x) {
+      paste0(x$name, " [", ClimMobTools:::.title_case(x$assessment), "]")
+    })))
+    
+  }else{
+    
+    traits_names <- as.vector(unlist(lapply(trait_list, function(x) {
+      x$name
+    })))
+    
+  }
+  
   
   traits_code <- as.vector(unlist(lapply(trait_list, function(x) {
     x$code
@@ -595,7 +613,7 @@ org_summ <- tryCatch({
 )
 
 if (any_error(org_summ)) {
-  
+  error <- c(error, org_summ$message)
   partiplot <- 0L
   itemtable <- data.frame()
   tbl_section1 <- data.frame()
@@ -670,11 +688,23 @@ org_kendall <- tryCatch({
   
   if (isTRUE(nothertraits > 0)) {
     
-    # filter cmdata so it matches the dims in all traits
+    isAGREE <- TRUE
+    
+    # filter data so it matches the dims in all traits
+    # first filter the traits, as sometimes a particular trait 
+    # can be completely missing and affect the entire analysis
     keep <- do.call(cbind, lapply(trait_list, function(x) x$keep))
     
-    keep <- rowSums(keep)
-    keep <- keep == length(trait_list)
+    # not less than 70% of the number of available data for the 
+    # reference trait
+    keep1 <- colSums(keep)
+    
+    keep1 <- keep1 >= floor(keep1[reference_trait] * 0.7)
+    
+    # now for the data
+    keep2 <- rowSums(keep[, keep1])
+    
+    keep2 <- keep2 == sum(keep1)
     
     # list of rankings
     compare <- list()
@@ -683,13 +713,15 @@ org_kendall <- tryCatch({
       
       cp <- list()
       
-      if (k == 1) keep_k <- keep
-      if (k != 1) keep_k <- keep & cmdata$group == groups[k - 1]
+      if (k == 1) keep_k <- keep2
+      if (k != 1) keep_k <- keep2 & cmdata$group == groups[k - 1]
       
-      for (j in seq_along(trait_list)) {
+      for (j in 1:length(trait_list[keep1])) {
+        tl <- trait_list[keep1][j]
+        
         a <- list(cmdata[keep_k, ],
                   items = itemnames,
-                  input = c(trait_list[[j]]$strings))
+                  input = c(tl[[1]]$strings))
         
         cp[[j]] <- do.call(rankwith, args = a)
         
@@ -699,19 +731,21 @@ org_kendall <- tryCatch({
       
     }
     
+    reftrait <- which(names(trait_list[keep1]) %in% names(trait_list)[reference_trait])
+    
     agreement <- lapply(compare, function(x) {
-      summarise_agreement(x[[reference_trait]], 
-                          x[-reference_trait], 
-                          labels = traits_names[-reference_trait])
+      summarise_agreement(x[[reftrait]], 
+                          x[-reftrait], 
+                          labels = traits_names[keep1][-reftrait])
     })
     
     agreement <- do.call(rbind, agreement)
     
-    agreement$group <- rep(c("Whole group", groups), each = nothertraits)
+    agreement$group <- rep(c("Whole group", groups), each = length(reftrait))
     
     agreement$group <- factor(agreement$group, levels = c("Whole group", groups))
     
-    agreement$labels <- factor(agreement$labels, levels = traits_names[-reference_trait])
+    agreement$labels <- factor(agreement$labels, levels = traits_names[keep1][-reftrait])
     
     # Plot kendall tau
     agreement$kendall[agreement$kendall < 0] <- 0
@@ -737,6 +771,8 @@ org_kendall <- tryCatch({
     
     agreement <- agreement[agreement$group == "Whole group", ]
     
+    agreement$labels <- as.character(agreement$labels)
+    
     strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
                         round(max(agreement$kendall), 3))
     
@@ -755,6 +791,7 @@ org_kendall <- tryCatch({
   } 
   
   if (isTRUE(nothertraits == 0)) {
+    isAGREE <- FALSE
     strongest_link <- character()
     weakest_link <- character()
     pagreement <- 0L
@@ -770,10 +807,12 @@ if (any_error(org_kendall)) {
   e <- org_kendall$message
   error <- c(error, e)
   
+  isAGREE <- FALSE
   strongest_link <- character()
   weakest_link <- character()
   pagreement <- 0L
   agreement <- data.frame()
+  
 }
 
 # .......................................................
@@ -882,19 +921,8 @@ org_pl <- tryCatch({
   
   # Plot with log-worth and multi comparison analysis 
   logworth_plot <- lapply(mod, function(x){
-    
-    # table with multi comparison analysis 
-    summ <- multcompPL(x,
-                       ref = reference,
-                       threshold = sig_level, 
-                       adjust = ci_adjust)
-    
     # and this is the chart with multi comparison analysis
-    plot_logworth(summ, level = ci_level) + 
-      theme_classic() +
-      theme(text = element_text(color = "grey20"),
-            axis.text.x = element_text(size = 10, color = "grey20"),
-            axis.text.y = element_text(size = 10, color = "grey20")) +
+    plot_logworth(x, ref = reference) +
       labs(y = Option, x = "Log-worth")
     
   })
@@ -909,24 +937,28 @@ org_pl <- tryCatch({
   # Table summarizing the best and worst items per trait
   # and their respective level of statistical significance
   overview_mod <- lapply(mod, function(x) {
+    
     ps <- anova.PL(x)[2,5]
     
-    summ <- multcompPL(x,
-                       ref = reference,
-                       threshold = sig_level, 
-                       adjust = ci_adjust)
+    # summ <- multcompPL(x,
+    #                    ref = reference,
+    #                    threshold = sig_level, 
+    #                    adjust = ci_adjust)
+    
+    summ <- itempar(x, log = TRUE, ref = reference)
     
     # take the best three items from this comparison
-    bests <- as.character(summ[, "term"][grepl("a", summ[,"group"])])
+    # bests <- as.character(summ[, "term"][grepl("a", summ[,"group"])])
+    bests <- names(rev(sort(summ[summ >= 0])))
     # if more than three, subset to get only three
     if (isTRUE(length(bests) > 3)) {
       bests <- bests[1:3]
     }
     
     # get the three worst items
-    worsts <- as.character(rev(summ[grepl(summ[nrow(summ),"group"], 
-                                            summ[, "group"]), "term"]))
-    
+    # worsts <- as.character(rev(summ[grepl(summ[nrow(summ),"group"], 
+    #                                         summ[, "group"]), "term"]))
+    worsts <- names(sort(summ[summ < 0]))
     # if more than three, subset to get only three
     if (isTRUE(length(worsts) > 3)) {
       worsts <- worsts[1:3]
@@ -996,14 +1028,7 @@ org_pladmm <- tryCatch({
   
   if (nothertraits > 0) {
     
-    features <- lapply(mod, function(x){
-      x <- itempar(x, log = TRUE, vcov = FALSE)
-    })
-    
-    features <- do.call(cbind, features)
-    
-    # remove features corresponding to the reference trait
-    features <- as.data.frame(features)
+    features <- combine_coeffs(mod, log = TRUE, vcov = FALSE)
     
     features <- features[,-reference_trait]
     
@@ -1033,6 +1058,9 @@ org_pladmm <- tryCatch({
     plad1 <- pladmm(R[[reference_trait]], f, data = features)
     
     plad1 <- pladmm_coeffs(plad1)
+    
+    # replace by the name of the question to be easier to read
+    plad1[-1, 1] <- trait[which(trait$codeQst %in% plad1[-1, 1]), "name"]
     
     # get the names of traits with significant influence to the main trait
     trait_to_overall <- suppressWarnings(as.numeric(plad1[,5]) <= sig_level)
@@ -1297,49 +1325,43 @@ org_pltree <- tryCatch({
     
     node_ids <- nodeids(tree_f, terminal = TRUE)
     
-    coefs_tree <- data.frame()
-    
-    for(i in seq_along(node_ids)){
-      
-      coef_i <- data.frame(node = node_ids[i],
-                           multcompPL(tree_f[[ node_ids[i] ]]$node$info$object, 
-                                      ref = reference,
-                                      threshold = sig_level_tree, adjust = ci_adjust),
-                           n = tree_f[[ node_ids[i] ]]$node$info$nobs,
-                           stringsAsFactors = FALSE)
-      
-      coefs_tree <- rbind(coefs_tree, coef_i)
-      
-    }
-    
-    # remove the strings %in% " and c() from rules 
-    coefs_tree <- split(coefs_tree, coefs_tree$node)
-    
-    coefs_tree <- lapply(coefs_tree, function(x){
-      x$m <- mean(x$estimate)
-      x$ctd <- x$estimate - x$m
-      x
-    })
-    
-    coefs_tree <- do.call(rbind, coefs_tree)
-    
-    best_tree <- data.frame()
-    
-    for(i in seq_along(node_ids)){
-      
-      tmp <- coefs_tree[coefs_tree$node == node_ids[i], ]
-      
-      best_tree <- rbind(best_tree,
-                         data.frame(node = tmp$node[1],
-                                    n = tmp$n[1], 
-                                    best = paste(tmp$term[tmp$group %in% "a"], collapse=", "),
-                                    worst = paste(rev(tmp$term[grepl(tmp$group[nrow(tmp)], tmp$group)]), collapse=", ")))
-    }
-    
-    
     rules <- node_rules(tree_f)
     
-    node_summary <- merge(best_tree, rules, by = "node")
+    for(i in seq_along(node_ids)){
+      
+      summ <- coef(tree_f[[node_ids[i]]], log = TRUE, ref = reference)
+      
+      summ <- summ[!grepl("tie", names(summ))]
+      
+      bests <- names(rev(sort(summ[summ >= 0])))
+      # if more than three, subset to get only three
+      if (isTRUE(length(bests) > 3)) {
+        bests <- bests[1:3]
+      }
+      
+      # get the three worst items
+      # worsts <- as.character(rev(summ[grepl(summ[nrow(summ),"group"], 
+      #                                         summ[, "group"]), "term"]))
+      worsts <- names(sort(summ[summ < 0]))
+      # if more than three, subset to get only three
+      if (isTRUE(length(worsts) > 3)) {
+        worsts <- worsts[1:3]
+      }
+      
+      # avoid bests and worst in the same column, this when very few items are tested
+      b <- bests[!bests %in% worsts]
+      w <- worsts[!worsts %in% bests]
+      
+      bests <- paste(b, collapse =", ")
+      worsts <- paste(w, collapse = ", ")
+      
+      rules[i, 3] <- bests
+      rules[i, 4] <- worsts
+      rules[i, 5] <- tree_f[[ node_ids[i] ]]$node$info$nobs
+      
+    }
+    
+    node_summary  <- rules[c(1,5,3,4,2)]
     
     names(node_summary) <- c("Node", "N", "Best ranked","Worst ranked", "Split rule")
     
