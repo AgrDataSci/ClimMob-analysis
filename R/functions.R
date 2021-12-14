@@ -683,13 +683,18 @@ plot_worth <- function(x, palette = NULL, ...){
   object$group <- factor(object$group, levels = player_levels)
   
   value <- object$value
-  group <- object$group
+  group <- as.character(object$group)
   
-  maxv <- gosset:::.round5(round(max(value) + .1, 2), 0.05)
+  maxv <- gosset:::.round5(round(max(value) + .02, 2), 0.05)
+  
+  angle <- 0
+  if (any(nchar(group) > 30)) {
+    angle <- 40  
+  }
   
   p <- ggplot2::ggplot(data = object, 
                   ggplot2::aes(x = value,
-                               y = "", 
+                               y = group, 
                                fill = group)) +
     ggplot2::geom_bar(stat = "identity", 
                       position = "dodge",
@@ -704,11 +709,10 @@ plot_worth <- function(x, palette = NULL, ...){
     ggplot2::theme(legend.position="bottom",
                    legend.text = element_text(size = 9),
                    panel.grid.major = element_blank(),
-                   axis.text.x = element_text(color = "grey20")) +
+                   axis.text.x = element_text(color = "grey20"),
+                   axis.text.y = element_text(angle = angle, vjust = 1, hjust=1, color = "grey20")) +
     ggplot2::labs(y = "",
-                  x = "") + 
-    ggplot2::geom_text(aes(label = group), 
-                       position = position_dodge(width = 1), hjust = -.1)
+                  x = "") 
   
   return(p)
   
@@ -839,12 +843,25 @@ node_rules <- function(x, ...){
   rule <- gsub("[.]", "DOT", rule)
   rule <- gsub("@", "EQUAL", rule)
   rule <- gsub("&", " AND ", rule)
+  rule <- gsub("<=", " LOWEQUAL ", rule)
+  rule <- gsub("=>", " HIGHEQUAL ", rule)
+  rule <- gsub("<", " LOW ", rule)
+  rule <- gsub(">", " HIGH ", rule)
+  
+  # remove all other special characters
   rule <- gsub("[[:punct:]]", "", rule)
+  
+  # reposition the key special characters
   rule <- gsub("  ", " ", rule)
+  rule <- gsub("LOWEQUAL", "<=", rule)
+  rule <- gsub("HIGHEQUAL", "=>", rule)
+  rule <- gsub("LOW", "<", rule)
+  rule <- gsub("HIGH", ">", rule)
   rule <- gsub("EQUAL", "= ", rule)
   rule <- gsub("AND", "&", rule)
   rule <- gsub("COMMA", ",", rule)
   rule <- gsub("DOT", ".", rule)
+  
   
   result$rules <- rule
   
