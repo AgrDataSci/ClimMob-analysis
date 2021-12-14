@@ -509,7 +509,6 @@ pairs_to_matrix <- function(df) {
   return(mat)
 }
 
-
 # function from https://github.com/EllaKaye/BradleyTerryScalable
 # which unfortunately was removed from CRAN
 #' Create a btdata object
@@ -659,10 +658,10 @@ summary.btdata <- function(object, ...){
   }
 }
 
-# Plot worth bar
-# @param object a data.frame with worth parameters
-# @param value an integer for index in object for the column with values to plot
-# @param group an integer for index in object to the colunm with values to group with
+#' Plot worth bar
+#' @param object a data.frame with worth parameters
+#' @param value an integer for index in object for the column with values to plot
+#' @param group an integer for index in object to the column with values to group with
 plot_worth <- function(x, palette = NULL, ...){
   
   if(is.null(palette)) {
@@ -670,6 +669,7 @@ plot_worth <- function(x, palette = NULL, ...){
   }
   
   object <- itempar(x, vcov = FALSE)
+  
   object <- data.frame(group = names(object),
                        value = as.vector(object))
   
@@ -836,6 +836,7 @@ node_rules <- function(x, ...){
   rule <- gsub("[(]|[)]| c","", rule)
   rule <- gsub('"NA",',"", rule)
   rule <- gsub(",", "COMMA", rule)
+  rule <- gsub("[.]", "DOT", rule)
   rule <- gsub("@", "EQUAL", rule)
   rule <- gsub("&", " AND ", rule)
   rule <- gsub("[[:punct:]]", "", rule)
@@ -843,6 +844,7 @@ node_rules <- function(x, ...){
   rule <- gsub("EQUAL", "= ", rule)
   rule <- gsub("AND", "&", rule)
   rule <- gsub("COMMA", ",", rule)
+  rule <- gsub("DOT", ".", rule)
   
   result$rules <- rule
   
@@ -922,8 +924,6 @@ paste3 <- function(x, lan = "en", ...) {
   return(result)
 
 }
-
-
 
 #' Plot log-worth
 #' @param x a multicomp dataframe
@@ -1034,7 +1034,6 @@ winprob_map <- function(object, traits, ...) {
 #' @param x a list with PlackettLuce models
 #' @param na.replace logical, to replace or keep NAs
 #' @param ... further arguments passed to methods
-
 combine_coeffs <- function(x, na.replace = TRUE, ...) {
   
   coeffs <- lapply(x, function(y) {psychotools::itempar(y, ...)})
@@ -1059,3 +1058,34 @@ combine_coeffs <- function(x, na.replace = TRUE, ...) {
   r
   
 }
+
+#' Get the top items out of a tree 
+top_items <- function(x, top = 5, ...) {
+  
+  if (length(x) > 1) {
+    
+    coef_x <- coef(x, log = FALSE)
+    
+    bestitems <- apply(coef_x, 1 , function(y) {
+      names(rev(sort(y)))[1:top]
+    })
+    
+    bestitems <- as.data.frame(t(bestitems))
+    
+    return(bestitems)
+    
+  }
+  
+  if (length(x) == 1){
+    
+    coef_x <- coef(x, log = FALSE)
+    
+    bestitems <- names(rev(sort(coef_x)))[1:top]
+    
+    return(bestitems)
+    
+  }
+  
+}
+
+

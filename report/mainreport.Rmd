@@ -230,9 +230,9 @@ if (isPLADMM) {
          "In this report, the log-worth of the ", nothertraits, " other traits were used as a item covariate,  or the intrinsic characteristics of the tested ", options, " to check  whether any if these traits have a significant influence to the rankings of the reference trait (", ovname, ").", 
          " The log-worth of ", trait_to_overall, " showed statistical correlation in explaining the performance of the ", options, " tested in this experiment. A full description of the log-worth estimates for each trait is presented in Table 1.5." )
   
-  if (length(rmcor) > 2) {
+  if (length(otn_rmv) > 0) {
     relation_other_chrs4 <- paste0(relation_other_chrs4, 
-                                   " The traits ", paste3(otn[rmcor], lan = language), " were not used in this analysis due to multicollinearity.")
+                                   " The traits ", paste3(otn_rmv, lan = language), " were not used in this analysis due to multicollinearity.")
   }
   
 }
@@ -268,7 +268,7 @@ if (isAGREE) {
 `r paste(relation_other_chrs3, collapse='\n')`
 
 
-```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_w, fig.cap= paste0("Figure 1.4. Probability of winning (worth) by traits of ", options, " tested in this experiment. The values are adjusted to the log scale where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with the lower performance for the given trait.")}
+```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.4. Probability of winning (worth) by traits of ", options, " tested in this experiment. The values are adjusted to the log scale where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with the lower performance for the given trait.")}
 if (length(worthmap) > 0) {
   try(worthmap, silent = TRUE)
 }

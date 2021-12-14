@@ -820,7 +820,7 @@ if (any_error(org_kendall)) {
 # 6. Fit PlackettLuce model ####
 # This will use the rankings from each trait 
 # to fit a PlackettLuce model and do
-# some exploratory analysis like favorability
+# some exploratory analysis
 # and a table showing statistical differences for each trait 
 org_pl <- tryCatch({
   
@@ -1032,7 +1032,9 @@ org_pladmm <- tryCatch({
     
     features <- features[,-reference_trait]
     
-    otn <- rename_duplicates(trait_names[-reference_trait])
+    otn <- names(trait_list)[-reference_trait]
+    
+    otn2 <- rename_duplicates(traits_names[-reference_trait])
     
     # add name of features
     names(features) <- otn
@@ -1042,25 +1044,48 @@ org_pladmm <- tryCatch({
     
     rownames(features) <- 1:nrow(features)
     
-    # remove traits with high correlation
-    cormat <- cor(features[-1])
-    
-    rmcor <- findCorrelation(cormat, cutoff = 0.7)
+    if (length(otn) > 3) {
+      
+      # remove traits with high correlation
+      cormat <- cor(features[-1])
+      
+      rmcor <- findCorrelation(cormat, cutoff = 0.7)
+      
+      if (length(rmcor) > 0 & length(rmcor) < (length(otn) - 2)) {
+        otn  <- otn[-rmcor]
+        
+        otn2 <- otn2[-rmcor]
+        
+      }
+      
+    }
     
     # if too many traits, take the last 10
     # this to prevent issues with time out
     if (length(otn) > 10) {
+      
       otn <- otn[rev(length(otn):(length(otn)-10))]
+      
+      otn2 <- otn2[rev(length(otn2):(length(otn2)-10))]
+      
     }
     
-    f <- as.formula(paste("~ ", paste(otn[-rmcor], collapse =" + ")))
+    # names of traits that went out, if any 
+    otn_rmv <- rename_duplicates(trait_names[-reference_trait])
+    
+    otn_rmv <- otn_rmv[!otn_rmv %in% otn]
+    
+    # formula to fit PLADMM
+    f <- as.formula(paste(" ~ ", paste(otn, collapse = " + ")))
+    
+    cat("Fitting PLADMM \n")
     
     plad1 <- pladmm(R[[reference_trait]], f, data = features)
     
     plad1 <- pladmm_coeffs(plad1)
     
-    # replace by the name of the question to be easier to read
-    plad1[-1, 1] <- trait[which(trait$codeQst %in% plad1[-1, 1]), "name"]
+    # replace the trait code by its name to be easier to read
+    plad1[-1, 1] <- otn2
     
     # get the names of traits with significant influence to the main trait
     trait_to_overall <- suppressWarnings(as.numeric(plad1[,5]) <= sig_level)
@@ -1083,10 +1108,6 @@ org_pladmm <- tryCatch({
 )
 
 if (any_error(org_pladmm)) {
-  
-  e <- org_pladmm$message
-  
-  error <- c(error, e)
   
   isPLADMM <- FALSE
 
@@ -1451,7 +1472,7 @@ if (all(infosheets, done)) {
     
     order_items <- names(order_items)
     
-    freq_items <- table(unlist(itemdata))
+    freq_items <- table(unlist(R[["myrank"]]))
     
     ordering <- R[["myrank"]]
     
@@ -1470,12 +1491,12 @@ if (all(infosheets, done)) {
     # ................................................................
     # ................................................................
     # Get the info from the participants ####
-    sel <- c("id", paste0("package_item_", LETTERS[1:ncomp]))
+    sel <- c("id", itemnames)
     partitable <- cmdata[, sel]
     
     partitable$name <- cmdata[,which(grepl("package_participant_name|package_farmername", names(cmdata)))]
     
-    names(partitable) <- gsub("package_|farmer", "", names(partitable))
+    #names(partitable) <- gsub("package_|farmer", "", names(partitable))
     
     # empty matrix to expand values from ord so it can fit partitable
     # in case of missing data when participants did not replied the reference trait
@@ -1582,24 +1603,8 @@ if (all(infosheets, done)) {
     
     # use the coefficients from the reference trait model and plot it as bar plot
     # to show the overall evaluation compared to the farmer evaluation
-    pover <- coef(mods[[reference_trait]], log = FALSE)
-    pover <- sort(pover)
-    pover <- data.frame(items = factor(names(pover), levels = names(pover)),
-                        pw = as.vector(pover))
-    
-    poverp <- ggplot(pover, aes(x = pw,
-                                y = items,
-                                fill = pw)) +
-      geom_bar(stat = "identity",
-               position = "dodge",
-               show.legend = FALSE) +
-      labs(x = "", y = "") +
-      theme(element_blank(),
-            axis.text.x = element_blank(),
-            axis.text.y = element_text(size = 5),
-            panel.background = element_blank(),
-            plot.margin=grid::unit(c(0,0,0,0), "mm"))
-    
+    pover <- worth_plot[[reference_trait]]
+      
     # make a template of ggplot to assemble a podium
     podium <- data.frame(label = factor(c("1st", "2nd", "3rd"), levels = c("2nd", "1st", "3rd")),
                          values = (3:1))
