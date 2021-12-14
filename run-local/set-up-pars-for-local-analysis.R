@@ -41,7 +41,6 @@ key <- "920b3608-a88b-452b-bd0f-6e3153e25666"
 # Add project id(s), if data will be fetched from ClimMob using ClimMobTools
 getProjectsCM(key)
 
-
 ids <- c("Bean21MM")
 
 lt <- list()
@@ -65,12 +64,14 @@ for(i in seq_along(ids)) {
 # data collection moment
 # So try to fix it, using grepl() gsub() or other replacement functions
 
+
+
+
 # Combine data by rows, this function will look for identical names
 # if no match it will create a new column and fill with NAs 
 cmdata <- rowbind(lt)
 
 names(cmdata)
-
 
 # ................................
 # Make list of parameters ####

@@ -1,19 +1,3 @@
-###Functions for Climmob Reporting Analysis
-
-
-#' Validate the class of objects generated in the tryCatch(s)
-any_error <- function(x){
-  isTRUE("error" %in% class(x))
-}
-
-#' Runs specific lines of the code
-source2 <- function(file, start, end, ...) {
-  file.lines <- scan(file, what=character(), skip=start-1, nlines=end-start+1, sep='\n')
-  file.lines.collapsed <- paste(file.lines, collapse='\n')
-  source(textConnection(file.lines.collapsed), ...)
-}
-
-
 #' Plot map using leaflet
 #' @param data a data frame
 #' @param xy index of data for the longitude and latitude coordinates (in that order)
@@ -289,9 +273,13 @@ draw.emojis <- Vectorize(draw.emojis)
 #' @return an igraph plot
 network <- function(object, ...) {
   
+  if (class(object) == "grouped_rankings") {
+    object <- as.rankings(object)
+  }
+  
   R <- object 
   
-  adj <- adjacency(R)
+  adj <- PlackettLuce::adjacency(R)
   
   adj <- as.vector(adj)
   
@@ -521,7 +509,6 @@ pairs_to_matrix <- function(df) {
   return(mat)
 }
 
-
 # function from https://github.com/EllaKaye/BradleyTerryScalable
 # which unfortunately was removed from CRAN
 #' Create a btdata object
@@ -671,28 +658,24 @@ summary.btdata <- function(object, ...){
   }
 }
 
-# Plot worth bar
-# @param object a data.frame with worth parameters
-# @param value an integer for index in object for the column with values to plot
-# @param group an integer for index in object to the colunm with values to group with
-plot_worth_bar <- function(object, value, group, palette = NULL, ...){
+#' Plot worth bar
+#' @param object a data.frame with worth parameters
+#' @param value an integer for index in object for the column with values to plot
+#' @param group an integer for index in object to the column with values to group with
+plot_worth <- function(x, palette = NULL, ...){
   
   if(is.null(palette)) {
     palette <- grDevices::colorRampPalette(c("#FFFF80", "#38E009","#1A93AB", "#0C1078"))
   }
   
-  object <- object[,c(group, value)]
-  names(object) <- c("group", "value")
+  object <- itempar(x, vcov = FALSE)
+  
+  object <- data.frame(group = names(object),
+                       value = as.vector(object))
   
   nr <- dim(object)[[1]]
   
-  object$group <- as.character(object$group)
-  
-  object$group <- gosset:::.reduce(object$group, ...)
-  
   object <- object[rev(order(object$value)), ] 
-  
-  object$value <- round(object$value * 100, 0)
   
   # get order of players based on their performance
   player_levels <- rev(gosset:::.player_order(object, "group", "value"))
@@ -702,9 +685,9 @@ plot_worth_bar <- function(object, value, group, palette = NULL, ...){
   value <- object$value
   group <- object$group
   
-  maxv <- round(max(value) + 10, -1)
+  maxv <- gosset:::.round5(round(max(value) + .1, 2), 0.05)
   
-  ggplot2::ggplot(data = object, 
+  p <- ggplot2::ggplot(data = object, 
                   ggplot2::aes(x = value,
                                y = "", 
                                fill = group)) +
@@ -714,18 +697,20 @@ plot_worth_bar <- function(object, value, group, palette = NULL, ...){
                       width = 1, 
                       color = "#ffffff") + 
     scale_fill_manual(values = palette(nr)) + 
-    ggplot2::scale_x_continuous(labels = paste0(seq(0, maxv, by = 10), "%"),
-                                breaks = seq(0, maxv, by = 10),
+    ggplot2::scale_x_continuous(labels = paste0(seq(0, maxv, by = 0.05)),
+                                breaks = seq(0, maxv, by = 0.05),
                                 limits = c(0, maxv)) +
     ggplot2::theme_minimal() +
     ggplot2::theme(legend.position="bottom",
                    legend.text = element_text(size = 9),
                    panel.grid.major = element_blank(),
-                   axis.text.x = element_text(color = "#000000")) +
+                   axis.text.x = element_text(color = "grey20")) +
     ggplot2::labs(y = "",
                   x = "") + 
     ggplot2::geom_text(aes(label = group), 
                        position = position_dodge(width = 1), hjust = -.1)
+  
+  return(p)
   
 }
 
@@ -798,4 +783,309 @@ rename_duplicates <- function(x, rename.with = "numbers", sep = "") {
   return(x)
   
 }
+
+#' Validate the class of objects generated in the tryCatch(s)
+any_error <- function(x){
+  isTRUE("error" %in% class(x))
+}
+
+#' Runs specific lines of the code
+source2 <- function(file, start, end, ...) {
+  file.lines <- scan(file, what=character(), skip=start-1, nlines=end-start+1, sep='\n')
+  file.lines.collapsed <- paste(file.lines, collapse='\n')
+  source(textConnection(file.lines.collapsed), ...)
+}
+
+
+#'Get colour
+#'
+col_pallet <- function(x, ...) {
+  
+  p <- c('#d73027','#4575b4', '#f46d43','#74add1', 
+         '#fdae61','#abd9e9', '#fee090', '#762a83',
+         '#a6dba0','#9970ab','#5aae61', '#c2a5cf', 
+         '#1b7837')
+  
+  v <- p[1:x]
+  
+  return(v)
+  
+}
+
+#' Get node rules 
+#' 
+#' Get the node rules from a party object
+#' 
+#' @param x an object of class party
+node_rules <- function(x, ...){
+  
+  node_ids <- partykit::nodeids(x, terminal = TRUE)
+  
+  result <- data.frame()
+  
+  for (i in seq_along(node_ids)) {
+    r <- data.frame(node = node_ids[i],
+                    rules = partykit:::.list.rules.party(x, node_ids[i]))
+    
+    result <- rbind(result, r)
+    
+  }
+  
+  rule <- result$rules
+  rule <- gsub("%in%","@", rule)
+  rule <- gsub("[(]|[)]| c","", rule)
+  rule <- gsub('"NA",',"", rule)
+  rule <- gsub(",", "COMMA", rule)
+  rule <- gsub("[.]", "DOT", rule)
+  rule <- gsub("@", "EQUAL", rule)
+  rule <- gsub("&", " AND ", rule)
+  rule <- gsub("[[:punct:]]", "", rule)
+  rule <- gsub("  ", " ", rule)
+  rule <- gsub("EQUAL", "= ", rule)
+  rule <- gsub("AND", "&", rule)
+  rule <- gsub("COMMA", ",", rule)
+  rule <- gsub("DOT", ".", rule)
+  
+  result$rules <- rule
+  
+  return(result)
+  
+}
+
+
+#' Get table with estimates out of a PLADMM
+#' @param x a PLADMM object
+pladmm_coeffs <- function(object, ...) {
+  coefs <- coef(object)
+  coefficients <- matrix(NA, nrow = length(coefs), ncol = 4L, 
+                         dimnames = list(names(coefs), c("Estimate", "Std. Error", 
+                                                         "z value", "Pr(>|z|)")))
+  coefficients[, 1L] <- coefs
+  se <- sqrt(diag(vcov(object)))
+  coefficients[names(se), 2L] <- se
+  coefficients[, 3L] <- coefficients[, 1L]/coefficients[, 2L]
+  coefficients[, 4L] <- 2L * pnorm(-abs(coefficients[, 3L]))
+  
+  coefficients <- as.data.frame(coefficients)
+  
+  coefficients[, 5] <- stars.pval(coefficients[, 4])
+  
+  coefficients[, 4] <- formatC(coefficients[, 4], format = "e", digits = 2)
+  
+  coefficients[, 6] <- rownames(coefficients)
+  
+  rownames(coefficients) <- 1:nrow(coefficients)
+  
+  coefficients <- coefficients[,c(6, 1:5)]
+  
+  names(coefficients)[c(1, 6)] <- ""
+  
+  coefficients
+  
+}
+
+#' Paste strings and put a final conjunction in the string
+#' @param a vector with characters
+#' @param lan the language, choose between c("en", "pt", "fr", "es", "sw", "no")
+#' @param ... additional passed to methods
+#' @examples 
+#' paste3(LETTERS[1:5])
+#' 
+#' paste3(LETTERS[1])
+#' 
+#' paste3(LETTERS[1:2], lan = "fr")
+#' 
+paste3 <- function(x, lan = "en", ...) {
+  
+  x <- x[!is.na(x)]
+  
+  if (length(x) == 1) {
+    return(x)
+  }
+  
+  idiom <- c("en", "pt", "fr", "es", "sw", "no")
+  conj <- c(" and ", " e ", " et ", " y ", " na ", " og ")
+  
+  index <- which(idiom %in% lan)
+  
+  if (length(index) == 0) {
+    index <- 1
+  }
+  
+  conj <- conj[index]
+  
+  x1 <- x[1:length(x)-1]
+  x2 <- x[length(x)]
+  
+  x1 <- paste(x1, collapse = ", ")
+  
+  result <- paste(x1, conj, x2)
+  
+  return(result)
+
+}
+
+#' Plot log-worth
+#' @param x a multicomp dataframe
+#' @param level the confidence interval level
+#' @param abbreviate logical to abbreviate labels in the chart
+plot_logworth <- function(x, intervalWidth = 2, ...) {
+  
+  frame <- qvcalc(x, ...)$qvframe
+  
+  faclevels <- factor(row.names(frame), levels = row.names(frame))
+  
+  xvalues <- seq(along = faclevels)
+  
+  est <- frame$estimate
+  
+  se <- frame$quasiSE
+  
+  tops <- est + (intervalWidth * se)
+  
+  tails <- est - (intervalWidth * se)
+  
+  range <- max(tops) - min(tails)
+  
+  x <- data.frame(est, se, faclevels, tops, tails)
+  
+  p <- ggplot(data = x,
+              aes(x = faclevels, 
+                  y = est,
+                  ymax = tops,
+                  ymin = tails)) +
+    geom_hline(yintercept = 0, 
+               colour = "#E5E7E9", size = 0.8) +
+    geom_point() +
+    geom_errorbar(width = 0.1) +
+    #geom_text(vjust = 1.2) +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(),
+          axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,
+                                     size = 10, color = "grey20"),
+          axis.text.y = element_text(size = 10, color = "grey20"),
+          text = element_text(color = "grey20")) +
+    labs(x = "Log-worth", y = "Item")
+  
+  return(p)
+  
+}
+
+#' Plot a map of winning probs
+#' 
+#' this highlights where each item is better for each trait
+#' 
+#' @param object a list of PlackettLuce models
+#' @param traits a vector with name of traits
+winprob_map <- function(object, traits, ...) {
+  
+  winprobs <- combine_coeffs(object, log = TRUE, vcov = FALSE)
+  
+  # add name of features
+  names(winprobs) <- traits
+  
+  winprobs <- data.frame(items = rep(dimnames(winprobs)[[1]], times = ncol(winprobs)),
+                         traits = rep(dimnames(winprobs)[[2]], each = nrow(winprobs)),
+                         winprob = as.numeric(unlist(winprobs)))
+  
+  winprobs$traits <- factor(winprobs$traits, levels = traits)
+  
+  items <- winprobs$items
+  winprob <- winprobs$winprob
+  
+  lims <- max(abs(winprob)) * c(-1, 1)
+  
+  angle <- 0
+  if (any(nchar(traits) > 30)) {
+    angle <- 40  
+  }
+  
+  p <- ggplot(winprobs, 
+              aes(x = items, 
+                  y = traits,
+                  fill = winprob,
+                  label = as.character(round(winprob, 2)))) +
+    geom_tile() + 
+    scale_fill_distiller(palette = "RdBu", limit = lims,
+                         direction = 1,
+                         na.value = "white") +
+    theme_bw() +
+    theme(plot.background = element_blank(),
+          axis.text = element_text(color = "grey20"),
+          strip.text.x = element_text(color = "grey20"),
+          axis.text.x = element_text(angle = 40, vjust = 1, hjust=1),
+          axis.text.y = element_text(angle = angle, vjust = 1, hjust=1),
+          panel.grid = element_blank()) +
+    ggplot2::labs(x = "", 
+                  y = "",
+                  fill = "")
+  
+  return(p)
+  
+  
+}
+
+#'Combine coefficients from PlackettLuce models
+#' 
+#' This function helps in combining coefficients 
+#' from different models when not all the items 
+#' are available for all models
+#' 
+#' @param x a list with PlackettLuce models
+#' @param na.replace logical, to replace or keep NAs
+#' @param ... further arguments passed to methods
+combine_coeffs <- function(x, na.replace = TRUE, ...) {
+  
+  coeffs <- lapply(x, function(y) {psychotools::itempar(y, ...)})
+  
+  items <- unique(unlist(lapply(coeffs, names)))
+  
+  r <- data.frame(items)
+  
+  rownames(r) <- items
+  
+  r <- r[,-1]
+  
+  for(i in seq_along(coeffs)) {
+    c_i <- coeffs[[i]]
+    r[names(c_i),i] <- c_i
+  }
+  
+  if (isTRUE(na.replace)) {
+    r[is.na(r)] <- 0
+  }
+  
+  r
+  
+}
+
+#' Get the top items out of a tree 
+top_items <- function(x, top = 5, ...) {
+  
+  if (length(x) > 1) {
+    
+    coef_x <- coef(x, log = FALSE)
+    
+    bestitems <- apply(coef_x, 1 , function(y) {
+      names(rev(sort(y)))[1:top]
+    })
+    
+    bestitems <- as.data.frame(t(bestitems))
+    
+    return(bestitems)
+    
+  }
+  
+  if (length(x) == 1){
+    
+    coef_x <- coef(x, log = FALSE)
+    
+    bestitems <- names(rev(sort(coef_x)))[1:top]
+    
+    return(bestitems)
+    
+  }
+  
+}
+
 
