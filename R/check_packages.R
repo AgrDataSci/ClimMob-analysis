@@ -13,11 +13,11 @@ install.packages(pkg)
 
 webshot::install_phantomjs(force = TRUE)
 
-remotes::install_github("agrobioinfoservices/ClimMobTools",
+remotes::install_github("AgrDataSci/ClimMobTools",
                         upgrade = "never",
                         force = TRUE)
 
-remotes::install_github("agrobioinfoservices/gosset",
+remotes::install_github("AgrDataSci/gosset",
                         upgrade = "never", 
                         force = TRUE)
 
