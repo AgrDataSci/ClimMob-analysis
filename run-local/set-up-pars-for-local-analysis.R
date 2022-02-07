@@ -162,6 +162,8 @@ traits$assessmentDay <- ifelse(traits$assessmentName == "pépinière", 9,
                                              ifelse(traits$assessmentName == "premièrerécolte", 29,
                                                     NA))))
 
+traits <- traits[order(traits$assessmentDay), ]
+
 # Check if there is a comparison with the local
 # if not create this object 
 tricotVSlocal <- data.frame()
@@ -217,16 +219,12 @@ covariates <- data.frame(assessmentId = "DataCollection",
                          assessmentName = "Data collection",
                          codeQst = c("Gender",
                                      "Age",
-                                     "EducationYears",
-                                     "Occupation", 
-                                     "Reading",
+                                     "Occupation",
                                      "HHSize"),
                          id = "",
                          nameString = c("registration_genderfr", 
                                         "registration_agefr", 
-                                        "registration_educationyearsfr", 
-                                        "registration_occupationfr",       
-                                        "registration_readingfr",
+                                        "registration_occupationfr",
                                         "registration_hhsizefr"),
                          name = "",
                          questionAsked = "")

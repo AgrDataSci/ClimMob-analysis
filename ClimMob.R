@@ -683,141 +683,8 @@ if (any_error(org_lonlat)) {
 
 # .......................................................
 # .......................................................
-# 5. Correlation between traits and the reference #####
-org_kendall <- tryCatch({
-  
-  if (isTRUE(nothertraits > 0)) {
-    
-    isAGREE <- TRUE
-    
-    # filter data so it matches the dims in all traits
-    # first filter the traits, as sometimes a particular trait 
-    # can be completely missing and affect the entire analysis
-    keep <- do.call(cbind, lapply(trait_list, function(x) x$keep))
-    
-    # not less than 70% of the number of available data for the 
-    # reference trait
-    keep1 <- colSums(keep)
-    
-    keep1 <- keep1 >= floor(keep1[reference_trait] * 0.7)
-    
-    # now for the data
-    keep2 <- rowSums(keep[, keep1])
-    
-    keep2 <- keep2 == sum(keep1)
-    
-    # list of rankings
-    compare <- list()
-    
-    for (k in seq_along(c("all", groups))) {
-      
-      cp <- list()
-      
-      if (k == 1) keep_k <- keep2
-      if (k != 1) keep_k <- keep2 & cmdata$group == groups[k - 1]
-      
-      for (j in 1:length(trait_list[keep1])) {
-        tl <- trait_list[keep1][j]
-        
-        a <- list(cmdata[keep_k, ],
-                  items = itemnames,
-                  input = c(tl[[1]]$strings))
-        
-        cp[[j]] <- do.call(rankwith, args = a)
-        
-      }
-      
-      compare[[k]] <- cp
-      
-    }
-    
-    reftrait <- which(names(trait_list[keep1]) %in% names(trait_list)[reference_trait])
-    
-    agreement <- lapply(compare, function(x) {
-      summarise_agreement(x[[reftrait]], 
-                          x[-reftrait], 
-                          labels = traits_names[keep1][-reftrait])
-    })
-    
-    agreement <- do.call(rbind, agreement)
-    
-    agreement$group <- rep(c("Whole group", groups), each = length(reftrait))
-    
-    agreement$group <- factor(agreement$group, levels = c("Whole group", groups))
-    
-    agreement$labels <- factor(agreement$labels, levels = traits_names[keep1][-reftrait])
-    
-    # Plot kendall tau
-    agreement$kendall[agreement$kendall < 0] <- 0
-    agreement$kendall <- agreement$kendall / 100
-    
-    pagreement <- 
-      ggplot(agreement,
-             aes(x = kendall, y = labels, fill = group)) +
-      geom_bar(stat = "identity", position = "dodge", show.legend = FALSE) +
-      facet_wrap(. ~ group) +
-      scale_x_continuous(labels = c(0, 0.25, 0.50, 0.75, 1), 
-                         breaks = c(0, 0.25, 0.50, 0.75, 1), 
-                         limits = c(0, 1)) +
-      labs(x = "", y = "") +
-      theme_minimal() +  
-      theme(legend.text = element_text(color = "grey20"),
-            axis.text = element_text(color = "grey20"),
-            strip.text.x = element_text(color = "grey20"),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank()) +
-      scale_fill_manual(values = col_pallet(length(groups) + 1))
-    
-    
-    agreement <- agreement[agreement$group == "Whole group", ]
-    
-    agreement$labels <- as.character(agreement$labels)
-    
-    strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
-                        round(max(agreement$kendall), 3))
-    
-    
-    weakest_link   <- c(agreement[[which.min(agreement$kendall), "labels"]],
-                        round(min(agreement$kendall), 3))
-    
-    agreement <- agreement[,-5]
-    
-    agreement[c(3:4)] <- lapply(agreement[c(3:4)], function(x) as.character(round(x, 1)))
-    
-    agreement[,2] <- as.character(round(agreement[,2], 3))
-    
-    names(agreement) <- c("Trait", "Kendall tau", "Agreement with best (%)", "Agreement with worst (%)")
-    
-  } 
-  
-  if (isTRUE(nothertraits == 0)) {
-    isAGREE <- FALSE
-    strongest_link <- character()
-    weakest_link <- character()
-    pagreement <- 0L
-    agreement <- data.frame()
- }
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_kendall)) {
-  e <- org_kendall$message
-  error <- c(error, e)
-  
-  isAGREE <- FALSE
-  strongest_link <- character()
-  weakest_link <- character()
-  pagreement <- 0L
-  agreement <- data.frame()
-  
-}
-
 # .......................................................
-# .......................................................
-# 6. Fit PlackettLuce model ####
+# 7. Fit PlackettLuce model ####
 # This will use the rankings from each trait 
 # to fit a PlackettLuce model and do
 # some exploratory analysis
@@ -901,6 +768,39 @@ org_pl <- tryCatch({
   mod <- lapply(R, function(x){
     PlackettLuce(x)
   })
+  
+  # Kendall tau
+  compare_to <- mod[-reference_trait]
+  baseline_trait <- coef(mod[[reference_trait]], log = FALSE)
+  kendall <- lapply(compare_to, function(x){
+    x <- coef(x, log = FALSE)
+    kendallTau(x, baseline_trait)
+  })
+  
+  kendall <- do.call(rbind, kendall)
+  
+  kendall$trait <- rename_duplicates(traits_names[-reference_trait])
+  
+  kendall <- kendall[rev(order(kendall$kendallTau)), ]
+  
+  kendall <- kendall[,-2]
+  
+  isAGREE <- nrow(kendall) > 1
+  
+  if (isAGREE) {
+    strongest_link <- c(kendall$trait[1],
+                        round(kendall$kendallTau[1], 2))
+    
+    weakest_link <- c(kendall$trait[nrow(kendall)],
+                      round(kendall$kendallTau[nrow(kendall)], 2))
+    
+    kendall <- kendall[,c(2,1)]
+    
+    kendall[,2] <- round(kendall[,2], 3)
+    
+    names(kendall) <- c("Trait", "Kendall tau")
+    
+  }
   
   #...........................................................
   # Analysis of variance

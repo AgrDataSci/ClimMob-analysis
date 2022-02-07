@@ -187,25 +187,23 @@ if (isAGREE) {
 relation_other_chrs1 <- 
   paste0("Table 1.4 shows, for each trait evaluated in the project, ", 
         "the frequency for which the rankings matched with the trait '", Ovname, 
-        "'. Best and worst agreement represent the percentage ", 
-        "for which the best and worst ", option, " for the trait ", 
-        "matched the best and worst '", Ovname, 
         "'. Kendall tau shows the complete ranking agreement ", 
         "on the ranking with the trait '", 
         Ovname, "' as reference using the Kendall correlation ", 
         "coefficient [@Kendall1938]. The coefficient is an equivalent of a Pearson ", 
-        "correlation designed for ranking data, ranging from 0 to 1, where 1 means a high correlation.")
+        "correlation designed for ranking data, ranging from -1 to 1, where 1 means a total correlation and -1 a total negative correlation.")
 
 relation_other_chrs2 <- 
   paste0("The trait that had the strongest ", 
-        "correlation with '", Ovname, "' was '", ClimMobTools:::.title_case(strongest_link[1]), 
-        "'. The rankings for '", ClimMobTools:::.title_case(strongest_link[1]), 
+        "correlation with '", Ovname, "' was '", 
+        strongest_link[1], 
+        "'. The rankings for '", strongest_link[1], 
         "' correlate with '", Ovname, "' with a Kendall tau of ",
         strongest_link[2],
         ". The trait that had the lowest correlation with ", Ovname,
-        "' was '",  ClimMobTools:::.title_case(weakest_link[1]), 
+        "' was '", weakest_link[1], 
         "'. The rankings for '" ,  
-        ClimMobTools:::.title_case(weakest_link[1]), "' had a Kendall tau of ", 
+        weakest_link[1], "' had a Kendall tau of ", 
         weakest_link[2], " when compared to '",  Ovname, 
         "'. The correlation with the other traits is also shown in Figure 1.3.")
 }
@@ -244,8 +242,8 @@ if (isPLADMM) {
 ```{r agreement_table}
 if (isAGREE) {
 try(
-  kable(agreement,
-      caption = paste0("Table 1.4. Correlation between '", Ovname, 
+  kable(kendall,
+      caption = paste0("Table 1.4. Kendall correlation between '", Ovname, 
                        "' and the other traits assessed in this experiment." ),
       row.names = FALSE),
   silent = TRUE)
@@ -255,13 +253,6 @@ try(
 \
 
 `r paste(relation_other_chrs2, collapse='\n')`
-
-
-```{r agreementplot, dpi=dpi,fig.height=agreem_h, fig.width=agreem_h, fig.cap= paste0("Figure 1.3. Kendall tau correlation between traits and ", Ovname, ".")}
-if (isAGREE) {
-  pagreement
-}
-```
 
 \
 
@@ -457,48 +448,6 @@ try(plottree, silent = TRUE)
 ```
 
 \
-
-# Section 3: Other traits
-
-```{r other_chars}
-other_chars <- paste0("This report only assessed the trait '", Ovname, "'.")
-
-if (isTRUE(nothertraits > 0)) {
-  other_chars <- 
-  paste0("Data analysis summaries are also shown for the ", 
-         "other ", nothertraits," traits assessed in this project.")
-} 
-```
-
-`r paste(other_chars, collapse='\n')`
-
-\
-
-```{r, other_chars_analysis}
-trait_summaries <- ""
-if(isTRUE(nothertraits > 0)) {
-  
-  trait_list <- trait_list[-reference_trait]
-  fav_traits[[1]] <- fav_traits[[1]][-reference_trait]
-  fav_traits[[2]] <- fav_traits[[2]][-reference_trait]
-  aov_tbl    <- aov_tbl[-reference_trait]
-  logworth_plot <- logworth_plot[-reference_trait]
-  worth_plot <- worth_plot[-reference_trait]
-  
-  for(i in seq_len(nothertraits)){
-    trait_summaries<-c(trait_summaries,
-                       knitr::knit_child(paste0(fullpath, "/report/other_trait_summaries.Rmd"), 
-                                         quiet=TRUE))
-}  
-}
-
-```
-
-```{r other_chars_include, echo=FALSE, results="asis", message=FALSE, warning=FALSE}
-cat(paste(trait_summaries, collapse = '\n'))
-```
-
-\pagebreak
 
 ```{r error}
 e <- ""
