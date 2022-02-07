@@ -1087,7 +1087,10 @@ top_items <- function(x, top = 5, ...) {
       names(rev(sort(y)))[1:top]
     })
     
-    bestitems <- as.data.frame(t(bestitems))
+    bestitems <- as.data.frame(bestitems)
+    
+    names(bestitems) <- paste0("Node", 
+                               nodeids(x, terminal = TRUE))
     
     return(bestitems)
     

@@ -216,7 +216,7 @@ org_rank <- tryCatch({
     
     # if any of the groups has less than 15% of the total data
     # then the groups will not be considered
-    if (any(table(cmdata$group) / nrow(cmdata) < 0.15)) {
+    if (any(table(cmdata$group) / nrow(cmdata) < 0.05)) {
       cmdata$group <- NA
     }
     

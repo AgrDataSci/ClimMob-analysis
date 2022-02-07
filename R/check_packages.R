@@ -4,11 +4,9 @@
 # # run this code each 15-days
 # # ................................................................
 # # ................................................................
-
-pkg <- c("remotes", "PlackettLuce", "partykit", "qvcalc", "psychotools", "jsonlite", 
-         "knitr", "rmarkdown", "pls", "gtools", "ggplot2", "leaflet", "mapview",
-         "igraph", "ggrepel", "patchwork", "ggparty", "multcompView",
-         "png", "plotrix", "gridExtra", "webshot", "caret")
+pkg <- c("PlackettLuce","partykit","qvcalc","psychotools","jsonlite","knitr","rmarkdown",
+         "pls","gtools","ggplot2","igraph","ggrepel","ggparty","patchwork","leaflet",
+         "mapview","multcompView","png","plotrix","gridExtra","caret")
 
 
 install.packages(pkg)
