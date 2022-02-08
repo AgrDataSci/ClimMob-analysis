@@ -772,8 +772,10 @@ org_pl <- tryCatch({
   # Kendall tau
   compare_to <- mod[-reference_trait]
   baseline_trait <- coef(mod[[reference_trait]], log = FALSE)
+  baseline_trait <- baseline_trait[items]
   kendall <- lapply(compare_to, function(x){
     x <- coef(x, log = FALSE)
+    x <- x[items]
     kendallTau(x, baseline_trait)
   })
   

@@ -41,7 +41,7 @@ key <- "28abd92b-406a-4260-9614-601cdf243afe"
 # Add project id(s), if data will be fetched from ClimMob using ClimMobTools
 projects <- getProjectsCM(key, server = '1000farms')
 
-ids <- c("amaML2021") #"amara2021B"
+ids <- c("amara2021B")
 server <- "1000farms"
 userowner <- "sognigbendanikou"
 
