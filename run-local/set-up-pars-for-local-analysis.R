@@ -36,14 +36,14 @@ library("gridExtra")
 source("R/functions.R")
 
 # Add API key, if data will be fetched from ClimMob using ClimMobTools
-key <- "28abd92b-406a-4260-9614-601cdf243afe"
+key <- "4431364f-49df-40c6-8ed2-7972e97adcdb"
 
 # Add project id(s), if data will be fetched from ClimMob using ClimMobTools
 projects <- getProjectsCM(key, server = '1000farms')
 
-ids <- c("amara2021B")
+ids <- c("Cowpeaiita")
 server <- "1000farms"
-userowner <- "sognigbendanikou"
+userowner <- "OBoukar"
 
 lt <- list()
 quest <- data.frame()

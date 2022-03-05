@@ -287,53 +287,8 @@ try(
 
 # Section 2: `r Ovname`, data summary and exploratory analysis
 
-## Assessment of `r options` 
-
-Exploratory analysis within the following section summarises results from the rankings on '`r Ovname`'. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020]. Performance of each of the `r options` for '`r Ovname`' is summarized in Table 2.1. The table below shows the number of times each `r option` was tested and the proportion of times it was ranked as the best or worst. Net favorability score is the different between the best and worst ranks for each `r option`. A score of +100 indicates that the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
-
-
-```{r fav_table}
-try(knitr::kable(fav_traits[[1]][[reference_trait]],
-             row.names = FALSE,
-             caption = paste0("Table 2.1. Favorability scores for '", 
-                              Ovname, "'." )), 
-    silent = TRUE)
-```
-
-\
-
-This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head-to-head contests' for which the `r option` won and the net favorability score (Figure 2.1). 
-
-```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favorability scores for '", Ovname, "'.")}
-try(fav_traits[[2]][[reference_trait]])
-```
-
-\
-
-```{r best_items}
-best_items <- ""
-if (isTRUE(nrow(fav_traits[[1]][[reference_trait]]) > 0)) {
-  best_items <-
-  try(paste("The", option, fav_traits[[1]][[reference_trait]][1,1], "was the top ranked", option, 
-  " for the trait ", ovname, " being ranked highest by", 
-  fav_traits[[1]][[reference_trait]][1,3], "of the" , 
-  itemtable[itemtable$Variety %in% fav_traits[[1]][[reference_trait]][1,1], 3], 
-  rankers, "who assessed this", option, "."), silent = TRUE)
-  
-  if ("try-error" %in% class(best_items)){
-    best_items  <- ""
-  }
-  
-}
-```
-
-`r paste(best_items, collapse = '\n')`
-
-\
 
 ## Plackett-Luce Model estimates
-
-\
 
 Table 2.2 shows the results from the likelihood ratio test from the Plackett-Luce model for the trait '`r Ovname`' of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
 
