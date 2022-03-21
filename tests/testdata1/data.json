@@ -1,0 +1,1062 @@
+{
+    "Characteristics": [
+        {
+            "name": "Germination",
+            "codeQst": "germination",
+            "id": 1551,
+            "vars": [
+                {
+                    "name": "ASS0801cda23f64_char_germination_pos"
+                },
+                {
+                    "name": "ASS0801cda23f64_char_germination_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option germinated more plants?",
+                "Which option germinated less plants?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_0801cda23f64_1551_add"
+        },
+        {
+            "name": "Diseases resistance",
+            "codeQst": "diseasesresistance",
+            "id": 1553,
+            "vars": [
+                {
+                    "name": "ASS0801cda23f64_char_diseasesresistance_pos"
+                },
+                {
+                    "name": "ASS0801cda23f64_char_diseasesresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to diseases?",
+                "Which option is more susceptible to diseases?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_0801cda23f64_1553_add"
+        },
+        {
+            "name": "Pest resistance",
+            "codeQst": "pestresistance",
+            "id": 1554,
+            "vars": [
+                {
+                    "name": "ASS0801cda23f64_char_pestresistance_pos"
+                },
+                {
+                    "name": "ASS0801cda23f64_char_pestresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to pests?",
+                "Which option is more susceptible to pests?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_0801cda23f64_1554_add"
+        },
+        {
+            "name": "Drought tolerance",
+            "codeQst": "droughttolerance",
+            "id": 1555,
+            "vars": [
+                {
+                    "name": "ASS0801cda23f64_char_droughttolerance_pos"
+                },
+                {
+                    "name": "ASS0801cda23f64_char_droughttolerance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more tolerant to drought?",
+                "Which option is more susceptible to drought?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_0801cda23f64_1555_add"
+        },
+        {
+            "name": "Pest resistance",
+            "codeQst": "pestresistance",
+            "id": 1554,
+            "vars": [
+                {
+                    "name": "ASS0299f02dbf87_char_pestresistance_pos"
+                },
+                {
+                    "name": "ASS0299f02dbf87_char_pestresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0299f02dbf87",
+                "ass_desc": "Breeder assessment (reproductive)",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to pests?",
+                "Which option is more susceptible to pests?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_0299f02dbf87_1554_add"
+        },
+        {
+            "name": "Diseases resistance",
+            "codeQst": "diseasesresistance",
+            "id": 1553,
+            "vars": [
+                {
+                    "name": "ASS0299f02dbf87_char_diseasesresistance_pos"
+                },
+                {
+                    "name": "ASS0299f02dbf87_char_diseasesresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0299f02dbf87",
+                "ass_desc": "Breeder assessment (reproductive)",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to diseases?",
+                "Which option is more susceptible to diseases?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_0299f02dbf87_1553_add"
+        },
+        {
+            "name": "Pest resistance",
+            "codeQst": "pestresistance",
+            "id": 1554,
+            "vars": [
+                {
+                    "name": "ASSc7094017b20e_char_pestresistance_pos"
+                },
+                {
+                    "name": "ASSc7094017b20e_char_pestresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to pests?",
+                "Which option is more susceptible to pests?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_c7094017b20e_1554_add"
+        },
+        {
+            "name": "Drought tolerance",
+            "codeQst": "droughttolerance",
+            "id": 1555,
+            "vars": [
+                {
+                    "name": "ASSc7094017b20e_char_droughttolerance_pos"
+                },
+                {
+                    "name": "ASSc7094017b20e_char_droughttolerance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more tolerant to drought?",
+                "Which option is more susceptible to drought?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_c7094017b20e_1555_add"
+        },
+        {
+            "name": "Diseases resistance",
+            "codeQst": "diseasesresistance",
+            "id": 1553,
+            "vars": [
+                {
+                    "name": "ASSc7094017b20e_char_diseasesresistance_pos"
+                },
+                {
+                    "name": "ASSc7094017b20e_char_diseasesresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to diseases?",
+                "Which option is more susceptible to diseases?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_c7094017b20e_1553_add"
+        },
+        {
+            "name": "Plant survival",
+            "codeQst": "plantsurvival",
+            "id": 1556,
+            "vars": [
+                {
+                    "name": "ASSc7094017b20e_char_plantsurvival_pos"
+                },
+                {
+                    "name": "ASSc7094017b20e_char_plantsurvival_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option has the higher plant survival rate?",
+                "Which option has the lower plant survival rate?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_c7094017b20e_1556_add"
+        },
+        {
+            "name": "Pest resistance",
+            "codeQst": "pestresistance",
+            "id": 1554,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_pestresistance_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_pestresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to pests?",
+                "Which option is more susceptible to pests?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1554_add"
+        },
+        {
+            "name": "Drought tolerance",
+            "codeQst": "droughttolerance",
+            "id": 1555,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_droughttolerance_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_droughttolerance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more tolerant to drought?",
+                "Which option is more susceptible to drought?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1555_add"
+        },
+        {
+            "name": "Diseases resistance",
+            "codeQst": "diseasesresistance",
+            "id": 1553,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_diseasesresistance_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_diseasesresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to diseases?",
+                "Which option is more susceptible to diseases?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1553_add"
+        },
+        {
+            "name": "Striga resistance",
+            "codeQst": "strigaresistance",
+            "id": 1564,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_strigaresistance_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_strigaresistance_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is more resistant to striga?",
+                "Which option is more susceptible to striga?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1564_add"
+        },
+        {
+            "name": "Maturity",
+            "codeQst": "maturity",
+            "id": 1557,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_maturity_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_maturity_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option has the earlier maturity?",
+                "Which option has the later maturity?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1557_add"
+        },
+        {
+            "name": "Grain size",
+            "codeQst": "grainsize",
+            "id": 1559,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_grainsize_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_grainsize_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option has the best grain/seed size for the target market?",
+                "Which option has the worst grain/seed size for the target market?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1559_add"
+        },
+        {
+            "name": "Grain colour",
+            "codeQst": "graincolour",
+            "id": 1560,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_graincolour_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_graincolour_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option has the best grain/seed colour for the target market?",
+                "Which option has the worst grain/seed colour for the target market?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1560_add"
+        },
+        {
+            "name": "Yield",
+            "codeQst": "yield",
+            "id": 1558,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_yield_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_yield_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option has the higher grain yield?",
+                "Which option has the lower grain yield?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1558_add"
+        },
+        {
+            "name": "Marketability",
+            "codeQst": "marketability",
+            "id": 1561,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_marketability_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_marketability_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option is easier to sell?",
+                "Which option is more difficult to sell?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1561_add"
+        },
+        {
+            "name": "Plant survival",
+            "codeQst": "plantsurvival",
+            "id": 1556,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_plantsurvival_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_plantsurvival_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Which option has the higher plant survival rate?",
+                "Which option has the lower plant survival rate?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_1556_add"
+        },
+        {
+            "name": "Overall preference",
+            "codeQst": "overallchar",
+            "id": 204,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_char_overallchar_pos"
+                },
+                {
+                    "name": "ASSd203319dcce5_char_overallchar_neg"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Overall, which option was the best?",
+                "Overall, which option was the worst?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_d203319dcce5_204_add"
+        }
+    ],
+    "Performance": [
+        {
+            "name": "Overall vs Local",
+            "codeQst": "overallper",
+            "id": 205,
+            "vars": [
+                {
+                    "name": "ASSd203319dcce5_perf_overallper_1"
+                },
+                {
+                    "name": "ASSd203319dcce5_perf_overallper_2"
+                },
+                {
+                    "name": "ASSd203319dcce5_perf_overallper_3"
+                }
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Overall, is A better or worse than the one that you currently grow?",
+                "Overall, is B better or worse than the one that you currently grow?",
+                "Overall, is C better or worse than the one that you currently grow?"
+            ],
+            "type": "performance",
+            "codeForAnalysis": "performance_ASS_d203319dcce5_205_add"
+        }
+    ],
+    "Explanatory": [
+        {
+            "name": "Point of delivery",
+            "codeQst": "pointofdelivery",
+            "questionAsked": "Please register the GPS location where the seeds were delivered",
+            "id": 206,
+            "dtype": 4,
+            "vars": "REG_pointofdelivery",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__206_add"
+        },
+        {
+            "name": "Age",
+            "codeQst": "age",
+            "questionAsked": "Please indicate your age",
+            "id": 1548,
+            "dtype": 3,
+            "vars": "REG_age",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1548_add"
+        },
+        {
+            "name": "Education",
+            "codeQst": "education",
+            "questionAsked": "Please select your highest degree obtained",
+            "id": 1549,
+            "dtype": 5,
+            "vars": "REG_education",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1549_add"
+        },
+        {
+            "name": "Civil status",
+            "codeQst": "civilstatus",
+            "questionAsked": "Please indicate your civil status",
+            "id": 1550,
+            "dtype": 5,
+            "vars": "REG_civilstatus",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1550_add"
+        },
+        {
+            "name": "Experience with the crop",
+            "codeQst": "experiencecrop",
+            "questionAsked": "Please indicate how many years you have growing the crop?",
+            "id": 1581,
+            "dtype": 3,
+            "vars": "REG_experiencecrop",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1581_add"
+        },
+        {
+            "name": "Gender",
+            "codeQst": "gender1",
+            "questionAsked": "Please select your gender",
+            "id": 1586,
+            "dtype": 5,
+            "vars": "REG_gender1",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1586_add"
+        },
+        {
+            "name": "Trial GPS",
+            "codeQst": "geotrial",
+            "questionAsked": "The GPS location of the on-farm trial",
+            "id": 1531,
+            "dtype": 4,
+            "vars": "ASS0801cda23f64_geotrial",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_0801cda23f64_1531_add"
+        },
+        {
+            "name": "Diseases any",
+            "codeQst": "diseasesany",
+            "questionAsked": "Did you find any disease in the trial?",
+            "id": 1539,
+            "dtype": 5,
+            "vars": "ASS0801cda23f64_diseasesany",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_0801cda23f64_1539_add"
+        },
+        {
+            "name": "Plant damage",
+            "codeQst": "plantdamag",
+            "questionAsked": "Did any plant suffer damage during the trial?",
+            "id": 1593,
+            "dtype": 5,
+            "vars": "ASS0801cda23f64_plantdamag",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_0801cda23f64_1593_add"
+        },
+        {
+            "name": "Any loss",
+            "codeQst": "anyloss",
+            "questionAsked": "Have you completely lost any of the trial plots?",
+            "id": 1605,
+            "dtype": 5,
+            "vars": "ASS0801cda23f64_anyloss",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_0801cda23f64_1605_add"
+        },
+        {
+            "name": "Plot loss",
+            "codeQst": "whichlost",
+            "questionAsked": "Did you lose any of your trial plots? If yes, which one?",
+            "id": 1606,
+            "dtype": 6,
+            "vars": "ASS0801cda23f64_whichlost",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_0801cda23f64_1606_add"
+        },
+        {
+            "name": "Diseases any",
+            "codeQst": "diseasesany",
+            "questionAsked": "Did you find any disease in the trial?",
+            "id": 1539,
+            "dtype": 5,
+            "vars": "ASSc7094017b20e_diseasesany",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_c7094017b20e_1539_add"
+        },
+        {
+            "name": "Plant damage",
+            "codeQst": "plantdamag",
+            "questionAsked": "Did any plant suffer damage during the trial?",
+            "id": 1593,
+            "dtype": 5,
+            "vars": "ASSc7094017b20e_plantdamag",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_c7094017b20e_1593_add"
+        },
+        {
+            "name": "Any loss",
+            "codeQst": "anyloss",
+            "questionAsked": "Have you completely lost any of the trial plots?",
+            "id": 1605,
+            "dtype": 5,
+            "vars": "ASSc7094017b20e_anyloss",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_c7094017b20e_1605_add"
+        },
+        {
+            "name": "Plot loss",
+            "codeQst": "whichlost",
+            "questionAsked": "Did you lose any of your trial plots? If yes, which one?",
+            "id": 1606,
+            "dtype": 6,
+            "vars": "ASSc7094017b20e_whichlost",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_c7094017b20e_1606_add"
+        },
+        {
+            "name": "Plant damage",
+            "codeQst": "plantdamag",
+            "questionAsked": "Did any plant suffer damage during the trial?",
+            "id": 1593,
+            "dtype": 5,
+            "vars": "ASSd203319dcce5_plantdamag",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_d203319dcce5_1593_add"
+        },
+        {
+            "name": "Any loss",
+            "codeQst": "anyloss",
+            "questionAsked": "Have you completely lost any of the trial plots?",
+            "id": 1605,
+            "dtype": 5,
+            "vars": "ASSd203319dcce5_anyloss",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_d203319dcce5_1605_add"
+        },
+        {
+            "name": "Plot loss",
+            "codeQst": "whichlost",
+            "questionAsked": "Did you lose any of your trial plots? If yes, which one?",
+            "id": 1606,
+            "dtype": 6,
+            "vars": "ASSd203319dcce5_whichlost",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_d203319dcce5_1606_add"
+        },
+        {
+            "name": "Diseases any",
+            "codeQst": "diseasesany",
+            "questionAsked": "Did you find any disease in the trial?",
+            "id": 1539,
+            "dtype": 5,
+            "vars": "ASSd203319dcce5_diseasesany",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_d203319dcce5_1539_add"
+        },
+        {
+            "name": "Grow again",
+            "codeQst": "grownext",
+            "questionAsked": "Which option would you like to grow again in the next season?",
+            "id": 1580,
+            "dtype": 6,
+            "vars": "ASSd203319dcce5_grownext",
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_d203319dcce5_1580_add"
+        }
+    ],
+    "Quantitative": [],
+    "linearRegression": [
+        {
+            "name": "Disease severity",
+            "codeQst": "diseaseseverit",
+            "id": 1592,
+            "dtype": 3,
+            "vars": [
+                "ASS0801cda23f64_diseaseseverit_a",
+                "ASS0801cda23f64_diseaseseverit_b",
+                "ASS0801cda23f64_diseaseseverit_c"
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0801cda23f64",
+                "ass_desc": "Vegetative",
+                "ass_days": 15,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "How was the percentage (%) of severity of the disease damage in  - Option A",
+                "How was the percentage (%) of severity of the disease damage in  - Option B",
+                "How was the percentage (%) of severity of the disease damage in  - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_0801cda23f64_1592_add"
+        },
+        {
+            "name": "Flowering (days to 50%)",
+            "codeQst": "flowering50",
+            "id": 1610,
+            "dtype": 3,
+            "vars": [
+                "ASS0299f02dbf87_flowering50_a",
+                "ASS0299f02dbf87_flowering50_b",
+                "ASS0299f02dbf87_flowering50_c"
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "0299f02dbf87",
+                "ass_desc": "Breeder assessment (reproductive)",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Days to 50% flowering - Option A",
+                "Days to 50% flowering - Option B",
+                "Days to 50% flowering - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_0299f02dbf87_1610_add"
+        },
+        {
+            "name": "Disease severity",
+            "codeQst": "diseaseseverit",
+            "id": 1592,
+            "dtype": 3,
+            "vars": [
+                "ASSc7094017b20e_diseaseseverit_a",
+                "ASSc7094017b20e_diseaseseverit_b",
+                "ASSc7094017b20e_diseaseseverit_c"
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "c7094017b20e",
+                "ass_desc": "Agronomic performance",
+                "ass_days": 30,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "How was the percentage (%) of severity of the disease damage in  - Option A",
+                "How was the percentage (%) of severity of the disease damage in  - Option B",
+                "How was the percentage (%) of severity of the disease damage in  - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_c7094017b20e_1592_add"
+        },
+        {
+            "name": "Yield (quantitative)",
+            "codeQst": "yieldperse",
+            "id": 1589,
+            "dtype": 2,
+            "vars": [
+                "ASSd203319dcce5_yieldperse_a",
+                "ASSd203319dcce5_yieldperse_b",
+                "ASSd203319dcce5_yieldperse_c"
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "d203319dcce5",
+                "ass_desc": "Post-harvest",
+                "ass_days": 60,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "The yield of  - Option A",
+                "The yield of  - Option B",
+                "The yield of  - Option C"
+            ],
+            "type": "linearregression",
+            "class": "decimal",
+            "codeForAnalysis": "linearregression_ASS_d203319dcce5_1589_add"
+        },
+        {
+            "name": "Yield (quantitative)",
+            "codeQst": "yieldperse",
+            "id": 1589,
+            "dtype": 2,
+            "vars": [
+                "ASS7dcdf37b0c54_yieldperse_a",
+                "ASS7dcdf37b0c54_yieldperse_b",
+                "ASS7dcdf37b0c54_yieldperse_c"
+            ],
+            "code": {
+                "project_id": "55a12afa27be",
+                "ass_cod": "7dcdf37b0c54",
+                "ass_desc": "Breeder assessment (post-harvest)",
+                "ass_days": 90,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "The yield of  - Option A",
+                "The yield of  - Option B",
+                "The yield of  - Option C"
+            ],
+            "type": "linearregression",
+            "class": "decimal",
+            "codeForAnalysis": "linearregression_ASS_7dcdf37b0c54_1589_add"
+        }
+    ]
+}

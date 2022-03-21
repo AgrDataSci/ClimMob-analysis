@@ -307,7 +307,7 @@ Figure 2.2 shows the estimated log-worth with `r ci_level*100`% confidence inter
 
 Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others in terms of '`r Ovname`'. When `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the alpha = `r sig_level`.
 
-```{r est_plot, dpi=dpi, fig.height=multcomp_h, fig.width=6, fig.cap=paste0("Figure 2.2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", Ovname,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
+```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 2.2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", Ovname,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
 try(logworth_plot[[reference_trait]], silent = TRUE)
 ```
 
@@ -332,16 +332,16 @@ A model-based recursive partitioning method [@Strobl2009] was used to determine 
 ```{r covar_statement}
 # make the statement if there is any covariate dropped
 covar_statement <- ""
-if (covarTRUE) {
-  covar_statement <- paste0("You provided the covariate(s): ", paste3(sort(covar$name), lan = language), ". ")
-  if (isTRUE(length(covar_dropped) > 0)) {
-    covar_statement <- paste0(covar_statement,
-      "However, the covariates(s) '", paste3(covar_dropped, lan = language),
-      "' were not used in the analysis, because they did not surpass ",
-      "the threshold of at least ", paste0(mincovar * 100, "%"), " valid entries."
-    )
-  }
-}
+# if (covarTRUE) {
+#   covar_statement <- paste0("You provided the covariate(s): ", paste3(sort(covar$name), lan = language), ". ")
+#   if (isTRUE(length(covar_dropped) > 0)) {
+#     covar_statement <- paste0(covar_statement,
+#       "However, the covariates(s) '", paste3(covar_dropped, lan = language),
+#       "' were not used in the analysis, because they did not surpass ",
+#       "the threshold of at least ", paste0(mincovar * 100, "%"), " valid entries."
+#     )
+#   }
+# }
 ```
 
 `r  paste(covar_statement, collapse='\n')`

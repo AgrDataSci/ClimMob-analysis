@@ -7,7 +7,7 @@
 pkg <- c("PlackettLuce","partykit","qvcalc","psychotools","jsonlite","knitr","rmarkdown",
          "pls","gtools","ggplot2","igraph","ggrepel","ggparty","patchwork","leaflet",
          "mapview","multcompView","png","plotrix","gridExtra","caret", "janitor",
-         "GGally")
+         "GGally", "ClimMobTools", "gosset")
 
 
 install.packages(pkg)

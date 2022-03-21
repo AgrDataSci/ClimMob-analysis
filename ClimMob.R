@@ -24,7 +24,8 @@ minitem     <- args[13] # minimum n of items tested, e.g. that all items are tes
 mincovar    <- args[14] # minimum proportion of covariates compared to total valid n
 sig_level   <- args[15] # significance level for the standard PL model
 sig_level_tree  <-  args[16] # significance level for the tree
-minsplit    <- args[17] # minimum n in each tree node
+minsplit    <- as.integer(args[17]) # minimum n in each tree node
+template    <- args[18] 
 
 if (isTRUE(is.na(reference))) {
   reference <- 1
@@ -97,7 +98,16 @@ done <- TRUE
 # 1. Read data and organize the rankings #### 
 try_data <- tryCatch({
   
-  source(paste0(fullpath, "modules/02_organize_ranking_data.R"))
+  # call pars sent by ClimMob
+  pars <- jsonlite::fromJSON(infoname)
+  pars <- decode_pars(pars)
+  
+  # the trial data 
+  cmdata <- jsonlite::fromJSON(outputname)
+  class(cmdata) <- union("CM_list", class(cmdata))
+  cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
+  
+  source(paste0(fullpath, "/modules/01_organize_ranking_data.R"))
   
 }, error = function(cond) {
     return(cond)
@@ -105,7 +115,7 @@ try_data <- tryCatch({
 )
 
 if (any_error(try_data)) {
-  e <- paste("Organize Ranking Data \n", try_data$message)
+  e <- paste("Organize Ranking Data: \n", try_data$message)
   error <- c(error, e)
   done <- FALSE
 }
@@ -115,7 +125,7 @@ if (any_error(try_data)) {
 # 2. Organise the rankings ####
 try_quanti_data <- tryCatch({
   
-  source(paste0(fullpath, "modules/02_organize_quantitative_data.R"))
+  source(paste0(fullpath, "/modules/02_organize_quantitative_data.R"))
     
 }, error = function(cond) {
   return(cond)
@@ -123,7 +133,7 @@ try_quanti_data <- tryCatch({
 )
 
 if (any_error(try_quanti_data)) {
-  e <- paste("Organize Quantitative Data \n", try_quanti_data$message)
+  e <- paste("Organize Quantitative Data: \n", try_quanti_data$message)
   error <- c(error, e)
   done <- FALSE
 }
@@ -132,6 +142,164 @@ if (any_error(try_quanti_data)) {
 # .......................................................
 # 3. Prepare summary tables / charts
 org_summ <- tryCatch({
+  # This module produces the summary tables and trial 
+  # overview, with information of traits assessed 
+  # frequency of participation and technologies 
+  # evaluated by participants
+  
+  #...........................................................
+  # This is the fist table in Section 1
+  # it shows the traits that were assessed in the project 
+  # and the number of answers used in the analysis
+  tbl_section1 <- lapply(trait_list, function(x){
+    data.frame(name = x$name,
+               collect = ClimMobTools:::.title_case(x$assessment),
+               quest = x$question,
+               n = sum(x$keep))
+  })
+  
+  tbl_section1 <- do.call(rbind, tbl_section1)  
+  
+  # rename columns in the original table
+  names(tbl_section1) <- c("Trait", "Data collection moment", 
+                           "Question asked", "Number of valid answers")
+  
+  #...........................................................
+  # Number of items tested
+  # This table show the frequencies where items were tested
+  # and how these frequencies were tested among groups, if any
+  itemtable <- cmdata[, grepl("package_item", names(cmdata))]
+  
+  itemtable <- data.frame(table(unlist(itemtable)))
+  
+  itemtable$x <- with(itemtable,
+                      round((Freq / nranker * 100), 1))
+  
+  itemtable$x <- with(itemtable,
+                      paste0(x, "%"))
+  
+  names(itemtable) <- c(Option, "Freq", "Relative freq")
+  
+  # check if any group is provided so it can be added to the itemtable
+  if (length(groups) > 0) {
+    
+    x <- unlist(cmdata[, grepl("package_item", names(cmdata))])
+    
+    ngroups <- table(cmdata$group)
+    
+    grouptbl <- c()
+    
+    for (i in seq_along(groups)) {
+      grouptbl <- cbind(grouptbl, 
+                        tapply(rep(cmdata$group, ncomp), x, function(x) {
+                          sum(x == groups[i], na.rm = TRUE)
+                        }))
+    }
+    
+    grouptbl <- as.data.frame(grouptbl)
+    
+    names(grouptbl) <- paste0(groups, " (n=", ngroups, ")")
+    
+    itemtable <- cbind(itemtable, grouptbl)
+    
+    rm(x)
+    
+  }
+  
+  itemtable$Abbreviation <- gosset:::.reduce(as.character(itemtable[, Option]))
+  
+  itemtable <- itemtable[union(c(Option, "Abbreviation"), names(itemtable))]
+  
+  rownames(itemtable) <- 1:nrow(itemtable)
+  
+  #...........................................................
+  # Participation during trial (response rate)
+  # it is a plot showing the rate of response in each 
+  # data collection moment, it takes the larger N response
+  # for each data collection moment
+  participation <- data.frame(n = nrow(cmdata),
+                              n_tot = nrow(cmdata),
+                              group = "Whole group",
+                              dc = "Registration")
+  
+  for(i in seq_along(trait_list)) {
+    
+    part <- data.frame(n = sum(trait_list[[i]]$keep),
+                       n_tot = nrow(cmdata),
+                       group = "Whole group",
+                       dc = trait_list[[i]]$assessment)
+    
+    participation <- rbind(participation, part)
+    
+  }
+  
+  if (length(groups) > 0) {
+    
+    participation2 <- data.frame(n = as.vector(table(cmdata$group)),
+                                 n_tot = as.vector(table(cmdata$group)),
+                                 group = names(table(cmdata$group)),
+                                 dc = "Registration")
+    
+    for(i in seq_along(trait_list)) {
+      
+      n <- table(cmdata[trait_list[[i]]$keep, "group"])
+      
+      p <- data.frame(group = groups,
+                      dc = trait_list[[i]]$assessment)
+      
+      part <- data.frame(n = as.vector(n),
+                         n_tot = as.vector(table(cmdata$group)),
+                         group = names(n))
+      
+      part <- merge(p, part, by = "group", all.x = TRUE)
+      
+      participation2 <- rbind(participation2, part)
+      
+    }
+    
+    participation <- rbind(participation, participation2)
+    
+  }
+  
+  # get the highest value in each data collection moment
+  participation <- split(participation, paste0(participation$dc, participation$group))
+  
+  participation <- lapply(participation, function(x){
+    i <- which.max(x$n)
+    x[i, ]
+  })
+  
+  participation <- do.call(rbind, participation)
+  
+  # transform into proportion to make it easier to visualize
+  participation$value_perc <- participation$n / participation$n_tot
+  
+  participation$dc <- ClimMobTools:::.title_case(participation$dc)
+  
+  participation$dc <- factor(participation$dc, levels = c("Registration", 
+                                                          ClimMobTools:::.title_case(unique(trait$assessmentName))))
+  
+  participation$group <- factor(participation$group, levels = c("Whole group",
+                                                                unique(groups)))
+  
+  partiplot <- 
+    ggplot(participation, aes(x = dc, y = value_perc, 
+                              group = group, color = group)) +
+    geom_line(size = 1) +
+    scale_y_continuous(limits = c(0, 1)) +
+    scale_colour_manual(values = col_pallet(length(unique(participation$group))), 
+                        name = "") +
+    theme_bw() +
+    theme(panel.background = element_blank(),
+          panel.grid = element_blank(), 
+          axis.text.x = element_text(angle = 35, hjust = 1),
+          legend.position = "top",
+          legend.text = element_text(size = 10, color = "grey20"),
+          axis.text = element_text(size = 10, color = "grey20"),
+          axis.title = element_text(size = 10, color = "grey20")) +
+    labs(x = "Trial stage", y = "Rate of response")
+  
+  
   
 }, error = function(cond) {
   return(cond)
@@ -253,42 +421,6 @@ org_pl <- tryCatch({
     #}
   }
   
-  # #...........................................................
-  # # Favorability scores showing a summary of the most 
-  # # voted items
-  # fav_tbl <- lapply(R, function(x){
-  #   summarise_favorite(x)
-  # })
-  # 
-  # fav_plot <- lapply(fav_tbl, function(x){
-  #   plot(x, abbreviate = FALSE) +
-  #     xlab("") +
-  #     theme_minimal() +
-  #     theme(axis.text.x = element_text(size = 10, color = "grey20"),
-  #           axis.text.y = element_text(size = 10, color = "grey20"),
-  #           panel.grid.major = element_blank(),
-  #           panel.grid.minor = element_blank(),
-  #           legend.position = "none")
-  # })
-  # 
-  # # Change the tables to be report friendly 
-  # fav_tbl <- lapply(fav_tbl, function(x){
-  #   
-  #   x$best <- paste0(round(x$best, 1), "%")
-  #   x$worst <- paste0(round(x$worst, 1), "%")
-  #   x$fav_score <- round(x$fav_score, 1)
-  #   
-  #   x <- x[,-which(grepl("wins", names(x)))]
-  #   
-  #   names(x) <- c(Option,"N","Top ranked","Bottom ranked",
-  #                      "Net favorability score")
-  #   
-  #   x
-  #   
-  # })
-  # 
-  # fav_traits <- list(fav_tbl, fav_plot)
-  
   #...........................................................
   # Fit Plackett-Luce model 
   mod <- lapply(R, function(x){
@@ -341,24 +473,22 @@ org_pl <- tryCatch({
   aov_tbl <- list()
   for (i in seq_along(trait_list)) {
     a <- anovas[[i]]
-    a[2, "model"] <- trait_list[[i]]$name
+    a[2, "Model"] <- trait_list[[i]]$name
     a[,5] <- paste(formatC(a[,5], format = "e", digits = 2),
                    stars.pval(a[,5]))
     aov_tbl[[i]] <- a
   }
   
-  # Plot with log-worth and multi comparison analysis 
-  logworth_plot <- lapply(mod, function(x){
-    # and this is the chart with multi comparison analysis
-    plot_logworth(x, ref = reference) +
-      labs(y = Option, x = "Log-worth")
-    
-  })
-  
   #...........................................................
   # Bar plot with worth parameters for each trait
   worth_plot <- lapply(mod, function(x){
-    plot_worth(x)
+    worth_bar(x, ref = reference) +
+      labs(y = Option, x = "Worth")
+  })
+  
+  # Plot log worth
+  logworth_plot <- lapply(mod, function(x){
+    plot_logworth(mod[[1]]) + labs(y = Option)
   })
   
   #...........................................................
@@ -367,11 +497,6 @@ org_pl <- tryCatch({
   overview_mod <- lapply(mod, function(x) {
     
     ps <- anova.PL(x)[2,5]
-    
-    # summ <- multcompPL(x,
-    #                    ref = reference,
-    #                    threshold = sig_level, 
-    #                    adjust = ci_adjust)
     
     summ <- itempar(x, log = TRUE, ref = reference)
     
@@ -383,9 +508,6 @@ org_pl <- tryCatch({
       bests <- bests[1:3]
     }
     
-    # get the three worst items
-    # worsts <- as.character(rev(summ[grepl(summ[nrow(summ),"group"], 
-    #                                         summ[, "group"]), "term"]))
     worsts <- names(sort(summ[summ < 0]))
     # if more than three, subset to get only three
     if (isTRUE(length(worsts) > 3)) {
@@ -424,8 +546,8 @@ org_pl <- tryCatch({
   
   #...........................................................
   # Head to head visualization of each item by trait
-  worthmap <- winprob_map(mod[-reference_trait],
-                          traits = traits_names[-reference_trait])
+  worthmap <- worth_map(mod[-reference_trait],
+                        labels = traits_names[-reference_trait])
   
   
   
@@ -438,7 +560,6 @@ if (any_error(org_pl)) {
   e <- org_pl$message
   error <- c(error, e)
   
-  logworth_plot <- list()
   mod <- list()
   worth_plot <- list()
   anovas <- list()
@@ -456,7 +577,7 @@ org_pladmm <- tryCatch({
   
   if (nothertraits > 0) {
     
-    features <- combine_coeffs(mod, log = TRUE, vcov = FALSE)
+    features <- gosset:::.combine_coeffs(mod, log = TRUE, vcov = FALSE)
     
     features <- features[,-reference_trait]
     
@@ -553,17 +674,44 @@ org_pltree <- tryCatch({
     
     # rename covariates to avoid duplicated strings, in case the same 
     # question was made in different data collection moments 
+    covar <- pars$covariates
     covar$codeQst <- rename_duplicates(covar$codeQst)
     covar$name    <- rename_duplicates(covar$name, sep = " ")
     
+    # check if longlat is required
+    if (any(grepl("geotrial", covar$codeQst))) {
+      
+      index <- which(grepl("geotrial", covar$codeQst))[1]
+      
+      if (is.na(index)) next
+      
+      covar[index, "nameString"] <- paste0("ASS",covar$assessmentId[index],"__longitude")
+      covar[index, "name"] <- paste(covar[index, "name"], "Longitude")
+      
+      covar[nrow(covar) + 1, ] <- covar[index, ]
+      covar[nrow(covar), "nameString"] <- paste0("ASS",covar$assessmentId[index],"__latitude")
+      covar[nrow(covar), "name"] <- paste(covar[nrow(covar), "name"], "Latitude")
+      
+    }
     
     # add the string $ to indicate the end of pattern
     strings <- paste0(covar$nameString, "$")
     
     # check for the full names
     for(i in seq_along(covar$nameString)){
-      covar$nameString[i] <- names(cmdata[which(grepl(strings[i], names(cmdata)))])
+      
+      index <- which(grepl(strings[i], names(cmdata)))[1]
+      
+      if (is.na(index)){ 
+        covar[i, ] <- NA
+        next
+      }
+      
+      covar$nameString[i] <- names(cmdata[index])
+      
     }
+    
+    covar <- na.omit(covar)
     
     strings <- covar$nameString
     
@@ -621,7 +769,7 @@ org_pltree <- tryCatch({
     trait_list[[reference_trait]]$keep_covariate <- keep
     
     # if no covariate left out put a pseudo variable
-    if(isTRUE(dim(covar)[[1]] == 0)) {
+    if (isTRUE(dim(covar)[[1]] == 0)) {
       
       covarTRUE <- FALSE
       
@@ -681,7 +829,7 @@ org_pltree <- tryCatch({
   nvar <- length(covar$nameString)
   
   # rename covariates with the name taken from ClimMob
-  names(Gdata) <- c(covar$codeQst)
+  names(Gdata) <- gsub(" ", "", ClimMobTools:::.title_case(covar$name))
   Gdata <- cbind(G, Gdata)
   nG <- nrow(Gdata)
   rownames(Gdata) <- 1:nG
@@ -691,7 +839,7 @@ org_pltree <- tryCatch({
   var_keep <- character(0L)
   best <- TRUE
   counter <- 1
-  exp_var <- covar$codeQst
+  exp_var <- names(Gdata)[-1]
   
   cat("Selecting the best covariate for Plackett-Luce trees \n")
   
@@ -750,8 +898,7 @@ org_pltree <- tryCatch({
   }
   
   if (length(var_keep) == 0) {
-    var_keep <- names(Gdata)[2]
-    minsplit <- nG
+    var_keep <- names(Gdata)[-1]
   }
   
   treeformula <- as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
@@ -770,7 +917,7 @@ org_pltree <- tryCatch({
   if (isTREE) { 
     
     # plot the tree (if any)
-    plottree <- gosset:::plot_tree(tree_f, ci.level = ci_level)
+    plottree <- plot(tree_f, ci.level = ci_level)
     
     node_ids <- nodeids(tree_f, terminal = TRUE)
     

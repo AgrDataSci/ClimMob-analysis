@@ -357,6 +357,16 @@ paste3 <- function(x, lan = "en", ...) {
 #'  tricotVSlocal: the comparison between tested items and the local item
 #'  covariates: the explanatory variables
 #'  linear: strings for the variables to be used in linear regression
+#' @examples
+#' library("jsonlite")
+#' x <- fromJSON("tests/testdata1/data.json")
+#' 
+#' pars <- decode_pars(x)
+#' 
+#' names(pars)
+#' 
+#' pars
+
 #' @noRd
 decode_pars <- function(x) {
   
@@ -448,6 +458,8 @@ decode_pars <- function(x) {
     
     rownames(questions) <- 1:nrow(questions)
     
+    questions$assessmentName <- gsub("[[:punct:]]", "", questions$assessmentName)
+    
     result[["traits"]] <- questions
     
   }else{
@@ -502,6 +514,8 @@ decode_pars <- function(x) {
       
     }
     
+    covariates$assessmentName <- gsub("[[:punct:]]", "", covariates$assessmentName)
+    
     result[["covariates"]] <- covariates
     
   }else{
@@ -552,6 +566,8 @@ decode_pars <- function(x) {
       
     }
     
+    questions$assessmentName <- gsub("[[:punct:]]", "", questions$assessmentName)
+    
     rownames(questions) <- 1:nrow(questions)
     
     result[["linear"]] <- questions
@@ -563,6 +579,52 @@ decode_pars <- function(x) {
   }
   
   return(result)
+  
+}
+
+#' Plot log-worth
+#' @param x a multicomp dataframe
+#' @param level the confidence interval level
+#' @param abbreviate logical to abbreviate labels in the chart
+plot_logworth <- function(x, intervalWidth = 2, ...) {
+  
+  frame <- qvcalc(x, ...)$qvframe
+  
+  faclevels <- factor(row.names(frame), levels = row.names(frame))
+  
+  xvalues <- seq(along = faclevels)
+  
+  est <- frame$estimate
+  
+  se <- frame$quasiSE
+  
+  tops <- est + (intervalWidth * se)
+  
+  tails <- est - (intervalWidth * se)
+  
+  range <- max(tops) - min(tails)
+  
+  x <- data.frame(est, se, faclevels, tops, tails)
+  
+  p <- ggplot(data = x,
+              aes(x = faclevels, 
+                  y = est,
+                  ymax = tops,
+                  ymin = tails)) +
+    geom_hline(yintercept = 0, 
+               colour = "#E5E7E9", size = 0.8) +
+    geom_point() +
+    geom_errorbar(width = 0.1) +
+    #geom_text(vjust = 1.2) +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(),
+          axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,
+                                     size = 10, color = "grey20"),
+          axis.text.y = element_text(size = 10, color = "grey20"),
+          text = element_text(color = "grey20")) +
+    labs(x = "Log-worth", y = "Item")
+  
+  return(p)
   
 }
 
