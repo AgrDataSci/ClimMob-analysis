@@ -24,7 +24,8 @@ minitem     <- args[13] # minimum n of items tested, e.g. that all items are tes
 mincovar    <- args[14] # minimum proportion of covariates compared to total valid n
 sig_level   <- args[15] # significance level for the standard PL model
 sig_level_tree  <-  args[16] # significance level for the tree
-minsplit    <- args[17] # minimum n in each tree node
+minsplit    <- as.integer(args[17]) # minimum n in each tree node
+template    <- args[18] 
 
 if (isTRUE(is.na(reference))) {
   reference <- 1
@@ -84,7 +85,9 @@ library("png")
 library("plotrix")
 library("gridExtra")
 library("caret")
-source(paste0(fullpath, "/R/functions.R"))
+library("janitor")
+library("GGally")
+source(paste0(fullpath, "/modules/helper_02_internal_functions.R"))
 
 # Two objects to begin with that will be used to verify the process
 error <- NULL
@@ -92,78 +95,19 @@ done <- TRUE
 
 # ................................................................
 # ................................................................
-# 1. Read data #### 
+# 1. Read data and organize the rankings #### 
 try_data <- tryCatch({
+  
   # call pars sent by ClimMob
   pars <- jsonlite::fromJSON(infoname)
-  pars <- ClimMobTools:::.decode_pars(pars)
+  pars <- decode_pars(pars)
   
   # the trial data 
-  # add the class "CM_list" so it can be passed to 
   cmdata <- jsonlite::fromJSON(outputname)
   class(cmdata) <- union("CM_list", class(cmdata))
-  # coerce to data.frame() 
   cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
   
-  # Get some info from the data and ClimMob parameters 
-  projname <- cmdata[1, "package_project_name"]
-  Option       <- ClimMobTools:::.title_case(option)
-  options      <- ClimMobTools:::.pluralize(option)
-  rankers      <- ClimMobTools:::.pluralize(ranker)
-  nranker      <- nrow(cmdata)
-  items        <- cmdata[, grepl("package_item", names(cmdata))]
-  itemnames    <- names(items)
-  items        <- unique(sort(unlist(items)))
-  nitems       <- length(unique(sort(unlist(items))))
-  covar        <- pars$covariates
-  covarTRUE    <- isTRUE(length(covar) > 0)
-  ntrait       <- dim(pars$traits)[[1]]
-  nothertraits <- ntrait - 1
-  ncomp        <- length(itemnames)
-  nquest       <- pars$traits$nQst[1]
-  
-  # select which function will be used to create the Plackett-Luce rankings
-  # it will depend on how many items each participant compares
-  if (ncomp == 3) {
-    rankwith <- "rankTricot"
-  }
-  
-  if (ncomp > 3) {
-    rankwith <- "rank_numeric"
-  }
-  
-  # minimum proportion of valid entries in tricot vs local
-  # this will be computed based on the valid entries of the reference
-  # trait after validations
-  mintricotVSlocal <- 0.90
-  
-  # method for adjustments for confidence intervals and setting widths for comparison. 
-  ci_adjust <- "BH"
-  
-  # confidence interval level for comparison plots with error bars
-  ci_level <- 0.84
-  
-  # resolution of display items
-  dpi <- 400
-  out_width <- "100%"
-  
-  # define height of plots based on items
-  favplot_h <- nitems * 0.4
-  agreem_h <- ntrait * 0.6
-  multcomp_h <- 4
-  worthmap_h <- ntrait
-  worthmap_w <- ntrait + 0.5
-  
-  if (favplot_h < 5) favplot_h <- 5
-  if (favplot_h > 8) favplot_h <- 7.5
-  if (agreem_h < 6)  agreem_h <- 6
-  if (agreem_h > 8)  agreem_h <- 7.5
-  if (worthmap_h < 7)  worthmap_h <- 7
-  if (worthmap_h > 8)  worthmap_h <- 8
-  if (worthmap_w < 7)  worthmap_w <- worthmap_h + 0.5
-  if (worthmap_w > 8)  worthmap_w <- worthmap_h + 0.5
-  
-  dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
+  source(paste0(fullpath, "/modules/01_organize_ranking_data.R"))
   
 }, error = function(cond) {
     return(cond)
@@ -171,7 +115,7 @@ try_data <- tryCatch({
 )
 
 if (any_error(try_data)) {
-  e <- try_data$message
+  e <- paste("Organize Ranking Data: \n", try_data$message)
   error <- c(error, e)
   done <- FALSE
 }
@@ -179,273 +123,17 @@ if (any_error(try_data)) {
 # ................................................................
 # ................................................................
 # 2. Organise the rankings ####
-# This is to check for missing data and create a vector
-# for each characteristic that will be used to filter 
-# inconsistent data
-org_rank <- tryCatch({
+try_quanti_data <- tryCatch({
   
-  # check whether a request to split the data by groups (gender, location, etc.) is provided
-  if (length(groups) > 0) {
+  source(paste0(fullpath, "/modules/02_organize_quantitative_data.R"))
     
-    group_index <- integer()
-    for(i in seq_along(groups)) {
-      group_index <- c(group_index, which(grepl(groups[i], names(cmdata)))[1])
-    }
-    
-    group_index <- group_index[!is.na(group_index)]
-    
-    groups <- names(cmdata)[group_index]
-    
-    if (length(groups) > 1) {
-      
-      keep <- rowSums(apply(cmdata[,groups], 2, function(x) {is.na(x)})) == 0
-      
-      cmdata <- cmdata[keep, ]
-      
-      cmdata$group <- apply(cmdata[,groups], 1, function(x) {paste(x, collapse = " - ")})
-      
-    }
-    
-    if (length(groups) == 1) {
-      
-      cmdata <- cmdata[!is.na(cmdata[,groups]), ]
-      
-      cmdata$group <- cmdata[,groups]
-      
-    }
-    
-    # if any of the groups has less than 15% of the total data
-    # then the groups will not be considered
-    if (any(table(cmdata$group) / nrow(cmdata) < 0.15)) {
-      cmdata$group <- NA
-    }
-    
-    # if more than 9 groups
-    # then the groups will not be considered
-    if (length(unique(cmdata$group)) > 9) {
-      cmdata$group <- NA
-    }
-    
-    if (length(groups) == 0) {
-      cmdata$group <- NA
-    }
-    
-  }else{
-    cmdata$group <- NA
-  }
-  
-  groups <- sort(unique(cmdata$group))
-  
-  if (any(is.na(groups))) {
-    groups <- character()
-  }
-  
-  if (length(groups) == 0) {
-    groups <- character()
-  }
-  
-  # rename traits to avoid duplicated strings, in case the same 
-  # trait is tested in different data collection moments 
-  trait <- pars$traits
-  trait$codeQst <- rename_duplicates(trait$codeQst)
-  trait$name    <- rename_duplicates(trait$name, sep = " ")
-  
-  tricotVSlocal <- length(pars$tricotVSlocal) > 0
-  
-  # get a vector with trait names matched with the assessment id
-  # do this because the same trait can be assessed in different data collection moments
-  trait_names <- trait$codeQst
-  
-  # find the index for the reference trait, the one that is going to be used 
-  # as main trait for the analysis
-  reference_trait <- which(trait$traitOrder == "referenceTrait")
-  
-  # this list will keep the logical vectors to filter the data per 
-  # remaining trait, the ones that passed the evaluation on minimal 
-  # amount of missing data 
-  trait_list <- list()
-  
-  # make a vector to register any possible trait to be dropped due to few 
-  # data availability
-  trait_dropped <- character()
-  
-  # run over traits to filter NAs and prepare for PlackettLuce rankings
-  for(i in seq_along(trait_names)){
-    
-    result <- list()
-    
-    # get the question full name
-    trait_i <- as.character(trait[i, paste0("nameString", seq_len(nquest))])
-    
-    # look for it in cmdata
-    for(j in seq_along(trait_i)) {
-      
-      trait_i[j] <- names(cmdata[which(grepl(trait_i[j], names(cmdata)))])
-      
-    }
-    
-    # replace Not observed entries with NA
-    rpl <- cmdata[trait_i]
-    rpl[rpl == "Not observed"] <- NA
-    cmdata[trait_i] <- rpl
-    
-    # if all the three items are tied than set this entry as NA
-    # as it results in issues on PlackettLuce S3 methods
-    tied <- as.vector(apply(cmdata[trait_i], 1, function(x) {
-      all(x == "Tie") & all(!is.na(x))
-    }))
-    
-    cmdata[tied, trait_i] <- NA
-    
-    # if best and worst are recorded with the same letter
-    equal <- as.vector(apply(cmdata[trait_i], 1, function(x) {
-      x[1] == x[2] & all(!is.na(x))
-    }))
-    
-    cmdata[equal, trait_i] <- NA
-    
-    # check for data completeness in this trait
-    # should return a vector with TRUE, FALSE, 
-    # where TRUE = complete, FALSE = missing
-    keep <- apply(cmdata[trait_i], 1, is.na)
-    keep <- as.vector(colSums(keep) == 0)
-    
-    # check if number of missing data is lower than the threshold
-    # at least that the number of valid entries is higher than missper (5)
-    cond1 <- sum(keep) > minN
-    
-    # at least that all the items are tested twice
-    cond2 <- all(table(unlist(cmdata[keep, itemnames])) >= minitem)
-    
-    keepit <- all(cond1, cond2)
-    
-    # if lower than missper it will be dropped
-    if (isFALSE(keepit)) {
-      trait_dropped <- c(trait_dropped, trait$name[i])
-      next
-    } 
-    
-    # if required, add comparison with local item
-    if (isTRUE(i == reference_trait & tricotVSlocal)) {
-      
-      # some times the user can add this question twice, I still don't have a solution for 
-      # this, so I will use the one that is related to the reference trait
-      ovsl <- which(names(cmdata) %in% pars$tricotVSlocal[1:3])
-      
-      if (length(ovsl) == 3) {
-        ovsl <- names(cmdata)[ovsl]
-        # check for data completeness
-        keep2 <- apply(cmdata[c(itemnames, ovsl)], 1, is.na)
-        keep2 <- as.vector(colSums(keep2) == 0)
-        
-        # combine with the vector of reference trait
-        keep2 <- keep & keep2
-        
-        # check if it has the minimal number of observations
-        # this should be combined with the available data in the reference
-        # trait as they will be filtered together
-        dropit2 <- sum(keep2 & keep) / sum(keep) < mintricotVSlocal
-        
-        # if is below the minimal number of observations then the comparison
-        # with the local item is ignored
-        if (isTRUE(dropit2)) {
-          trait_dropped <- c(trait_dropped, "Comparison with local")
-          tricotVSlocal <- FALSE
-        }
-        
-        result[["keep2"]] <- keep2
-        
-        result[["tricotVSlocal"]] <- ovsl
-        
-      }else{
-      tricotVSlocal <- FALSE
-      result[["keep2"]] <- rep(FALSE, nranker)
-      result[["tricotVSlocal"]] <- character()
-    }
-    }
-    
-    # logical vector to subset the data 
-    result[["keep"]]       <- keep  
-    # string names to find the data in cmdata
-    result[["strings"]]    <- trait_i
-    # the trait name
-    result[["name"]]       <- trait$name[i]
-    # the trait code
-    result[["code"]]       <- trait$codeQst[i]
-    # the questions that were asked 
-    result[["question"]]   <- paste(trait[i, paste0("questionAsked", seq_len(nquest))], collapse = ", ")
-    # the data collection moment
-    result[["assessment"]] <- trait$assessmentName[i]
-    # days after the beginning of the trail for the data collection moment
-    result[["day"]]        <- trait$assessmentDay[i]
-    # the assessment id
-    result[["assessmentid"]] <- trait$assessmentId[i]
-    
-    trait_list[[trait_names[i]]] <- result
-    
-  }
-  
-  # if all the traits were removed then make a report and stop the process here 
-  if (all(trait$name %in% trait_dropped)) {
-    rmarkdown::render(paste0(fullpath, "/report/mainreport_no_traits.Rmd"),
-                      output_dir = outputpath,
-                      output_format = "word_document",
-                      output_file = paste0("climmob_main_report.docx"))
-    quit()
-  }
-  
-  # refresh the number of traits
-  ntrait <- length(trait_list)
-  
-  # refresh the index for the reference trait in case it changed due to 
-  # dropped trait
-  reference_trait <- trait[reference_trait, "codeQst"]
-  reference_trait <- which(names(trait_list) %in% reference_trait)
-  
-  # if for some reason the reference trait was dropped, than take the last one
-  if (length(reference_trait) == 0) {
-    reference_trait <- length(trait_list) 
-    # and coerce tricotVSlocal to FALSE to prevent errors in matching strings
-    tricotVSlocal <- FALSE
-  }
-  
-  # get the name of the reference trait both in lower and title case
-  ovname <- tolower(trait_list[[reference_trait]]$name)
-  Ovname <- ClimMobTools:::.title_case(trait_list[[reference_trait]]$name)
-  
-  # the name of other traits combined with the name of assessments
-  if (length(unique(trait$assessmentName)) > 1) {
-    
-    traits_names <- as.vector(unlist(lapply(trait_list, function(x) {
-      paste0(x$name, " [", ClimMobTools:::.title_case(x$assessment), "]")
-    })))
-    
-  }else{
-    
-    traits_names <- as.vector(unlist(lapply(trait_list, function(x) {
-      x$name
-    })))
-    
-  }
-  
-  
-  traits_code <- as.vector(unlist(lapply(trait_list, function(x) {
-    x$code
-  })))
-  
-  # remove any potential special character
-  traits_code <- gsub("[[:punct:]]", "", traits_code)
-  
-  # refresh number of other traits
-  nothertraits <- length(trait_list) - 1
-  
 }, error = function(cond) {
   return(cond)
 }
 )
 
-if (any_error(org_rank)) {
-  e <- org_rank$message
+if (any_error(try_quanti_data)) {
+  e <- paste("Organize Quantitative Data: \n", try_quanti_data$message)
   error <- c(error, e)
   done <- FALSE
 }
@@ -454,6 +142,10 @@ if (any_error(org_rank)) {
 # .......................................................
 # 3. Prepare summary tables / charts
 org_summ <- tryCatch({
+  # This module produces the summary tables and trial 
+  # overview, with information of traits assessed 
+  # frequency of participation and technologies 
+  # evaluated by participants
   
   #...........................................................
   # This is the fist table in Section 1
@@ -465,13 +157,13 @@ org_summ <- tryCatch({
                quest = x$question,
                n = sum(x$keep))
   })
-
+  
   tbl_section1 <- do.call(rbind, tbl_section1)  
   
   # rename columns in the original table
   names(tbl_section1) <- c("Trait", "Data collection moment", 
                            "Question asked", "Number of valid answers")
- 
+  
   #...........................................................
   # Number of items tested
   # This table show the frequencies where items were tested
@@ -501,7 +193,7 @@ org_summ <- tryCatch({
       grouptbl <- cbind(grouptbl, 
                         tapply(rep(cmdata$group, ncomp), x, function(x) {
                           sum(x == groups[i], na.rm = TRUE)
-                          }))
+                        }))
     }
     
     grouptbl <- as.data.frame(grouptbl)
@@ -536,7 +228,7 @@ org_summ <- tryCatch({
                        n_tot = nrow(cmdata),
                        group = "Whole group",
                        dc = trait_list[[i]]$assessment)
-
+    
     participation <- rbind(participation, part)
     
   }
@@ -566,7 +258,7 @@ org_summ <- tryCatch({
     }
     
     participation <- rbind(participation, participation2)
-  
+    
   }
   
   # get the highest value in each data collection moment
@@ -606,6 +298,8 @@ org_summ <- tryCatch({
           axis.text = element_text(size = 10, color = "grey20"),
           axis.title = element_text(size = 10, color = "grey20")) +
     labs(x = "Trial stage", y = "Rate of response")
+  
+  
   
 }, error = function(cond) {
   return(cond)
@@ -683,141 +377,8 @@ if (any_error(org_lonlat)) {
 
 # .......................................................
 # .......................................................
-# 5. Correlation between traits and the reference #####
-org_kendall <- tryCatch({
-  
-  if (isTRUE(nothertraits > 0)) {
-    
-    isAGREE <- TRUE
-    
-    # filter data so it matches the dims in all traits
-    # first filter the traits, as sometimes a particular trait 
-    # can be completely missing and affect the entire analysis
-    keep <- do.call(cbind, lapply(trait_list, function(x) x$keep))
-    
-    # not less than 70% of the number of available data for the 
-    # reference trait
-    keep1 <- colSums(keep)
-    
-    keep1 <- keep1 >= floor(keep1[reference_trait] * 0.7)
-    
-    # now for the data
-    keep2 <- rowSums(keep[, keep1])
-    
-    keep2 <- keep2 == sum(keep1)
-    
-    # list of rankings
-    compare <- list()
-    
-    for (k in seq_along(c("all", groups))) {
-      
-      cp <- list()
-      
-      if (k == 1) keep_k <- keep2
-      if (k != 1) keep_k <- keep2 & cmdata$group == groups[k - 1]
-      
-      for (j in 1:length(trait_list[keep1])) {
-        tl <- trait_list[keep1][j]
-        
-        a <- list(cmdata[keep_k, ],
-                  items = itemnames,
-                  input = c(tl[[1]]$strings))
-        
-        cp[[j]] <- do.call(rankwith, args = a)
-        
-      }
-      
-      compare[[k]] <- cp
-      
-    }
-    
-    reftrait <- which(names(trait_list[keep1]) %in% names(trait_list)[reference_trait])
-    
-    agreement <- lapply(compare, function(x) {
-      summarise_agreement(x[[reftrait]], 
-                          x[-reftrait], 
-                          labels = traits_names[keep1][-reftrait])
-    })
-    
-    agreement <- do.call(rbind, agreement)
-    
-    agreement$group <- rep(c("Whole group", groups), each = length(reftrait))
-    
-    agreement$group <- factor(agreement$group, levels = c("Whole group", groups))
-    
-    agreement$labels <- factor(agreement$labels, levels = traits_names[keep1][-reftrait])
-    
-    # Plot kendall tau
-    agreement$kendall[agreement$kendall < 0] <- 0
-    agreement$kendall <- agreement$kendall / 100
-    
-    pagreement <- 
-      ggplot(agreement,
-             aes(x = kendall, y = labels, fill = group)) +
-      geom_bar(stat = "identity", position = "dodge", show.legend = FALSE) +
-      facet_wrap(. ~ group) +
-      scale_x_continuous(labels = c(0, 0.25, 0.50, 0.75, 1), 
-                         breaks = c(0, 0.25, 0.50, 0.75, 1), 
-                         limits = c(0, 1)) +
-      labs(x = "", y = "") +
-      theme_minimal() +  
-      theme(legend.text = element_text(color = "grey20"),
-            axis.text = element_text(color = "grey20"),
-            strip.text.x = element_text(color = "grey20"),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank()) +
-      scale_fill_manual(values = col_pallet(length(groups) + 1))
-    
-    
-    agreement <- agreement[agreement$group == "Whole group", ]
-    
-    agreement$labels <- as.character(agreement$labels)
-    
-    strongest_link <- c(agreement[[which.max(agreement$kendall), "labels"]],
-                        round(max(agreement$kendall), 3))
-    
-    
-    weakest_link   <- c(agreement[[which.min(agreement$kendall), "labels"]],
-                        round(min(agreement$kendall), 3))
-    
-    agreement <- agreement[,-5]
-    
-    agreement[c(3:4)] <- lapply(agreement[c(3:4)], function(x) as.character(round(x, 1)))
-    
-    agreement[,2] <- as.character(round(agreement[,2], 3))
-    
-    names(agreement) <- c("Trait", "Kendall tau", "Agreement with best (%)", "Agreement with worst (%)")
-    
-  } 
-  
-  if (isTRUE(nothertraits == 0)) {
-    isAGREE <- FALSE
-    strongest_link <- character()
-    weakest_link <- character()
-    pagreement <- 0L
-    agreement <- data.frame()
- }
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_kendall)) {
-  e <- org_kendall$message
-  error <- c(error, e)
-  
-  isAGREE <- FALSE
-  strongest_link <- character()
-  weakest_link <- character()
-  pagreement <- 0L
-  agreement <- data.frame()
-  
-}
-
 # .......................................................
-# .......................................................
-# 6. Fit PlackettLuce model ####
+# 7. Fit PlackettLuce model ####
 # This will use the rankings from each trait 
 # to fit a PlackettLuce model and do
 # some exploratory analysis
@@ -861,46 +422,45 @@ org_pl <- tryCatch({
   }
   
   #...........................................................
-  # Favorability scores showing a summary of the most 
-  # voted items
-  fav_tbl <- lapply(R, function(x){
-    summarise_favorite(x)
-  })
-  
-  fav_plot <- lapply(fav_tbl, function(x){
-    plot(x, abbreviate = FALSE) +
-      xlab("") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(size = 10, color = "grey20"),
-            axis.text.y = element_text(size = 10, color = "grey20"),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            legend.position = "none")
-  })
-  
-  # Change the tables to be report friendly 
-  fav_tbl <- lapply(fav_tbl, function(x){
-    
-    x$best <- paste0(round(x$best, 1), "%")
-    x$worst <- paste0(round(x$worst, 1), "%")
-    x$fav_score <- round(x$fav_score, 1)
-    
-    x <- x[,-which(grepl("wins", names(x)))]
-    
-    names(x) <- c(Option,"N","Top ranked","Bottom ranked",
-                       "Net favorability score")
-    
-    x
-    
-  })
-  
-  fav_traits <- list(fav_tbl, fav_plot)
-  
-  #...........................................................
   # Fit Plackett-Luce model 
   mod <- lapply(R, function(x){
     PlackettLuce(x)
   })
+  
+  # Kendall tau
+  compare_to <- mod[-reference_trait]
+  baseline_trait <- coef(mod[[reference_trait]], log = FALSE)
+  baseline_trait <- baseline_trait[items]
+  kendall <- lapply(compare_to, function(x){
+    x <- coef(x, log = FALSE)
+    x <- x[items]
+    kendallTau(x, baseline_trait)
+  })
+  
+  kendall <- do.call(rbind, kendall)
+  
+  kendall$trait <- rename_duplicates(traits_names[-reference_trait])
+  
+  kendall <- kendall[rev(order(kendall$kendallTau)), ]
+  
+  kendall <- kendall[,-2]
+  
+  isAGREE <- nrow(kendall) > 1
+  
+  if (isAGREE) {
+    strongest_link <- c(kendall$trait[1],
+                        round(kendall$kendallTau[1], 2))
+    
+    weakest_link <- c(kendall$trait[nrow(kendall)],
+                      round(kendall$kendallTau[nrow(kendall)], 2))
+    
+    kendall <- kendall[,c(2,1)]
+    
+    kendall[,2] <- round(kendall[,2], 3)
+    
+    names(kendall) <- c("Trait", "Kendall tau")
+    
+  }
   
   #...........................................................
   # Analysis of variance
@@ -913,24 +473,22 @@ org_pl <- tryCatch({
   aov_tbl <- list()
   for (i in seq_along(trait_list)) {
     a <- anovas[[i]]
-    a[2, "model"] <- trait_list[[i]]$name
+    a[2, "Model"] <- trait_list[[i]]$name
     a[,5] <- paste(formatC(a[,5], format = "e", digits = 2),
                    stars.pval(a[,5]))
     aov_tbl[[i]] <- a
   }
   
-  # Plot with log-worth and multi comparison analysis 
-  logworth_plot <- lapply(mod, function(x){
-    # and this is the chart with multi comparison analysis
-    plot_logworth(x, ref = reference) +
-      labs(y = Option, x = "Log-worth")
-    
-  })
-  
   #...........................................................
   # Bar plot with worth parameters for each trait
   worth_plot <- lapply(mod, function(x){
-    plot_worth(x)
+    worth_bar(x, ref = reference) +
+      labs(y = Option, x = "Worth")
+  })
+  
+  # Plot log worth
+  logworth_plot <- lapply(mod, function(x){
+    plot_logworth(mod[[1]]) + labs(y = Option)
   })
   
   #...........................................................
@@ -939,11 +497,6 @@ org_pl <- tryCatch({
   overview_mod <- lapply(mod, function(x) {
     
     ps <- anova.PL(x)[2,5]
-    
-    # summ <- multcompPL(x,
-    #                    ref = reference,
-    #                    threshold = sig_level, 
-    #                    adjust = ci_adjust)
     
     summ <- itempar(x, log = TRUE, ref = reference)
     
@@ -955,9 +508,6 @@ org_pl <- tryCatch({
       bests <- bests[1:3]
     }
     
-    # get the three worst items
-    # worsts <- as.character(rev(summ[grepl(summ[nrow(summ),"group"], 
-    #                                         summ[, "group"]), "term"]))
     worsts <- names(sort(summ[summ < 0]))
     # if more than three, subset to get only three
     if (isTRUE(length(worsts) > 3)) {
@@ -996,8 +546,8 @@ org_pl <- tryCatch({
   
   #...........................................................
   # Head to head visualization of each item by trait
-  worthmap <- winprob_map(mod[-reference_trait],
-                          traits = traits_names[-reference_trait])
+  worthmap <- worth_map(mod[-reference_trait],
+                        labels = traits_names[-reference_trait])
   
   
   
@@ -1010,7 +560,6 @@ if (any_error(org_pl)) {
   e <- org_pl$message
   error <- c(error, e)
   
-  logworth_plot <- list()
   mod <- list()
   worth_plot <- list()
   anovas <- list()
@@ -1028,7 +577,7 @@ org_pladmm <- tryCatch({
   
   if (nothertraits > 0) {
     
-    features <- combine_coeffs(mod, log = TRUE, vcov = FALSE)
+    features <- gosset:::.combine_coeffs(mod, log = TRUE, vcov = FALSE)
     
     features <- features[,-reference_trait]
     
@@ -1125,17 +674,44 @@ org_pltree <- tryCatch({
     
     # rename covariates to avoid duplicated strings, in case the same 
     # question was made in different data collection moments 
+    covar <- pars$covariates
     covar$codeQst <- rename_duplicates(covar$codeQst)
     covar$name    <- rename_duplicates(covar$name, sep = " ")
     
+    # check if longlat is required
+    if (any(grepl("geotrial", covar$codeQst))) {
+      
+      index <- which(grepl("geotrial", covar$codeQst))[1]
+      
+      if (is.na(index)) next
+      
+      covar[index, "nameString"] <- paste0("ASS",covar$assessmentId[index],"__longitude")
+      covar[index, "name"] <- paste(covar[index, "name"], "Longitude")
+      
+      covar[nrow(covar) + 1, ] <- covar[index, ]
+      covar[nrow(covar), "nameString"] <- paste0("ASS",covar$assessmentId[index],"__latitude")
+      covar[nrow(covar), "name"] <- paste(covar[nrow(covar), "name"], "Latitude")
+      
+    }
     
     # add the string $ to indicate the end of pattern
     strings <- paste0(covar$nameString, "$")
     
     # check for the full names
     for(i in seq_along(covar$nameString)){
-      covar$nameString[i] <- names(cmdata[which(grepl(strings[i], names(cmdata)))])
+      
+      index <- which(grepl(strings[i], names(cmdata)))[1]
+      
+      if (is.na(index)){ 
+        covar[i, ] <- NA
+        next
+      }
+      
+      covar$nameString[i] <- names(cmdata[index])
+      
     }
+    
+    covar <- na.omit(covar)
     
     strings <- covar$nameString
     
@@ -1193,7 +769,7 @@ org_pltree <- tryCatch({
     trait_list[[reference_trait]]$keep_covariate <- keep
     
     # if no covariate left out put a pseudo variable
-    if(isTRUE(dim(covar)[[1]] == 0)) {
+    if (isTRUE(dim(covar)[[1]] == 0)) {
       
       covarTRUE <- FALSE
       
@@ -1253,7 +829,7 @@ org_pltree <- tryCatch({
   nvar <- length(covar$nameString)
   
   # rename covariates with the name taken from ClimMob
-  names(Gdata) <- c(covar$codeQst)
+  names(Gdata) <- gsub(" ", "", ClimMobTools:::.title_case(covar$name))
   Gdata <- cbind(G, Gdata)
   nG <- nrow(Gdata)
   rownames(Gdata) <- 1:nG
@@ -1263,7 +839,7 @@ org_pltree <- tryCatch({
   var_keep <- character(0L)
   best <- TRUE
   counter <- 1
-  exp_var <- covar$codeQst
+  exp_var <- names(Gdata)[-1]
   
   cat("Selecting the best covariate for Plackett-Luce trees \n")
   
@@ -1322,8 +898,7 @@ org_pltree <- tryCatch({
   }
   
   if (length(var_keep) == 0) {
-    var_keep <- names(Gdata)[2]
-    minsplit <- nG
+    var_keep <- names(Gdata)[-1]
   }
   
   treeformula <- as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
@@ -1342,7 +917,7 @@ org_pltree <- tryCatch({
   if (isTREE) { 
     
     # plot the tree (if any)
-    plottree <- gosset:::plot_tree(tree_f, ci.level = ci_level)
+    plottree <- plot(tree_f, ci.level = ci_level)
     
     node_ids <- nodeids(tree_f, terminal = TRUE)
     

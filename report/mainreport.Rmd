@@ -187,25 +187,23 @@ if (isAGREE) {
 relation_other_chrs1 <- 
   paste0("Table 1.4 shows, for each trait evaluated in the project, ", 
         "the frequency for which the rankings matched with the trait '", Ovname, 
-        "'. Best and worst agreement represent the percentage ", 
-        "for which the best and worst ", option, " for the trait ", 
-        "matched the best and worst '", Ovname, 
         "'. Kendall tau shows the complete ranking agreement ", 
         "on the ranking with the trait '", 
         Ovname, "' as reference using the Kendall correlation ", 
         "coefficient [@Kendall1938]. The coefficient is an equivalent of a Pearson ", 
-        "correlation designed for ranking data, ranging from 0 to 1, where 1 means a high correlation.")
+        "correlation designed for ranking data, ranging from -1 to 1, where 1 means a total correlation and -1 a total negative correlation.")
 
 relation_other_chrs2 <- 
   paste0("The trait that had the strongest ", 
-        "correlation with '", Ovname, "' was '", ClimMobTools:::.title_case(strongest_link[1]), 
-        "'. The rankings for '", ClimMobTools:::.title_case(strongest_link[1]), 
+        "correlation with '", Ovname, "' was '", 
+        strongest_link[1], 
+        "'. The rankings for '", strongest_link[1], 
         "' correlate with '", Ovname, "' with a Kendall tau of ",
         strongest_link[2],
         ". The trait that had the lowest correlation with ", Ovname,
-        "' was '",  ClimMobTools:::.title_case(weakest_link[1]), 
+        "' was '", weakest_link[1], 
         "'. The rankings for '" ,  
-        ClimMobTools:::.title_case(weakest_link[1]), "' had a Kendall tau of ", 
+        weakest_link[1], "' had a Kendall tau of ", 
         weakest_link[2], " when compared to '",  Ovname, 
         "'. The correlation with the other traits is also shown in Figure 1.3.")
 }
@@ -244,8 +242,8 @@ if (isPLADMM) {
 ```{r agreement_table}
 if (isAGREE) {
 try(
-  kable(agreement,
-      caption = paste0("Table 1.4. Correlation between '", Ovname, 
+  kable(kendall,
+      caption = paste0("Table 1.4. Kendall correlation between '", Ovname, 
                        "' and the other traits assessed in this experiment." ),
       row.names = FALSE),
   silent = TRUE)
@@ -255,13 +253,6 @@ try(
 \
 
 `r paste(relation_other_chrs2, collapse='\n')`
-
-
-```{r agreementplot, dpi=dpi,fig.height=agreem_h, fig.width=agreem_h, fig.cap= paste0("Figure 1.3. Kendall tau correlation between traits and ", Ovname, ".")}
-if (isAGREE) {
-  pagreement
-}
-```
 
 \
 
@@ -296,53 +287,8 @@ try(
 
 # Section 2: `r Ovname`, data summary and exploratory analysis
 
-## Assessment of `r options` 
-
-Exploratory analysis within the following section summarises results from the rankings on '`r Ovname`'. Results from other sections, and in the overall summary use Plackett-Luce models [@Turner2020]. Performance of each of the `r options` for '`r Ovname`' is summarized in Table 2.1. The table below shows the number of times each `r option` was tested and the proportion of times it was ranked as the best or worst. Net favorability score is the different between the best and worst ranks for each `r option`. A score of +100 indicates that the `r option` won all 'contests' it was involved in, a score of 0 indicates an equal number of wins and losses, a score of -100 indicates the `r option` lost all contests. 
-
-
-```{r fav_table}
-try(knitr::kable(fav_traits[[1]][[reference_trait]],
-             row.names = FALSE,
-             caption = paste0("Table 2.1. Favorability scores for '", 
-                              Ovname, "'." )), 
-    silent = TRUE)
-```
-
-\
-
-This shows the percentage of `r rankers` who assessed the `r options` as the best among the `r ncomp` `r options` they were provided, the percentage of `r rankers` who included the `r option` as their worst, the percentage of 'head-to-head contests' for which the `r option` won and the net favorability score (Figure 2.1). 
-
-```{r fav_plot, dpi=dpi, fig.height=favplot_h, fig.width=6, fig.cap= paste0("Figure 2.1. Net favorability scores for '", Ovname, "'.")}
-try(fav_traits[[2]][[reference_trait]])
-```
-
-\
-
-```{r best_items}
-best_items <- ""
-if (isTRUE(nrow(fav_traits[[1]][[reference_trait]]) > 0)) {
-  best_items <-
-  try(paste("The", option, fav_traits[[1]][[reference_trait]][1,1], "was the top ranked", option, 
-  " for the trait ", ovname, " being ranked highest by", 
-  fav_traits[[1]][[reference_trait]][1,3], "of the" , 
-  itemtable[itemtable$Variety %in% fav_traits[[1]][[reference_trait]][1,1], 3], 
-  rankers, "who assessed this", option, "."), silent = TRUE)
-  
-  if ("try-error" %in% class(best_items)){
-    best_items  <- ""
-  }
-  
-}
-```
-
-`r paste(best_items, collapse = '\n')`
-
-\
 
 ## Plackett-Luce Model estimates
-
-\
 
 Table 2.2 shows the results from the likelihood ratio test from the Plackett-Luce model for the trait '`r Ovname`' of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
 
@@ -361,7 +307,7 @@ Figure 2.2 shows the estimated log-worth with `r ci_level*100`% confidence inter
 
 Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others in terms of '`r Ovname`'. When `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the alpha = `r sig_level`.
 
-```{r est_plot, dpi=dpi, fig.height=multcomp_h, fig.width=6, fig.cap=paste0("Figure 2.2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", Ovname,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
+```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 2.2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", Ovname,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
 try(logworth_plot[[reference_trait]], silent = TRUE)
 ```
 
@@ -386,16 +332,16 @@ A model-based recursive partitioning method [@Strobl2009] was used to determine 
 ```{r covar_statement}
 # make the statement if there is any covariate dropped
 covar_statement <- ""
-if (covarTRUE) {
-  covar_statement <- paste0("You provided the covariate(s): ", paste3(sort(covar$name), lan = language), ". ")
-  if (isTRUE(length(covar_dropped) > 0)) {
-    covar_statement <- paste0(covar_statement,
-      "However, the covariates(s) '", paste3(covar_dropped, lan = language),
-      "' were not used in the analysis, because they did not surpass ",
-      "the threshold of at least ", paste0(mincovar * 100, "%"), " valid entries."
-    )
-  }
-}
+# if (covarTRUE) {
+#   covar_statement <- paste0("You provided the covariate(s): ", paste3(sort(covar$name), lan = language), ". ")
+#   if (isTRUE(length(covar_dropped) > 0)) {
+#     covar_statement <- paste0(covar_statement,
+#       "However, the covariates(s) '", paste3(covar_dropped, lan = language),
+#       "' were not used in the analysis, because they did not surpass ",
+#       "the threshold of at least ", paste0(mincovar * 100, "%"), " valid entries."
+#     )
+#   }
+# }
 ```
 
 `r  paste(covar_statement, collapse='\n')`
@@ -457,48 +403,6 @@ try(plottree, silent = TRUE)
 ```
 
 \
-
-# Section 3: Other traits
-
-```{r other_chars}
-other_chars <- paste0("This report only assessed the trait '", Ovname, "'.")
-
-if (isTRUE(nothertraits > 0)) {
-  other_chars <- 
-  paste0("Data analysis summaries are also shown for the ", 
-         "other ", nothertraits," traits assessed in this project.")
-} 
-```
-
-`r paste(other_chars, collapse='\n')`
-
-\
-
-```{r, other_chars_analysis}
-trait_summaries <- ""
-if(isTRUE(nothertraits > 0)) {
-  
-  trait_list <- trait_list[-reference_trait]
-  fav_traits[[1]] <- fav_traits[[1]][-reference_trait]
-  fav_traits[[2]] <- fav_traits[[2]][-reference_trait]
-  aov_tbl    <- aov_tbl[-reference_trait]
-  logworth_plot <- logworth_plot[-reference_trait]
-  worth_plot <- worth_plot[-reference_trait]
-  
-  for(i in seq_len(nothertraits)){
-    trait_summaries<-c(trait_summaries,
-                       knitr::knit_child(paste0(fullpath, "/report/other_trait_summaries.Rmd"), 
-                                         quiet=TRUE))
-}  
-}
-
-```
-
-```{r other_chars_include, echo=FALSE, results="asis", message=FALSE, warning=FALSE}
-cat(paste(trait_summaries, collapse = '\n'))
-```
-
-\pagebreak
 
 ```{r error}
 e <- ""
