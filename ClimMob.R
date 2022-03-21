@@ -125,7 +125,7 @@ if (any_error(try_data)) {
 # 2. Organise the rankings ####
 try_quanti_data <- tryCatch({
   
-  source(paste0(fullpath, "/modules/02_organize_quantitative_data.R"))
+  # source(paste0(fullpath, "/modules/02_organize_quantitative_data.R"))
     
 }, error = function(cond) {
   return(cond)
