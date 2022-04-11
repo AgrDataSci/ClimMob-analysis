@@ -85,10 +85,3 @@ quanti_data <- list(boxplots = boxps,
 
 rm(boxps, mod, outliers)
 
-# mod <- lm(yieldperse2 ~ items, data = quanti)
-# 
-# plot(mod)
-# 
-# summary(mod)
-# 
-# 

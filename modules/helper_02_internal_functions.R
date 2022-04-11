@@ -189,10 +189,10 @@ network <- function(object, ...) {
   
   GGally::ggnet2(net, 
                  label = TRUE,
-                 label.color = "grey20",
-                 arrow.size = 8, 
-                 edge.color = "grey50",
-                 arrow.gap = 0.03, 
+                 #label.color = "grey20",
+                 #arrow.size = 8, 
+                 #edge.color = "grey50",
+                 #arrow.gap = 0.03, 
                  color = col_pallet(ncol(object)),
                  legend.size = 12)
   
@@ -584,38 +584,47 @@ decode_pars <- function(x) {
 
 #' Plot log-worth
 #' @param x a multicomp dataframe
-#' @param level the confidence interval level
-#' @param abbreviate logical to abbreviate labels in the chart
-plot_logworth <- function(x, intervalWidth = 2, ...) {
+#' @param ci.level the confidence interval level
+#' @param multcomp logical to add group letters 
+plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, ...) {
   
-  frame <- qvcalc(x, ...)$qvframe
+  frame <- qvcalc(x)$qvframe
   
-  faclevels <- factor(row.names(frame), levels = row.names(frame))
-  
-  xvalues <- seq(along = faclevels)
+  items <- factor(row.names(frame), levels = row.names(frame))
   
   est <- frame$estimate
   
   se <- frame$quasiSE
   
-  tops <- est + (intervalWidth * se)
+  tops <- est + stats::qnorm(1-(1 - ci.level) / 2) * se
   
-  tails <- est - (intervalWidth * se)
+  tails <- est - stats::qnorm(1-(1 - ci.level) / 2) * se
   
   range <- max(tops) - min(tails)
   
-  x <- data.frame(est, se, faclevels, tops, tails)
+  pdat <- data.frame(est, se, items, tops, tails)
   
-  p <- ggplot(data = x,
-              aes(x = faclevels, 
+  if (isTRUE(multcomp)) {
+    lettersdat <- multcompPL(mod = x, ...)
+    lettersdat <- lettersdat[, c("items", "group")]
+    pdat <- merge(pdat, lettersdat, by = "items")
+  } 
+  
+  if (!isTRUE(multcomp)) {
+    pdat$group <- ""
+  }
+  
+  p <- ggplot(data = pdat,
+              aes(x = items, 
                   y = est,
                   ymax = tops,
-                  ymin = tails)) +
+                  ymin = tails, 
+                  label = group)) +
     geom_hline(yintercept = 0, 
                colour = "#E5E7E9", size = 0.8) +
     geom_point() +
     geom_errorbar(width = 0.1) +
-    #geom_text(vjust = 1.2) +
+    geom_text(vjust = 1.2, hjust = 1.2) +
     theme_bw() +
     theme(panel.grid.major = element_blank(),
           axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,
@@ -625,6 +634,76 @@ plot_logworth <- function(x, intervalWidth = 2, ...) {
     labs(x = "Log-worth", y = "Item")
   
   return(p)
+  
+}
+
+
+#' @rdname multcompPL
+#' @export
+multcompPL <- function(mod, items = NULL, threshold = 0.05, adjust = "none", ...){
+  
+  #get estimates with quasi-SEs
+  qv1 <- qvcalc::qvcalc(mod, ...)$qvframe
+  
+  #reduce frame to only selected items if not all comparisons are desired
+  if (!is.null(items)) {
+    qv1 <- subset(qv1, rownames(qv1) %in% items)
+    # give error if less than 2 items can be identified
+    if (nrow(qv1) < 3) {
+      stop("Less than 2 items selected")
+    }
+  }
+  
+  #set up matrices for all differences and pooled errors
+  diffs <- mat.or.vec(nrow(qv1),nrow(qv1))
+  ses <- mat.or.vec(nrow(qv1),nrow(qv1))
+  
+  for(i in 1:nrow(qv1)){
+    for(j in 1:nrow(qv1)){
+      #get differences and pooled ses
+      diffs[i,j] <- qv1$estimate[i] - qv1$estimate[j]
+      ses[i,j] <- sqrt(qv1$quasiVar[i] + qv1$quasiVar[j])
+    }
+  }
+  
+  #calculate z scores
+  z <- diffs/ses
+  #TO DO: What DF to use to use here? Is it just the resid DF?
+  p <- 2 * (1 - stats::pt(abs(z), mod$df.residual))
+  
+  #adjust p-value if you want to adjust. make sure to only take each p once for adjustment
+  p[upper.tri(p)] <- stats::p.adjust(p[upper.tri(p)], method = adjust)
+  
+  #make sure lower triangular is mirror of upper
+  p[lower.tri(p)] <- t(p)[lower.tri(p)]
+  
+  #set rownames
+  rownames(p) <- colnames(p) <- rownames(qv1)
+  
+  #re-order qv output to ensure letters are produced in a sensible order
+  qv1$items <- stats::reorder(factor(rownames(qv1)), qv1$estimate, mean)
+  qv1 <- qv1[order(qv1$estimate, decreasing = TRUE), ]
+  
+  #get mean seperation letter groupings
+  args <- list(formula = estimate ~ items, 
+               x = p, 
+               data = qv1,
+               compare = "<",
+               threshold =  threshold,
+               Letters = letters,
+               reversed = FALSE)
+  
+  let <- do.call("multcompLetters2", args)
+  
+  qv1$group <- let$Letters
+  
+  qv1 <- qv1[, union("items", names(qv1))]
+  
+  row.names(qv1) <- seq_along(qv1$group)
+  
+  class(qv1) <- union("multcompPL", class(qv1))
+  
+  return(qv1)
   
 }
 
