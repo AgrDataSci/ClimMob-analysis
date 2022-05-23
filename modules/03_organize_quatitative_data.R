@@ -9,11 +9,10 @@
 #'  with the technologies
 #' @param groups a vector with characters for the index in cmdata indicating 
 #'  columns to aggregate and make segments of participants 
-#'        
-organize_ranking_data <- function(cmdata, 
-                                  pars, 
-                                  groups = NULL,
-                                  tech_index = c("package_item_A", "package_item_B", "package_item_C")) {
+organize_quantitative_data <- function(cmdata, 
+                                       pars, 
+                                       groups = NULL,
+                                       tech_index = c("package_item_A", "package_item_B", "package_item_C")) {
   
   ntech <- length(tech_index)
   
@@ -115,36 +114,25 @@ organize_ranking_data <- function(cmdata,
     
   }
   
-  # put colnames
-  names(quanti)[-c(1:2)] <- quanti_traits$codeQst
-  
   # identify outliers
-  outliers <- data.frame()
+  outliers <- lapply(quanti_dat, function(x){
+    
+    out_values_i <- unique(boxplot.stats(x[,"value"])$out)
+    
+    out_i <- x[,"value"] %in% out_values_i
+
+    outliers_i <- x[out_i, ]
+    
+  })
   
-  for(i in seq_along(quanti_traits$codeQst)){
-    
-    index_i <- quanti_traits$codeQst[i]
-    
-    out_values_i <- unique(boxplot.stats(quanti[,index_i])$out)
-    
-    out_i <- quanti[,index_i] %in% out_values_i
-    
-    quanti[out_i, index_i] <- NA
-    
-    outliers_i <- quanti[out_i, c("id", "items")]
-    
-    if (nrow(outliers_i) == 0) next
-    
-    outliers_i$values <- quanti[out_i, index_i]
-    
-    outliers_i$trait <- quanti_traits$name[i]
-    
-    outliers_i$assessment <- quanti_traits$assessmentName[i]
-    
-    outliers <- rbind(outliers, outliers_i)
-    
-  }
+  outliers <- do.call("rbind", outliers)
   
   rownames(outliers) <- NULL
+  
+  result <- list(quanti_dat = quanti_dat,
+                 group = group,
+                 outliers)
+  
+  return(result)
   
 }
