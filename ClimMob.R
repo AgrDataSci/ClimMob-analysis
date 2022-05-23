@@ -59,6 +59,12 @@ if (isTRUE(is.na(language))) {
   language <- "en"
 }
 
+# method for adjustments for confidence intervals and setting widths for comparison. 
+ci_adjust <- "BH"
+
+# confidence interval level for comparison plots with error bars
+ci_level <- 0.84
+
 # # ................................................................
 # # ................................................................
 ## Packages ####
@@ -87,7 +93,7 @@ library("gridExtra")
 library("caret")
 library("janitor")
 library("GGally")
-source(paste0(fullpath, "/modules/helper_02_internal_functions.R"))
+source(paste0(fullpath, "/modules/01_functions.R"))
 
 # Two objects to begin with that will be used to verify the process
 error <- NULL
@@ -107,7 +113,23 @@ try_data <- tryCatch({
   class(cmdata) <- union("CM_list", class(cmdata))
   cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
   
-  source(paste0(fullpath, "/modules/01_organize_ranking_data.R"))
+  dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
+  
+  source(paste0(fullpath, "/modules/02_organize_ranking_data.R"))
+  
+  rank_dat <- organize_ranking_data(cmdata, 
+                                    pars, 
+                                    groups, 
+                                    option = "technology",
+                                    ranker = "participant")
+  
+  if (length(rank_dat) == 0) {
+    rmarkdown::render(paste0(fullpath, "/report/mainreport_no_traits.Rmd"),
+                      output_dir = outputpath,
+                      output_format = "word_document",
+                      output_file = paste0("climmob_main_report.docx"))
+    quit()
+  }
   
 }, error = function(cond) {
     return(cond)
@@ -1017,6 +1039,23 @@ if (all(infosheets, done)) {
 
 # produce the main report
 if (isTRUE(done)) {
+  
+  
+  # resolution of display items
+  dpi <- 400
+  out_width <- "100%"
+  
+  # define height of plots based on items
+  worthmap_h <- ntrait
+  worthmap_w <- ntrait + 0.5
+  favplot_h <- nitems * 0.4
+  
+  if (worthmap_h < 7)  worthmap_h <- 7
+  if (worthmap_h > 8)  worthmap_h <- 8
+  if (worthmap_w < 7)  worthmap_w <- worthmap_h + 0.5
+  if (worthmap_w > 8)  worthmap_w <- worthmap_h + 0.5
+  if (favplot_h < 5) favplot_h <- 5
+  if (favplot_h > 8) favplot_h <- 7.5
   
   # the main report
   try_rep <- tryCatch({

@@ -1,17 +1,22 @@
-#' Organize the ranking (tricot) data from a ClimMob project
+#' This Module organizes the ranking (tricot) data from a ClimMob project
 #' 
-#' This function organize the data using internal parameters and
+#' Organize the data using internal parameters and
 #' the parameters sent by ClimMob to get the data read for analysis 
+#' 
 #' @param pars a list with parameters sent by ClimMob
 #' @param cmdata a data frame with the ClimMob data
-
-#organize_ranking_data <- function(cmdata, pars, ...){
+#' @param groups a vector with characters for the index in cmdata indicating 
+#'        columns to aggregate and make segments of participants 
+#' @param option a character indicating the type of technology tested
+#' @param ranker a character indicating the type of participant in the trial
+organize_ranking_data <- function(cmdata, 
+                                  pars, 
+                                  groups,
+                                  option = "technology", 
+                                  ranker = "participant"){
   
   # Get some info from the data and ClimMob parameters 
   projname     <- cmdata[1, "package_project_name"]
-  Option       <- ClimMobTools:::.title_case(option)
-  options      <- ClimMobTools:::.pluralize(option)
-  rankers      <- ClimMobTools:::.pluralize(ranker)
   nranker      <- nrow(cmdata)
   items        <- cmdata[, grepl("package_item", names(cmdata))]
   itemnames    <- names(items)
@@ -24,44 +29,10 @@
   ncomp        <- length(itemnames)
   nquest       <- pars$traits$nQst[1]
   
-  # select which function will be used to create the Plackett-Luce rankings
-  # it will depend on how many items each participant compares
-  if (ncomp == 3) {
-    rankwith <- "rank_tricot"
-  }
-  
-  if (ncomp > 3) {
-    rankwith <- "rank_numeric"
-  }
-  
   # minimum proportion of valid entries in tricot vs local
   # this will be computed based on the valid entries of the reference
   # trait after validations
   mintricotVSlocal <- 0.90
-  
-  # method for adjustments for confidence intervals and setting widths for comparison. 
-  ci_adjust <- "BH"
-  
-  # confidence interval level for comparison plots with error bars
-  ci_level <- 0.84
-  
-  # resolution of display items
-  dpi <- 400
-  out_width <- "100%"
-  
-  # define height of plots based on items
-  worthmap_h <- ntrait
-  worthmap_w <- ntrait + 0.5
-  favplot_h <- nitems * 0.4
-  
-  if (worthmap_h < 7)  worthmap_h <- 7
-  if (worthmap_h > 8)  worthmap_h <- 8
-  if (worthmap_w < 7)  worthmap_w <- worthmap_h + 0.5
-  if (worthmap_w > 8)  worthmap_w <- worthmap_h + 0.5
-  if (favplot_h < 5) favplot_h <- 5
-  if (favplot_h > 8) favplot_h <- 7.5
-  
-  dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
   
   # check if a request to split the data by groups (segments)
   # (gender, location, etc.) is provided
@@ -275,11 +246,8 @@
   
   # if all the traits were removed then make a report and stop the process here 
   if (all(trait$name %in% trait_dropped)) {
-    rmarkdown::render(paste0(fullpath, "/report/mainreport_no_traits.Rmd"),
-                      output_dir = outputpath,
-                      output_format = "word_document",
-                      output_file = paste0("climmob_main_report.docx"))
-    quit()
+    result <- list()
+    return(result)
   }
   
   # refresh the number of traits
@@ -299,8 +267,7 @@
   
   # get the name of the reference trait both in lower and title case
   ovname <- tolower(trait_list[[reference_trait]]$name)
-  Ovname <- ClimMobTools:::.title_case(trait_list[[reference_trait]]$name)
-  
+
   # the name of other traits combined with the name of assessments
   if (length(unique(trait$assessmentName)) > 1) {
     
@@ -327,9 +294,24 @@
   # refresh number of other traits
   nothertraits <- length(trait_list) - 1
   
-#result <- list()
-#return(result)
-#}
+  result <- list(projname = projname,
+                 option = option,
+                 ranker = ranker,
+                 nranker = nranker,
+                 technologies = items,
+                 technologies_index = itemnames,
+                 reference_trait = ovname,
+                 reference_trait_index = reference_trait,
+                 trait_names = traits_names,
+                 trait_code = traits_code,
+                 trait_list = trait_list,
+                 trait_dropped = trait_dropped,
+                 covarTRUE = covarTRUE,
+                 covar = covar)
+  
+  return(result)
+
+}
 
 
 

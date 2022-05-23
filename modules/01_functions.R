@@ -1,7 +1,13 @@
+# # ................................................................
+# # ................................................................
+# # This Module load the internal functions used in this workflow
+# # ................................................................
+# # ................................................................
+
 #'Get colour pallet
 #' @param x an integer
 #' @examples 
-#' col_pallet(15)
+#' col_pallet(3)
 col_pallet <- function(x, ...) {
   
   p <- c('#d73027','#4575b4', '#f46d43','#74add1', 
@@ -130,6 +136,7 @@ plot_map <- function(data,
 #' mod <- PlackettLuce(R)
 #' 
 #' anova.PL(mod)
+#' 
 #' @noRd
 anova.PL <- function(model){
   if(class(model)!="PlackettLuce"){
@@ -366,7 +373,6 @@ paste3 <- function(x, lan = "en", ...) {
 #' names(pars)
 #' 
 #' pars
-
 #' @noRd
 decode_pars <- function(x) {
   
@@ -582,62 +588,6 @@ decode_pars <- function(x) {
   
 }
 
-#' Plot log-worth
-#' @param x a multicomp dataframe
-#' @param ci.level the confidence interval level
-#' @param multcomp logical to add group letters 
-plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, ...) {
-  
-  frame <- qvcalc(x)$qvframe
-  
-  items <- factor(row.names(frame), levels = row.names(frame))
-  
-  est <- frame$estimate
-  
-  se <- frame$quasiSE
-  
-  tops <- est + stats::qnorm(1-(1 - ci.level) / 2) * se
-  
-  tails <- est - stats::qnorm(1-(1 - ci.level) / 2) * se
-  
-  range <- max(tops) - min(tails)
-  
-  pdat <- data.frame(est, se, items, tops, tails)
-  
-  if (isTRUE(multcomp)) {
-    lettersdat <- multcompPL(mod = x, ...)
-    lettersdat <- lettersdat[, c("items", "group")]
-    pdat <- merge(pdat, lettersdat, by = "items")
-  } 
-  
-  if (!isTRUE(multcomp)) {
-    pdat$group <- ""
-  }
-  
-  p <- ggplot(data = pdat,
-              aes(x = items, 
-                  y = est,
-                  ymax = tops,
-                  ymin = tails, 
-                  label = group)) +
-    geom_hline(yintercept = 0, 
-               colour = "#E5E7E9", size = 0.8) +
-    geom_point() +
-    geom_errorbar(width = 0.1) +
-    geom_text(vjust = 1.2, hjust = 1.2) +
-    theme_bw() +
-    theme(panel.grid.major = element_blank(),
-          axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,
-                                     size = 10, color = "grey20"),
-          axis.text.y = element_text(size = 10, color = "grey20"),
-          text = element_text(color = "grey20")) +
-    labs(x = "Log-worth", y = "Item")
-  
-  return(p)
-  
-}
-
-
 #' @rdname multcompPL
 #' @export
 multcompPL <- function(mod, items = NULL, threshold = 0.05, adjust = "none", ...){
@@ -707,4 +657,91 @@ multcompPL <- function(mod, items = NULL, threshold = 0.05, adjust = "none", ...
   
 }
 
+#' Plot log-worth
+#' @param x a multicomp dataframe
+#' @param ci.level the confidence interval level
+#' @param multcomp logical to add group letters 
+plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, ...) {
+  
+  frame <- qvcalc(x)$qvframe
+  
+  items <- factor(row.names(frame), levels = row.names(frame))
+  
+  est <- frame$estimate
+  
+  se <- frame$quasiSE
+  
+  tops <- est + stats::qnorm(1-(1 - ci.level) / 2) * se
+  
+  tails <- est - stats::qnorm(1-(1 - ci.level) / 2) * se
+  
+  range <- max(tops) - min(tails)
+  
+  pdat <- data.frame(est, se, items, tops, tails)
+  
+  if (isTRUE(multcomp)) {
+    lettersdat <- multcompPL(mod = x, ...)
+    lettersdat <- lettersdat[, c("items", "group")]
+    pdat <- merge(pdat, lettersdat, by = "items")
+  } 
+  
+  if (!isTRUE(multcomp)) {
+    pdat$group <- ""
+  }
+  
+  p <- ggplot(data = pdat,
+              aes(x = items, 
+                  y = est,
+                  ymax = tops,
+                  ymin = tails, 
+                  label = group)) +
+    geom_hline(yintercept = 0, 
+               colour = "#E5E7E9", size = 0.8) +
+    geom_point() +
+    geom_errorbar(width = 0.1) +
+    geom_text(vjust = 1.2, hjust = 1.2) +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(),
+          axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,
+                                     size = 10, color = "grey20"),
+          axis.text.y = element_text(size = 10, color = "grey20"),
+          text = element_text(color = "grey20")) +
+    labs(x = "Log-worth", y = "Item")
+  
+  return(p)
+  
+}
 
+#' Pluralize
+#' @param x a character
+pluralize <- function(x, p = "s") {
+  
+  pl <- matrix(c("variety","varieties",
+                 "variedad","variedades",
+                 "opcion", "opciones",
+                 "technology", "technologies"), 
+               nrow = 4, ncol = 2, byrow = TRUE)
+  
+  is_here <- x %in% pl[,1]
+  if (isTRUE(is_here)) {
+    x <- pl[pl[,1] %in% x, 2]
+  }
+  
+  if (isFALSE(is_here)) {
+    x <- paste0(x, p)
+  }
+  
+  return(x)
+  
+}
+
+
+#' Put sentences in title case
+#' @param x a character
+#' @examples 
+#' title_case("the apple tree")
+title_case <- function(x) {
+  gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", 
+       x, 
+       perl = TRUE)
+}
