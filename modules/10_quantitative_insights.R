@@ -85,3 +85,37 @@ quanti_data <- list(boxplots = boxps,
 
 rm(boxps, mod, outliers)
 
+
+# make box plots 
+densitplots <- list()
+
+for (i in seq_along(quanti_traits$codeQst)){
+  
+  ggdat_i <- quanti[,c("items", quanti_traits$codeQst[i])]
+  
+  names(ggdat_i) <- c("items", "values")
+  
+  b_i <- ggplot(ggdat_i, aes(x = values, group = items, fill = items)) + 
+    geom_density(adjust=1.5, alpha=.4) +
+    theme_bw() + 
+    facet_wrap(~ items) +
+    labs(x = Option, y = quanti_traits$name[i]) +
+    theme(panel.grid = element_blank(),
+          axis.text.x = element_text(angle = 45, 
+                                     vjust = 1, 
+                                     hjust = 1))
+  
+  b_i
+  
+  densitplots[[i]] <- b_i
+}
+
+
+
+quanti_data <- list(densityplots = densitplots,
+                    outliers = outliers, 
+                    mod = NULL)
+
+rm(densityplots, mod, outliers)
+
+

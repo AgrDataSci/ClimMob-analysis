@@ -6,19 +6,22 @@
 #' @param pars a list with parameters sent by ClimMob
 #' @param cmdata a data frame with the ClimMob data
 #' @param groups a vector with characters for the index in cmdata indicating 
-#'        columns to aggregate and make segments of participants 
+#'  columns to aggregate and make segments of participants 
 #' @param option a character indicating the type of technology tested
 #' @param ranker a character indicating the type of participant in the trial
+#' @param tech_index a vector of characters for the indices in cmdata
+#'  with the technologies
 organize_ranking_data <- function(cmdata, 
                                   pars, 
-                                  groups,
+                                  groups = NULL,
                                   option = "technology", 
-                                  ranker = "participant"){
+                                  ranker = "participant",
+                                  tech_index = c("package_item_A", "package_item_B", "package_item_C")){
   
   # Get some info from the data and ClimMob parameters 
   projname     <- cmdata[1, "package_project_name"]
   nranker      <- nrow(cmdata)
-  items        <- cmdata[, grepl("package_item", names(cmdata))]
+  items        <- cmdata[, tech_index]
   itemnames    <- names(items)
   items        <- unique(sort(unlist(items)))
   nitems       <- length(unique(sort(unlist(items))))
@@ -39,60 +42,59 @@ organize_ranking_data <- function(cmdata,
   if (length(groups) > 0) {
     
     group_index <- integer()
+    
     for(i in seq_along(groups)) {
+      
       group_index <- c(group_index, which(grepl(groups[i], names(cmdata)))[1])
+      
     }
     
     group_index <- group_index[!is.na(group_index)]
     
     groups <- names(cmdata)[group_index]
     
-    if (length(groups) > 1) {
-      
-      keep <- rowSums(apply(cmdata[,groups], 2, function(x) {is.na(x)})) == 0
-      
-      cmdata <- cmdata[keep, ]
-      
-      cmdata$group <- apply(cmdata[,groups], 1, function(x) {paste(x, collapse = " - ")})
-      
-    }
-    
     if (length(groups) == 1) {
       
-      cmdata <- cmdata[!is.na(cmdata[,groups]), ]
+      group <- cmdata[, groups]
       
-      cmdata$group <- cmdata[,groups]
+      if (sum(is.na(group)) > (length(group) * 0.5)) {
+        
+        group <- NULL
+        
+      } else {
+        
+        group <- ifelse(is.na(group), "Others", group)
+        
+      }
       
     }
     
-    # if any of the groups has less than 15% of the total data
-    # then the groups will not be considered
-    if (any(table(cmdata$group) / nrow(cmdata) < 0.05)) {
-      cmdata$group <- NA
+    if (length(groups) > 1) {
+      
+      group <- cmdata[,groups]
+      
+      group[is.na(group)] <- "Others" 
+      
+      group <- apply(group, 1, function(x) {paste(x, collapse = " - ")})
+      
     }
     
-    # if more than 9 groups
-    # then the groups will not be considered
-    if (length(unique(cmdata$group)) > 9) {
-      cmdata$group <- NA
+    # We can only handle 9 groups. The ones with fewer data will 
+    # be aggregated and assigned to "Others"
+    ngroups <- unique(group)
+    
+    if (ngroups > 8) {
+      
+      keep_group <- names(rev(sort(table(group)))[1:8])
+      
+      group[!group %in% keep_group] <- "Others"
+      
     }
     
-    if (length(groups) == 0) {
-      cmdata$group <- NA
-    }
-    
-  }else{
-    cmdata$group <- NA
-  }
-  
-  groups <- sort(unique(cmdata$group))
-  
-  if (any(is.na(groups))) {
-    groups <- character()
   }
   
   if (length(groups) == 0) {
-    groups <- character()
+    group <- NULL
   }
   
   # rename traits to avoid duplicated strings, in case the same 
@@ -307,7 +309,8 @@ organize_ranking_data <- function(cmdata,
                  trait_list = trait_list,
                  trait_dropped = trait_dropped,
                  covarTRUE = covarTRUE,
-                 covar = covar)
+                 covar = covar,
+                 group = group)
   
   return(result)
 

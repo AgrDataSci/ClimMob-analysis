@@ -121,7 +121,8 @@ try_data <- tryCatch({
                                     pars, 
                                     groups, 
                                     option = "technology",
-                                    ranker = "participant")
+                                    ranker = "participant",
+                                    tech_index = c("package_item_A", "package_item_B", "package_item_C"))
   
   if (length(rank_dat) == 0) {
     rmarkdown::render(paste0(fullpath, "/report/mainreport_no_traits.Rmd"),
