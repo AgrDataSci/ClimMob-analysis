@@ -294,19 +294,17 @@ get_pltree <- function(cmdata, rank_dat, reference_tech) {
   }
   
   if (length(var_keep) > 0) {
-    treeformula <- as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
-    message(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
+    treeformula <- paste0("G ~ ", paste(c(var_keep), collapse = " + "))
   }
   
   if (length(var_keep) == 0) {
-    treeformula <- as.formula("G ~ 1")
-    message("G ~ 1")
+    treeformula <- "G ~ 1"
   }
   
-  
+  message(treeformula)
   
   # now fit the tree with the selected covariates
-  tree_f <- pltree(treeformula,
+  tree_f <- pltree(as.formula(treeformula),
                    data = Gdata,
                    minsize = node_size,
                    alpha = tree_alpha,

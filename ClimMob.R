@@ -289,7 +289,12 @@ if (any_error(org_pltree)) {
   
   error <- c(error, e)
   
-  isTREE <- FALSE
+  PL_tree <- list(isTRUE = FALSE,
+                  tree_formula = "",
+                  PLtree = list(),
+                  PLtree_plot = 0L,
+                  node_summary = data.frame(),
+                  regret_table = data.frame())
   
 }
 
@@ -534,6 +539,12 @@ if (all(infosheets, done)) {
 # produce the main report
 if (isTRUE(done)) {
   
+  noptions <- length(rank_dat$technologies_index)
+  option <- rank_dat$option
+  options <- pluralize(rank_dat$option)
+  participant <- rank_dat$ranker
+  participants <- pluralize(rank_dat$ranker)
+  nparticipants <- nrow(cmdata)
   
   # resolution of display items
   dpi <- 400
