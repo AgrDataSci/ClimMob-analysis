@@ -163,6 +163,106 @@ anova.PL <- function(model){
   
 }
 
+# function from https://github.com/EllaKaye/BradleyTerryScalable
+# which unfortunately was removed from CRAN
+#' @rdname btdata
+btdata <- function(x, return_graph = FALSE) {
+  
+  # if x is a table, convert it to a matrix
+  if (is.table(x)) {
+    attr(x, "class") <- NULL
+    attr(x, "call") <- NULL
+  }
+  
+  # if x is a df
+  if (is.data.frame(x)) {
+    if (!(ncol(x) %in% 3:4 )) stop("If x is a dataframe, it must have 3 or 4 columns.")
+    wins <- pairs_to_matrix(x)
+    g <- igraph::graph.adjacency(wins, weighted = TRUE, diag = FALSE)
+  }
+  
+  # if x is a graph
+  else if (igraph::is.igraph(x)) {
+    if(!igraph::is.directed(x))  stop("If x is a graph, it must be a directed igraph object")
+    
+    # check for names
+    if(!is.null(igraph::V(x)$name)) {
+      
+      arg <- deparse(substitute(x))
+      
+      if(anyDuplicated(igraph::V(x)$name) > 0) stop(paste0("If x is a graph, vertex names must be unique. Consider fixing with V(", arg, ")$name <- make.names(V(", arg, ")$name, unique = TRUE)"))
+    }
+    
+    wins <- graph_to_matrix(x)
+    g <- x
+  }
+  
+  else if ((methods::is(x, "Matrix") | is.matrix(x) )) {
+    
+    # check dimensions/content
+    if (dim(x)[1] != dim(x)[2]) stop("If x is a matrix or table, it must be a square")
+    if(is.matrix(x)) {if (!is.numeric(x)) stop("If x is a matrix or table, all elements must be numeric")}
+    if(methods::is(x, "Matrix")) {if (!is.numeric(as.vector(x))) stop("If x is a matrix or table, all elements must be numeric")}
+    if (any(x < 0)) stop("If x is a matrix or table, all elements must be non-negative")
+    if(!identical(rownames(x), colnames(x))) stop("If x is a matrix or table, rownames and colnames of x should be the same")
+    if (anyDuplicated(rownames(x)) > 0) {
+      
+      arg <- deparse(substitute(x))
+      stop("If x is a matrix or table with row- and column names, these must be unique. Consider fixing with rownames(", arg, ") <- colnames(", arg, ") <- make.names(rownames(", arg, "), unique = TRUE)")
+    }
+    
+    # ensure wins is a dgCMatrix
+    if (is.matrix(x)) wins <- Matrix::Matrix(x, sparse = TRUE)
+    else wins <- x
+    if (class(wins) != "dgCMatrix") wins <- methods::as(wins, "dgCMatrix")
+    g <- igraph::graph.adjacency(wins, weighted = TRUE, diag = FALSE)
+  }
+  
+  else stop("x must be a 3 or 4 column dataframe, a directed igraph object, or square matrix or contingency table.")
+  
+  
+  ## get components
+  comp <- igraph::components(g, mode = "strong")
+  components <- igraph::groups(comp)
+  
+  # name the rows and columns of the wins matrix, if NULL
+  if (is.null(unlist(dimnames(wins)))) {
+    K <- nrow(wins)
+    dimnames(wins) <- list(1:K, 1:K)
+  }
+  
+  # return
+  result <- list(wins = wins, components = components)
+  if (return_graph) result$graph <- g
+  class(result) <- c("btdata", "list")
+  result
+}
+
+summary.btdata <- function(object, ...){
+  if (!inherits(object, "btdata")) stop("object should be a 'btdata' object")
+  K <- nrow(object$wins)
+  num_comps <- length(object$components)
+  connected <- num_comps == 1
+  components_greater_than_one <- Filter(function(x) length(x) > 1, object$components)
+  my_tab <- table(sapply(object$components, length))
+  my_df <- as.data.frame(my_tab)
+  
+  colnames(my_df) <- c("Component size", "Freq")
+  
+  density <- Matrix::mean(object$wins != 0)
+  
+  cat("Number of items:", K, "\n")
+  cat("Density of wins matrix:", density, "\n")
+  cat("Fully-connected:", connected, "\n")
+  
+  
+  if (num_comps > 1) {
+    cat("Number of fully-connected components:", num_comps, "\n")
+    cat("Summary of fully-connected components: \n")
+    print(my_df)
+  }
+}
+
 
 #' Visualise network
 #' @param object an object of class rankings
@@ -192,16 +292,15 @@ network <- function(object, ...) {
   
   adj <- PlackettLuce::adjacency(R)
   
-  net <- network::network(adj)
+  adj <- as.vector(adj)
   
-  GGally::ggnet2(net, 
-                 label = TRUE,
-                 #label.color = "grey20",
-                 #arrow.size = 8, 
-                 #edge.color = "grey50",
-                 #arrow.gap = 0.03, 
-                 color = col_pallet(ncol(object)),
-                 legend.size = 12)
+  adj <- t(matrix(adj, nrow = ncol(R), ncol = ncol(R)))
+  
+  dimnames(adj) <- list(dimnames(R)[[2]], dimnames(R)[[2]])
+  
+  adj <- btdata(adj, return_graph = TRUE)
+  
+  netw <- adj$graph
   
 }
 
@@ -744,4 +843,18 @@ title_case <- function(x) {
   gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", 
        x, 
        perl = TRUE)
+}
+
+
+#' Abbreviate long sentences 
+#' @param x a vector with characters
+reduce <- function(x, nchars = 8, ...){
+  
+  reduc <- nchar(x) > nchars
+  
+  abb <- abbreviate(x[reduc], ...)
+  
+  x[reduc] <- abb
+  
+  return(x)
 }

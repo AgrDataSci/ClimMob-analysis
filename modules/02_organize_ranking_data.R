@@ -53,6 +53,12 @@ organize_ranking_data <- function(cmdata,
     
     groups <- names(cmdata)[group_index]
     
+    if (length(groups) == 0) {
+      
+      group <- NULL
+    
+    }
+    
     if (length(groups) == 1) {
       
       group <- cmdata[, groups]
@@ -83,7 +89,7 @@ organize_ranking_data <- function(cmdata,
     # be aggregated and assigned to "Others"
     ngroups <- unique(group)
     
-    if (ngroups > 8) {
+    if (isTRUE(ngroups > 8)) {
       
       keep_group <- names(rev(sort(table(group)))[1:8])
       
@@ -302,6 +308,7 @@ organize_ranking_data <- function(cmdata,
                  nranker = nranker,
                  technologies = items,
                  technologies_index = itemnames,
+                 assessment_order = unique(trait$assessmentName),
                  reference_trait = ovname,
                  reference_trait_index = reference_trait,
                  trait_names = traits_names,

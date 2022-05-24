@@ -34,6 +34,12 @@ organize_quantitative_data <- function(cmdata,
     
     groups <- names(cmdata)[group_index]
     
+    if (length(groups) == 0) {
+      
+      group <- NULL
+      
+    }
+    
     if (length(groups) == 1) {
       
       group <- cmdata[, groups]
@@ -64,7 +70,7 @@ organize_quantitative_data <- function(cmdata,
     # be aggregated and assigned to "Others"
     ngroups <- unique(group)
     
-    if (ngroups > 8) {
+    if (isTRUE(ngroups > 8)) {
       
       keep_group <- names(rev(sort(table(group)))[1:8])
       
@@ -75,7 +81,7 @@ organize_quantitative_data <- function(cmdata,
   }
   
   if (length(groups) == 0) {
-    group <- NULL
+    group <- NA
   }
   
   # rename traits to avoid duplicated strings, in case the same 
@@ -128,6 +134,10 @@ organize_quantitative_data <- function(cmdata,
   outliers <- do.call("rbind", outliers)
   
   rownames(outliers) <- NULL
+  
+  if (isTRUE(length(group) == 1)) {
+    group <- NULL
+  }
   
   result <- list(quanti_dat = quanti_dat,
                  group = group,

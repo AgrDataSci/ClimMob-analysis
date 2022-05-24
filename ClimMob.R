@@ -119,7 +119,7 @@ try_data <- tryCatch({
   
   rank_dat <- organize_ranking_data(cmdata, 
                                     pars, 
-                                    groups, 
+                                    groups = groups, 
                                     option = "technology",
                                     ranker = "participant",
                                     tech_index = c("package_item_A", "package_item_B", "package_item_C"))
@@ -148,8 +148,19 @@ if (any_error(try_data)) {
 # 2. Organise the rankings ####
 try_quanti_data <- tryCatch({
   
-  source(paste0(fullpath, "/modules/02_organize_quantitative_data.R"))
-    
+  source(paste0(fullpath, "/modules/03_organize_quantitative_data.R"))
+  
+  if (isTRUE(length(pars$linear) > 0)) {
+    quanti_dat <- organize_quantitative_data(cmdata, 
+                                             pars, 
+                                             groups = groups, 
+                                             tech_index = c("package_item_A", "package_item_B", "package_item_C"))
+  }else{
+    quanti_dat <- NULL
+  }
+  
+  
+  
 }, error = function(cond) {
   return(cond)
 }
@@ -166,6 +177,10 @@ if (any_error(try_quanti_data)) {
 # 3. Prepare summary tables / charts
 org_summ <- tryCatch({
  
+  source(paste0(fullpath, "/modules/04_overview_and_summaries.R"))
+  
+  overview_and_summaries <- get_overview_summaries(cmdata, rank_dat)
+  
   
 }, error = function(cond) {
   return(cond)
@@ -174,10 +189,10 @@ org_summ <- tryCatch({
 
 if (any_error(org_summ)) {
   error <- c(error, org_summ$message)
-  partiplot <- 0L
-  itemtable <- data.frame()
-  tbl_section1 <- data.frame()
-  
+  overview_and_summaries <- list(partipation_plot = 0L,
+                                 summary_table_trait = data.frame(),
+                                 summary_table_tech = idata.frame(),
+                                 trial_connectivity = 0L)
 }
 
 # .......................................................

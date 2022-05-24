@@ -1,45 +1,50 @@
-# Check if lonlat is provided
-lon <- grepl("_longitude", names(cmdata))
-lat <- grepl("_latitude", names(cmdata))
-
-geoTRUE <- all(any(lon), any(lat))
-
-if (isTRUE(geoTRUE)) {
+#' This module produces the map when GPS is available
+#' 
+#' @param cmdata a data frame with the ClimMob data
+make_trial_map <- function(cmdata, output_path){
   
-  # find the vector with most completeness 
-  less_nas <- lapply(cmdata[lon], function(x){
-    sum(is.na(x))
-  })
+  # Check if lonlat is provided
+  lon <- grepl("_longitude", names(cmdata))
+  lat <- grepl("_latitude", names(cmdata))
   
-  lon <- names(which.min(unlist(less_nas)))
-  lat <- gsub("_longitude", "_latitude", lon)
+  geoTRUE <- all(any(lon), any(lat))
   
-  lonlat <- cmdata[,c(lon,lat)]
-  
-  lonlat <- na.omit(lonlat)
-  
-  nlonlat <- dim(lonlat)[[1]]
-  
-  if (nlonlat > 0){
+  if (isTRUE(geoTRUE)) {
     
-    trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = TRUE, 
-                          map_provider = "OpenStreetMap.Mapnik")
+    # find the vector with most completeness 
+    less_nas <- lapply(cmdata[lon], function(x){
+      sum(is.na(x))
+    })
     
-    mapshot(trial_map, 
-            url = paste0(outputpath, "/", projname, "_trial_map.html"),
-            file = paste0(outputpath, "/", projname, "_trial_map.png"))
+    lon <- names(which.min(unlist(less_nas)))
+    lat <- gsub("_longitude", "_latitude", lon)
+    
+    lonlat <- cmdata[,c(lon,lat)]
+    
+    lonlat <- na.omit(lonlat)
+    
+    nlonlat <- dim(lonlat)[[1]]
+    
+    if (nlonlat > 0){
+      
+      trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = TRUE, 
+                            map_provider = "OpenStreetMap.Mapnik")
+      
+      mapshot(trial_map, 
+              url = paste0(outputpath, "/trial_map.html"),
+              file = paste0(outputpath, "/trial_map.png"))
+      
+    }
+    
+    if (nlonlat == 0) {
+      geoTRUE <- FALSE
+    }
     
   }
   
-  if (nlonlat == 0) {
-    geoTRUE <- FALSE
-  }
+  result <- list(geoTRUE = geoTRUE,
+                 map_path = paste0(outputpath, "/trial_map.png"))
   
 }
 
-if (isFALSE(geoTRUE)) {
-  
-  trial_map_statement <- ""
-  
-}  
 
