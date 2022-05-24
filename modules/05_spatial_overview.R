@@ -31,8 +31,8 @@ make_trial_map <- function(cmdata, output_path){
                             map_provider = "OpenStreetMap.Mapnik")
       
       mapshot(trial_map, 
-              url = paste0(outputpath, "/trial_map.html"),
-              file = paste0(outputpath, "/trial_map.png"))
+              url = paste0(output_path, "/trial_map.html"),
+              file = paste0(output_path, "/trial_map.png"))
       
     }
     
@@ -43,7 +43,7 @@ make_trial_map <- function(cmdata, output_path){
   }
   
   result <- list(geoTRUE = geoTRUE,
-                 map_path = paste0(outputpath, "/trial_map.png"))
+                 map_path = paste0(output_path, "/trial_map.png"))
   
 }
 

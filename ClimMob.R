@@ -199,7 +199,12 @@ if (any_error(org_summ)) {
 # .......................................................
 # 4. Make map ####
 org_lonlat <- tryCatch({
-  sssss
+  
+  source(paste0(fullpath, "/modules/05_spatial_overview.R"))
+  
+  trial_map <- make_trial_map(cmdata, output_path = outputpath)
+  
+  
 }, error = function(cond) {
   return(cond)
 }
@@ -208,8 +213,9 @@ org_lonlat <- tryCatch({
 if (any_error(org_lonlat)) {
   e <- org_lonlat$message
   error <- c(error, e)
-  geoTRUE <- FALSE
-  trial_map_statement <- ""
+  trial_map <- list(geoTRUE = FALSE,
+                    map_path = "")
+
 }
 
 # .......................................................
@@ -222,169 +228,7 @@ if (any_error(org_lonlat)) {
 # and a table showing statistical differences for each trait 
 org_pl <- tryCatch({
   
-  #...........................................................
-  # first a list with rankings
-  R <- list()
   
-  for (i in seq_along(trait_list)) {
-    
-    keep <- trait_list[[i]]$keep
-    
-    # list of arguments for the function that will be used to 
-    # create the rankings
-    a <- list(cmdata[keep, c(itemnames, trait_list[[i]]$strings)],
-              items = itemnames,
-              input = trait_list[[i]]$strings)
-    
-    R[[i]] <- do.call(rankwith, args = a)
-    
-    # get the network of items evaluated in the project
-    #if (i == reference_trait) {
-      
-      if (isTRUE(tricotVSlocal)) {
-        
-        keep <- trait_list[[reference_trait]]$keep2 & trait_list[[i]]$keep
-        
-        a <- list(cmdata[keep, c(itemnames, 
-                                 trait_list[[i]]$strings, 
-                                 trait_list[[reference_trait]]$tricotVSlocal)],
-                  items = itemnames,
-                  input = trait_list[[i]]$strings,
-                  additional.rank = cmdata[keep, trait_list[[reference_trait]]$tricotVSlocal])
-        
-        R[[i]] <- do.call(rankwith, args = a)
-        
-      }
-    #}
-  }
-  
-  #...........................................................
-  # Fit Plackett-Luce model 
-  mod <- lapply(R, function(x){
-    PlackettLuce(x)
-  })
-  
-  # Kendall tau
-  compare_to <- mod[-reference_trait]
-  baseline_trait <- coef(mod[[reference_trait]], log = FALSE)
-  baseline_trait <- baseline_trait[items]
-  kendall <- lapply(compare_to, function(x){
-    x <- coef(x, log = FALSE)
-    x <- x[items]
-    kendallTau(x, baseline_trait)
-  })
-  
-  kendall <- do.call(rbind, kendall)
-  
-  kendall$trait <- rename_duplicates(traits_names[-reference_trait])
-  
-  kendall <- kendall[rev(order(kendall$kendallTau)), ]
-  
-  kendall <- kendall[,-2]
-  
-  isAGREE <- nrow(kendall) > 1
-  
-  if (isAGREE) {
-    strongest_link <- c(kendall$trait[1],
-                        round(kendall$kendallTau[1], 2))
-    
-    weakest_link <- c(kendall$trait[nrow(kendall)],
-                      round(kendall$kendallTau[nrow(kendall)], 2))
-    
-    kendall <- kendall[,c(2,1)]
-    
-    kendall[,2] <- round(kendall[,2], 3)
-    
-    names(kendall) <- c("Trait", "Kendall tau")
-    
-  }
-  
-  #...........................................................
-  # Analysis of variance
-  anovas <- lapply(mod, function(x){
-    a <- anova.PL(x)
-    a
-  })
-  
-  # and the tables with rounded p-values and sig stars
-  aov_tbl <- list()
-  for (i in seq_along(trait_list)) {
-    a <- anovas[[i]]
-    a[2, "Model"] <- trait_list[[i]]$name
-    a[,5] <- paste(formatC(a[,5], format = "e", digits = 2),
-                   stars.pval(a[,5]))
-    aov_tbl[[i]] <- a
-  }
-  
-  #...........................................................
-  # Bar plot with worth parameters for each trait
-  worth_plot <- lapply(mod, function(x){
-    worth_bar(x, ref = reference) +
-      labs(y = Option, x = "Worth")
-  })
-  
-  # Plot log worth
-  logworth_plot <- lapply(mod, function(x){
-    plot_logworth(mod[[1]]) + labs(y = Option)
-  })
-  
-  #...........................................................
-  # Table summarizing the best and worst items per trait
-  # and their respective level of statistical significance
-  overview_mod <- lapply(mod, function(x) {
-    
-    ps <- anova.PL(x)[2,5]
-    
-    summ <- itempar(x, log = TRUE, ref = reference)
-    
-    # take the best three items from this comparison
-    # bests <- as.character(summ[, "term"][grepl("a", summ[,"group"])])
-    bests <- names(rev(sort(summ[summ >= 0])))
-    # if more than three, subset to get only three
-    if (isTRUE(length(bests) > 3)) {
-      bests <- bests[1:3]
-    }
-    
-    worsts <- names(sort(summ[summ < 0]))
-    # if more than three, subset to get only three
-    if (isTRUE(length(worsts) > 3)) {
-      worsts <- worsts[1:3]
-    }
-    
-    # avoid bests and worst in the same column, this when very few items are tested
-    b <- bests[!bests %in% worsts]
-    w <- worsts[!worsts %in% bests]
-    
-    bests <- paste(b, collapse =", ")
-    worsts <- paste(w, collapse = ", ")
-    
-    tbl <- data.frame(trait = "",
-                      dc = "",
-                      b = bests,
-                      w = worsts,
-                      p = ps)
-    
-  })
-  
-  for (i in seq_along(trait_list)) {
-    overview_mod[[i]][,1] <- ClimMobTools:::.title_case(trait_list[[i]]$name)
-    overview_mod[[i]][,2] <- ClimMobTools:::.title_case(trait_list[[i]]$assessment)
-  }
-  
-  overview_mod <- do.call("rbind", overview_mod)
-  
-  overview_mod[,6] <- stars.pval(overview_mod[,5])
-  
-  overview_mod[,5] <- formatC(overview_mod[,5], format = "e", digits = 2)
-  
-  names(overview_mod) <- c("Trait", "Data collection moment", 
-                           "Best performance", "Worst performance", 
-                           "Pr(>Chisq)", "")
-  
-  #...........................................................
-  # Head to head visualization of each item by trait
-  worthmap <- worth_map(mod[-reference_trait],
-                        labels = traits_names[-reference_trait])
   
   
   

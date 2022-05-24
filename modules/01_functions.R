@@ -762,7 +762,7 @@ multcompPL <- function(mod, items = NULL, threshold = 0.05, adjust = "none", ...
 #' @param multcomp logical to add group letters 
 plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, ...) {
   
-  frame <- qvcalc(x)$qvframe
+  frame <- qvcalc(x, ...)$qvframe
   
   items <- factor(row.names(frame), levels = row.names(frame))
   

@@ -317,7 +317,8 @@ organize_ranking_data <- function(cmdata,
                  trait_dropped = trait_dropped,
                  covarTRUE = covarTRUE,
                  covar = covar,
-                 group = group)
+                 group = group,
+                 comparison_with_local = tricotVSlocal)
   
   return(result)
 
