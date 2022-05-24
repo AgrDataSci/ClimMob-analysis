@@ -228,8 +228,9 @@ if (any_error(org_lonlat)) {
 # and a table showing statistical differences for each trait 
 org_pl <- tryCatch({
   
+  source(paste0(fullpath, "/modules/06_PlackettLuce_by_traits.R"))
   
-  
+  PL_models <- get_rank_models(cmdata, rank_dat, reference)
   
   
 }, error = function(cond) {
@@ -240,6 +241,16 @@ org_pl <- tryCatch({
 if (any_error(org_pl)) {
   e <- org_pl$message
   error <- c(error, e)
+  
+  PL_models <- list(PL_models = list(),
+                    PL_models_overview = data.frame(),
+                    logworth_aggregated_rank = 0L,
+                    worthmap = 0L,
+                    logworth_plot = 0L,
+                    kendall = list(isKendall = FALSE,
+                                   strongest_link = "", 
+                                   weakest_link = "",
+                                   kendall_plot = 0L))
   
 }
 

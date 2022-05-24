@@ -151,7 +151,7 @@ get_rank_models <- function(cmdata, rank_dat, reference_tech) {
   
   # Plot log worth
   logworth_plot <- lapply(mod, function(x){
-    plot_logworth(mod[[1]], ref = reference_tech) + 
+    plot_logworth(x, ref = reference_tech, ci.level = 0.5) + 
       labs(y = title_case(option))
   })
   
@@ -209,14 +209,66 @@ get_rank_models <- function(cmdata, rank_dat, reference_tech) {
                            "Pr(>Chisq)", "")
   
   #...........................................................
-  # Head to head visualization of each item by trait
+  # Head to head visualization of each technology performance by trait
   worthmap <- worth_map(mod[-reference_trait_index],
                         labels = trait_names[-reference_trait_index],
                         ref = reference_tech)
   
   
+  #..........................................................
+  # PlackettLuce with aggregated rankings
+  # this put the rankings from all traits into a single 
+  # grouped rankings to assess "overall technology performance"
+  # reference trait must be the first in this vector
+  othertraits <- union(names(trait_list[reference_trait_index]),
+                       names(trait_list[-reference_trait_index]))
+  indicesbase <- as.vector(which(trait_list[[reference_trait_index]]$keep))
+  resetindices <- 1:length(indicesbase)
+  
+  RG <- list()
+  
+  index <- c()
+  
+  for(i in seq_along(othertraits)) {
+    
+    trait_i <- which(names(trait_list) %in% othertraits[i])
+    
+    # this should be combined with the baseline trait
+    index_i <- as.vector(which(trait_list[[trait_i]]$keep))
+    
+    keep_i <- index_i %in% indicesbase
+    
+    index_i <- index_i[keep_i]
+    
+    r_i <- rankTricot(cmdata[index_i, ],
+                      technologies_index,
+                      c(trait_list[[trait_i]]$strings),
+                      group = FALSE)
+    
+    # reset indices to match with grouped_rankings later
+    index_i <- resetindices[indicesbase %in% index_i]
+    
+    index <- c(index, index_i)
+    
+    RG[[i]] <- r_i
+    
+  }
+  
+  RG <- do.call("rbind", RG)
+  
+  RG <- group(RG, index = index)
+  
+  # PlackettLuce of aggregated rankings
+  # TO DO: add weights to rankings  
+  modRG <- PlackettLuce(RG)
+  
+  logworth_aggregated_rank <- 
+    plot_logworth(modRG, ref = reference_tech, ci.level = 0.5) +
+    labs(y = title_case(option))
+  
   result <- list(PL_models = mod,
                  PL_models_overview = overview_mod,
+                 logworth_aggregated_rank = logworth_aggregated_rank,
                  worthmap = worthmap,
                  logworth_plot = logworth_plot,
                  kendall = list(isKendall = isKendall,
