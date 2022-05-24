@@ -6,10 +6,9 @@
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
 #' @param reference_tech a integer or character indicating the reference technology
-get_pltree <- function(cmdata, rank_dat, reference_tech, minsplit, alpha) {
+get_pltree <- function(cmdata, rank_dat, reference_tech) {
   
   trait_list <- rank_dat[["trait_list"]]
-  nranker <- rank_dat[["nranker"]]
   option <- rank_dat[["option"]]
   group <- rank_dat[["group"]]
   technologies_index <- rank_dat[["technologies_index"]]
@@ -19,7 +18,9 @@ get_pltree <- function(cmdata, rank_dat, reference_tech, minsplit, alpha) {
   trait_names <- rank_dat[["trait_names"]]
   covarTRUE <- rank_dat[["covarTRUE"]]
   covar <- rank_dat[["covar"]]
-  
+  nranker <- sum(trait_list[[reference_trait_index]]$keep)
+  node_size <- nranker * 0.1
+  tree_alpha <- 0.5
   
   if (isTRUE(covarTRUE)) {
     
@@ -247,15 +248,15 @@ get_pltree <- function(cmdata, rank_dat, reference_tech, minsplit, alpha) {
       
       t_i <- try(pltree(as.formula(paste0("G ~ ", paste(c(var_keep, exp_var[i]), collapse = " + "))),
                         data = Gdata,
-                        minsize = minsplit,
-                        alpha = sig_level_tree,
-                        ref = reference_tech,
-                        gamma = TRUE), silent = TRUE)
+                        minsize = node_size,
+                        alpha = tree_alpha,
+                        gamma = TRUE), 
+                 silent = TRUE)
       
       if (isFALSE("try-error" %in% class(t_i))) {
         validations <- data.frame(nnodes = length(nodeids(t_i, terminal = TRUE)),
                                   AIC = AIC(t_i),
-                                  noerror = !"try-error" %in% class(try(itempar(t_i, vcov = TRUE), silent = TRUE)))
+                                  noerror = TRUE)
       }else{
         validations <- data.frame(nnodes = NA,
                                   AIC = NA,
@@ -292,19 +293,24 @@ get_pltree <- function(cmdata, rank_dat, reference_tech, minsplit, alpha) {
     
   }
   
-  if (length(var_keep) == 0) {
-    var_keep <- names(Gdata)[-1]
+  if (length(var_keep) > 0) {
+    treeformula <- as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
+    message(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
   }
   
-  treeformula <- as.formula(paste0("G ~ ", paste(c(var_keep), collapse = " + ")))
+  if (length(var_keep) == 0) {
+    treeformula <- as.formula("G ~ 1")
+    message("G ~ 1")
+  }
+  
+  
   
   # now fit the tree with the selected covariates
   tree_f <- pltree(treeformula,
                    data = Gdata,
-                   minsize = minsplit,
-                   gamma = TRUE,
-                   alpha = alpha,
-                   ref = reference)
+                   minsize = node_size,
+                   alpha = tree_alpha,
+                   gamma = TRUE)
   
   isTREE <- isTRUE(length(tree_f) > 1)
   
@@ -400,9 +406,11 @@ get_pltree <- function(cmdata, rank_dat, reference_tech, minsplit, alpha) {
   } else {
     node_summary <- data.frame()
     regret_tbl <- data.frame()
+    plottree <- 0L
   }
   
-  result <- list(tree_formula = treeformula,
+  result <- list(isTRUE = isTRUE,
+                 tree_formula = treeformula,
                  PLtree = tree_f,
                  PLtree_plot = plottree,
                  node_summary = node_summary,

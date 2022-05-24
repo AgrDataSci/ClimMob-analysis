@@ -23,7 +23,7 @@ minN        <- args[12] # minimum n of complete data required in a trait evaluat
 minitem     <- args[13] # minimum n of items tested, e.g. that all items are tested at least twice
 mincovar    <- args[14] # minimum proportion of covariates compared to total valid n
 sig_level   <- args[15] # significance level for the standard PL model
-sig_level_tree  <-  args[16] # significance level for the tree
+sig_level_tree  <-  as.numeric(args[16]) # significance level for the tree
 minsplit    <- as.integer(args[17]) # minimum n in each tree node
 template    <- args[18] 
 
@@ -58,12 +58,6 @@ if (isTRUE(is.na(minsplit))) {
 if (isTRUE(is.na(language))) {
   language <- "en"
 }
-
-# method for adjustments for confidence intervals and setting widths for comparison. 
-ci_adjust <- "BH"
-
-# confidence interval level for comparison plots with error bars
-ci_level <- 0.84
 
 # # ................................................................
 # # ................................................................
@@ -278,10 +272,12 @@ if (any_error(org_pladmm)) {
 # .......................................................
 # .......................................................
 # 8. Fit pltree ####
-# organize covariates and prepate to fit pltree()
-# outputs of pltree(), if any, are also processed for further insights
 org_pltree <- tryCatch({
-  ss
+  
+  source(paste0(fullpath, "/modules/08_PlackettLuce_tree.R"))
+  
+  PL_tree <- get_pltree(cmdata, rank_dat, reference)
+  
 }, error = function(cond) {
   return(cond)
 }
