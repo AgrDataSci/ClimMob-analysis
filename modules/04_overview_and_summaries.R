@@ -194,5 +194,12 @@ get_overview_summaries <- function(cmdata, rank_dat) {
   
 }
 
+# .......................................
+# Error in data 
+# this is a file that is generated to be used in case of errors
+error_data_overview_and_summaries <- list(partipation_plot = 0L,
+                                          summary_table_trait = data.frame(),
+                                          summary_table_tech = idata.frame(),
+                                          trial_connectivity = 0L)
 
 

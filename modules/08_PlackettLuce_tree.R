@@ -6,7 +6,7 @@
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
 #' @param reference_tech a integer or character indicating the reference technology
-get_pltree <- function(cmdata, rank_dat, reference_tech) {
+get_PlackettLuce_tree <- function(cmdata, rank_dat, reference_tech) {
   
   trait_list <- rank_dat[["trait_list"]]
   option <- rank_dat[["option"]]
@@ -19,8 +19,9 @@ get_pltree <- function(cmdata, rank_dat, reference_tech) {
   covarTRUE <- rank_dat[["covarTRUE"]]
   covar <- rank_dat[["covar"]]
   nranker <- sum(trait_list[[reference_trait_index]]$keep)
-  node_size <- nranker * 0.1
-  tree_alpha <- 0.5
+  # use <<- to assign these two variables to the .GlobalEnv
+  node_size <<- nranker * 0.1
+  tree_alpha <<- 0.5
   
   if (isTRUE(covarTRUE)) {
     
@@ -415,4 +416,16 @@ get_pltree <- function(cmdata, rank_dat, reference_tech) {
                  regret_table = regret_tbl)
   
 }
+
+
+# .......................................
+# Error in data 
+# this is a file that is generated to be used in case of errors
+error_data_PL_tree <- list(isTRUE = FALSE,
+                           tree_formula = "",
+                           PLtree = list(),
+                           PLtree_plot = 0L,
+                           node_summary = data.frame(),
+                           regret_table = data.frame())
+
 

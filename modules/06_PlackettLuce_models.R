@@ -6,7 +6,7 @@
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
 #' @param reference_tech a integer or character indicating the reference technology
-get_rank_models <- function(cmdata, rank_dat, reference_tech) {
+get_PlackettLuce_models <- function(cmdata, rank_dat, reference_tech) {
   
   trait_list <- rank_dat[["trait_list"]]
   nranker <- rank_dat[["nranker"]]
@@ -277,4 +277,21 @@ get_rank_models <- function(cmdata, rank_dat, reference_tech) {
                                 kendall_plot = kendall_plot))
   
 }
+
+
+# .......................................
+# Error in data 
+# this is a file that is generated to be used in case of errors
+error_data_PL_models <- list(PL_models = list(),
+                             PL_models_overview = data.frame(),
+                             logworth_aggregated_rank = 0L,
+                             worthmap = 0L,
+                             logworth_plot = 0L,
+                             kendall = list(isKendall = FALSE,
+                                            strongest_link = "", 
+                                            weakest_link = "",
+                                            kendall_plot = 0L))
+
+
+
 

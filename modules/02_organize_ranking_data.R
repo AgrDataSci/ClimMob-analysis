@@ -324,7 +324,25 @@ organize_ranking_data <- function(cmdata,
 
 }
 
-
-
+# .......................................
+# Error in data organize ranking
+# this is a file that is generated to be used in case of errors
+error_data_rank_dat <- list(projname = "",
+                            option = "",
+                            ranker = "",
+                            nranker = "",
+                            technologies = "",
+                            technologies_index = "",
+                            assessment_order = "",
+                            reference_trait = "",
+                            reference_trait_index = "",
+                            trait_names = "",
+                            trait_code = "",
+                            trait_list = list(),
+                            trait_dropped = character(),
+                            covarTRUE = FALSE,
+                            covar = data.frame(),
+                            group = NULL,
+                            comparison_with_local = FALSE)
 
 

@@ -141,8 +141,15 @@ organize_quantitative_data <- function(cmdata,
   
   result <- list(quanti_dat = quanti_dat,
                  group = group,
-                 outliers)
+                 outliers = outliers)
   
   return(result)
   
 }
+
+# .......................................
+# Error in data 
+# this is a file that is generated to be used in case of errors
+error_data_quanti_dat <- list(quanti_dat = data.frame(),
+                              group = NULL,
+                              outliers = data.frame())

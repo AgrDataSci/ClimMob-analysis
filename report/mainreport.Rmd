@@ -1,5 +1,5 @@
 ---
-title: "`r paste('Report of ClimMob project ', rank_dat$projname)`"
+title: "`r paste('Report of ClimMob project ', project_name)`"
 author: "ClimMob.net"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -39,21 +39,17 @@ If you publish any results generated with ClimMob, you should cite a number of a
 
 # Section 1: Headline results
 
-Overall, there were `r participant`  registered to this project. Each `r participant` assessed `r length(rank_dat$technologies_index)` different `r pluralize(rank_dat$option)` and provided rankings for `r length(rank_dat$trait_list)` trait(s). 
+Overall, there were `r nparticipants`  registered to this project. Each `r participant` assessed `r noptions` different `r options` and provided rankings for `r ntraits` trait(s). 
 
 ```{r traits}
-try(
 kable(overview_and_summaries$summary_table_trait, 
-      caption = paste0("Table 1.1. Summary of traits and number of observations (answers) per trait used in this report."),
-      row.names = FALSE,
-      align = "l"),
-silent = TRUE)
+      caption = paste0("Table 1.1. Summary of traits and number of observations (answers) per trait used in this report."), row.names = FALSE, align = "l")
 
 ```
 
 \
 
-The rate of response in each trial stage (data collection moment) is presented in Figure 1.1. This gives an illustration of the level of participation during the experiment and any attrition (when participants leave the experiment). 
+The rate of response in each trial stage (data collection moment) is presented in Figure 1.1. This gives an overview of the level of participation during the experiment and any attrition (when participants leave the experiment). 
 
 \
 
@@ -68,7 +64,7 @@ trial_map_statement <- ""
 if (isTRUE(trial_map$geoTRUE)){
   trial_map_statement <- paste0("The map below shows the distribution ",
                                "of the trials in this project. To respect ",
-                               , "' privacy, the coordinates ",
+                               participants, "' privacy, the coordinates ",
                                "were clustered with a 0.05 arc-degree resolution. You can find ",
                                "the original coordinates in your ClimMob data.")
 }
@@ -78,31 +74,26 @@ if (isTRUE(trial_map$geoTRUE)){
 
 ```{r map, dpi=dpi, out.width = '70%'}
 if (isTRUE(trial_map$geoTRUE)) {
-  if (extension == "html") {
-    trial_map
-  }else{
-    try(knitr::include_graphics(trial_map$map_path), silent = TRUE)
-  }
+knitr::include_graphics(trial_map$map_path)
 }
 ```
 
 
-Table 1.2 shows the `r length(rank_dat$technologies_index)` `r pluralize(rank_dat$option)` assessed in this trial, with the frequency and percentage of `r pluralize(rank_dat$ranker)` who assessed each `r rank_dat$option`. If the `r pluralize(rank_dat$option)` have large names (> 12 characters) an abbreviation is applied across the figures in this report.
+Table 1.2 shows the `r ntechnologies` `r options` assessed in this trial, with the frequency and percentage of `r participants` who assessed each `r option`. If the `r options` have large names (> 12 characters) an abbreviation is applied across the figures in this report.
 
 ```{r itemtable}
-try(kable(overview_and_summaries$summary_table_tech, 
-          caption = paste0("Table 1.2. Frequency of ", pluralize(rank_dat$option)," assessed in this experiment."),
+kable(overview_and_summaries$summary_table_tech, 
+          caption = paste0("Table 1.2. Frequency of ", options," assessed in this trial."),
           align = "l",
-          row.names = FALSE), silent = TRUE)
+          row.names = FALSE)
 ```
 
 \
 
-Figure 1.2 shows that the `r pluralize(rank_dat$option)` are all connected to each other. That means that they all co-occurred at least once in an incomplete block of `r length(rank_dat$technologies_index)` `r pluralize(rank_dat$option)`. 
+Figure 1.2 shows that the `r ntechnologies` are all connected to each other. That means that they all co-occurred at least once in an incomplete block of `r noptions` `r options`. 
 
-```{r network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.2. Network representation of ", pluralize(rank_dat$option), " tested in this trial.")}
-if (isTRUE("igraph" %in% class(net))){
- try(plot(overview_and_summaries$trial_connectivity), silent = TRUE)
+```{r network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.2. Experimental network representation of ", options, " tested in this trial.")}
+ plot(overview_and_summaries$trial_connectivity)
 }
 ```
 
