@@ -5,8 +5,7 @@
 #' 
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
-#' @param reference_tech a integer or character indicating the reference technology
-get_PlackettLuce_tree <- function(cmdata, rank_dat, reference_tech) {
+get_PlackettLuce_tree <- function(cmdata, rank_dat) {
   
   trait_list <- rank_dat[["trait_list"]]
   option <- rank_dat[["option"]]
@@ -22,6 +21,7 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, reference_tech) {
   # use <<- to assign these two variables to the .GlobalEnv
   node_size <<- nranker * 0.1
   tree_alpha <<- 0.5
+  reference_tech <- rank_dat[["reference_tech"]]
   
   if (isTRUE(covarTRUE)) {
     

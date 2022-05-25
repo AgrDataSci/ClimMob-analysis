@@ -30,9 +30,7 @@ ClimMob software assigns a limited number of items (typically 3) to each partici
  
 ClimMob applies the Plackett-Luce model to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls].
  
-> If you publish any results generated with ClimMob, you should cite a number of articles as the package builds on various contributions. The crowdsourcing philosophy behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. It is important to mention that ClimMob is implemented in R, a free, open-source analysis software [@RCoreTeam]. Methodologically, if you report on the Plackett-Luce tree results, you should mention that ClimMob applies the Plackett-Luce model, jointly attributed to Luce (1959) [@Luce1959] and Plackett (1975) [@Plackett1975], and implemented in R by Turner et al. 2020 [@Turner2020]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2022) [@climmobanalysis].
-
-\pagebreak
+> If you publish the results presented in this report you should cite a number supporting tools and approaches that the report relies on. The decentralized experimental approach behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2022) [@climmobanalysis].
 
 # Trial overview
 
@@ -152,7 +150,7 @@ if (isTRUE(length(PL_models$worthmap) > 0)) {
                                  " tested in this trial is presented in Figure 1.4.",
                                  " The chart shows for each trait the ", options, 
                                  " with higher and weakest performance compared to",
-                                 " the reference ", option, " ", reference, ".",
+                                 " the reference ", option, " ", reference_tech, ".",
                                  " The values are adjusted to the log scale",
                                  " where log-worth > 0 (blue) represents the ", options, 
                                  " with superior performance for the given trait, ",
@@ -180,14 +178,14 @@ if (isTRUE(PL_models$kendall$isKendall)) {
 `r paste(relation_other_chrs3, collapse='\n')`
 
 
-```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.4. ", title_case(option), " performance by trait. The chart display log-worth values where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with the lower performance for the given trait. The ", option, " ", reference, " is set as refence (log-worth arbitrarily set to zero).")}
+```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.4. ", title_case(option), " performance by trait. The chart display log-worth values where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with the lower performance for the given trait. The ", option, " ", reference_tech, " is set as refence (log-worth arbitrarily set to zero).")}
 plot(PL_models$worthmap)
 ```
 
 
 Figure 1.5 shows the estimated log-worth for the grouped rankings of all `r ntraits` traits. This analysis combines all the rankings provided for each trait into a single list of grouped rankings, thus giving insights on `r option` performance across all the traits. The purpose is to be able to distinguish the `r option` with the highest overall performance. As such, it can be concluded that a higher log-worth indicates that a `r option` has best performance overall. While the lowest log-worth shows `r option` with weakest performance overall. Mean separation analysis was also conducted to indicate, using letters, which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order at the alpha = `r sig_level`.
 
-```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 1.5. Plackett-Luce Model estimates (log-worth) of tested ", options, " obtained from grouped rankings combining the performance of ", options, " in the ", ntraits, " traits assessed in this trial. The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
+```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 1.5. Plackett-Luce Model estimates (log-worth) of tested ", options, " obtained from grouped rankings combining the performance of ", options, " in the ", ntraits, " traits assessed in this trial. The ", option, " ", reference_tech, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
 plot(PL_models$logworth_grouped_rank)
 ```
 
@@ -219,7 +217,7 @@ if (isTRUE(PL_tree$isTREE)) {
     paste0("Table 1.4 presents the node groups that were obtained from the Plackett-Luce trees using the set of covariates retained by the forward selection.")
   
   tree_test2 <- 
-    paste0("Figure 1.6 shows the Plackett-Luce tree obtaioned with the selected model.")
+    paste0("Figure 1.6 shows the Plackett-Luce tree obtained with the selected model.")
   
   tree_test3 <- 
     paste0("Table 1.5 present the worth and regret values across the tree nodes. This provides an approach to select ", options, " with the higher performance across all nodes in the tree and can be used as a risk assessment approach.")
@@ -247,7 +245,7 @@ kable(PL_tree$node_summary,
 
 \
 
-```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Fig. 1.6. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs. The gray vertical lines indicate the reference.")}
+```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Fig. 1.6. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
 if (isTRUE(PL_tree$isTREE)) {
 plot(PL_tree$PLtree_plot)
 }
@@ -279,8 +277,8 @@ if (isFALSE(is.null(error))){
   e <- paste("During the execution of the requested analysis",
              "we found the following error(s).",
              "Please report the error(s) to", 
-             "Kauê de Sousa <k.desousa(at)cgiar.org> and",
-             "to Brandon Madriz <bmadriz(at)mrbotcr.com>.")
+             "Kauê de Sousa <k.desousa@cgiar.org> and",
+             "to Brandon Madriz <bmadriz@mrbotcr.com>.")
 }
 ```
 

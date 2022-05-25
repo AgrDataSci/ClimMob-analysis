@@ -14,6 +14,7 @@
 #'  with the technologies
 organize_ranking_data <- function(cmdata, 
                                   pars, 
+                                  project_name,
                                   groups = NULL,
                                   option_label = "technology", 
                                   ranker_label = "participant",
@@ -21,7 +22,7 @@ organize_ranking_data <- function(cmdata,
                                   tech_index = c("package_item_A", "package_item_B", "package_item_C")){
   
   # Get some info from the data and ClimMob parameters 
-  projname     <- cmdata[1, "package_project_name"]
+  projname     <- project_name
   nranker      <- nrow(cmdata)
   items        <- cmdata[, tech_index]
   itemnames    <- names(items)
@@ -304,8 +305,19 @@ organize_ranking_data <- function(cmdata,
   # refresh number of other traits
   nothertraits <- length(trait_list) - 1
   
-  if (isTRUE(is.integer(reference_tech))) {
-    reference_tech <- items[1]
+  # replace the index of reference tech by its name 
+  if (isTRUE(is.numeric(reference_tech))) {
+    reference_tech <- items[reference_tech]
+  }
+  
+  # check if the reference tech is within the items 
+  # otherwise take the first
+  if (isTRUE(is.character(reference_tech))) {
+    
+    if (isFALSE(reference_tech %in% items)) {
+      reference_tech <- items[1]
+    }
+    
   }
   
   

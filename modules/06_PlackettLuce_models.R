@@ -284,7 +284,7 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
 # .......................................
 # Error in data 
 # this is a file that is generated to be used in case of errors
-error_data_PL_models <- list(PL_models = list(),
+error_data_PL_model <- list(PL_models = list(),
                              PL_models_overview = data.frame(),
                              logworth_grouped_rank = 0L,
                              worthmap = 0L,

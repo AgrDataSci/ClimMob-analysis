@@ -86,7 +86,6 @@ library("plotrix")
 library("gridExtra")
 library("caret")
 library("janitor")
-library("GGally")
 source(paste0(fullpath, "modules/01_functions.R"))
 
 # An object to capture error messages when running the analysis
@@ -104,7 +103,10 @@ try_data <- tryCatch({
   # the trial data 
   cmdata <- jsonlite::fromJSON(outputname)
   class(cmdata) <- union("CM_list", class(cmdata))
-  cmdata <- as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE)
+  project_name <- cmdata$project$project_name
+  reference <- cmdata$combination$elements[[reference]]$alias_name
+  cmdata <- try(as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE),
+                silent = TRUE)
   
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
   
@@ -112,6 +114,7 @@ try_data <- tryCatch({
   
   rank_dat <- organize_ranking_data(cmdata, 
                                     pars, 
+                                    project_name,
                                     groups, 
                                     option_label = option,
                                     ranker_label = ranker,
@@ -182,7 +185,6 @@ org_lonlat <- tryCatch({
   
   trial_map <- get_testing_sites_map(cmdata, output_path = outputpath)
   
-  
 }, error = function(cond) {
   return(cond)
 }
@@ -234,7 +236,7 @@ org_pltree <- tryCatch({
   
   source(paste0(fullpath, "/modules/08_PlackettLuce_tree.R"))
   
-  PL_tree <- get_PlackettLuce_tree(cmdata, rank_dat, reference)
+  PL_tree <- get_PlackettLuce_tree(cmdata, rank_dat)
   
 }, error = function(cond) {
   return(cond)
@@ -293,6 +295,7 @@ participants <- pluralize(rank_dat$ranker)
 nparticipants <- nrow(cmdata)
 ntraits <- length(rank_dat$trait_list)
 reference_trait <- title_case(rank_dat$reference_trait)
+reference_tech <- rank_dat$reference_tech
 
 # resolution of display items
 dpi <- 400

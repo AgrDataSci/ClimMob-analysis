@@ -1,0 +1,1033 @@
+{
+    "Characteristics": [
+        {
+            "name": "Overall ranking",
+            "codeQst": "overallperf",
+            "id": 204,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_overallperf_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_overallperf_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Overall, which option was the best?",
+                "Overall, which option was the worst?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_204_add"
+        },
+        {
+            "name": "Flowing time",
+            "codeQst": "Flowertime",
+            "id": 3476,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_flowertime_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_flowertime_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype flowered first ?",
+                "Which genotype flowered last ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3476_add"
+        },
+        {
+            "name": "Podding time",
+            "codeQst": "Podtime",
+            "id": 3488,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_podtime_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_podtime_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype podded first?",
+                "Which genotype podded last?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3488_add"
+        },
+        {
+            "name": "Stem diameter",
+            "codeQst": "Stemdiameter",
+            "id": 3472,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_stemdiameter_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_stemdiameter_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has bigger stem diameter? ",
+                "Which genotype has smaller stem diameter? "
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3472_add"
+        },
+        {
+            "name": "Leaf number",
+            "codeQst": "Numleaves",
+            "id": 3474,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_numleaves_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_numleaves_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more leaves ?",
+                "Which genotype has less leaves ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3474_add"
+        },
+        {
+            "name": "Jorquettes (Branching)",
+            "codeQst": "Jorquettes",
+            "id": 3479,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_jorquettes_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_jorquettes_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more jorquette? ",
+                "Which genotype has less jorquette? "
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3479_add"
+        },
+        {
+            "name": "Cacao Yield",
+            "codeQst": "CoYield",
+            "id": 3478,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_coyield_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_coyield_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more yield ?",
+                "Which genotype has less yield ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3478_add"
+        },
+        {
+            "name": "Pod size",
+            "codeQst": "Podsize",
+            "id": 3475,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_podsize_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_podsize_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has bigger pod size? ",
+                "Which genotype has smaller pod size? "
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3475_add"
+        },
+        {
+            "name": "Beans size",
+            "codeQst": "Beansize",
+            "id": 3477,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_beansize_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_beansize_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has the bigger bean sizes? ",
+                "Which genotype has the smaller bean sizes? "
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3477_add"
+        },
+        {
+            "name": "Mortalities",
+            "codeQst": "Mortalities",
+            "id": 3487,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_mortalities_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_mortalities_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more mortalities?",
+                "Which genotype has less mortalities?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3487_add"
+        },
+        {
+            "name": "Diseased Pods",
+            "codeQst": "Diseasedpods",
+            "id": 3486,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_diseasedpods_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_diseasedpods_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more diseased pods?",
+                "Which genotype has less diseased pods?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3486_add"
+        },
+        {
+            "name": "Pest tolerant",
+            "codeQst": "Pesttoler",
+            "id": 3485,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_pesttoler_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_pesttoler_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype is more tolerant to pests?",
+                "Which genotype is less tolerant to pests?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3485_add"
+        },
+        {
+            "name": "Drought tolerant",
+            "codeQst": "Droughttoler",
+            "id": 3484,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_droughttoler_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_droughttoler_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype is more tolerant to drought?",
+                "Which genotype is less tolerant to drought?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3484_add"
+        },
+        {
+            "name": "Cherelle wilt",
+            "codeQst": "Cherellewilt",
+            "id": 3483,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_cherellewilt_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_cherellewilt_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more Cherelle wilt?",
+                "Which genotype has less Cherelle wilt?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3483_add"
+        },
+        {
+            "name": "Monilia",
+            "codeQst": "Monilia",
+            "id": 3482,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_monilia_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_monilia_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more monilia?",
+                "Which genotype has less monilia?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3482_add"
+        },
+        {
+            "name": "Phytophthora",
+            "codeQst": "Phytophthora",
+            "id": 3481,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_phytophthora_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_phytophthora_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more phytophthora? ",
+                "Which genotype has less phytophthora? "
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3481_add"
+        },
+        {
+            "name": "Mistletoe",
+            "codeQst": "Mistletoe",
+            "id": 3480,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_mistletoe_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_mistletoe_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has more mistletoe?",
+                "Which genotype has less mistletoe?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3480_add"
+        },
+        {
+            "name": "Cocoa Height",
+            "codeQst": "CoHeight",
+            "id": 3473,
+            "vars": [
+                {
+                    "name": "ASS6bedcf1507f5_char_coheight_pos"
+                },
+                {
+                    "name": "ASS6bedcf1507f5_char_coheight_neg"
+                }
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "Which genotype has taller height?",
+                "Which genotype has shorter height?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_6bedcf1507f5_3473_add"
+        }
+    ],
+    "Performance": [],
+    "Explanatory": [
+        {
+            "name": "Farm Geolocation",
+            "codeQst": "farmgoelocation",
+            "questionAsked": "Farm Geolocation",
+            "id": 206,
+            "dtype": 4,
+            "vars": "REG_farmgoelocation",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__206_add"
+        },
+        {
+            "name": "What is the gender ?",
+            "codeQst": "gender",
+            "questionAsked": "What is the gender ?",
+            "id": 237,
+            "dtype": 5,
+            "vars": "REG_gender",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__237_add"
+        },
+        {
+            "name": "How old are you?",
+            "codeQst": "age",
+            "questionAsked": "How old are you?",
+            "id": 238,
+            "dtype": 3,
+            "vars": "REG_age",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__238_add"
+        },
+        {
+            "name": "Age",
+            "codeQst": "bioage",
+            "questionAsked": "How old are you?",
+            "id": 1684,
+            "dtype": 3,
+            "vars": "ASS6bedcf1507f5_bioage",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_1684_add"
+        },
+        {
+            "name": "Gender",
+            "codeQst": "biogender",
+            "questionAsked": "Select the gender of the participant",
+            "id": 1683,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_biogender",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_1683_add"
+        },
+        {
+            "name": "Any loss",
+            "codeQst": "anyloss",
+            "questionAsked": "Have you completely lost any of the trial plots?",
+            "id": 2579,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_anyloss",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_2579_add"
+        },
+        {
+            "name": "Experience",
+            "codeQst": "Experiencecocoa",
+            "questionAsked": "How many years have you been cultivating cocoa? ",
+            "id": 3452,
+            "dtype": 3,
+            "vars": "ASS6bedcf1507f5_experiencecocoa",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3452_add"
+        },
+        {
+            "name": "Soil characteristics",
+            "codeQst": "SoilCharact",
+            "questionAsked": "What characterizes your soil?",
+            "id": 1702,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_soilcharact",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_1702_add"
+        },
+        {
+            "name": "Row Length",
+            "codeQst": "Rowlength",
+            "questionAsked": "How many feet long is the row for each variety? ",
+            "id": 3453,
+            "dtype": 3,
+            "vars": "ASS6bedcf1507f5_rowlength",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3453_add"
+        },
+        {
+            "name": "Years of using the field",
+            "codeQst": "Lengthoffielduse",
+            "questionAsked": "For how many years has your test plot been in continuous use? ",
+            "id": 3461,
+            "dtype": 3,
+            "vars": "ASS6bedcf1507f5_lengthoffielduse",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3461_add"
+        },
+        {
+            "name": "Crop arrangement",
+            "codeQst": "Croppingarrange",
+            "questionAsked": "What cropping arrangement did you use?",
+            "id": 3458,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_croppingarrange",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3458_add"
+        },
+        {
+            "name": "Nature of field",
+            "codeQst": "Fieldnature",
+            "questionAsked": "What is the nature of the field you established the trial on?",
+            "id": 3459,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_fieldnature",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3459_add"
+        },
+        {
+            "name": "Land quality",
+            "codeQst": "Landquality",
+            "questionAsked": "What is the land quality of the test plot? ",
+            "id": 3462,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_landquality",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3462_add"
+        },
+        {
+            "name": "Fertilizer",
+            "codeQst": "Fert",
+            "questionAsked": "Did you apply fertilizer?",
+            "id": 1696,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_fert",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_1696_add"
+        },
+        {
+            "name": "Fertilizer Kind",
+            "codeQst": "KindofFert",
+            "questionAsked": "What did you use to fertilize?",
+            "id": 1697,
+            "dtype": 6,
+            "vars": "ASS6bedcf1507f5_kindoffert",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_1697_add"
+        },
+        {
+            "name": "Irrigation ",
+            "codeQst": "IrrigDrought",
+            "questionAsked": "Did you irrigate to address drought?",
+            "id": 1695,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_irrigdrought",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_1695_add"
+        },
+        {
+            "name": "Shade",
+            "codeQst": "Shadeprovision",
+            "questionAsked": "Did you provide shade? ",
+            "id": 3469,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_shadeprovision",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3469_add"
+        },
+        {
+            "name": "Continued the experiment",
+            "codeQst": "Continuedexp",
+            "questionAsked": "Did you continue executing the experiment so far? ",
+            "id": 3465,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_continuedexp",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3465_add"
+        },
+        {
+            "name": "Problem",
+            "codeQst": "Fieldproblem",
+            "questionAsked": "Did you have any problems with your test plot that affected yield of one or more of the varieties?",
+            "id": 3463,
+            "dtype": 6,
+            "vars": "ASS6bedcf1507f5_fieldproblem",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3463_add"
+        },
+        {
+            "name": "Pesticides",
+            "codeQst": "Pesticideuse",
+            "questionAsked": "Did you use pesticides on your field? ",
+            "id": 3454,
+            "dtype": 5,
+            "vars": "ASS6bedcf1507f5_pesticideuse",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3454_add"
+        },
+        {
+            "name": "Spraying regimes",
+            "codeQst": "Sprayingregimes",
+            "questionAsked": "How many times did you spray your field?",
+            "id": 3457,
+            "dtype": 3,
+            "vars": "ASS6bedcf1507f5_sprayingregimes",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3457_add"
+        },
+        {
+            "name": "Weeding regimes",
+            "codeQst": "Weedingregime",
+            "questionAsked": "How many times did you weed?",
+            "id": 3456,
+            "dtype": 3,
+            "vars": "ASS6bedcf1507f5_weedingregime",
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_3456_add"
+        }
+    ],
+    "Quantitative": [],
+    "linearRegression": [
+        {
+            "name": "Survival",
+            "codeQst": "Survivalrate",
+            "id": 3471,
+            "dtype": 3,
+            "vars": [
+                "ASS6bedcf1507f5_Survivalrate_a",
+                "ASS6bedcf1507f5_Survivalrate_b",
+                "ASS6bedcf1507f5_Survivalrate_c"
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "How many of the plants survived?  - Option A",
+                "How many of the plants survived?  - Option B",
+                "How many of the plants survived?  - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_6bedcf1507f5_3471_add"
+        },
+        {
+            "name": "Number of harvests",
+            "codeQst": "harvestimes",
+            "id": 3468,
+            "dtype": 3,
+            "vars": [
+                "ASS6bedcf1507f5_harvestimes_a",
+                "ASS6bedcf1507f5_harvestimes_b",
+                "ASS6bedcf1507f5_harvestimes_c"
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "How many times did you harvest from each variety? - Option A",
+                "How many times did you harvest from each variety? - Option B",
+                "How many times did you harvest from each variety? - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_6bedcf1507f5_3468_add"
+        },
+        {
+            "name": "Planting Distance",
+            "codeQst": "PlantDist",
+            "id": 3490,
+            "dtype": 3,
+            "vars": [
+                "ASS6bedcf1507f5_PlantDist_a",
+                "ASS6bedcf1507f5_PlantDist_b",
+                "ASS6bedcf1507f5_PlantDist_c"
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "What was the planting distance? - Option A",
+                "What was the planting distance? - Option B",
+                "What was the planting distance? - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_6bedcf1507f5_3490_add"
+        },
+        {
+            "name": "Number of diseased pods",
+            "codeQst": "NumbDiseasePods",
+            "id": 3489,
+            "dtype": 3,
+            "vars": [
+                "ASS6bedcf1507f5_NumbDiseasePods_a",
+                "ASS6bedcf1507f5_NumbDiseasePods_b",
+                "ASS6bedcf1507f5_NumbDiseasePods_c"
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "How many pods were diseased?  - Option A",
+                "How many pods were diseased?  - Option B",
+                "How many pods were diseased?  - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_6bedcf1507f5_3489_add"
+        },
+        {
+            "name": "Tree Harvest times",
+            "codeQst": "Treeharvest",
+            "id": 3491,
+            "dtype": 3,
+            "vars": [
+                "ASS6bedcf1507f5_Treeharvest_a",
+                "ASS6bedcf1507f5_Treeharvest_b",
+                "ASS6bedcf1507f5_Treeharvest_c"
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "How many pods did your harvest from each tree? - Option A",
+                "How many pods did your harvest from each tree? - Option B",
+                "How many pods did your harvest from each tree? - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_6bedcf1507f5_3491_add"
+        },
+        {
+            "name": "Number of Bags",
+            "codeQst": "BagsPod",
+            "id": 3492,
+            "dtype": 3,
+            "vars": [
+                "ASS6bedcf1507f5_BagsPod_a",
+                "ASS6bedcf1507f5_BagsPod_b",
+                "ASS6bedcf1507f5_BagsPod_c"
+            ],
+            "code": {
+                "project_id": "7a1d89767d65",
+                "ass_cod": "6bedcf1507f5",
+                "ass_desc": "Cocoa_Target_data",
+                "ass_days": 365,
+                "ass_status": 1,
+                "ass_final": 1
+            },
+            "questionAsked": [
+                "What is the number of bags of the beans from each genotype? - Option A",
+                "What is the number of bags of the beans from each genotype? - Option B",
+                "What is the number of bags of the beans from each genotype? - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_6bedcf1507f5_3492_add"
+        }
+    ]
+}
