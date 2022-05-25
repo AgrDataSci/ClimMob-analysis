@@ -397,7 +397,7 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, reference_tech) {
       
       node_summary  <- rules[c(1,5,3,4,2)]
       
-      names(node_summary) <- c("Node", "N", "Best performance","Worst performance", "Split rule")
+      names(node_summary) <- c("Node", "N", "Higher performance", "Weaker performance", "Split rule")
       
     }
     
@@ -408,8 +408,9 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, reference_tech) {
     plottree <- 0L
   }
   
-  result <- list(isTRUE = isTRUE,
+  result <- list(isTREE = isTREE,
                  tree_formula = treeformula,
+                 nobservations_used_tree = dim(Gdata)[1],
                  PLtree = tree_f,
                  PLtree_plot = plottree,
                  node_summary = node_summary,
@@ -421,8 +422,9 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, reference_tech) {
 # .......................................
 # Error in data 
 # this is a file that is generated to be used in case of errors
-error_data_PL_tree <- list(isTRUE = FALSE,
+error_data_PL_tree <- list(isTREE = FALSE,
                            tree_formula = "",
+                           nobservations_used_tree = 0,
                            PLtree = list(),
                            PLtree_plot = 0L,
                            node_summary = data.frame(),

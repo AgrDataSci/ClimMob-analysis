@@ -37,7 +37,7 @@ If you publish any results generated with ClimMob, you should cite a number of a
 
 \pagebreak
 
-# Section 1: Headline results
+# Trial overview
 
 Overall, there were `r nparticipants`  registered to this project. Each `r participant` assessed `r noptions` different `r options` and provided rankings for `r ntraits` trait(s). 
 
@@ -53,7 +53,7 @@ The rate of response in each trial stage (data collection moment) is presented i
 
 \
 
-```{r progress, dpi=dpi, fig.height=7, fig.width=10, fig.cap=paste0("Figure 1.1. Rate of response during trial stages (data collection moment) in this project.")}
+```{r progress, dpi=dpi, fig.height=7, fig.width=10, fig.cap=paste0("Figure 1.1. Rate of response during trial stages (data collection moments).")}
 plot(overview_and_summaries$partipation_plot)
 ```
 
@@ -63,7 +63,7 @@ plot(overview_and_summaries$partipation_plot)
 trial_map_statement <- ""
 if (isTRUE(trial_map$geoTRUE)){
   trial_map_statement <- paste0("The map below shows the distribution ",
-                               "of the trials in this project. To respect ",
+                               "of the plots in this trial. To respect ",
                                participants, "' privacy, the coordinates ",
                                "were clustered with a 0.05 arc-degree resolution. You can find ",
                                "the original coordinates in your ClimMob data.")
@@ -74,7 +74,7 @@ if (isTRUE(trial_map$geoTRUE)){
 
 ```{r map, dpi=dpi, out.width = '70%'}
 if (isTRUE(trial_map$geoTRUE)) {
-knitr::include_graphics(trial_map$map_path)
+try(knitr::include_graphics(trial_map$map_path), silent = TRUE)
 }
 ```
 
@@ -92,22 +92,21 @@ kable(overview_and_summaries$summary_table_tech,
 
 Figure 1.2 shows that the `r ntechnologies` are all connected to each other. That means that they all co-occurred at least once in an incomplete block of `r noptions` `r options`. 
 
-```{r network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.2. Experimental network representation of ", options, " tested in this trial.")}
- plot(overview_and_summaries$trial_connectivity)
-}
+```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.2. Experimental network representation of ", options, " tested in this trial.")}
+plot(overview_and_summaries$trial_connectivity)
 ```
 
 \
 
-## Summary of `r rank_dat$option` performance
+# Summary of `r options`' performance
 
 ```{r stat_diff_statement}
 # make the statement for the report about the statistical significance
-stat_diff_statement <- paste0("This report takes the trait '", title_case(rank_dat$reference_trait), 
+stat_diff_statement <- paste0("This report takes the trait '", reference_trait, 
                               "' as the reference trait for the analysis.",
                               " A summary of the p-values testing the hypothesis ",
-                              "that there were differences in the rankings for each ",
-                              "trait, and the list of ", pluralize(rank_dat$option),
+                              "that there were differences in ", option, 
+                              " performance for each trait, and the list of ", options,
                               " which showed significant ",
                               "best and worst performance, are summarized in Table 1.3.")
 ```
@@ -116,12 +115,11 @@ stat_diff_statement <- paste0("This report takes the trait '", title_case(rank_d
 
 \
 
-```{r summ_differences}
-try(
-  kable(PL_models$PL_models_overview, 
-      caption = paste0("Table 1.3. Summary of ",`r pluralize(rank_dat$option)`," with best and worst performance by trait and data collection moment. The table shows up to three ", `r pluralize(rank_dat$option)`, " with best and worst performance based on the log-worth estimated by the Plackett-Luce model from the evaluations given by the participants in this experiment."),
-      row.names = FALSE),
-  silent = TRUE)
+```{r pl_models_overview}
+kable(PL_models$PL_models_overview, 
+      caption = paste0("Table 1.3. Summary of ", option," performance trait. The table shows up to three ", options,
+                       " with best and worst performance based on the log-worth estimates obtained with Plackett-Luce models."),
+      row.names = FALSE)
 ```
 
 
@@ -131,71 +129,48 @@ try(
 relation_other_chrs1 <- ""
 relation_other_chrs2 <- ""
 relation_other_chrs3 <- ""
-relation_other_chrs4 <- ""
-if (isAGREE) {
+if ((isTRUE(PL_models$kendall$isKendall))) {
 relation_other_chrs1 <- 
-  paste0("Table 1.4 shows, for each trait evaluated in the project, ", 
-        "the frequency for which the rankings matched with the trait '", Ovname, 
-        "'. Kendall tau shows the complete ranking agreement ", 
-        "on the ranking with the trait '", 
-        Ovname, "' as reference using the Kendall correlation ", 
-        "coefficient [@Kendall1938]. The coefficient is an equivalent of a Pearson ", 
+  paste0("Figure 1.3 shows, the Kendall tau coefficient[@Kendall1938] which represents the ",
+         " correlation between the '", reference_trait, "' and the other traits assessed in the trial.", 
+        " The coefficient is an equivalent of a Pearson ", 
         "correlation designed for ranking data, ranging from -1 to 1, where 1 means a total correlation and -1 a total negative correlation.")
 
 relation_other_chrs2 <- 
   paste0("The trait that had the strongest ", 
-        "correlation with '", Ovname, "' was '", 
-        strongest_link[1], 
-        "'. The rankings for '", strongest_link[1], 
-        "' correlate with '", Ovname, "' with a Kendall tau of ",
-        strongest_link[2],
-        ". The trait that had the lowest correlation with ", Ovname,
-        "' was '", weakest_link[1], 
-        "'. The rankings for '" ,  
-        weakest_link[1], "' had a Kendall tau of ", 
-        weakest_link[2], " when compared to '",  Ovname, 
-        "'. The correlation with the other traits is also shown in Figure 1.3.")
+        "correlation with '", reference_trait, "' was '", 
+        PL_models$kendall$strongest_link[1], 
+        "' with a Kendall tau of ",
+        PL_models$kendall$strongest_link[2],
+        ". The trait that had the weakest correlation with '", 
+        reference_trait,
+        "' was '", PL_models$kendall$weakest_link[1], 
+        "' with a Kendall tau of ", 
+        PL_models$kendall$weakest_link[2], ".")
 }
 
-if (length(worthmap) > 0) {
-  relation_other_chrs3 <- paste0("The worth (probability of winning) by trait of each ",
+if (isTRUE(length(PL_models$worthmap) > 0)) {
+  relation_other_chrs3 <- paste0("The log-worth by trait of each ",
                                  option, 
-                                 " tested in this experiment is highlighted in Figure 1.4.",
-                                 " The chart shows in which trait the ", options, 
-                                 " have higher performance based on the ", rankers, 
-                                 " evaluations. The values are adjusted to the log scale",
-                                 " where worth > 0 (blue) represents the ", options, 
+                                 " tested in this trial is presented in Figure 1.4.",
+                                 " The chart shows for each trait the ", options, 
+                                 " with higher and weakest performance compared to",
+                                 " the reference ", option, " ", reference, ".",
+                                 " The values are adjusted to the log scale",
+                                 " where log-worth > 0 (blue) represents the ", options, 
                                  " with superior performance for the given trait, ",
                                  " whereas worth < 0 (red) represents the ", options, 
                                  " with the lower performance for the given trait.")
     
 }
 
-if (isPLADMM) {
-  relation_other_chrs4 <- 
-  paste0("The Alternating Directions Method of Multipliers (ADMM) algorithm [@Yildiz2020] was applied to each model log-worth as a linear function of item covariates. ",
-         "In this report, the log-worth of the ", nothertraits, " other traits were used as a item covariate,  or the intrinsic characteristics of the tested ", options, " to check  whether any if these traits have a significant influence to the rankings of the reference trait (", ovname, ").", 
-         " The log-worth of ", trait_to_overall, " showed statistical correlation in explaining the performance of the ", options, " tested in this experiment. A full description of the log-worth estimates for each trait is presented in Table 1.5." )
-  
-  if (length(otn_rmv) > 0) {
-    relation_other_chrs4 <- paste0(relation_other_chrs4, 
-                                   " The traits ", paste3(otn_rmv, lan = language), " were not used in this analysis due to multicollinearity.")
-  }
-  
-}
-
 ```
 
 `r paste(relation_other_chrs1, collapse='\n')`
 
-```{r agreement_table}
-if (isAGREE) {
-try(
-  kable(kendall,
-      caption = paste0("Table 1.4. Kendall correlation between '", Ovname, 
-                       "' and the other traits assessed in this experiment." ),
-      row.names = FALSE),
-  silent = TRUE)
+```{r kendall_tau_plot, dpi = dpi, fig.height=7, fig.width=7, fig.cap=paste0("Fig. 1.3. Correlation between '", reference_trait, "' and the other traits assessed in this trial. The chart displays Kendall correlation coefficients.")}
+if (isTRUE(PL_models$kendall$isKendall)) {
+  plot(PL_models$kendall$kendall_plot)
 }
 ```
 
@@ -208,159 +183,107 @@ try(
 `r paste(relation_other_chrs3, collapse='\n')`
 
 
-```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.4. Probability of winning (worth) by traits of ", options, " tested in this experiment. The values are adjusted to the log scale where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with the lower performance for the given trait.")}
-if (length(worthmap) > 0) {
-  try(worthmap, silent = TRUE)
-}
+```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.4. ", title_case(option), " performance by trait. The chart display log-worth values where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with the lower performance for the given trait. The ", option, " ", reference, " is set as refence (log-worth arbitrarily set to zero).")}
+plot(PL_models$worthmap)
 ```
 
 
-\
+Figure 1.5 shows the estimated log-worth for the grouped rankings of all `r ntraits` traits. This analysis combines all the rankings provided for each trait into a single list of grouped rankings, thus giving insights on `r option` performance across all the traits. The purpose is to be able to distinguish the `r option` with the highest overall performance. As such, it can be concluded that a higher log-worth indicates that a `r option` has best performance overall. While the lowest log-worth shows `r option` with weakest performance overall. Mean separation analysis was also conducted to indicate, using letters, which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order at the alpha = `r sig_level`.
 
-
-`r paste(relation_other_chrs4, collapse='\n')`
-
-```{r pladmm}
-if (isPLADMM) {
-try(
-  kable(plad1,
-      caption = paste0("Table 1.5. Model coefficients (log-worth) by item covariates estimated by the Alternating Directions Method of Multipliers (ADMM) algorithm to represent their influence to the rankings given to '", Ovname  , "'." ),
-      row.names = FALSE),
-  silent = TRUE)
-}
-```
-
-
-\pagebreak
-
-
-# Section 2: `r Ovname`, data summary and exploratory analysis
-
-
-## Plackett-Luce Model estimates
-
-Table 2.2 shows the results from the likelihood ratio test from the Plackett-Luce model for the trait '`r Ovname`' of the different `r options`. The hypothesis being tested is that there is no difference in the assessments of any of the different `r options`.
-
-```{r, aov1}
-try(kable(aov_tbl[[reference_trait]], 
-      caption = paste0("Table 2.2. Likelihood ratio test results from fitted ", 
-      "Plackett-Luce model with rankings from '", 
-      Ovname, "'."),
-      row.names = FALSE),
-  silent = TRUE)
+```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 1.5. Plackett-Luce Model estimates (log-worth) of tested ", options, " obtained from grouped rankings combining the performance of ", options, " in the ", ntraits, " traits assessed in this trial. The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
+plot(PL_models$logworth_grouped_rank)
 ```
 
 \
 
-Figure 2.2 shows the estimated log-worth with `r ci_level*100`% confidence intervals. The purpose of this graph is to be able to best distinguish between the relative strength of each of the `r options` assessed. As such the log-worth are not directly interpretable, but it can be concluded that a higher value for the coefficient indicates that a `r option` has a higher probability of being the `r option` with higher performance. The `r ci_level*100`% confidence width is chosen so that non-overlapping confidence intervals could be interpreted as indicating significant differences at the alpha = `r sig_level`. This may not match exactly with the mean separation groupings, as these groupings also take into account multiple testing through the Benjamini and Hochberg adjustment [@BHtest].
+# Effect of covariates on `r options`' performance 
 
-Mean separation analysis was also conducted to indicate, using letters, which `r options` are significantly more preferred than others in terms of '`r Ovname`'. When `r options` have at least one letter in common, there is not enough evidence from the experiment to be confident about their relative order at the alpha = `r sig_level`.
-
-```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 2.2. Plackett-Luce Model estimates (log-worth) of tested ", options, " for '", Ovname,". The ", option, " ", reference, " is set as reference (log-worth arbitrarily set to zero). Intervals based on quasi standard errors.")}
-try(logworth_plot[[reference_trait]], silent = TRUE)
-```
-
-\
-
-
-Figure 2.3 shows the worth parameters (probability of being the best) from the Plackett-Luce model in a direct comparison between all of the possible `r options`.
-
-\
-
-```{r rankedfirst, dpi=dpi, fig.height=favplot_h, fig.width=5, fig.cap= paste0("Figure 2.3. Worth parameters (probability of being the best ranked) for '", Ovname, "'.")}
-try(worth_plot[[reference_trait]],
-  silent = TRUE)
-```
-
-\
-
-## Plackett-Luce Tree  
-
-A model-based recursive partitioning method [@Strobl2009] was used to determine the effect of covariates in the rankings of `r Ovname`. This approach identifies sub-groups in the data for which the rankings are significantly different to each other. This analysis required that all rankings and covariates are completely available for the entire data set. Here we used `r dim(Gdata)[[1]]` out of `r sum(trait_list[[reference_trait]]$keep)` valid rankings for `r Ovname`. 
-
-```{r covar_statement}
-# make the statement if there is any covariate dropped
-covar_statement <- ""
-# if (covarTRUE) {
-#   covar_statement <- paste0("You provided the covariate(s): ", paste3(sort(covar$name), lan = language), ". ")
-#   if (isTRUE(length(covar_dropped) > 0)) {
-#     covar_statement <- paste0(covar_statement,
-#       "However, the covariates(s) '", paste3(covar_dropped, lan = language),
-#       "' were not used in the analysis, because they did not surpass ",
-#       "the threshold of at least ", paste0(mincovar * 100, "%"), " valid entries."
-#     )
-#   }
-# }
-```
-
-`r  paste(covar_statement, collapse='\n')`
+A model-based recursive partitioning approach [@Strobl2009] was used to determine the effect of covariates on the `r option` performance. This approach identifies sub-groups in the data for which the `r option` performance is significantly different. This analysis required that all rankings and covariates are completely available for the entire data set. Here we used `r PL_tree$nobservations_used_tree` out of `r nparticipants` valid rankings. We report the performance of `r options` using the grouped rankings as described in the previous section. 
 
 To select the covariate(s) that best represent the data set, a stepwise regression based on the forward selection approach was used. The procedure begins by fitting each covariate individually and adding new covariates one by one when it makes a single best improvement to the model based on the Akaike Information Criterion (AIC) [@Sakamoto1986]. The AIC estimates the relative amount of information lost by a given model, the less information a model loses, the higher the quality of that model. In the Plackett-Luce trees, the AIC is obtained by adding the maximized log likelihood ($L$) to the degrees of freedom ($\nu$). 
 
 Equation [1]
 $$AIC = -2L +  2\nu$$
+Based on this approach, the following model was applied to the data: 
 
-```{r}
-best_covar <- ""
-if (isTREE) {
-  best_covar <- paste0("Based on this method, the covariate(s) ", paste3(var_keep, lan = language),
-                       " were identified as the most representative to the rankings. The table below ", 
-                       "shows the sub-groups (tree nodes) identified with the selected covariate(s).")
+> `r PL_tree$tree_formula`
+
+```{r tree_test}
+tree_test1 <- ""
+tree_test2 <- ""
+tree_test3 <- ""
+if (isFALSE(PL_tree$isTREE)) {
+  tree_test1 <- 
+    paste0("However, no differences based on the covariates provided were found. This could mean many things, some of the possible reasons is that there is no difference at all between groups, or that very few data was provided, or that a different set of covariates and model parameters should be used. Please contact the ClimMob team for further assistance.")
 }
+
+if (isTRUE(PL_tree$isTREE)) {
+  tree_test1 <- 
+    paste0("Table 1.4 presents the node groups that were obtained from the Plackett-Luce trees using the set of covariates retained by the forward selection.")
+  
+  tree_test2 <- 
+    paste0("Figure 1.6 shows the Plackett-Luce tree obtaioned with the selected model.")
+  
+  tree_test3 <- 
+    paste0("Table 1.5 present the worth and regret values across the tree nodes. This provides an approach to select ", options, " with the higher performance across all nodes in the tree and can be used as a risk assessment approach.")
+}
+
 ```
 
-`r  paste(best_covar, collapse='\n')`
+`r paste(tree_test1, collapse='\n')`
 
-```{r subgroups-found}
-if(isTREE){
-  try(
-    kable(node_summary, 
-        caption = paste0("Table 2.3. Summary of sub-groups (tree nodes) identified",
+\
+
+```{r tree_node_table}
+if(isTRUE(PL_tree$isTREE)){
+kable(PL_tree$node_summary, 
+        caption = paste0("Table 1.4. Summary of node groups identified",
                          " by the model-based recursive partitioning tree applied to the Plackett-Luce rankings."),
-        row.names = FALSE),
-    silent = TRUE)
+        row.names = FALSE)
 }
 
 ```
 
+\
 
-```{r no_tree}
-no_tree <- ""
-if (!isTREE) {
-  no_tree <- 
-    paste0("No split was found for the Plackett-Luce rankings using the selected ",
-    "covariates. You may refer to Figure 2.2 and Figure 2.3 to check the performance of the tested ", options, " for '",  Ovname, "' in this experiment.")
-}
-```
+`r paste(tree_test2, collapse='\n')`
 
-`r paste(no_tree, collapse='\n')`
+\
 
-
-```{r pltree_legend}
-pltree_text <- paste0("Figure 2.4. Plackett-Luce tree for '", Ovname, "'. The horizontal axis is the probability of winning (worth). Error bars show quasi-SEs. The gray vertical line indicates the average probability of winning (1/number of ", options, ").")
-
-if (isTREE) {
-  pltree_text <- paste0(pltree_text, " Nodes split by the following covariate and attribute ", paste(paste("Node", node_summary[,1], node_summary[,5]), collapse = ", and "), ".")
-}
-
-```
-
-```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = pltree_text}
-if (isTREE) {
-try(plottree, silent = TRUE)
+```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Fig. 1.6. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs. The gray vertical lines indicate the reference.")}
+if (isTRUE(PL_tree$isTREE)) {
+plot(PL_tree$PLtree_plot)
 }
 ```
 
 \
 
+`r paste(tree_test3, collapse='\n')`
+
+\
+
+```{r regret_table}
+if(isTRUE(PL_tree$isTREE)){
+kable(PL_tree$regret_table, 
+        caption = paste0("Table 1.5. Expected probability of winning (worth) and worst regret measures. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
+        row.names = FALSE)
+}
+
+```
+
+# Summary of quantitative metrics
+
+
+\pagebreak
+
 ```{r error}
 e <- ""
 if (isFALSE(is.null(error))){
   e <- paste("During the execution of the requested analysis",
-             "we also found the following error(s) that disabled",
-             "the production of some outputs.",
-             "Please report the error(s) to the ClimMob Team, via the",
-             "'Chat bot' in your ClimMob account.")
+             "we found the following error(s).",
+             "Please report the error(s) to", 
+             "Kauê de Sousa <k.desousa(at)cgiar.org> and",
+             "to Brandon Madriz <bmadriz(at)mrbotcr.com>.")
 }
 ```
 

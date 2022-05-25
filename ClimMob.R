@@ -298,60 +298,38 @@ output_format <- ifelse(extension == "docx","word_document",
 # }
 
 # produce the main report
-if (isTRUE(done)) {
-  
-  project_name <- rank_dat$projname
-  noptions <- length(rank_dat$technologies_index)
-  ntechnologies <- length(rank_dat$technologies)
-  option <- rank_dat$option
-  options <- pluralize(rank_dat$option)
-  participant <- rank_dat$ranker
-  participants <- pluralize(rank_dat$ranker)
-  nparticipants <- nrow(cmdata)
-  ntraits <- length(rank_dat$trait_list)
-  
-  # resolution of display items
-  dpi <- 400
-  out_width <- "100%"
-  
-  # define height of plots based on items
-  worthmap_h <- ntrait
-  worthmap_w <- ntrait + 0.5
-  favplot_h <- nitems * 0.4
-  
-  if (worthmap_h < 7)  worthmap_h <- 7
-  if (worthmap_h > 8)  worthmap_h <- 8
-  if (worthmap_w < 7)  worthmap_w <- worthmap_h + 0.5
-  if (worthmap_w > 8)  worthmap_w <- worthmap_h + 0.5
-  if (favplot_h < 5) favplot_h <- 5
-  if (favplot_h > 8) favplot_h <- 7.5
-  
-  # the main report
-  try_rep <- tryCatch({
-    rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
-                      output_dir = outputpath,
-                      output_format = output_format,
-                      output_file = paste0("climmob_main_report", ".", extension))
-  }, error = function(cond) {
-    return(cond)
-  }
-  )
-  
-  if (any_error(try_rep)) {
-    e <- paste("Error 116.", try_rep$message)
-    error <- c(error, e)
-    done <- FALSE
-  }
-  
-}
+project_name <- rank_dat$projname
+noptions <- length(rank_dat$technologies_index)
+ntechnologies <- length(rank_dat$technologies)
+option <- rank_dat$option
+options <- pluralize(rank_dat$option)
+participant <- rank_dat$ranker
+participants <- pluralize(rank_dat$ranker)
+nparticipants <- nrow(cmdata)
+ntraits <- length(rank_dat$trait_list)
+reference_trait <- title_case(rank_dat$reference_trait)
 
-# if there was any error in the analysis, produce a error report 
-if (isFALSE(done)) {
-  rmarkdown::render(paste0(fullpath, "/report/mainreport_failed.Rmd"),
-                    output_dir = outputpath,
-                    output_format = "word_document",
-                    output_file = paste0("climmob_main_report.docx"))
-}
+# resolution of display items
+dpi <- 400
+out_width <- "100%"
+
+# define height of plots based on items
+worthmap_h <- ntraits
+worthmap_w <- ntraits + 0.5
+favplot_h <- ntechnologies * 0.4
+
+if (worthmap_h < 7)  worthmap_h <- 7
+if (worthmap_h > 8)  worthmap_h <- 8
+if (worthmap_w < 7)  worthmap_w <- worthmap_h + 0.5
+if (worthmap_w > 8)  worthmap_w <- worthmap_h + 0.5
+if (favplot_h < 5) favplot_h <- 5
+if (favplot_h > 8) favplot_h <- 7.5
+
+# the main report
+rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
+                  output_dir = outputpath,
+                  output_format = output_format,
+                  output_file = paste0("climmob_main_report", ".", extension))
 
 if (length(error) > 0) {
   print(error)

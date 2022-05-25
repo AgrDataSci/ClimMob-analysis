@@ -205,14 +205,15 @@ get_PlackettLuce_models <- function(cmdata, rank_dat, reference_tech) {
   overview_mod[,5] <- formatC(overview_mod[,5], format = "e", digits = 2)
   
   names(overview_mod) <- c("Trait", "Data collection moment", 
-                           "Best performance", "Worst performance", 
+                           "Higher performance", "Weaker performance", 
                            "Pr(>Chisq)", "")
   
   #...........................................................
   # Head to head visualization of each technology performance by trait
   worthmap <- worth_map(mod[-reference_trait_index],
                         labels = trait_names[-reference_trait_index],
-                        ref = reference_tech)
+                        ref = reference_tech) +
+    labs(x = title_case(option), y = "Traits")
   
   
   #..........................................................
@@ -262,13 +263,13 @@ get_PlackettLuce_models <- function(cmdata, rank_dat, reference_tech) {
   # TO DO: add weights to rankings  
   modRG <- PlackettLuce(RG)
   
-  logworth_aggregated_rank <- 
+  logworth_grouped_rank <- 
     plot_logworth(modRG, ref = reference_tech, ci.level = 0.5) +
     labs(y = title_case(option))
   
   result <- list(PL_models = mod,
                  PL_models_overview = overview_mod,
-                 logworth_aggregated_rank = logworth_aggregated_rank,
+                 logworth_grouped_rank = logworth_grouped_rank,
                  worthmap = worthmap,
                  logworth_plot = logworth_plot,
                  kendall = list(isKendall = isKendall,
@@ -284,12 +285,12 @@ get_PlackettLuce_models <- function(cmdata, rank_dat, reference_tech) {
 # this is a file that is generated to be used in case of errors
 error_data_PL_models <- list(PL_models = list(),
                              PL_models_overview = data.frame(),
-                             logworth_aggregated_rank = 0L,
+                             logworth_grouped_rank = 0L,
                              worthmap = 0L,
                              logworth_plot = 0L,
                              kendall = list(isKendall = FALSE,
-                                            strongest_link = "", 
-                                            weakest_link = "",
+                                            strongest_link = c("", ""), 
+                                            weakest_link = c("", ""),
                                             kendall_plot = 0L))
 
 
