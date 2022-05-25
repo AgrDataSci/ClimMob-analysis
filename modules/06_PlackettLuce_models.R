@@ -6,7 +6,7 @@
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
 #' @param reference_tech a integer or character indicating the reference technology
-get_PlackettLuce_models <- function(cmdata, rank_dat, reference_tech) {
+get_PlackettLuce_models <- function(cmdata, rank_dat) {
   
   trait_list <- rank_dat[["trait_list"]]
   nranker <- rank_dat[["nranker"]]
@@ -17,6 +17,7 @@ get_PlackettLuce_models <- function(cmdata, rank_dat, reference_tech) {
   reference_trait_index <- rank_dat[["reference_trait_index"]]
   comparison_with_local <- rank_dat[["comparison_with_local"]]
   trait_names <- rank_dat[["trait_names"]]
+  reference_tech <- rank_dat[["reference_tech"]]
   
   # first a list with rankings
   R <- list()

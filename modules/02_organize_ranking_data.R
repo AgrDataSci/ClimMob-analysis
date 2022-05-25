@@ -7,15 +7,17 @@
 #' @param cmdata a data frame with the ClimMob data
 #' @param groups a vector with characters for the index in cmdata indicating 
 #'  columns to aggregate and make segments of participants 
-#' @param option a character indicating the type of technology tested
-#' @param ranker a character indicating the type of participant in the trial
+#' @param option_label a character indicating the type of technology tested
+#' @param ranker_label a character indicating the type of participant in the trial
+#' @param reference_tech a character indicating the reference technology
 #' @param tech_index a vector of characters for the indices in cmdata
 #'  with the technologies
 organize_ranking_data <- function(cmdata, 
                                   pars, 
                                   groups = NULL,
-                                  option = "technology", 
-                                  ranker = "participant",
+                                  option_label = "technology", 
+                                  ranker_label = "participant",
+                                  reference_tech = 1,
                                   tech_index = c("package_item_A", "package_item_B", "package_item_C")){
   
   # Get some info from the data and ClimMob parameters 
@@ -302,15 +304,21 @@ organize_ranking_data <- function(cmdata,
   # refresh number of other traits
   nothertraits <- length(trait_list) - 1
   
+  if (isTRUE(is.integer(reference_tech))) {
+    reference_tech <- items[1]
+  }
+  
+  
   result <- list(projname = projname,
-                 option = option,
-                 ranker = ranker,
+                 option = option_label,
+                 ranker = ranker_label,
                  nranker = nranker,
                  technologies = items,
                  technologies_index = itemnames,
                  assessment_order = unique(trait$assessmentName),
                  reference_trait = ovname,
                  reference_trait_index = reference_trait,
+                 reference_tech = reference_tech,
                  trait_names = traits_names,
                  trait_code = traits_code,
                  trait_list = trait_list,
@@ -336,6 +344,7 @@ error_data_rank_dat <- list(projname = "",
                             assessment_order = "",
                             reference_trait = "",
                             reference_trait_index = "",
+                            reference_tech = "",
                             trait_names = "",
                             trait_code = "",
                             trait_list = list(),

@@ -87,7 +87,7 @@ library("gridExtra")
 library("caret")
 library("janitor")
 library("GGally")
-source(paste0(fullpath, "/modules/01_functions.R"))
+source(paste0(fullpath, "modules/01_functions.R"))
 
 # An object to capture error messages when running the analysis
 error <- NULL
@@ -108,13 +108,14 @@ try_data <- tryCatch({
   
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
   
-  source(paste0(fullpath, "/modules/02_organize_ranking_data.R"))
+  source(paste0(fullpath, "modules/02_organize_ranking_data.R"))
   
   rank_dat <- organize_ranking_data(cmdata, 
                                     pars, 
-                                    groups = groups, 
-                                    option = "technology",
-                                    ranker = "participant",
+                                    groups, 
+                                    option_label = option,
+                                    ranker_label = ranker,
+                                    reference_tech = reference,
                                     tech_index = c("package_item_A", "package_item_B", "package_item_C"))
   
 }, error = function(cond) {
@@ -167,7 +168,7 @@ org_summ <- tryCatch({
 )
 
 if (any_error(org_summ)) {
-  error <- c(error, org_summ$message)
+  e <- paste("Overview and Summary: \n", org_summ$message)
   error <- c(error, e)
   overview_and_summaries <- error_data_overview_and_summaries
 }
@@ -188,7 +189,7 @@ org_lonlat <- tryCatch({
 )
 
 if (any_error(org_lonlat)) {
-  e <- org_lonlat$message
+  e <- paste("Trial map: \n", org_lonlat$message)
   error <- c(error, e)
   trial_map <- error_data_trial_map
 
@@ -206,7 +207,7 @@ org_pl <- tryCatch({
   
   source(paste0(fullpath, "/modules/06_PlackettLuce_models.R"))
   
-  PL_models <- get_PlackettLuce_models(cmdata, rank_dat, reference)
+  PL_models <- get_PlackettLuce_models(cmdata, rank_dat)
   
   
 }, error = function(cond) {
@@ -215,7 +216,7 @@ org_pl <- tryCatch({
 )
 
 if (any_error(org_pl)) {
-  e <- org_pl$message
+  e <- paste("Plackett-Luce model: \n", org_pl$message)
   error <- c(error, e)
   PL_models <- error_data_PL_model
 }
@@ -224,22 +225,6 @@ if (any_error(org_pl)) {
 # .......................................................
 # 7. Fit PLADMM model ####
 # TO DO! 
-# this will try to fit a simple PLDMM for the overall trait
-# using the log-worth from the other traits as a reference
-# org_pladmm <- tryCatch({
-#   
-#   sa
-#   
-# }, error = function(cond) {
-#   return(cond)
-# }
-# )
-# 
-# if (any_error(org_pladmm)) {
-#   
-#   isPLADMM <- FALSE
-# 
-# }
 
 
 # .......................................................
@@ -257,7 +242,7 @@ org_pltree <- tryCatch({
 )
 
 if (any_error(org_pltree)) {
-  e <- org_pltree$message
+  e <- paste("Plackett-Luce Tree: \n", org_pltree$message)
   error <- c(error, e)
   PL_tree <- error_data_PL_tree
 }
