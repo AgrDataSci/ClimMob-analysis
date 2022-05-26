@@ -87,7 +87,7 @@ organize_quantitative_data <- function(cmdata,
   # rename traits to avoid duplicated strings, in case the same 
   # trait is tested in different data collection moments 
   quanti_traits$codeQst <- rename_duplicates(quanti_traits$codeQst)
-  quanti_traits$name    <- rename_duplicates(quanti_traits$name, sep = " ")
+  quanti_traits$name    <- title_case(rename_duplicates(quanti_traits$name, sep = " "))
   
   quanti_dat <- list()
   
@@ -101,7 +101,7 @@ organize_quantitative_data <- function(cmdata,
     strings_i <- as.vector(unlist(quanti_traits[i, paste0("nameString", 1:ntech)]))
     
     index_i <- as.vector(sapply(strings_i,  function(x){
-      which(grepl(x, names(cmdata)))
+      which(grepl(tolower(x), tolower(names(cmdata))))
     }))
     
     # find the enumerator that submitted the data
@@ -121,6 +121,7 @@ organize_quantitative_data <- function(cmdata,
   }
   
   # identify outliers
+  # TO DO: add technology label (A, B, C)
   outliers <- lapply(quanti_dat, function(x){
     
     out_values_i <- unique(boxplot.stats(x[,"value"])$out)
@@ -133,7 +134,12 @@ organize_quantitative_data <- function(cmdata,
   
   outliers <- do.call("rbind", outliers)
   
-  rownames(outliers) <- NULL
+  # sort outliers by id
+  if (nrow(outliers) > 1) {
+    outliers <- outliers[order(as.integer(outliers$id)), ]
+    rownames(outliers) <- NULL
+  }
+  
   
   if (isTRUE(length(group) == 1)) {
     group <- NULL
@@ -150,6 +156,6 @@ organize_quantitative_data <- function(cmdata,
 # .......................................
 # Error in data 
 # this is a file that is generated to be used in case of errors
-error_data_quanti_dat <- list(quanti_dat = data.frame(),
+error_data_quanti_dat <- list(quanti_dat = list(),
                               group = NULL,
                               outliers = data.frame())

@@ -1,121 +1,54 @@
-# This module organize the quantitative data
-quanti_traits <- pars[["linear"]]
-
-# rename traits to avoid duplicated strings, in case the same 
-# trait is tested in different data collection moments 
-quanti_traits$codeQst <- rename_duplicates(quanti_traits$codeQst)
-quanti_traits$name    <- rename_duplicates(quanti_traits$name, sep = " ")
-
-# run over traits and get it in long format (unlist)
-quanti <- data.frame(id = as.vector(unlist(cmdata[, "id" ])) ,
-                     items = as.vector(unlist(cmdata[, itemnames])))
-
-for(i in seq_along(quanti_traits$codeQst)){
+#' This module summarises the quantitative data
+#' 
+#' The analysis is performed iteratively for each trait 
+#' retained in the quanti_dat object
+#' 
+#' @param quanti_dat a list with parameters
+get_quantitative_summaries <- function(quanti_dat) {
   
-  strings_i <- as.vector(unlist(quanti_traits[i, c("nameString1",
-                                                   "nameString2", 
-                                                   "nameString3")]))
-  index_i <- as.vector(sapply(strings_i,  function(x){
-    which(grepl(x, names(cmdata)))
-  }))
+  # make density plots with the data 
+  densitplots <- list()
   
-  values_i <- as.numeric(unlist(cmdata[,index_i]))
+  # a list with file names to print charts
+  density_file_names <- list()
   
-  quanti <- cbind(quanti, values_i)
+  for (i in seq_along(quanti_dat$quanti_dat)){
+    
+    ggdat_i <- quanti_dat$quanti_dat[[i]]
+    
+    b_i <- ggplot(ggdat_i, aes(x = value, group = technology, fill = technology)) + 
+      geom_density(adjust = 1.5, alpha = 0.7, show.legend = FALSE) +
+      facet_wrap(~ technology) +
+      scale_fill_manual(values = col_pallet(length(unique(ggdat_i$technology)))) +
+      labs(title = paste(unique(ggdat_i$trait), unique(ggdat_i$data_collection), sep = " - "),
+           x = '', 
+           y = "Density") +
+      theme_bw() + 
+      theme(panel.grid = element_blank(),
+            text = element_text(size = 16),
+            title = element_text(size = 14),
+            axis.title = element_text(size = 15))
+    
+    densitplots[[i]] <- b_i
+    density_file_names[[i]] <- tolower(gsub(" ", "", 
+                                            paste(unique(ggdat_i$trait), 
+                                                  unique(ggdat_i$data_collection), 
+                                                  sep = " - ")))
+    
+  }
   
-}
-
-# put colnames
-names(quanti)[-c(1:2)] <- quanti_traits$codeQst
-
-
-# make box plots 
-boxps <- list()
-
-for (i in seq_along(quanti_traits$codeQst)){
-  ggdat_i <- quanti[,c("items", quanti_traits$codeQst[i])]
+  result <- list(density_plots = densitplots,
+                 density_file_names = density_file_names)
   
-  names(ggdat_i) <- c("items", "values")
-  
-  b_i <- ggplot(ggdat_i, aes(x = items, y = values)) + 
-    geom_boxplot() +
-    theme_bw() + 
-    labs(x = Option, y = quanti_traits$name[i]) +
-    theme(panel.grid = element_blank(),
-          axis.text.x = element_text(angle = 45, 
-                                     vjust = 1, 
-                                     hjust = 1))
-  
-  boxps[[i]] <- b_i
-}
-
-
-
-# identify outliers
-outliers <- data.frame()
-
-for(i in seq_along(quanti_traits$codeQst)){
-  
-  index_i <- quanti_traits$codeQst[i]
-  
-  out_values_i <- unique(boxplot.stats(quanti[,index_i])$out)
-  
-  out_i <- quanti[,index_i] %in% out_values_i
-  
-  outliers_i <- quanti[out_i, c("id", "items")]
-  
-  if (nrow(outliers_i) == 0) next
-  
-  outliers_i$values <- quanti[out_i, index_i]
-  
-  outliers_i$trait <- quanti_traits$name[i]
-  
-  outliers_i$assessment <- quanti_traits$assessmentName[i]
-  
-  outliers <- rbind(outliers, outliers_i)
+  return(result)
   
 }
 
-rownames(outliers) <- NULL
 
-
-quanti_data <- list(boxplots = boxps,
-                    outliers = outliers, 
-                    mod = NULL)
-
-rm(boxps, mod, outliers)
-
-
-# make box plots 
-densitplots <- list()
-
-for (i in seq_along(quanti_traits$codeQst)){
-  
-  ggdat_i <- quanti[,c("items", quanti_traits$codeQst[i])]
-  
-  names(ggdat_i) <- c("items", "values")
-  
-  b_i <- ggplot(ggdat_i, aes(x = values, group = items, fill = items)) + 
-    geom_density(adjust=1.5, alpha=.4) +
-    theme_bw() + 
-    facet_wrap(~ items) +
-    labs(x = Option, y = quanti_traits$name[i]) +
-    theme(panel.grid = element_blank(),
-          axis.text.x = element_text(angle = 45, 
-                                     vjust = 1, 
-                                     hjust = 1))
-  
-  b_i
-  
-  densitplots[[i]] <- b_i
-}
-
-
-
-quanti_data <- list(densityplots = densitplots,
-                    outliers = outliers, 
-                    mod = NULL)
-
-rm(densityplots, mod, outliers)
+# .......................................
+# Error in data 
+# this is a file that is generated to be used in case of errors
+error_data_quantitative_traits <- list(density_plots = list(),
+                                       density_file_names = list())
 
 

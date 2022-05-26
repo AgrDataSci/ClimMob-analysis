@@ -1,6 +1,5 @@
 ---
-title: "`r paste('Report of ClimMob project ', project_name)`"
-author: "ClimMob.net"
+title: "`r project_name`"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   word_document:
@@ -28,13 +27,13 @@ The primary goal of ClimMob is to support the selection of innovative technologi
  
 ClimMob software assigns a limited number of items (typically 3) to each participant, who will compare their performance. Each participant gets a different combination of items drawn from a much larger set of items (typically 15-25). Once the results of the small tasks have been collected, ClimMob builds a data base of the whole set of tested technologies, combining all observations. ClimMob not only reconstructs the overall ordering of items, but also takes into account differences and similarities between participants and the conditions under which they observe (e.g. socio-economic and plot environmental traits). It assigns similar participants to groups that each corresponds among different group profiles. Groups are created on the basis of whichever items which have been collected, that are found to be significantly linked to the observed rankings.
  
-ClimMob applies the Plackett-Luce model to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls].
- 
-> If you publish the results presented in this report you should cite a number supporting tools and approaches that the report relies on. The decentralized experimental approach behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2022) [@climmobanalysis].
+ClimMob applies the Plackett-Luce model to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls]. The decentralized experimental approach behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2022) [@climmobanalysis].
+
+\pagebreak
 
 # Trial overview
 
-Overall, there were `r nparticipants`  registered to this project. Each `r participant` assessed `r noptions` different `r options` and provided rankings for `r ntraits` trait(s). 
+Overall, there were `r nparticipants` `r participants` contributing to this trial. Each `r participant` assessed `r noptions` different `r options` and provided rankings for `r ntraits` trait(s). 
 
 ```{r traits}
 kable(overview_and_summaries$summary_table_trait, 
@@ -44,7 +43,7 @@ kable(overview_and_summaries$summary_table_trait,
 
 \
 
-The rate of response in each trial stage (data collection moment) is presented in Figure 1.1. This gives an overview of the level of participation during the experiment and any attrition (when participants leave the experiment). 
+The rate of response in each trial stage (data collection moment) is presented in Figure 1.1. This gives an overview of the level of participation during the trial and any attrition (when participants leave the experiment). 
 
 \
 
@@ -67,9 +66,35 @@ if (isTRUE(trial_map$geoTRUE)){
 
 `r paste(trial_map_statement, collapse='\n')`
 
-```{r map, dpi=dpi, out.width = '70%'}
+```{r map, dpi=dpi, out.width = '70%', fig.cap=paste0("Distribution of trial plots. Coordinates were clustered with a 0.05 arc-degree resolution.")}
 if (isTRUE(trial_map$geoTRUE)) {
 try(knitr::include_graphics(trial_map$map_path), silent = TRUE)
+}
+```
+
+```{r agroclimate}
+agroclimate_text1 <- ""
+if (isTRUE(agroclimate$agroclimate)){
+  agroclimate_text1 <- paste0("The charts bellow present the temperature and rainfall indices ",
+                              "obtained using the GPS data presented in the map. The timespan ",
+                              "window used to capture the climate data were from ",
+                              paste(agroclimate$dates, collapse = " to "), ".")
+}
+```
+
+`r paste(agroclimate_text1, collapse = '\n')`
+
+```{r temperature_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Temperature indices from ", paste(agroclimate$dates, collapse = " to "), ". The chart presents the maximum day temperature (maxDT), the minimum day temperature (minDT), the maximum night temperature (maxNT), and the minimum nigth temperature (minNT).")}
+if (isTRUE(agroclimate$agroclimate)){
+plot(agroclimate$temperature_plot)
+}
+```
+
+\
+
+```{r rainfall_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Rainfall indices from ", paste(agroclimate$dates, collapse = " to "), ". The chart presents the total rainfall (Rtotal), simple daily intensity index, total precipitation divided by the number of wet days (mm/days, SDII), maximum length of consecutive dry day, rain < 1 mm (MLDS), and the maximum length of consecutive wet days, rain >= 1 mm (MLWS).")}
+if (isTRUE(agroclimate$agroclimate)){
+plot(agroclimate$rain_plot)
 }
 ```
 
@@ -266,27 +291,26 @@ kable(PL_tree$regret_table,
 
 ```
 
-# Summary of quantitative metrics
-
-
-\pagebreak
-
-```{r error}
-e <- ""
-if (isFALSE(is.null(error))){
-  e <- paste("During the execution of the requested analysis",
-             "we found the following error(s).",
-             "Please report the error(s) to", 
-             "Kauê de Sousa <k.desousa@cgiar.org> and",
-             "to Brandon Madriz <bmadriz@mrbotcr.com>.")
+```{r quantitative_test}
+quanti_caption <- ""
+quanti_test1 <- ""
+if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
+  quanti_caption <- "# Summary of quantitative traits"
+  quanti_test1 <- 
+    paste0("This section presents an exploratory analysis of the quantitative traits collected in the trial. Since each trait has its own distribution and requires individual data cleaning process, we cannot present models for the traits. Here we present density plots to help in the visualization of data distribution and possible outliers (which are fully described in the Appendix), to read more about density plots please visit this blog < https://www.data-to-viz.com/graph/density.html >. If you identify outliers, you can adjust the values on your ClimMob project and request a new report. The following presents the density plots for the traits measured in this trial.")
 }
+
 ```
 
-`r paste(e, collapse = '\n')`
+`r paste(quanti_caption, collapse='\n')`
 
-```{r error2}
-if (isFALSE(is.null(error))){
-print(error)
+`r paste(quanti_test1, collapse='\n')`
+
+```{r denstity_plot, dpi=500, asis=TRUE,fig.height=8,fig.width=10}
+if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
+for(i in seq_along(quantitative_traits$density_plots)) {
+  plot(quantitative_traits$density_plots[[i]])
+}
 }
 ```
 
@@ -295,3 +319,49 @@ print(error)
 
 # References
 
+::: {#refs}
+:::
+
+# Appendix
+
+```{r error}
+error_caption <- ""
+error_text1 <- ""
+if (isFALSE(is.null(error))){
+  error_caption <- "## Errors producing the report"
+  error_text1 <- paste("During the execution of the requested analysis",
+             "we found the following error(s).",
+             "Please report the error(s) to", 
+             "Kauê de Sousa <k.desousa(at)cgiar.org> and",
+             "to Brandon Madriz <bmadriz(at)mrbotcr.com>.")
+}
+```
+
+`r paste(error_caption, collapse = '\n')`
+
+`r paste(error_text1, collapse = '\n')`
+
+```{r error2}
+if (isFALSE(is.null(error))){
+print(error)
+}
+```
+
+\pagebreak
+
+```{r outlier_text}
+outlier_caption <- ""
+if (isTRUE(nrow(quanti_dat$outliers) > 0)){
+  outlier_caption <- "## Outliers identified in quantitative traits"
+}
+```
+
+`r paste(outlier_caption, collapse = '\n')`
+
+```{r outlier}
+if (isTRUE(nrow(quanti_dat$outliers) > 0))
+kable(quanti_dat$outliers, 
+          caption = paste0("Appendix 1.1. Possible outliers identified in quantitative data collected in the trial. If you consider any of these as outliers, please adjust it in your ClimMob project and request a new report."),
+          align = "l",
+          row.names = FALSE)
+```

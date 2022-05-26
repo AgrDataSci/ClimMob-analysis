@@ -18,7 +18,7 @@ ranker      <- args[7] # how the report will refer to participants/farmers
 option      <- args[8] # how the report will refer to tested technologies
 fullpath    <- args[9] # this is backward path
 groups      <- args[10] # any group to do the analysis 
-reference   <- args[11] # the reference item for the analysis
+reference   <- as.integer(args[11]) # the reference item for the analysis
 minN        <- args[12] # minimum n of complete data required in a trait evaluation before it is excluded
 minitem     <- args[13] # minimum n of items tested, e.g. that all items are tested at least twice
 mincovar    <- args[14] # minimum proportion of covariates compared to total valid n
@@ -86,7 +86,16 @@ library("plotrix")
 library("gridExtra")
 library("caret")
 library("janitor")
-source(paste0(fullpath, "modules/01_functions.R"))
+library("nasapower")
+library("climatrends")
+
+# .........................................
+# Load modules
+modules <- list.files(paste0(fullpath, "modules"), full.names = TRUE)
+modules <- modules[-which(grepl("check_packages.R", modules))]
+for (i in seq_along(modules)) {
+  source(modules[i])
+}
 
 # An object to capture error messages when running the analysis
 error <- NULL
@@ -109,8 +118,6 @@ try_data <- tryCatch({
                 silent = TRUE)
   
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
-  
-  source(paste0(fullpath, "modules/02_organize_ranking_data.R"))
   
   rank_dat <- organize_ranking_data(cmdata, 
                                     pars, 
@@ -137,8 +144,6 @@ if (any_error(try_data)) {
 # 2. Organise the rankings ####
 try_quanti_data <- tryCatch({
   
-  source(paste0(fullpath, "/modules/03_organize_quantitative_data.R"))
-  
   quanti_dat <- organize_quantitative_data(cmdata, 
                                            pars, 
                                            groups = groups, 
@@ -159,11 +164,8 @@ if (any_error(try_quanti_data)) {
 # .......................................................
 # 3. Prepare summary tables / charts
 org_summ <- tryCatch({
- 
-  source(paste0(fullpath, "/modules/04_overview_and_summaries.R"))
   
   overview_and_summaries <- get_overview_summaries(cmdata, rank_dat)
-  
   
 }, error = function(cond) {
   return(cond)
@@ -180,8 +182,6 @@ if (any_error(org_summ)) {
 # .......................................................
 # 4. Make map ####
 org_lonlat <- tryCatch({
-  
-  source(paste0(fullpath, "/modules/05_spatial_overview.R"))
   
   trial_map <- get_testing_sites_map(cmdata, output_path = outputpath)
   
@@ -201,16 +201,9 @@ if (any_error(org_lonlat)) {
 # .......................................................
 # .......................................................
 # 7. Fit PlackettLuce model ####
-# This will use the rankings from each trait 
-# to fit a PlackettLuce model and do
-# some exploratory analysis
-# and a table showing statistical differences for each trait 
 org_pl <- tryCatch({
   
-  source(paste0(fullpath, "/modules/06_PlackettLuce_models.R"))
-  
   PL_models <- get_PlackettLuce_models(cmdata, rank_dat)
-  
   
 }, error = function(cond) {
   return(cond)
@@ -234,8 +227,6 @@ if (any_error(org_pl)) {
 # 8. Fit pltree ####
 org_pltree <- tryCatch({
   
-  source(paste0(fullpath, "/modules/08_PlackettLuce_tree.R"))
-  
   PL_tree <- get_PlackettLuce_tree(cmdata, rank_dat)
   
 }, error = function(cond) {
@@ -253,11 +244,39 @@ if (any_error(org_pltree)) {
 # .......................................................
 # .......................................................
 # 9. Agroclimatic information  ####
+org_agroclim <- tryCatch({
+  
+  agroclimate <- get_agroclimatic_data(cmdata)
+  
+}, error = function(cond) {
+  return(cond)
+}
+)
 
+if (any_error(org_agroclim)) {
+  e <- paste("Agroclimatic data: \n", org_agroclim$message)
+  error <- c(error, e)
+  agroclimate <- error_data_agroclimate
+}
 
 # .......................................................
 # .......................................................
 # 10. Summaries from quantitative data  ####
+org_quantitative_summ <- tryCatch({
+  
+  quantitative_traits <- get_quantitative_summaries(quanti_dat)
+  
+}, error = function(cond) {
+  return(cond)
+}
+)
+
+if (any_error(org_quantitative_summ)) {
+  e <- paste("Quantitative Traits: \n", org_quantitative_summ$message)
+  error <- c(error, e)
+  quantitative_traits <- error_data_quantitative_traits
+}
+
 
 # ................................................................
 # ................................................................
@@ -267,24 +286,7 @@ output_format <- ifelse(extension == "docx","word_document",
                         paste0(extension,"_document"))
 
 
-# if (all(infosheets, done)) {
-#   
-#   try_infosheet <- tryCatch(rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
-#                                               output_dir = outputpath,
-#                                               output_format = output_format,
-#                                               output_file = paste0("participants_report", ".", extension)), error = function(cond) {
-#     return(cond)
-#   }
-#   )
-#   
-#   if (any_error(try_infosheet)) {
-#     e <- paste("Error 115. Participant(s) report. ", try_infosheet$message)
-#     error <- c(error, e)
-#   }
-#   
-# }
-
-# produce the main report
+# arguments to use in the report text
 project_name <- rank_dat$projname
 noptions <- length(rank_dat$technologies_index)
 ntechnologies <- length(rank_dat$technologies)
@@ -301,7 +303,7 @@ reference_tech <- rank_dat$reference_tech
 dpi <- 400
 out_width <- "100%"
 
-# define height of plots based on items
+# define height of plots based on number of technologies
 worthmap_h <- ntraits
 worthmap_w <- ntraits + 0.5
 favplot_h <- ntechnologies * 0.4
