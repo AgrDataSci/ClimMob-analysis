@@ -114,7 +114,7 @@ try_data <- tryCatch({
   class(cmdata) <- union("CM_list", class(cmdata))
   project_name <- cmdata$project$project_name
   reference <- cmdata$combination$elements[[reference]]$alias_name
-  cmdata <- try(as.data.frame(cmdata, tidynames = FALSE, pivot.wider = TRUE),
+  cmdata <- try(as.data.frame(x = cmdata, tidynames = FALSE, pivot.wider = TRUE),
                 silent = TRUE)
   
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
