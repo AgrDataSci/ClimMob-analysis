@@ -9,12 +9,17 @@ get_agroclimatic_data <- function(cmdata){
   dates <- which(grepl("clm_start", names(cmdata)))
   
   # only run if more than one data collection moment
-  if (length(dates) > 1) {
+  if (isTRUE(length(dates) > 1)) {
   
     dates <- as.Date(unlist(cmdata[dates]))
     
     dates <- c(dates[which.min(dates)], dates[which.max(dates)])
-      
+    
+    # if less than 2 days from TODAYS Sys.Date() then reduce the window
+    if (isTRUE(Sys.Date() - dates[2] < 2)) {
+      dates[2] <- dates[2] - 2
+    }
+    
     # Check if lonlat is provided
     lon <- grepl("_longitude", names(cmdata))
     lat <- grepl("_latitude", names(cmdata))
@@ -33,11 +38,16 @@ get_agroclimatic_data <- function(cmdata){
       
       lonlat <- cmdata[,c(lon,lat)]
       
+      lonlat[1:2] <- lapply(lonlat[1:2], as.numeric)
+      
+      lonlat[,1] <- ifelse(lonlat[,1] > 180 | lonlat[,1] < -180, NA, lonlat[,1])
+      
+      lonlat[,2] <- ifelse(lonlat[,2] > 70 | lonlat[,2] < -70, NA, lonlat[,2])
+      
       lonlat <- na.omit(lonlat)
       
       d <- lonlat
       names(d) <- c("lon","lat")
-      d[1:2] <- lapply(d[1:2], as.numeric)
       
       # make clusters 
       h <- stats::dist(d)

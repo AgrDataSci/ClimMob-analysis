@@ -21,6 +21,12 @@ get_testing_sites_map <- function(cmdata, output_path){
     
     lonlat <- cmdata[,c(lon,lat)]
     
+    lonlat[1:2] <- lapply(lonlat[1:2], as.numeric)
+    
+    lonlat[,1] <- ifelse(lonlat[,1] > 180 | lonlat[,1] < -180, NA, lonlat[,1])
+    
+    lonlat[,2] <- ifelse(lonlat[,2] > 70 | lonlat[,2] < -70, NA, lonlat[,2])
+    
     lonlat <- na.omit(lonlat)
     
     nlonlat <- dim(lonlat)[[1]]
