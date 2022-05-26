@@ -1,0 +1,1771 @@
+{
+    "Characteristics": [
+        {
+            "name": "Germination",
+            "codeQst": "germinationFR",
+            "id": 1705,
+            "vars": [
+                {
+                    "name": "ASSc2ba25939d4e_char_germinationfr_pos"
+                },
+                {
+                    "name": "ASSc2ba25939d4e_char_germinationfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "c2ba25939d4e",
+                "ass_desc": "Pépinière",
+                "ass_days": 7,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le meilleur taux de germination ?",
+                "Quelle variété a le mauvais taux de germination ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_c2ba25939d4e_1705_add"
+        },
+        {
+            "name": "Vigueur",
+            "codeQst": "vigorFR",
+            "id": 1706,
+            "vars": [
+                {
+                    "name": "ASSc2ba25939d4e_char_vigorfr_pos"
+                },
+                {
+                    "name": "ASSc2ba25939d4e_char_vigorfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "c2ba25939d4e",
+                "ass_desc": "Pépinière",
+                "ass_days": 7,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle est la variété la plus vigoureuse ?",
+                "Quelle variété la moins vigoureuse ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_c2ba25939d4e_1706_add"
+        },
+        {
+            "name": "Résistance aux maladies",
+            "codeQst": "diseasesresistanceFR",
+            "id": 1708,
+            "vars": [
+                {
+                    "name": "ASSc2ba25939d4e_char_diseasesresistancefr_pos"
+                },
+                {
+                    "name": "ASSc2ba25939d4e_char_diseasesresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "c2ba25939d4e",
+                "ass_desc": "Pépinière",
+                "ass_days": 7,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux maladies ?",
+                "Quelle variété est la plus sensible aux maladies ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_c2ba25939d4e_1708_add"
+        },
+        {
+            "name": "Survie des plantes",
+            "codeQst": "plantsurvivalFR",
+            "id": 1709,
+            "vars": [
+                {
+                    "name": "ASSca08441ad72b_char_plantsurvivalfr_pos"
+                },
+                {
+                    "name": "ASSca08441ad72b_char_plantsurvivalfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "ca08441ad72b",
+                "ass_desc": "Transplantation",
+                "ass_days": 15,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le taux de survie le plus élevé avant la récolte ?",
+                "Quelle variété a le taux de survie le plus bas avant la récolte ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_ca08441ad72b_1709_add"
+        },
+        {
+            "name": "Résistance aux ravageurs",
+            "codeQst": "pestresistanceFR",
+            "id": 1707,
+            "vars": [
+                {
+                    "name": "ASSca08441ad72b_char_pestresistancefr_pos"
+                },
+                {
+                    "name": "ASSca08441ad72b_char_pestresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "ca08441ad72b",
+                "ass_desc": "Transplantation",
+                "ass_days": 15,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux ravageurs ? ",
+                "Quelle variété est la plus sensible aux ravageurs ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_ca08441ad72b_1707_add"
+        },
+        {
+            "name": "Résistance aux maladies",
+            "codeQst": "diseasesresistanceFR",
+            "id": 1708,
+            "vars": [
+                {
+                    "name": "ASSca08441ad72b_char_diseasesresistancefr_pos"
+                },
+                {
+                    "name": "ASSca08441ad72b_char_diseasesresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "ca08441ad72b",
+                "ass_desc": "Transplantation",
+                "ass_days": 15,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux maladies ?",
+                "Quelle variété est la plus sensible aux maladies ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_ca08441ad72b_1708_add"
+        },
+        {
+            "name": "Tolérance à la sécheresse",
+            "codeQst": "droughttoleranceFR",
+            "id": 1710,
+            "vars": [
+                {
+                    "name": "ASSca08441ad72b_char_droughttolerancefr_pos"
+                },
+                {
+                    "name": "ASSca08441ad72b_char_droughttolerancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "ca08441ad72b",
+                "ass_desc": "Transplantation",
+                "ass_days": 15,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus tolérante à la sécheresse ?",
+                "Quelle variété est la plus sensible à la sécheresse ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_ca08441ad72b_1710_add"
+        },
+        {
+            "name": "Tolérance aux inondations",
+            "codeQst": "floodtoleranceFR",
+            "id": 1711,
+            "vars": [
+                {
+                    "name": "ASSca08441ad72b_char_floodtolerancefr_pos"
+                },
+                {
+                    "name": "ASSca08441ad72b_char_floodtolerancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "ca08441ad72b",
+                "ass_desc": "Transplantation",
+                "ass_days": 15,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus tolérante aux inondations ?",
+                "Quelle variété est la moins tolérante aux inondations ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_ca08441ad72b_1711_add"
+        },
+        {
+            "name": "Floraison",
+            "codeQst": "floweringFR",
+            "id": 1712,
+            "vars": [
+                {
+                    "name": "ASSfbf5f207993a_char_floweringfr_pos"
+                },
+                {
+                    "name": "ASSfbf5f207993a_char_floweringfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "fbf5f207993a",
+                "ass_desc": "Floraison",
+                "ass_days": 21,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a fleuri en premier ?",
+                "Quelle variété a fleuri en dernier ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_fbf5f207993a_1712_add"
+        },
+        {
+            "name": "Survie des plantes",
+            "codeQst": "plantsurvivalFR",
+            "id": 1709,
+            "vars": [
+                {
+                    "name": "ASSfbf5f207993a_char_plantsurvivalfr_pos"
+                },
+                {
+                    "name": "ASSfbf5f207993a_char_plantsurvivalfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "fbf5f207993a",
+                "ass_desc": "Floraison",
+                "ass_days": 21,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le taux de survie le plus élevé avant la récolte ?",
+                "Quelle variété a le taux de survie le plus bas avant la récolte ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_fbf5f207993a_1709_add"
+        },
+        {
+            "name": "Résistance aux ravageurs",
+            "codeQst": "pestresistanceFR",
+            "id": 1707,
+            "vars": [
+                {
+                    "name": "ASSfbf5f207993a_char_pestresistancefr_pos"
+                },
+                {
+                    "name": "ASSfbf5f207993a_char_pestresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "fbf5f207993a",
+                "ass_desc": "Floraison",
+                "ass_days": 21,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux ravageurs ? ",
+                "Quelle variété est la plus sensible aux ravageurs ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_fbf5f207993a_1707_add"
+        },
+        {
+            "name": "Résistance aux maladies",
+            "codeQst": "diseasesresistanceFR",
+            "id": 1708,
+            "vars": [
+                {
+                    "name": "ASSfbf5f207993a_char_diseasesresistancefr_pos"
+                },
+                {
+                    "name": "ASSfbf5f207993a_char_diseasesresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "fbf5f207993a",
+                "ass_desc": "Floraison",
+                "ass_days": 21,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux maladies ?",
+                "Quelle variété est la plus sensible aux maladies ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_fbf5f207993a_1708_add"
+        },
+        {
+            "name": "Vigueur",
+            "codeQst": "vigorFR",
+            "id": 1706,
+            "vars": [
+                {
+                    "name": "ASSfbf5f207993a_char_vigorfr_pos"
+                },
+                {
+                    "name": "ASSfbf5f207993a_char_vigorfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "fbf5f207993a",
+                "ass_desc": "Floraison",
+                "ass_days": 21,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle est la variété la plus vigoureuse ?",
+                "Quelle variété la moins vigoureuse ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_fbf5f207993a_1706_add"
+        },
+        {
+            "name": "Rendement",
+            "codeQst": "yieldFR",
+            "id": 1714,
+            "vars": [
+                {
+                    "name": "ASS34a103df575f_char_yieldfr_pos"
+                },
+                {
+                    "name": "ASS34a103df575f_char_yieldfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "34a103df575f",
+                "ass_desc": "Première récolte",
+                "ass_days": 29,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le rendement le plus élevé ?",
+                "Quelle variété a le rendement le plus bas ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_34a103df575f_1714_add"
+        },
+        {
+            "name": "Taille des feuilles",
+            "codeQst": "leafsizeFR",
+            "id": 1727,
+            "vars": [
+                {
+                    "name": "ASS34a103df575f_char_leafsizefr_pos"
+                },
+                {
+                    "name": "ASS34a103df575f_char_leafsizefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "34a103df575f",
+                "ass_desc": "Première récolte",
+                "ass_days": 29,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle option a les plus grandes feuilles ?",
+                "Quelle option a les plus petites feuilles ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_34a103df575f_1727_add"
+        },
+        {
+            "name": "Goût ",
+            "codeQst": "tasteFR",
+            "id": 1716,
+            "vars": [
+                {
+                    "name": "ASS34a103df575f_char_tastefr_pos"
+                },
+                {
+                    "name": "ASS34a103df575f_char_tastefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "34a103df575f",
+                "ass_desc": "Première récolte",
+                "ass_days": 29,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le meilleur goût ?",
+                "Quelle variété a le pire goût ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_34a103df575f_1716_add"
+        },
+        {
+            "name": "Globalement",
+            "codeQst": "overallcharFR",
+            "id": 1715,
+            "vars": [
+                {
+                    "name": "ASS34a103df575f_char_overallcharfr_pos"
+                },
+                {
+                    "name": "ASS34a103df575f_char_overallcharfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "34a103df575f",
+                "ass_desc": "Première récolte",
+                "ass_days": 29,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Dans l'ensemble, quelle variété a les meilleures performances ?",
+                "Dans l'ensemble, quelle variété a les pires performances ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_34a103df575f_1715_add"
+        },
+        {
+            "name": "Qualité marchande",
+            "codeQst": "marketabilityFR",
+            "id": 1725,
+            "vars": [
+                {
+                    "name": "ASS34a103df575f_char_marketabilityfr_pos"
+                },
+                {
+                    "name": "ASS34a103df575f_char_marketabilityfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "34a103df575f",
+                "ass_desc": "Première récolte",
+                "ass_days": 29,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelles options sont les plus faciles à vendre ?",
+                "Quelles options sont les plus difficiles à vendre ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_34a103df575f_1725_add"
+        },
+        {
+            "name": "Survie des plantes",
+            "codeQst": "plantsurvivalFR",
+            "id": 1709,
+            "vars": [
+                {
+                    "name": "ASS4a20805281f9_char_plantsurvivalfr_pos"
+                },
+                {
+                    "name": "ASS4a20805281f9_char_plantsurvivalfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le taux de survie le plus élevé avant la récolte ?",
+                "Quelle variété a le taux de survie le plus bas avant la récolte ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_4a20805281f9_1709_add"
+        },
+        {
+            "name": "Résistance aux ravageurs",
+            "codeQst": "pestresistanceFR",
+            "id": 1707,
+            "vars": [
+                {
+                    "name": "ASS4a20805281f9_char_pestresistancefr_pos"
+                },
+                {
+                    "name": "ASS4a20805281f9_char_pestresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux ravageurs ? ",
+                "Quelle variété est la plus sensible aux ravageurs ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_4a20805281f9_1707_add"
+        },
+        {
+            "name": "Tolérance à la sécheresse",
+            "codeQst": "droughttoleranceFR",
+            "id": 1710,
+            "vars": [
+                {
+                    "name": "ASS4a20805281f9_char_droughttolerancefr_pos"
+                },
+                {
+                    "name": "ASS4a20805281f9_char_droughttolerancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus tolérante à la sécheresse ?",
+                "Quelle variété est la plus sensible à la sécheresse ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_4a20805281f9_1710_add"
+        },
+        {
+            "name": "Tolérance aux inondations",
+            "codeQst": "floodtoleranceFR",
+            "id": 1711,
+            "vars": [
+                {
+                    "name": "ASS4a20805281f9_char_floodtolerancefr_pos"
+                },
+                {
+                    "name": "ASS4a20805281f9_char_floodtolerancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus tolérante aux inondations ?",
+                "Quelle variété est la moins tolérante aux inondations ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_4a20805281f9_1711_add"
+        },
+        {
+            "name": "Hauteur de la plante (tricot)",
+            "codeQst": "plantheighttricotFR",
+            "id": 1731,
+            "vars": [
+                {
+                    "name": "ASS4a20805281f9_char_plantheighttricotfr_pos"
+                },
+                {
+                    "name": "ASS4a20805281f9_char_plantheighttricotfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle option a les plantes les plus plantes ?",
+                "Quelle option a les plus petites plantes ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_4a20805281f9_1731_add"
+        },
+        {
+            "name": "Branchement",
+            "codeQst": "branchingFR",
+            "id": 1713,
+            "vars": [
+                {
+                    "name": "ASS4a20805281f9_char_branchingfr_pos"
+                },
+                {
+                    "name": "ASS4a20805281f9_char_branchingfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a la capacité de ramification la plus élevée ?",
+                "Quelle variété a la capacité de ramification la plus faible ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_4a20805281f9_1713_add"
+        },
+        {
+            "name": "Résistance aux maladies",
+            "codeQst": "diseasesresistanceFR",
+            "id": 1708,
+            "vars": [
+                {
+                    "name": "ASS4a20805281f9_char_diseasesresistancefr_pos"
+                },
+                {
+                    "name": "ASS4a20805281f9_char_diseasesresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux maladies ?",
+                "Quelle variété est la plus sensible aux maladies ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_4a20805281f9_1708_add"
+        },
+        {
+            "name": "Globalement",
+            "codeQst": "overallcharFR",
+            "id": 1715,
+            "vars": [
+                {
+                    "name": "ASS4a20805281f9_char_overallcharfr_pos"
+                },
+                {
+                    "name": "ASS4a20805281f9_char_overallcharfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Dans l'ensemble, quelle variété a les meilleures performances ?",
+                "Dans l'ensemble, quelle variété a les pires performances ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_4a20805281f9_1715_add"
+        },
+        {
+            "name": "Rendement",
+            "codeQst": "yieldFR",
+            "id": 1714,
+            "vars": [
+                {
+                    "name": "ASS1ff04e99b944_char_yieldfr_pos"
+                },
+                {
+                    "name": "ASS1ff04e99b944_char_yieldfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "1ff04e99b944",
+                "ass_desc": "Deuxième récolte",
+                "ass_days": 42,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le rendement le plus élevé ?",
+                "Quelle variété a le rendement le plus bas ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_1ff04e99b944_1714_add"
+        },
+        {
+            "name": "Taille des feuilles",
+            "codeQst": "leafsizeFR",
+            "id": 1727,
+            "vars": [
+                {
+                    "name": "ASS1ff04e99b944_char_leafsizefr_pos"
+                },
+                {
+                    "name": "ASS1ff04e99b944_char_leafsizefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "1ff04e99b944",
+                "ass_desc": "Deuxième récolte",
+                "ass_days": 42,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle option a les plus grandes feuilles ?",
+                "Quelle option a les plus petites feuilles ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_1ff04e99b944_1727_add"
+        },
+        {
+            "name": "Goût ",
+            "codeQst": "tasteFR",
+            "id": 1716,
+            "vars": [
+                {
+                    "name": "ASS1ff04e99b944_char_tastefr_pos"
+                },
+                {
+                    "name": "ASS1ff04e99b944_char_tastefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "1ff04e99b944",
+                "ass_desc": "Deuxième récolte",
+                "ass_days": 42,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le meilleur goût ?",
+                "Quelle variété a le pire goût ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_1ff04e99b944_1716_add"
+        },
+        {
+            "name": "Globalement",
+            "codeQst": "overallcharFR",
+            "id": 1715,
+            "vars": [
+                {
+                    "name": "ASS1ff04e99b944_char_overallcharfr_pos"
+                },
+                {
+                    "name": "ASS1ff04e99b944_char_overallcharfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "1ff04e99b944",
+                "ass_desc": "Deuxième récolte",
+                "ass_days": 42,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Dans l'ensemble, quelle variété a les meilleures performances ?",
+                "Dans l'ensemble, quelle variété a les pires performances ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_1ff04e99b944_1715_add"
+        },
+        {
+            "name": "Qualité marchande",
+            "codeQst": "marketabilityFR",
+            "id": 1725,
+            "vars": [
+                {
+                    "name": "ASS1ff04e99b944_char_marketabilityfr_pos"
+                },
+                {
+                    "name": "ASS1ff04e99b944_char_marketabilityfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "1ff04e99b944",
+                "ass_desc": "Deuxième récolte",
+                "ass_days": 42,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelles options sont les plus faciles à vendre ?",
+                "Quelles options sont les plus difficiles à vendre ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_1ff04e99b944_1725_add"
+        },
+        {
+            "name": "Résistance aux maladies",
+            "codeQst": "diseasesresistanceFR",
+            "id": 1708,
+            "vars": [
+                {
+                    "name": "ASScd0cafef5f06_char_diseasesresistancefr_pos"
+                },
+                {
+                    "name": "ASScd0cafef5f06_char_diseasesresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux maladies ?",
+                "Quelle variété est la plus sensible aux maladies ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_cd0cafef5f06_1708_add"
+        },
+        {
+            "name": "Survie des plantes",
+            "codeQst": "plantsurvivalFR",
+            "id": 1709,
+            "vars": [
+                {
+                    "name": "ASScd0cafef5f06_char_plantsurvivalfr_pos"
+                },
+                {
+                    "name": "ASScd0cafef5f06_char_plantsurvivalfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le taux de survie le plus élevé avant la récolte ?",
+                "Quelle variété a le taux de survie le plus bas avant la récolte ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_cd0cafef5f06_1709_add"
+        },
+        {
+            "name": "Tolérance à la sécheresse",
+            "codeQst": "droughttoleranceFR",
+            "id": 1710,
+            "vars": [
+                {
+                    "name": "ASScd0cafef5f06_char_droughttolerancefr_pos"
+                },
+                {
+                    "name": "ASScd0cafef5f06_char_droughttolerancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus tolérante à la sécheresse ?",
+                "Quelle variété est la plus sensible à la sécheresse ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_cd0cafef5f06_1710_add"
+        },
+        {
+            "name": "Tolérance aux inondations",
+            "codeQst": "floodtoleranceFR",
+            "id": 1711,
+            "vars": [
+                {
+                    "name": "ASScd0cafef5f06_char_floodtolerancefr_pos"
+                },
+                {
+                    "name": "ASScd0cafef5f06_char_floodtolerancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus tolérante aux inondations ?",
+                "Quelle variété est la moins tolérante aux inondations ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_cd0cafef5f06_1711_add"
+        },
+        {
+            "name": "Hauteur de la plante (tricot)",
+            "codeQst": "plantheighttricotFR",
+            "id": 1731,
+            "vars": [
+                {
+                    "name": "ASScd0cafef5f06_char_plantheighttricotfr_pos"
+                },
+                {
+                    "name": "ASScd0cafef5f06_char_plantheighttricotfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle option a les plantes les plus plantes ?",
+                "Quelle option a les plus petites plantes ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_cd0cafef5f06_1731_add"
+        },
+        {
+            "name": "Branchement",
+            "codeQst": "branchingFR",
+            "id": 1713,
+            "vars": [
+                {
+                    "name": "ASScd0cafef5f06_char_branchingfr_pos"
+                },
+                {
+                    "name": "ASScd0cafef5f06_char_branchingfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a la capacité de ramification la plus élevée ?",
+                "Quelle variété a la capacité de ramification la plus faible ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_cd0cafef5f06_1713_add"
+        },
+        {
+            "name": "Globalement",
+            "codeQst": "overallcharFR",
+            "id": 1715,
+            "vars": [
+                {
+                    "name": "ASScd0cafef5f06_char_overallcharfr_pos"
+                },
+                {
+                    "name": "ASScd0cafef5f06_char_overallcharfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Dans l'ensemble, quelle variété a les meilleures performances ?",
+                "Dans l'ensemble, quelle variété a les pires performances ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_cd0cafef5f06_1715_add"
+        },
+        {
+            "name": "Résistance aux ravageurs",
+            "codeQst": "pestresistanceFR",
+            "id": 1707,
+            "vars": [
+                {
+                    "name": "ASScd0cafef5f06_char_pestresistancefr_pos"
+                },
+                {
+                    "name": "ASScd0cafef5f06_char_pestresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux ravageurs ? ",
+                "Quelle variété est la plus sensible aux ravageurs ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_cd0cafef5f06_1707_add"
+        },
+        {
+            "name": "Rendement",
+            "codeQst": "yieldFR",
+            "id": 1714,
+            "vars": [
+                {
+                    "name": "ASSbe5279a0f035_char_yieldfr_pos"
+                },
+                {
+                    "name": "ASSbe5279a0f035_char_yieldfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "be5279a0f035",
+                "ass_desc": "Troisième récolte",
+                "ass_days": 56,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le rendement le plus élevé ?",
+                "Quelle variété a le rendement le plus bas ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_be5279a0f035_1714_add"
+        },
+        {
+            "name": "Taille des feuilles",
+            "codeQst": "leafsizeFR",
+            "id": 1727,
+            "vars": [
+                {
+                    "name": "ASSbe5279a0f035_char_leafsizefr_pos"
+                },
+                {
+                    "name": "ASSbe5279a0f035_char_leafsizefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "be5279a0f035",
+                "ass_desc": "Troisième récolte",
+                "ass_days": 56,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle option a les plus grandes feuilles ?",
+                "Quelle option a les plus petites feuilles ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_be5279a0f035_1727_add"
+        },
+        {
+            "name": "Goût ",
+            "codeQst": "tasteFR",
+            "id": 1716,
+            "vars": [
+                {
+                    "name": "ASSbe5279a0f035_char_tastefr_pos"
+                },
+                {
+                    "name": "ASSbe5279a0f035_char_tastefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "be5279a0f035",
+                "ass_desc": "Troisième récolte",
+                "ass_days": 56,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le meilleur goût ?",
+                "Quelle variété a le pire goût ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_be5279a0f035_1716_add"
+        },
+        {
+            "name": "Globalement",
+            "codeQst": "overallcharFR",
+            "id": 1715,
+            "vars": [
+                {
+                    "name": "ASSbe5279a0f035_char_overallcharfr_pos"
+                },
+                {
+                    "name": "ASSbe5279a0f035_char_overallcharfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "be5279a0f035",
+                "ass_desc": "Troisième récolte",
+                "ass_days": 56,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Dans l'ensemble, quelle variété a les meilleures performances ?",
+                "Dans l'ensemble, quelle variété a les pires performances ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_be5279a0f035_1715_add"
+        },
+        {
+            "name": "Qualité marchande",
+            "codeQst": "marketabilityFR",
+            "id": 1725,
+            "vars": [
+                {
+                    "name": "ASSbe5279a0f035_char_marketabilityfr_pos"
+                },
+                {
+                    "name": "ASSbe5279a0f035_char_marketabilityfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "be5279a0f035",
+                "ass_desc": "Troisième récolte",
+                "ass_days": 56,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelles options sont les plus faciles à vendre ?",
+                "Quelles options sont les plus difficiles à vendre ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_be5279a0f035_1725_add"
+        },
+        {
+            "name": "Résistance aux maladies",
+            "codeQst": "diseasesresistanceFR",
+            "id": 1708,
+            "vars": [
+                {
+                    "name": "ASS9bbf2fea7f1d_char_diseasesresistancefr_pos"
+                },
+                {
+                    "name": "ASS9bbf2fea7f1d_char_diseasesresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux maladies ?",
+                "Quelle variété est la plus sensible aux maladies ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_9bbf2fea7f1d_1708_add"
+        },
+        {
+            "name": "Survie des plantes",
+            "codeQst": "plantsurvivalFR",
+            "id": 1709,
+            "vars": [
+                {
+                    "name": "ASS9bbf2fea7f1d_char_plantsurvivalfr_pos"
+                },
+                {
+                    "name": "ASS9bbf2fea7f1d_char_plantsurvivalfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le taux de survie le plus élevé avant la récolte ?",
+                "Quelle variété a le taux de survie le plus bas avant la récolte ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_9bbf2fea7f1d_1709_add"
+        },
+        {
+            "name": "Résistance aux ravageurs",
+            "codeQst": "pestresistanceFR",
+            "id": 1707,
+            "vars": [
+                {
+                    "name": "ASS9bbf2fea7f1d_char_pestresistancefr_pos"
+                },
+                {
+                    "name": "ASS9bbf2fea7f1d_char_pestresistancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus résistante aux ravageurs ? ",
+                "Quelle variété est la plus sensible aux ravageurs ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_9bbf2fea7f1d_1707_add"
+        },
+        {
+            "name": "Tolérance à la sécheresse",
+            "codeQst": "droughttoleranceFR",
+            "id": 1710,
+            "vars": [
+                {
+                    "name": "ASS9bbf2fea7f1d_char_droughttolerancefr_pos"
+                },
+                {
+                    "name": "ASS9bbf2fea7f1d_char_droughttolerancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus tolérante à la sécheresse ?",
+                "Quelle variété est la plus sensible à la sécheresse ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_9bbf2fea7f1d_1710_add"
+        },
+        {
+            "name": "Tolérance aux inondations",
+            "codeQst": "floodtoleranceFR",
+            "id": 1711,
+            "vars": [
+                {
+                    "name": "ASS9bbf2fea7f1d_char_floodtolerancefr_pos"
+                },
+                {
+                    "name": "ASS9bbf2fea7f1d_char_floodtolerancefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété est la plus tolérante aux inondations ?",
+                "Quelle variété est la moins tolérante aux inondations ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_9bbf2fea7f1d_1711_add"
+        },
+        {
+            "name": "Hauteur de la plante (tricot)",
+            "codeQst": "plantheighttricotFR",
+            "id": 1731,
+            "vars": [
+                {
+                    "name": "ASS9bbf2fea7f1d_char_plantheighttricotfr_pos"
+                },
+                {
+                    "name": "ASS9bbf2fea7f1d_char_plantheighttricotfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle option a les plantes les plus plantes ?",
+                "Quelle option a les plus petites plantes ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_9bbf2fea7f1d_1731_add"
+        },
+        {
+            "name": "Branchement",
+            "codeQst": "branchingFR",
+            "id": 1713,
+            "vars": [
+                {
+                    "name": "ASS9bbf2fea7f1d_char_branchingfr_pos"
+                },
+                {
+                    "name": "ASS9bbf2fea7f1d_char_branchingfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a la capacité de ramification la plus élevée ?",
+                "Quelle variété a la capacité de ramification la plus faible ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_9bbf2fea7f1d_1713_add"
+        },
+        {
+            "name": "Globalement",
+            "codeQst": "overallcharFR",
+            "id": 1715,
+            "vars": [
+                {
+                    "name": "ASS9bbf2fea7f1d_char_overallcharfr_pos"
+                },
+                {
+                    "name": "ASS9bbf2fea7f1d_char_overallcharfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Dans l'ensemble, quelle variété a les meilleures performances ?",
+                "Dans l'ensemble, quelle variété a les pires performances ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_9bbf2fea7f1d_1715_add"
+        },
+        {
+            "name": "Rendement",
+            "codeQst": "yieldFR",
+            "id": 1714,
+            "vars": [
+                {
+                    "name": "ASS3f1bd90f435e_char_yieldfr_pos"
+                },
+                {
+                    "name": "ASS3f1bd90f435e_char_yieldfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "3f1bd90f435e",
+                "ass_desc": "Quatrième récolte",
+                "ass_days": 70,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le rendement le plus élevé ?",
+                "Quelle variété a le rendement le plus bas ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_3f1bd90f435e_1714_add"
+        },
+        {
+            "name": "Cultiver encore",
+            "codeQst": "grownextFR",
+            "id": 1699,
+            "vars": [
+                {
+                    "name": "ASS3f1bd90f435e_char_grownextfr_pos"
+                },
+                {
+                    "name": "ASS3f1bd90f435e_char_grownextfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "3f1bd90f435e",
+                "ass_desc": "Quatrième récolte",
+                "ass_days": 70,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle option voudriez-vous faire pousser à nouveau dans la prochaine saison ?",
+                "Quelle option ne veux-tu pas faire pousser à nouveau la saison prochaine ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_3f1bd90f435e_1699_add"
+        },
+        {
+            "name": "Globalement",
+            "codeQst": "overallcharFR",
+            "id": 1715,
+            "vars": [
+                {
+                    "name": "ASS3f1bd90f435e_char_overallcharfr_pos"
+                },
+                {
+                    "name": "ASS3f1bd90f435e_char_overallcharfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "3f1bd90f435e",
+                "ass_desc": "Quatrième récolte",
+                "ass_days": 70,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Dans l'ensemble, quelle variété a les meilleures performances ?",
+                "Dans l'ensemble, quelle variété a les pires performances ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_3f1bd90f435e_1715_add"
+        },
+        {
+            "name": "Taille des feuilles",
+            "codeQst": "leafsizeFR",
+            "id": 1727,
+            "vars": [
+                {
+                    "name": "ASS3f1bd90f435e_char_leafsizefr_pos"
+                },
+                {
+                    "name": "ASS3f1bd90f435e_char_leafsizefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "3f1bd90f435e",
+                "ass_desc": "Quatrième récolte",
+                "ass_days": 70,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle option a les plus grandes feuilles ?",
+                "Quelle option a les plus petites feuilles ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_3f1bd90f435e_1727_add"
+        },
+        {
+            "name": "Goût ",
+            "codeQst": "tasteFR",
+            "id": 1716,
+            "vars": [
+                {
+                    "name": "ASS3f1bd90f435e_char_tastefr_pos"
+                },
+                {
+                    "name": "ASS3f1bd90f435e_char_tastefr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "3f1bd90f435e",
+                "ass_desc": "Quatrième récolte",
+                "ass_days": 70,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelle variété a le meilleur goût ?",
+                "Quelle variété a le pire goût ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_3f1bd90f435e_1716_add"
+        },
+        {
+            "name": "Qualité marchande",
+            "codeQst": "marketabilityFR",
+            "id": 1725,
+            "vars": [
+                {
+                    "name": "ASS3f1bd90f435e_char_marketabilityfr_pos"
+                },
+                {
+                    "name": "ASS3f1bd90f435e_char_marketabilityfr_neg"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "3f1bd90f435e",
+                "ass_desc": "Quatrième récolte",
+                "ass_days": 70,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quelles options sont les plus faciles à vendre ?",
+                "Quelles options sont les plus difficiles à vendre ?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_3f1bd90f435e_1725_add"
+        }
+    ],
+    "Performance": [
+        {
+            "name": "Globale vs Locale",
+            "codeQst": "overallperFR",
+            "id": 1717,
+            "vars": [
+                {
+                    "name": "ASS3f1bd90f435e_perf_overallperfr_1"
+                },
+                {
+                    "name": "ASS3f1bd90f435e_perf_overallperfr_2"
+                },
+                {
+                    "name": "ASS3f1bd90f435e_perf_overallperfr_3"
+                }
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "3f1bd90f435e",
+                "ass_desc": "Quatrième récolte",
+                "ass_days": 70,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "La variété A est-elle meilleure ou pire que celle que vous cultivez actuellement ?",
+                "La variété B est-elle meilleure ou pire que celle que vous cultivez actuellement ?",
+                "La variété C est-elle meilleure ou pire que celle que vous cultivez actuellement ?"
+            ],
+            "type": "performance",
+            "codeForAnalysis": "performance_ASS_3f1bd90f435e_1717_add"
+        }
+    ],
+    "Explanatory": [
+        {
+            "name": "Genre",
+            "codeQst": "genderFR",
+            "questionAsked": "S'il vous plait selectionnez votre genre",
+            "id": 1638,
+            "dtype": 5,
+            "vars": "REG_genderfr",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1638_add"
+        },
+        {
+            "name": "Âge",
+            "codeQst": "ageFR",
+            "questionAsked": "Indiquer votre âge",
+            "id": 1639,
+            "dtype": 3,
+            "vars": "REG_agefr",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1639_add"
+        },
+        {
+            "name": "Années d'études",
+            "codeQst": "educationyearsFR",
+            "questionAsked": "Pendant combien d'années êtes-vous allé à l'école? Mettez zéro si illettré.",
+            "id": 1640,
+            "dtype": 3,
+            "vars": "REG_educationyearsfr",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1640_add"
+        },
+        {
+            "name": "Occupation",
+            "codeQst": "occupationFR",
+            "questionAsked": "Quelle est l&#8242;occupation principale du répondant ?",
+            "id": 1645,
+            "dtype": 5,
+            "vars": "REG_occupationfr",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1645_add"
+        },
+        {
+            "name": "Genre",
+            "codeQst": "genderFR",
+            "questionAsked": "S'il vous plait selectionnez votre genre",
+            "id": 1638,
+            "dtype": 5,
+            "vars": "REG_genderfr",
+            "code": null,
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_REG__1638_add"
+        }
+    ],
+    "Quantitative": [],
+    "linearRegression": [
+        {
+            "name": "Gravité de la maladie",
+            "codeQst": "diseaseseveritFR",
+            "id": 1697,
+            "dtype": 3,
+            "vars": [
+                "ASSfbf5f207993a_diseaseseveritFR_a",
+                "ASSfbf5f207993a_diseaseseveritFR_b",
+                "ASSfbf5f207993a_diseaseseveritFR_c"
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "fbf5f207993a",
+                "ass_desc": "Floraison",
+                "ass_days": 21,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quel est le degré de sévérité de la maladie ? - Option A",
+                "Quel est le degré de sévérité de la maladie ? - Option B",
+                "Quel est le degré de sévérité de la maladie ? - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_fbf5f207993a_1697_add"
+        },
+        {
+            "name": "Gravité de la maladie",
+            "codeQst": "diseaseseveritFR",
+            "id": 1697,
+            "dtype": 3,
+            "vars": [
+                "ASS4a20805281f9_diseaseseveritFR_a",
+                "ASS4a20805281f9_diseaseseveritFR_b",
+                "ASS4a20805281f9_diseaseseveritFR_c"
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "4a20805281f9",
+                "ass_desc": "Performance agronomique 1",
+                "ass_days": 36,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quel est le degré de sévérité de la maladie ? - Option A",
+                "Quel est le degré de sévérité de la maladie ? - Option B",
+                "Quel est le degré de sévérité de la maladie ? - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_4a20805281f9_1697_add"
+        },
+        {
+            "name": "Gravité de la maladie",
+            "codeQst": "diseaseseveritFR",
+            "id": 1697,
+            "dtype": 3,
+            "vars": [
+                "ASScd0cafef5f06_diseaseseveritFR_a",
+                "ASScd0cafef5f06_diseaseseveritFR_b",
+                "ASScd0cafef5f06_diseaseseveritFR_c"
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "cd0cafef5f06",
+                "ass_desc": "Performance agronomique 2",
+                "ass_days": 49,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quel est le degré de sévérité de la maladie ? - Option A",
+                "Quel est le degré de sévérité de la maladie ? - Option B",
+                "Quel est le degré de sévérité de la maladie ? - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_cd0cafef5f06_1697_add"
+        },
+        {
+            "name": "Gravité de la maladie",
+            "codeQst": "diseaseseveritFR",
+            "id": 1697,
+            "dtype": 3,
+            "vars": [
+                "ASS9bbf2fea7f1d_diseaseseveritFR_a",
+                "ASS9bbf2fea7f1d_diseaseseveritFR_b",
+                "ASS9bbf2fea7f1d_diseaseseveritFR_c"
+            ],
+            "code": {
+                "project_id": "d2cfc0a9f40a",
+                "ass_cod": "9bbf2fea7f1d",
+                "ass_desc": "Performance agronomique 3",
+                "ass_days": 63,
+                "ass_status": 1,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "Quel est le degré de sévérité de la maladie ? - Option A",
+                "Quel est le degré de sévérité de la maladie ? - Option B",
+                "Quel est le degré de sévérité de la maladie ? - Option C"
+            ],
+            "type": "linearregression",
+            "class": "integer",
+            "codeForAnalysis": "linearregression_ASS_9bbf2fea7f1d_1697_add"
+        }
+    ]
+}
