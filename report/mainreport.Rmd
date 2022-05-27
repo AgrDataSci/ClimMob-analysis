@@ -27,7 +27,7 @@ The primary goal of ClimMob is to support the selection of innovative technologi
  
 ClimMob software assigns a limited number of items (typically 3) to each participant, who will compare their performance. Each participant gets a different combination of items drawn from a much larger set of items (typically 15-25). Once the results of the small tasks have been collected, ClimMob builds a data base of the whole set of tested technologies, combining all observations. ClimMob not only reconstructs the overall ordering of items, but also takes into account differences and similarities between participants and the conditions under which they observe (e.g. socio-economic and plot environmental traits). It assigns similar participants to groups that each corresponds among different group profiles. Groups are created on the basis of whichever items which have been collected, that are found to be significantly linked to the observed rankings.
  
-ClimMob applies the Plackett-Luce model to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls]. The decentralized experimental approach behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2022) [@climmobanalysis].
+ClimMob applies the Plackett-Luce model to analyze ranking data with the R [@RCoreTeam] package 'PlackettLuce' [@Turner2020]. It automatically generates analytical reports, as well as individualized information sheets for each participant using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls]. Agroclimatic indices are obtained using the packages climatrends [@climatrends] and nasapower [@nasapower]. The decentralized experimental approach behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2022) [@climmobanalysis].
 
 \pagebreak
 
@@ -78,13 +78,16 @@ if (isTRUE(agroclimate$agroclimate)){
   agroclimate_text1 <- paste0("The charts bellow present the temperature and rainfall indices ",
                               "obtained using the GPS data presented in the map. The timespan ",
                               "window used to capture the climate data were from ",
-                              paste(agroclimate$dates, collapse = " to "), ".")
+                              paste(agroclimate$dates, collapse = " to "), ". The charts ",
+                              "present the weekly agroclimatic indices (7-days). Data was obtained ",
+                              " using the R package nasapower [@nasapower], indices were computed using the ",
+                              "R package climatrends [@climatrends].")
 }
 ```
 
 `r paste(agroclimate_text1, collapse = '\n')`
 
-```{r temperature_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Temperature indices from ", paste(agroclimate$dates, collapse = " to "), ". The chart presents the maximum day temperature (maxDT), the minimum day temperature (minDT), the maximum night temperature (maxNT), and the minimum nigth temperature (minNT).")}
+```{r temperature_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Temperature indices from ", paste(agroclimate$dates, collapse = " to "), ". The chart presents weekly (7-days) maximum day temperature (maxDT), the minimum day temperature (minDT), the maximum night temperature (maxNT), and the minimum nigth temperature (minNT).")}
 if (isTRUE(agroclimate$agroclimate)){
 plot(agroclimate$temperature_plot)
 }
@@ -92,7 +95,7 @@ plot(agroclimate$temperature_plot)
 
 \
 
-```{r rainfall_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Rainfall indices from ", paste(agroclimate$dates, collapse = " to "), ". The chart presents the total rainfall (Rtotal), simple daily intensity index, total precipitation divided by the number of wet days (mm/days, SDII), maximum length of consecutive dry day, rain < 1 mm (MLDS), and the maximum length of consecutive wet days, rain >= 1 mm (MLWS).")}
+```{r rainfall_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Rainfall indices from ", paste(agroclimate$dates, collapse = " to "), ". The chart presents weekly (7-days) total rainfall (Rtotal), simple daily intensity index, total precipitation divided by the number of wet days (mm/days, SDII), maximum length of consecutive dry day, rain < 1 mm (MLDS), and the maximum length of consecutive wet days, rain >= 1 mm (MLWS).")}
 if (isTRUE(agroclimate$agroclimate)){
 plot(agroclimate$rain_plot)
 }
@@ -240,6 +243,14 @@ if (isFALSE(PL_tree$isTREE)) {
 if (isTRUE(PL_tree$isTREE)) {
   tree_test1 <- 
     paste0("Table 1.4 presents the node groups that were obtained from the Plackett-Luce trees using the set of covariates retained by the forward selection.")
+  
+  if (isTRUE(agroclimate$agroclimate)) {
+   tree_test1 <- paste0(tree_test1, 
+           "We also included a set of agroclimatic covariates to the PlackettLuce trees.",
+           "The indices are computed for each recorded location from the ",
+           paste(agroclimate$dates, collapse = " to "),
+           ". Please check the documentation of the climatrends package for a full description of agroclimatic covariates < https://agrdatasci.github.io/climatrends/ >.")
+  }
   
   tree_test2 <- 
     paste0("Figure 1.6 shows the Plackett-Luce tree obtained with the selected model.")

@@ -6,18 +6,32 @@ get_agroclimatic_data <- function(cmdata){
   result <- list(agroclimate = FALSE)
   
   # look for the first and last dates in the dataset
-  dates <- which(grepl("clm_start", names(cmdata)))
+  dates <- sum(grepl("clm_start", names(cmdata)))
   
   # only run if more than one data collection moment
-  if (isTRUE(length(dates) > 1)) {
-  
-    dates <- as.Date(unlist(cmdata[dates]))
+  if (isTRUE(dates > 1)) {
     
-    dates <- c(dates[which.min(dates)], dates[which.max(dates)])
+    # the first data is the registration of participants
+    dates1 <- which(grepl("REG_clm_start", names(cmdata)))
+    dates1 <- as.Date(unlist(cmdata[dates1]))
+    dates1 <- dates1[which.min(dates1)]
+    
+    # then the last data record
+    dates2 <- which(grepl("clm_start", names(cmdata)))
+    dates2 <- as.Date(unlist(cmdata[dates2]))
+    dates2 <- dates2[which.max(dates2)]
+    
+    dates <- c(dates1, dates2)
+ 
+    # BUG FIX nasapower is not downloading data for more than a year
+    # if more than a year than take the first year
+    if (isTRUE(dates[2] - dates[1] > 362)) {
+      dates[2] <- dates[1] + 362
+    }
     
     # if less than 2 days from TODAYS Sys.Date() then reduce the window
     if (isTRUE(Sys.Date() - dates[2] < 2)) {
-      dates[2] <- dates[2] - 2
+      dates[2] <- Sys.Date() - 2
     }
     
     # Check if lonlat is provided
@@ -44,34 +58,37 @@ get_agroclimatic_data <- function(cmdata){
       
       lonlat[,2] <- ifelse(lonlat[,2] > 70 | lonlat[,2] < -70, NA, lonlat[,2])
       
-      lonlat <- na.omit(lonlat)
+      keep_lonlat <- apply(lonlat,1,function(x){sum(is.na(x))}) == 0
+      
+      lonlat <- lonlat[keep_lonlat, ]
       
       d <- lonlat
       names(d) <- c("lon","lat")
-      
-      # make clusters 
+
+      # make clusters
       h <- stats::dist(d)
-      
+
       h <- stats::hclust(h)
-      
+
       h <- stats::cutree(h, h = 0.05)
-      
+
       # split the d by each defined cluster
       d <- split(d, h)
-      
-      # and take the mean 
+
+      # and take the mean
       d <- lapply(d, function(x) {
         colMeans(x)
       })
-      
+
       # back to data frame
       d <- do.call("rbind", d)
-      
+
       d <- as.data.frame(d)
-      
+
       names(d) <- c("lon","lat")
       
-      # get rainfall using nasapower
+      # get rainfall using nasapower 
+      # use the clustered points to save time
       rain <- rainfall(d, 
                        day.one = dates[1], 
                        last.day = dates[2],
@@ -79,6 +96,7 @@ get_agroclimatic_data <- function(cmdata){
                        intervals = 7)
       
       # temperature data
+      # use the clustered points to save time
       temp <- temperature(d,
                           day.one = dates[1],
                           last.day = dates[2],
@@ -121,8 +139,7 @@ get_agroclimatic_data <- function(cmdata){
       
       rain_plot <- rain_plot1 / rain_plot2
       
-      
-      # now the temperature indices 
+      # temperature
       sel <- c("maxDT", "minDT", "maxNT", "minNT")
       
       rplot <- temp[temp$index %in% sel, ]
@@ -141,11 +158,46 @@ get_agroclimatic_data <- function(cmdata){
               title = element_text(size = 14),
               axis.title = element_text(size = 15))
       
+      
+      # now get the temperature and rainfall for the whole period
+      # to use in the PLtree module
+      # get rainfall using nasapower
+      rain1 <- rainfall(lonlat, 
+                        day.one = dates[1], 
+                        last.day = dates[2])
+      
+      # temperature data
+      temp1 <- temperature(lonlat,
+                           day.one = dates[1],
+                           last.day = dates[2])
+      
+      rain_final <- as.data.frame(matrix(NA, 
+                                         ncol = ncol(rain1),
+                                         nrow = nrow(cmdata)))
+      
+      rain_final[keep_lonlat, ] <- rain1
+      names(rain_final) <- names(rain1)
+      # TO IMPROVE! Replace NA's with zeros
+      rain_final[is.na(rain_final)] <- 0
+      
+      temp_final <- as.data.frame(matrix(NA, 
+                                         ncol = ncol(temp1),
+                                         nrow = nrow(cmdata)))
+      
+      temp_final[keep_lonlat, ] <- temp1
+      names(temp_final) <- names(temp1)
+      # TO IMPROVE! Replace NA's with zeros
+      temp_final[is.na(temp_final)] <- 0
+      
       result <- list(agroclimate = TRUE, 
                      rain_plot = rain_plot,
                      temperature_plot = temperature_plot,
-                     dates = as.vector(as.character(dates)))
-      
+                     dates = as.vector(as.character(dates)),
+                     rainfall_week = rain,
+                     temperature_week = temp,
+                     keep_lonlat = keep_lonlat,
+                     rainfall = rain_final,
+                     temperature = temp_final)
       
       
     }
@@ -162,6 +214,10 @@ get_agroclimatic_data <- function(cmdata){
 error_data_agroclimate <- list(agroclimate = FALSE, 
                                rain_plot = 0,
                                temperature_plot = 0,
-                               dates = c("", ""))
+                               dates = c("", ""),
+                               rainfall_week = data.frame(),
+                               temperature_week = data.frame(),
+                               rainfall = data.frame(),
+                               temperature = data.frame())
 
 

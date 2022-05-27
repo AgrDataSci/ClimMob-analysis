@@ -97,26 +97,27 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
       
       kendall <- kendall[rev(order(kendall$kendallTau)), ]
       
-      kendall$trait <- factor(kendall$trait, levels = kendall$trait)
+      kendall$trait <- factor(kendall$trait, levels = rev(kendall$trait))
       
       # make a bar plot plot 
       kendall_plot <- ggplot2::ggplot(data = kendall, 
-                                      ggplot2::aes(x = trait,
-                                                   y = kendallTau, 
+                                      ggplot2::aes(x = kendallTau,
+                                                   y = trait, 
                                                    fill = trait)) +
         ggplot2::geom_bar(stat = "identity", 
                           position = "dodge",
                           show.legend = FALSE,
                           width = 1, 
                           color = "#ffffff") + 
-        ggplot2::scale_fill_manual(values = col_pallet(nrow(kendall))) +
+        ggplot2::scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
         ggplot2::theme_minimal() +
         ggplot2::theme(legend.position="bottom",
                        legend.text = ggplot2::element_text(size = 9),
                        panel.grid.major = ggplot2::element_blank(),
                        axis.text.y = ggplot2::element_text(color = "grey20"),
-                       axis.text.x = ggplot2::element_text(angle = 65, vjust = 1,
-                                                           hjust=1, color = "grey20")) +
+                       axis.text.x = ggplot2::element_text(vjust = 1,
+                                                           hjust=1, 
+                                                           color = "grey20")) +
         ggplot2::labs(y = "Kendall tau",
                       x = "Trait") 
       
@@ -214,7 +215,9 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
   worthmap <- worth_map(mod[-reference_trait_index],
                         labels = trait_names[-reference_trait_index],
                         ref = reference_tech) +
-    labs(x = title_case(option), y = "Traits")
+    labs(x = title_case(option), y = "Traits") +
+    theme(axis.text.y = ggplot2::element_text(color = "grey20", angle = 0))
+    
   
   
   #..........................................................

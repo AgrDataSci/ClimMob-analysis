@@ -100,6 +100,11 @@ organize_ranking_data <- function(cmdata,
       
     }
     
+    # Also, no more than 5 entries per group
+    if (any(table(group) < 5)) {
+      group <- NULL
+    }
+    
   }
   
   if (length(groups) == 0) {

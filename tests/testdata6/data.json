@@ -501,17 +501,6 @@
             "codeForAnalysis": "explanatory_REG__206_add"
         },
         {
-            "name": "What is the gender ?",
-            "codeQst": "gender",
-            "questionAsked": "What is the gender ?",
-            "id": 237,
-            "dtype": 5,
-            "vars": "REG_gender",
-            "code": null,
-            "type": "explanatory",
-            "codeForAnalysis": "explanatory_REG__237_add"
-        },
-        {
             "name": "How old are you?",
             "codeQst": "age",
             "questionAsked": "How old are you?",
@@ -539,24 +528,6 @@
             },
             "type": "explanatory",
             "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_1684_add"
-        },
-        {
-            "name": "Gender",
-            "codeQst": "biogender",
-            "questionAsked": "Select the gender of the participant",
-            "id": 1683,
-            "dtype": 5,
-            "vars": "ASS6bedcf1507f5_biogender",
-            "code": {
-                "project_id": "7a1d89767d65",
-                "ass_cod": "6bedcf1507f5",
-                "ass_desc": "Cocoa_Target_data",
-                "ass_days": 365,
-                "ass_status": 1,
-                "ass_final": 1
-            },
-            "type": "explanatory",
-            "codeForAnalysis": "explanatory_ASS_6bedcf1507f5_1683_add"
         },
         {
             "name": "Any loss",

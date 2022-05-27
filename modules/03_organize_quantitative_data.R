@@ -20,7 +20,7 @@ organize_quantitative_data <- function(cmdata,
   
   # check if a request to split the data by groups (segments)
   # (gender, location, etc.) is provided
-  if (length(groups) > 0) {
+  if (isTRUE(length(groups) > 0)) {
     
     group_index <- integer()
     
@@ -34,13 +34,13 @@ organize_quantitative_data <- function(cmdata,
     
     groups <- names(cmdata)[group_index]
     
-    if (length(groups) == 0) {
+    if (isTRUE(length(groups) == 0)) {
       
       group <- NULL
       
     }
     
-    if (length(groups) == 1) {
+    if (isTRUE(length(groups) == 1)) {
       
       group <- cmdata[, groups]
       
@@ -56,7 +56,7 @@ organize_quantitative_data <- function(cmdata,
       
     }
     
-    if (length(groups) > 1) {
+    if (isTRUE(length(groups) > 1)) {
       
       group <- cmdata[,groups]
       
