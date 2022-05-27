@@ -22,4 +22,7 @@ remotes::install_github("AgrDataSci/gosset",
                         upgrade = "never", 
                         force = TRUE)
 
+remotes::install_github("AgrDataSci/climatrends",
+                        upgrade = "never", 
+                        force = TRUE)
 

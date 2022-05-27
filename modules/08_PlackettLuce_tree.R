@@ -5,7 +5,8 @@
 #' 
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
-get_PlackettLuce_tree <- function(cmdata, rank_dat) {
+#' @param agroclimate a list with agroclimatic parameters 
+get_PlackettLuce_tree <- function(cmdata, rank_dat, agroclimate) {
   
   trait_list <- rank_dat[["trait_list"]]
   option <- rank_dat[["option"]]
@@ -19,6 +20,7 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat) {
   covar <- rank_dat[["covar"]]
   nranker <- sum(trait_list[[reference_trait_index]]$keep)
   # use <<- to assign these two variables to the .GlobalEnv
+  use_agroclimate <- isTRUE(agroclimate$agroclimate)
   node_size <<- nranker * 0.1
   tree_alpha <<- 0.5
   reference_tech <- rank_dat[["reference_tech"]]
@@ -65,7 +67,7 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat) {
     
     covar <- na.omit(covar)
     
-    strings <- covar$nameString
+    strings <- unique(covar$nameString)
     
     # check for missing data
     # if values are character or factor, add "Unknown" for any missing
@@ -230,6 +232,11 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat) {
   Gdata <- cbind(G, Gdata)
   nG <- nrow(Gdata)
   rownames(Gdata) <- 1:nG
+  
+  # add agroclimate data if any
+  if(use_agroclimate) {
+    Gdata <- cbind(Gdata, agroclimate$rainfall[keep, ], agroclimate$temperature[keep, ])
+  }
   
   # perform a forward selection as pltree() 
   # sometimes don't split when G ~ . is used

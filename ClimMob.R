@@ -199,6 +199,24 @@ if (any_error(org_lonlat)) {
 
 # .......................................................
 # .......................................................
+# 9. Agroclimatic information  ####
+org_agroclim <- tryCatch({
+  
+  agroclimate <- get_agroclimatic_data(cmdata)
+  
+}, error = function(cond) {
+  return(cond)
+}
+)
+
+if (any_error(org_agroclim)) {
+  e <- paste("Agroclimatic data: \n", org_agroclim$message)
+  error <- c(error, e)
+  agroclimate <- error_data_agroclimate
+}
+
+# .......................................................
+# .......................................................
 # .......................................................
 # 7. Fit PlackettLuce model ####
 org_pl <- tryCatch({
@@ -227,7 +245,7 @@ if (any_error(org_pl)) {
 # 8. Fit pltree ####
 org_pltree <- tryCatch({
   
-  PL_tree <- get_PlackettLuce_tree(cmdata, rank_dat)
+  PL_tree <- get_PlackettLuce_tree(cmdata, rank_dat, agroclimate)
   
 }, error = function(cond) {
   return(cond)
@@ -240,24 +258,6 @@ if (any_error(org_pltree)) {
   PL_tree <- error_data_PL_tree
 }
 
-
-# .......................................................
-# .......................................................
-# 9. Agroclimatic information  ####
-org_agroclim <- tryCatch({
-  
-  agroclimate <- get_agroclimatic_data(cmdata)
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_agroclim)) {
-  e <- paste("Agroclimatic data: \n", org_agroclim$message)
-  error <- c(error, e)
-  agroclimate <- error_data_agroclimate
-}
 
 # .......................................................
 # .......................................................

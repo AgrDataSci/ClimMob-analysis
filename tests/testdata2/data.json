@@ -686,17 +686,6 @@
             "codeForAnalysis": "explanatory_REG__1548_add"
         },
         {
-            "name": "Education",
-            "codeQst": "education",
-            "questionAsked": "Please select your highest degree obtained",
-            "id": 1549,
-            "dtype": 5,
-            "vars": "REG_education",
-            "code": null,
-            "type": "explanatory",
-            "codeForAnalysis": "explanatory_REG__1549_add"
-        },
-        {
             "name": "Gender",
             "codeQst": "gender1",
             "questionAsked": "Please select your gender",
@@ -717,24 +706,6 @@
             "code": null,
             "type": "explanatory",
             "codeForAnalysis": "explanatory_REG__1581_add"
-        },
-        {
-            "name": "Protocol",
-            "codeQst": "protocol",
-            "questionAsked": "Have you followed the trial protocol (plot size, density) when establishing your trial?",
-            "id": 1738,
-            "dtype": 5,
-            "vars": "ASS4c584a77fe1a_protocol",
-            "code": {
-                "project_id": "7b153881fd9d",
-                "ass_cod": "4c584a77fe1a",
-                "ass_desc": "Vegetative",
-                "ass_days": 15,
-                "ass_status": 2,
-                "ass_final": 0
-            },
-            "type": "explanatory",
-            "codeForAnalysis": "explanatory_ASS_4c584a77fe1a_1738_add"
         },
         {
             "name": "On time",
