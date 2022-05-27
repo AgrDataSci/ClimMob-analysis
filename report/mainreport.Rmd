@@ -249,7 +249,7 @@ if (isTRUE(PL_tree$isTREE)) {
            "We also included a set of agroclimatic covariates to the PlackettLuce trees.",
            "The indices are computed for each recorded location from the ",
            paste(agroclimate$dates, collapse = " to "),
-           "Please check the documentation of the climatrends package for a full description of agroclimatic covariates < https://agrdatasci.github.io/climatrends/ >.")
+           ". Please check the documentation of the climatrends package for a full description of agroclimatic covariates < https://agrdatasci.github.io/climatrends/ >.")
   }
   
   tree_test2 <- 
