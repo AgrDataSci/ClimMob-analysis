@@ -314,7 +314,7 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, agroclimate) {
   # now fit the tree with the selected covariates
   tree_f <- pltree(as.formula(treeformula),
                    data = Gdata,
-                   minsize = node_size,
+                   minsize = as.integer(node_size),
                    alpha = tree_alpha,
                    gamma = TRUE)
   
@@ -322,9 +322,6 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, agroclimate) {
   
   # if the tree has splits, extract coeffs from nodes
   if (isTREE) { 
-    
-    # plot the tree (if any)
-    plottree <- plot(tree_f, ci.level = 0.5)
     
     # ......................................
     # ......................................
@@ -337,7 +334,7 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, agroclimate) {
       
       tree_mod <- list()
       nobs_tree <- integer()
-      
+
       for (i in seq_along(node_id_tree)) {
         
         Gi <- RG[nodes_tree == node_id_tree[i]]
@@ -351,8 +348,8 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, agroclimate) {
       
       tree_branch <- gosset:::build_tree_branches(tree_f)
       tree_nodes <- gosset:::build_tree_nodes(tree_mod, 
-                                              log = TRUE,
-                                              ci.level = 0.95,
+                                              log = FALSE,
+                                              ci.level = 0.5,
                                               node.ids = node_id_tree,
                                               n.obs = nobs_tree) +
         theme(axis.text.x = element_text(angle = 45))

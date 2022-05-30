@@ -64,6 +64,8 @@ if (isTRUE(is.na(language))) {
 ## Packages ####
 library("ClimMobTools")
 library("gosset")
+library("nasapower")
+library("climatrends")
 library("PlackettLuce")
 library("partykit")
 library("qvcalc")
@@ -75,7 +77,6 @@ library("pls")
 library("gtools")
 library("ggplot2")
 library("igraph")
-library("ggrepel")
 library("ggparty")
 library("patchwork")
 library("leaflet")
@@ -86,12 +87,11 @@ library("plotrix")
 library("gridExtra")
 library("caret")
 library("janitor")
-library("nasapower")
-library("climatrends")
 
-# .........................................
-# Load modules
-modules <- list.files(paste0(fullpath, "modules"), full.names = TRUE)
+# ................................................................
+# ................................................................
+# Load modules ####
+modules <- list.files(paste0(fullpath, "/modules"), full.names = TRUE)
 modules <- modules[-which(grepl("check_packages.R", modules))]
 for (i in seq_along(modules)) {
   source(modules[i])
@@ -143,7 +143,7 @@ if (any_error(try_data)) {
 
 # ................................................................
 # ................................................................
-# 2. Organise the rankings ####
+# 2. Organise quantitative data ####
 try_quanti_data <- tryCatch({
   
   if (isTRUE(length(pars[["linear"]]) > 0)) {
@@ -336,6 +336,56 @@ rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
 if (length(error) > 0) {
   print(error)
 }
+
+
+# Now try to write the extra charts
+chartdir <- paste0(outputpath, "/charts/")
+dir.create(chartdir, recursive = TRUE, showWarnings = FALSE)
+
+# log worth plot by trait
+for(m in seq_along(PL_models$logworth_plot)){
+  try(ggsave(paste0(chartdir, rank_dat$trait_code[m], "_logworth.png"),
+         plot = PL_models$logworth_plot[[m]],
+         width = 18,
+         height = 15,
+         units = "cm",
+         dpi = 200), silent = TRUE)
+}
+
+# plot worth
+try(ggsave(paste0(chartdir, "kendall_tau.png"),
+           plot = PL_models$kendall$kendall_plot,
+           width = 15,
+           height = 15,
+           units = "cm",
+           dpi = 200), silent = TRUE)
+
+
+if(length(unique(rank_dat$group)) > 1) {
+  g <- unique(rank_dat$group)
+  # log worth plot by group
+  for(m in seq_along(PL_models$logworth_plot_groups)){
+    try(ggsave(paste0(chartdir, "Group", m, "_", g[m], "_logworth_grouped_rank.png"),
+           plot = PL_models$logworth_plot_groups[[m]],
+           width = 18,
+           height = 15,
+           units = "cm",
+           dpi = 200), silent = TRUE)
+  }
+}
+
+if(PL_tree$isTREE){
+  try(ggsave(paste0(chartdir, "PlackettLuce.png"),
+             plot = PL_tree$PLtree_plot,
+             width = 25,
+             height = 20,
+             units = "cm",
+             dpi = 200), silent = TRUE)
+}
+
+files2zip <- list.dirs(chartdir, full.names = TRUE)
+
+zip(paste0(outputpath,"/mycharts"), files = files2zip)
 
 # End of analysis
 
