@@ -5,7 +5,7 @@
 # # ................................................................
 # # ................................................................
 pkg <- c("PlackettLuce","partykit","qvcalc","psychotools","jsonlite","knitr","rmarkdown",
-         "pls","gtools","ggplot2","igraph","ggrepel","ggparty","patchwork","leaflet",
+         "pls","gtools","ggplot2","igraph","ggparty","patchwork","leaflet",
          "mapview","multcompView","png","plotrix","gridExtra","caret", "janitor",
          "ClimMobTools", "gosset", "nasapower", "climatrends")
 

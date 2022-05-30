@@ -119,7 +119,6 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
         ggplot2::theme_minimal() +
         ggplot2::theme(legend.position="bottom",
                        legend.text = ggplot2::element_text(size = 9),
-                       panel.grid.major = ggplot2::element_blank(),
                        axis.text.y = ggplot2::element_text(color = "grey20"),
                        axis.text.x = ggplot2::element_text(vjust = 1,
                                                            hjust=1, 
@@ -158,10 +157,14 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
   })
   
   # Plot log worth
-  logworth_plot <- lapply(mod, function(x){
-    plot_logworth(x, ref = reference_tech, ci.level = 0.5) + 
-      labs(y = title_case(option))
-  })
+  logworth_plot <- list()
+  for(m in seq_along(mod)) {
+    logworth_plot[[m]] <- 
+      plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
+      labs(y = title_case(option), 
+           title = paste0(rank_dat$trait_names[m],
+                          " (n = ", length(mod[[m]]$rankings),")"))
+  }
   
   #...........................................................
   # Table summarizing the best and worst items per trait
@@ -288,18 +291,22 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
     mod_group <- list()
     
     for (i in seq_along(unique_groups)) {
-      mod_group[[i]] <- PlackettLuce(RG[group == unique_groups[i], ])
+      
+      mod_group[[i]] <- try(PlackettLuce(RG[group == unique_groups[i], ]),
+                            silent = TRUE)
       
       logworth_group_plot[[i]] <- 
-        plot_logworth(mod_group[[i]], ref = reference_tech, ci.level = 0.5) +
-        labs(y = title_case(option), title = unique_groups[i])
+        try(plot_logworth(mod_group[[i]], ref = reference_tech, ci.level = 0.5) +
+        labs(y = title_case(option), title = unique_groups[i]),
+        silent = TRUE)
+      
+      if("try-error" %in% class(logworth_group_plot[[i]])) {
+        logworth_group_plot[[i]] <- 0L
+      }
       
     }
     
-    
-    
   }
-  
   
   result <- list(PL_models = mod,
                  PL_models_overview = overview_mod,
@@ -319,15 +326,15 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
 # Error in data 
 # this is a file that is generated to be used in case of errors
 error_data_PL_model <- list(PL_models = list(),
-                             PL_models_overview = data.frame(),
-                             logworth_grouped_rank = 0L,
-                             worthmap = 0L,
-                             logworth_plot = 0L,
+                            PL_models_overview = data.frame(),
+                            logworth_grouped_rank = 0L,
+                            worthmap = 0L,
+                            logworth_plot = 0L,
                             logworth_plot_groups = 0L,
-                             kendall = list(isKendall = FALSE,
-                                            strongest_link = c("", ""), 
-                                            weakest_link = c("", ""),
-                                            kendall_plot = 0L))
+                            kendall = list(isKendall = FALSE,
+                                           strongest_link = c("", ""), 
+                                           weakest_link = c("", ""),
+                                           kendall_plot = 0L))
 
 
 

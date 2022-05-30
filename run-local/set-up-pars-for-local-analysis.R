@@ -1,3 +1,5 @@
+# Run ClimMob Analysis locally  
+#
 # This workflow is used to prepare the tricot data to run the analysis locally.
 # You can use this, for example, to add environmental variables and/or 
 # combine data from different trials into a single report.
@@ -5,15 +7,17 @@
 # adapt some parts of this workflow depending on the type of data that you are dealing with. 
 # Mostly depending on how you designed your tricot project(s) and how similar they are to
 # each other in terms of data collection moments and questions' ids.
-# Good luck and contact me if you need support and/or advice
-# Kauê de Sousa <k(dot)desousa(at)cgiar(dot)org>
+# If you need support and/or advice, please submit an issue using the link below
+# https://github.com/AgrDataSci/ClimMob-analysis/issues
+# Kauê de Sousa 
 
-# Load packages
+# ................................................................
+# ................................................................
+## Packages ####
 library("ClimMobTools")
 library("gosset")
-library("climatrends")
-library("chirps")
 library("nasapower")
+library("climatrends")
 library("PlackettLuce")
 library("partykit")
 library("qvcalc")
@@ -25,7 +29,6 @@ library("pls")
 library("gtools")
 library("ggplot2")
 library("igraph")
-library("ggrepel")
 library("ggparty")
 library("patchwork")
 library("leaflet")
@@ -34,10 +37,22 @@ library("multcompView")
 library("png")
 library("plotrix")
 library("gridExtra")
-source("R/functions.R")
+library("caret")
+library("janitor")
+
+# ................................................................
+# ................................................................
+# Load modules ####
+modules <- list.files(paste0("modules"), full.names = TRUE)
+modules <- modules[-which(grepl("check_packages.R", modules))]
+for (i in seq_along(modules)) {
+  source(modules[i])
+}
 
 # Add API key, if data will be fetched from ClimMob using ClimMobTools
-key <- "4431364f-49df-40c6-8ed2-7972e97adcdb"
+
+
+
 
 # Add project id(s), if data will be fetched from ClimMob using ClimMobTools
 projects <- getProjectsCM(key, server = '1000farms')

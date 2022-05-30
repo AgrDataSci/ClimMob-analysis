@@ -6,18 +6,18 @@ get_agroclimatic_data <- function(cmdata){
   result <- list(agroclimate = FALSE)
   
   # look for the first and last dates in the dataset
-  dates <- sum(grepl("clm_start", names(cmdata)))
+  dates <- sum(grepl("_start", names(cmdata)))
   
   # only run if more than one data collection moment
   if (isTRUE(dates > 1)) {
     
     # the first data is the registration of participants
-    dates1 <- which(grepl("REG_clm_start", names(cmdata)))
+    dates1 <- which(grepl("REG_clm_start|registration_survey_start", names(cmdata)))
     dates1 <- as.Date(unlist(cmdata[dates1]))
     dates1 <- dates1[which.min(dates1)]
     
     # then the last data record
-    dates2 <- which(grepl("clm_start", names(cmdata)))
+    dates2 <- which(grepl("_start", names(cmdata)))
     dates2 <- as.Date(unlist(cmdata[dates2]))
     dates2 <- dates2[which.max(dates2)]
     
