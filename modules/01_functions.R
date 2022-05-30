@@ -788,6 +788,8 @@ plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, ...) {
     pdat$group <- ""
   }
   
+  pdat$items <- factor(pdat$items, levels = sort(unique(as.character(pdat$items))))
+  
   p <- ggplot(data = pdat,
               aes(x = items, 
                   y = est,

@@ -1,11 +1,12 @@
-# This script is used to prepare the tricot data to run the analysis locally.
-# You can use this for example to add environmental variables and/or 
-# combine results from different projects. All the process is manual and you need to 
-# adapt some parts of this script depending on the type of data that you are dealing with. 
+# This workflow is used to prepare the tricot data to run the analysis locally.
+# You can use this, for example, to add environmental variables and/or 
+# combine data from different trials into a single report.
+# All the process is manual and you need to 
+# adapt some parts of this workflow depending on the type of data that you are dealing with. 
 # Mostly depending on how you designed your tricot project(s) and how similar they are to
-# each other in terms of data structure and behaviour.
+# each other in terms of data collection moments and questions' ids.
 # Good luck and contact me if you need support and/or advice
-# Kauê de Sousa
+# Kauê de Sousa <k(dot)desousa(at)cgiar(dot)org>
 
 # Load packages
 library("ClimMobTools")
