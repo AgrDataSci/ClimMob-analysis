@@ -383,10 +383,6 @@ if(PL_tree$isTREE){
              dpi = 200), silent = TRUE)
 }
 
-files2zip <- list.dirs(chartdir, full.names = TRUE)
-
-zip(paste0(outputpath,"/mycharts"), files = files2zip)
-
 # End of analysis
 
 
