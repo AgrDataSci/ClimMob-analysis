@@ -1,25 +1,19 @@
-tag <- "testdata1"
+tag <- "testdata3/"
+path <- paste0("tests/", tag)
 
-args <- c(paste0("tests/",tag,"/data.json"), # a json file with parameters for the analysis
-          paste0("tests/",tag,"/info.json"), # a json file with the results
-          paste0("dev/output/",tag,""), # the path where results will be written
-          "FALSE", # logical, if infosheets should be written TRUE FALSE
-          "en", # the language to write the report "en" for english and "es" for spanish
-          "docx", # report file format it can be "docx", "pdf", and "html"
-          "farmer", # how the report will refer to participants/farmers
-          "genotype", # how the report will refer to tested technologies
-          getwd(), # this is backward path
-          "REG_gender1", # any group to do the analysis 
-          NULL, # the reference item for the analysis
-          NA, # minimum n of complete data required in a trait evaluation before it is excluded
-          NA, # minimum n of items tested, e.g. that all items are tested at least twice
-          NA, # minimum proportion of covariates compared to total valid n
-          NA, 
-          0.1, # significance level for the standard PL model
-          0.5, # significance level for the tree
-          100) # minimum n in each tree node
+args <- c(paste0(path, "data.json"),
+          paste0(path, "info.json"),
+          paste0("tests/output/",tag,""),
+          "FALSE",
+          "en",
+          "docx",
+          "farmer",
+          "variety",
+          paste0(getwd(), "/"),
+          "gender",
+          "3")
 
-source("modules/helper_02_internal_functions.R")
+source("modules/01_functions.R")
 
 checkfile <- readLines("ClimMob.R")
 b <- which(grepl("# Arguments ####", checkfile)) + 3
@@ -28,7 +22,11 @@ e <- which(grepl("# End of analysis", checkfile))
 # Run the workflow to analyse the data and produce the report 
 source2("ClimMob.R", b, e)
 
-# sudo Rscript ClimMob.R dev/data/Pot21A/data.json dev/data/Pot21A/info.json /Users/kauedesousa/OneDrive\ \-\ \Høgskolen\ \i\ \Innlandet/Rcode/ClimMob-analysis/dev/output/Pot21A/ FALSE en docx farmer variety /Users/kauedesousa/OneDrive\ \-\ \Høgskolen\ \i\ \Innlandet/Rcode/ClimMob-analysis/ Kirundo
-# sudo Rscript ClimMob.R dev/data/21AIP/data.json dev/data/21AIP/info.json /Users/kauedesousa/OneDrive\ \-\ \Høgskolen\ \i\ \Innlandet/Rcode/ClimMob-analysis/dev/output/21AIP/ TRUE en docx farmer variety /Users/kauedesousa/OneDrive\ \-\ \Høgskolen\ \i\ \Innlandet/Rcode/ClimMob-analysis/ Kirundo
-# sudo Rscript ClimMob.R dev/data/RTBKUM/data.json dev/data/RTBKUM/info.json /Users/kauedesousa/OneDrive\ \-\ \Høgskolen\ \i\ \Innlandet/Rcode/ClimMob-analysis/dev/output/RTBKUM/ FALSE en docx farmer variety /Users/kauedesousa/OneDrive\ \-\ \Høgskolen\ \i\ \Innlandet/Rcode/ClimMob-analysis/
-# sudo Rscript ClimMob.R dev/data/OPP1114827/data.json dev/data/OPP1114827/info.json /Users/kauedesousa/OneDrive\ \-\ \Høgskolen\ \i\ \Innlandet/Rcode/ClimMob-analysis/dev/output/OPP1114827/ TRUE en docx farmer variety /Users/kauedesousa/OneDrive\ \-\ \Høgskolen\ \i\ \Innlandet/Rcode/ClimMob-analysis/
+# sudo Rscript ClimMob.R tests/testdata1/data.json tests/testdata1/info.json /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/tests/output/testdata1/ FALSE en docx farmer variety /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/ gender1 Danila
+# sudo Rscript ClimMob.R tests/testdata2/data.json tests/testdata2/info.json /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/tests/output/testdata2/ FALSE en docx farmer variety /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/ gender1 Gloria
+# sudo Rscript ClimMob.R tests/testdata3/data.json tests/testdata3/info.json /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/tests/output/testdata3/ FALSE en docx farmer variety /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/ gender1 
+# sudo Rscript ClimMob.R tests/testdata4/data.json tests/testdata4/info.json /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/tests/output/testdata4/ FALSE en docx farmer genotype /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/ gender
+# sudo Rscript ClimMob.R tests/testdata5/data.json tests/testdata5/info.json /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/tests/output/testdata5/ FALSE en docx farmer variety /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/ gender
+# sudo Rscript ClimMob.R tests/testdata6/data.json tests/testdata6/info.json /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/tests/output/testdata6/ FALSE en docx farmer variety /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/ gender
+# sudo Rscript ClimMob.R tests/testdata7/data.json tests/testdata7/info.json /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/tests/output/testdata7/ FALSE en docx farmer variety /Users/kauedesousa/Library/Mobile\ \Documents/com~apple~CloudDocs/Work/Rcode/ClimMob-analysis/ gender
+

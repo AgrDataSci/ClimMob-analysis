@@ -1,0 +1,153 @@
+{
+    "Characteristics": [
+        {
+            "name": "ranking intensity of sweetness",
+            "codeQst": "ranksweetness",
+            "id": 3441,
+            "vars": [
+                {
+                    "name": "ASS2901c535d0f0_char_ranksweetness_pos"
+                },
+                {
+                    "name": "ASS2901c535d0f0_char_ranksweetness_neg"
+                }
+            ],
+            "code": {
+                "project_id": "ab7deb9ed1da",
+                "ass_cod": "2901c535d0f0",
+                "ass_desc": "Consumer_testing_4MAP",
+                "ass_days": 2,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "In terms of the intensity of sweetness of sweetpotato, which of three samples do you find MOST preferrable?",
+                "In terms of the intensity of sweetness of sweetpotato, which of three samples do you find LEAST preferrable?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_2901c535d0f0_3441_add"
+        },
+        {
+            "name": "ranking intensity of firmness",
+            "codeQst": "rankfirmness",
+            "id": 3442,
+            "vars": [
+                {
+                    "name": "ASS2901c535d0f0_char_rankfirmness_pos"
+                },
+                {
+                    "name": "ASS2901c535d0f0_char_rankfirmness_neg"
+                }
+            ],
+            "code": {
+                "project_id": "ab7deb9ed1da",
+                "ass_cod": "2901c535d0f0",
+                "ass_desc": "Consumer_testing_4MAP",
+                "ass_days": 2,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "In terms of the intensity of firmness of sweetpotato, which of three samples do you find MOST preferrable?",
+                "In terms of the intensity of firmness of sweetpotato, which of three samples do you find LEAT preferrable?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_2901c535d0f0_3442_add"
+        },
+        {
+            "name": "Most preferred Sample",
+            "codeQst": "mostpreferedsample",
+            "id": 3440,
+            "vars": [
+                {
+                    "name": "ASS2901c535d0f0_char_mostpreferedsample_pos"
+                },
+                {
+                    "name": "ASS2901c535d0f0_char_mostpreferedsample_neg"
+                }
+            ],
+            "code": {
+                "project_id": "ab7deb9ed1da",
+                "ass_cod": "2901c535d0f0",
+                "ass_desc": "Consumer_testing_4MAP",
+                "ass_days": 2,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "In terms overall testing, which of the three samples do you find MOST preferrable?",
+                "In terms overall testing, which of the three samples do you find LEAST preferrable?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_2901c535d0f0_3440_add"
+        },
+        {
+            "name": "rank the powdery texture",
+            "codeQst": "rankpowderytexture",
+            "id": 3443,
+            "vars": [
+                {
+                    "name": "ASS2901c535d0f0_char_rankpowderytexture_pos"
+                },
+                {
+                    "name": "ASS2901c535d0f0_char_rankpowderytexture_neg"
+                }
+            ],
+            "code": {
+                "project_id": "ab7deb9ed1da",
+                "ass_cod": "2901c535d0f0",
+                "ass_desc": "Consumer_testing_4MAP",
+                "ass_days": 2,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "questionAsked": [
+                "In terms of the powdery texture of sweetpotato, which of three samples do you find MOST preferrable?",
+                "In terms of the powdery texture of sweetpotato, which of three samples do you find LEAST preferrable?"
+            ],
+            "type": "characteristic",
+            "codeForAnalysis": "characteristic_ASS_2901c535d0f0_3443_add"
+        }
+    ],
+    "Performance": [],
+    "Explanatory": [
+        {
+            "name": "Sex of participant",
+            "codeQst": "sexparticipant",
+            "questionAsked": "Sex of participant",
+            "id": 3401,
+            "dtype": 5,
+            "vars": "ASS2901c535d0f0_sexparticipant",
+            "code": {
+                "project_id": "ab7deb9ed1da",
+                "ass_cod": "2901c535d0f0",
+                "ass_desc": "Consumer_testing_4MAP",
+                "ass_days": 2,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_2901c535d0f0_3401_add"
+        },
+        {
+            "name": "Age category",
+            "codeQst": "agecategory",
+            "questionAsked": "Age category of participant",
+            "id": 3400,
+            "dtype": 5,
+            "vars": "ASS2901c535d0f0_agecategory",
+            "code": {
+                "project_id": "ab7deb9ed1da",
+                "ass_cod": "2901c535d0f0",
+                "ass_desc": "Consumer_testing_4MAP",
+                "ass_days": 2,
+                "ass_status": 2,
+                "ass_final": 0
+            },
+            "type": "explanatory",
+            "codeForAnalysis": "explanatory_ASS_2901c535d0f0_3400_add"
+        }
+    ],
+    "Quantitative": [],
+    "linearRegression": []
+}
