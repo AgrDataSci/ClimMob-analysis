@@ -21,18 +21,9 @@ get_agroclimatic_data <- function(cmdata){
     dates2 <- as.Date(unlist(cmdata[dates2]))
     dates2 <- dates2[which.max(dates2)]
     
-    dates <- c(dates1, dates2)
- 
-    # BUG FIX nasapower is not downloading data for more than a year
-    # if more than a year than take the first year
-    if (isTRUE(dates[2] - dates[1] > 362)) {
-      dates[2] <- dates[1] + 362
-    }
+    #dates <- c(dates1, dates2)
     
-    # if less than 2 days from TODAYS Sys.Date() then reduce the window
-    if (isTRUE(Sys.Date() - dates[2] < 2)) {
-      dates[2] <- Sys.Date() - 2
-    }
+    dates <- c("2020-06-01", "2022-01-31")
     
     # Check if lonlat is provided
     lon <- grepl("_longitude", names(cmdata))
@@ -87,22 +78,56 @@ get_agroclimatic_data <- function(cmdata){
 
       names(d) <- c("lon","lat")
       
-      # get rainfall using nasapower 
-      # use the clustered points to save time
-      rain <- rainfall(d, 
-                       day.one = dates[1], 
-                       last.day = dates[2],
-                       timeseries = TRUE, 
-                       intervals = 7)
+      dates <- climatrends:::.coerce2Date(dates)
       
-      # temperature data
-      # use the clustered points to save time
-      temp <- temperature(d,
-                          day.one = dates[1],
-                          last.day = dates[2],
-                          timeseries = TRUE, 
-                          intervals = 7)
+      days <- dates[1]:dates[2]
       
+      years <- ceiling(length(days)/360)
+      
+      # TO DO !!!!
+      # find an elegant way!!!
+      if (isTRUE(years > 1)) {
+        ny <- rep(1:years, each = 360, length.out = length(days))
+        begin <- integer()
+        end <- integer()
+        for (i in seq_len(years)){
+          begin <- c(begin, min(days[ny == c(1:years)[i]]))
+          end <- c(end, max(days[ny == c(1:years)[i]]))
+        }
+        begin <- climatrends:::.coerce2Date(begin)
+        end <- climatrends:::.coerce2Date(end)
+      }else{
+        begin <- dates[1]
+        end <- dates[2]
+      }
+      
+      
+      # get rainfall using nasapower
+      # use the clustered points to save time
+      rain <- data.frame()
+      temp <- data.frame()
+      
+      for(seq_len(years)){
+        
+        r_i <- rainfall(d, 
+                        day.one = begin[i], 
+                        last.day = end[i],
+                        timeseries = TRUE, 
+                        intervals = 7)
+        
+        rain <- rbind(rain, r_i)
+        
+        # temperature data
+        # use the clustered points to save time
+        t_i <- temperature(d,
+                           day.one = begin[i],
+                           last.day = end[i],
+                           timeseries = TRUE, 
+                           intervals = 7)
+        
+        temp <- rbind(temp, t_i)
+        
+      }
       
       # plot rain indices
       sel <- c("Rtotal", "SDII")
@@ -145,7 +170,8 @@ get_agroclimatic_data <- function(cmdata){
       rplot <- temp[temp$index %in% sel, ]
       
       rplot$index <- factor(rplot$index, 
-                            levels = c("maxDT", "minDT", "maxNT", "minNT"))
+                            levels = c("maxDT", "minDT",
+                                       "maxNT", "minNT"))
       
       temperature_plot <- ggplot(rplot) +
         geom_line(aes(y = value, x = date, group = id)) +
@@ -162,6 +188,18 @@ get_agroclimatic_data <- function(cmdata){
       # now get the temperature and rainfall for the whole period
       # to use in the PLtree module
       # get rainfall using nasapower
+      dates2 <- dates
+      # BUG FIX nasapower is not downloading data for more than a year
+      # if more than a year than take the first year
+      if (isTRUE(dates[2] - dates[1] > 362)) {
+        dates[2] <- dates[1] + 362
+      }
+
+      # if less than 2 days from TODAYS Sys.Date() then reduce the window
+      if (isTRUE(Sys.Date() - dates[2] < 2)) {
+        dates[2] <- Sys.Date() - 2
+      }
+      
       rain1 <- rainfall(lonlat, 
                         day.one = dates[1], 
                         last.day = dates[2])
@@ -192,7 +230,7 @@ get_agroclimatic_data <- function(cmdata){
       result <- list(agroclimate = TRUE, 
                      rain_plot = rain_plot,
                      temperature_plot = temperature_plot,
-                     dates = as.vector(as.character(dates)),
+                     dates = as.vector(as.character(dates2)),
                      rainfall_week = rain,
                      temperature_week = temp,
                      keep_lonlat = keep_lonlat,

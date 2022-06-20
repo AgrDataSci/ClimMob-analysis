@@ -116,7 +116,7 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
                           width = 1, 
                           color = "#ffffff") + 
         ggplot2::scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
-        ggplot2::theme_minimal() +
+        ggplot2::theme_bw() +
         ggplot2::theme(legend.position="bottom",
                        legend.text = ggplot2::element_text(size = 9),
                        axis.text.y = ggplot2::element_text(color = "grey20"),
@@ -268,14 +268,18 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
     
   }
   
+  # make weights based on response
+  weight <- as.vector(table(index))
+  weight <- weight / max(weight)
+  
   RG <- do.call("rbind", RG)
   
   RG <- group(RG, index = index)
   
   # PlackettLuce of aggregated rankings
   # TO DO: add weights to rankings  
-  modRG <- PlackettLuce(RG)
-  
+  modRG <- PlackettLuce(RG, weights = weight)
+ 
   logworth_grouped_rank <- 
     plot_logworth(modRG, ref = reference_tech, ci.level = 0.5) +
     labs(y = title_case(option))
