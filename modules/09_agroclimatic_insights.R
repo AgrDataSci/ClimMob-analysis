@@ -21,9 +21,7 @@ get_agroclimatic_data <- function(cmdata){
     dates2 <- as.Date(unlist(cmdata[dates2]))
     dates2 <- dates2[which.max(dates2)]
     
-    #dates <- c(dates1, dates2)
-    
-    dates <- c("2020-06-01", "2022-01-31")
+    dates <- c(dates1, dates2)
     
     # Check if lonlat is provided
     lon <- grepl("_longitude", names(cmdata))
@@ -107,7 +105,7 @@ get_agroclimatic_data <- function(cmdata){
       rain <- data.frame()
       temp <- data.frame()
       
-      for(seq_len(years)){
+      for(i in seq_len(years)){
         
         r_i <- rainfall(d, 
                         day.one = begin[i], 
