@@ -72,7 +72,7 @@ organize_ranking_data <- function(cmdata,
         
       } else {
         
-        group <- ifelse(is.na(group), "Others", group)
+        group <- ifelse(is.na(group), "Not specified", group)
         
       }
       
@@ -82,7 +82,7 @@ organize_ranking_data <- function(cmdata,
       
       group <- cmdata[,groups]
       
-      group[is.na(group)] <- "Others" 
+      group[is.na(group)] <- "Not specified" 
       
       group <- apply(group, 1, function(x) {paste(x, collapse = " - ")})
       

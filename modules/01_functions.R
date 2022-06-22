@@ -465,7 +465,7 @@ paste3 <- function(x, lan = "en", ...) {
 #'  linear: strings for the variables to be used in linear regression
 #' @examples
 #' library("jsonlite")
-#' x <- fromJSON("tests/testdata1/data.json")
+#' x <- jsonlite::fromJSON("tests/testdata1/data.json")
 #' 
 #' pars <- decode_pars(x)
 #' 
@@ -556,7 +556,13 @@ decode_pars <- function(x) {
       tr <- toupper(tr)
     }
     
-    if (sum(grepl("performance|yield|overall|overallperf", tolower(tr))) == 0) {
+    if (any(grepl("market", tr))) {
+      i <- which(grepl("market", tr))[1]
+      questions$traitOrder[i] <- "referenceTrait"
+      tr <- toupper(tr)
+    }
+    
+    if (sum(grepl("performance|yield|overall|overallperf|market", tolower(tr))) == 0) {
       questions$traitOrder[length(questions$codeQst)] <- "referenceTrait"
       tr <- toupper(tr)
     }

@@ -106,27 +106,26 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
       kendall$trait <- factor(kendall$trait, levels = rev(kendall$trait))
       
       # make a bar plot plot 
-      kendall_plot <- ggplot2::ggplot(data = kendall, 
-                                      ggplot2::aes(x = kendallTau,
-                                                   y = trait, 
-                                                   fill = trait)) +
+      kendall_plot <- 
+        ggplot2::ggplot(data = kendall, 
+                        ggplot2::aes(x = kendallTau,
+                                     y = trait, 
+                                     fill = trait)) +
         ggplot2::geom_bar(stat = "identity", 
                           position = "dodge",
                           show.legend = FALSE,
                           width = 1, 
                           color = "#ffffff") + 
         ggplot2::scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
-        ggplot2::theme_minimal() +
+        ggplot2::theme_bw() +
         ggplot2::theme(legend.position="bottom",
                        legend.text = ggplot2::element_text(size = 9),
                        axis.text.y = ggplot2::element_text(color = "grey20"),
                        axis.text.x = ggplot2::element_text(vjust = 1,
                                                            hjust=1, 
                                                            color = "grey20")) +
-        ggplot2::labs(y = "Kendall tau",
-                      x = "Trait") 
-      
-      
+        ggplot2::labs(y = "Trait",
+                      x = "Kendall tau") 
       
     }
     
@@ -268,14 +267,18 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
     
   }
   
+  # make weights based on response
+  weight <- as.vector(table(index))
+  weight <- weight / max(weight)
+  
   RG <- do.call("rbind", RG)
   
   RG <- group(RG, index = index)
   
   # PlackettLuce of aggregated rankings
   # TO DO: add weights to rankings  
-  modRG <- PlackettLuce(RG)
-  
+  modRG <- PlackettLuce(RG, weights = weight)
+ 
   logworth_grouped_rank <- 
     plot_logworth(modRG, ref = reference_tech, ci.level = 0.5) +
     labs(y = title_case(option))
