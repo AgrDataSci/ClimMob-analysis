@@ -229,8 +229,8 @@ get_agroclimatic_data <- function(cmdata){
                      rain_plot = rain_plot,
                      temperature_plot = temperature_plot,
                      dates = as.vector(as.character(dates2)),
-                     rainfall_week = rain,
-                     temperature_week = temp,
+                     rainfall_season = rain,
+                     temperature_season = temp,
                      keep_lonlat = keep_lonlat,
                      rainfall = rain_final,
                      temperature = temp_final)
@@ -251,8 +251,8 @@ error_data_agroclimate <- list(agroclimate = FALSE,
                                rain_plot = 0,
                                temperature_plot = 0,
                                dates = c("", ""),
-                               rainfall_week = data.frame(),
-                               temperature_week = data.frame(),
+                               rainfall_season = data.frame(),
+                               temperature_season = data.frame(),
                                rainfall = data.frame(),
                                temperature = data.frame())
 

@@ -4,10 +4,11 @@
 # # core packages to run this workflow
 # # ................................................................
 # # ................................................................
-pkg <- c("PlackettLuce","partykit","qvcalc","psychotools","jsonlite","knitr","rmarkdown",
-         "pls","gtools","ggplot2","igraph","ggparty","patchwork","leaflet",
-         "mapview","multcompView","png","plotrix","gridExtra","caret", "janitor",
-         "ClimMobTools", "gosset", "nasapower", "climatrends")
+pkg <- c('caret', 'climatrends', 'ClimMobTools', 'ggparty', 'ggplot2', 'gosset', 
+         'gridExtra', 'gtools', 'igraph', 'janitor', 'jsonlite', 'knitr', 'leaflet', 
+         'mapview', 'multcompView', 'nasapower', 'partykit', 'patchwork', 
+         'PlackettLuce', 'plotrix', 'pls', 'png', 'psychotools', 'qvcalc',
+         'remotes', 'rmarkdown')
 
 
 install.packages(pkg)

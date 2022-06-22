@@ -106,10 +106,11 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
       kendall$trait <- factor(kendall$trait, levels = rev(kendall$trait))
       
       # make a bar plot plot 
-      kendall_plot <- ggplot2::ggplot(data = kendall, 
-                                      ggplot2::aes(x = kendallTau,
-                                                   y = trait, 
-                                                   fill = trait)) +
+      kendall_plot <- 
+        ggplot2::ggplot(data = kendall, 
+                        ggplot2::aes(x = kendallTau,
+                                     y = trait, 
+                                     fill = trait)) +
         ggplot2::geom_bar(stat = "identity", 
                           position = "dodge",
                           show.legend = FALSE,
@@ -123,10 +124,8 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
                        axis.text.x = ggplot2::element_text(vjust = 1,
                                                            hjust=1, 
                                                            color = "grey20")) +
-        ggplot2::labs(y = "Kendall tau",
-                      x = "Trait") 
-      
-      
+        ggplot2::labs(y = "Trait",
+                      x = "Kendall tau") 
       
     }
     

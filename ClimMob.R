@@ -338,8 +338,8 @@ if (length(error) > 0) {
 }
 
 
-# Now try to write the extra charts
-chartdir <- paste0(outputpath, "/charts/")
+# Now write the extra charts and tables
+chartdir <- paste0(outputpath, "/extra-outputs/")
 dir.create(chartdir, recursive = TRUE, showWarnings = FALSE)
 
 # log worth plot by trait
@@ -367,7 +367,7 @@ if(length(unique(rank_dat$group)) > 1) {
   for(m in seq_along(PL_models$logworth_plot_groups)){
     try(ggsave(paste0(chartdir, "Group", m, "_", g[m], "_logworth_grouped_rank.png"),
            plot = PL_models$logworth_plot_groups[[m]],
-           width = 18,
+           width = 15,
            height = 15,
            units = "cm",
            dpi = 200), silent = TRUE)
@@ -377,10 +377,46 @@ if(length(unique(rank_dat$group)) > 1) {
 if(PL_tree$isTREE){
   try(ggsave(paste0(chartdir, "PlackettLuce.png"),
              plot = PL_tree$PLtree_plot,
-             width = 25,
+             width = 15,
+             height = 15,
+             units = "cm",
+             dpi = 200), silent = TRUE)
+}
+
+# agroclimate data during the "season"
+if (isTRUE(agroclimate$agroclimate)) {
+   
+  write.csv(agroclimate$rainfall_season,
+            file = paste0(chartdir, "weekly_precipitation_indices.csv"),
+            row.names = FALSE)
+  
+  write.csv(agroclimate$temperature_season,
+            file = paste0(chartdir, "weekly_temperature_indices.csv"),
+            row.names = FALSE)
+  
+  try(ggsave(paste0(chartdir, "weekly_precipitation_indices.png"),
+             plot = agroclimate$rain_plot,
+             width = 20,
              height = 20,
              units = "cm",
              dpi = 200), silent = TRUE)
+  
+  try(ggsave(paste0(chartdir, "weekly_temperature_indices.png"),
+             plot = agroclimate$temperature_plot,
+             width = 20,
+             height = 20,
+             units = "cm",
+             dpi = 200), silent = TRUE)
+  
+}
+
+# write outputs of quantitative data if any 
+if (isTRUE(quanti_dat$quantitative)) {
+  
+  write.csv(quanti_dat$outliers,
+            file = paste0(chartdir, "possible_outliers_in_quantitative_data.csv"),
+            row.names = FALSE)
+  
 }
 
 # End of analysis
