@@ -1,11 +1,12 @@
-ClimMob-analysis v1.3 (2021-05-21)
+ClimMob-analysis v2 (2022-06-22)
 =========================
 
 ### Improvements
 
+* Implement modules of data handling and analysis to allow the generation of different reports
 * Add a simple forward selection to choose the best covariates for the Plackett-Luce trees
 * Optimize the main script to avoid mistakes in placing tables and indices
-* Update the participant reports, now the report in rendered as one single file (two per participant) and uses new display items i) a vertical bar plot to illustrate a podium ii) a horizontal bar plot with the probabilities of winning for the variaties in the baseline trait
+* Update the participant reports, now the report in rendered as one single file (two per participant) and uses new display items i) a vertical bar plot to illustrate a podium ii) a horizontal bar plot with the probabilities of winning for the varieties in the baseline trait
 
 
 ClimMob-analysis v1.2 (2021-03-17)
