@@ -346,20 +346,27 @@ dir.create(chartdir, recursive = TRUE, showWarnings = FALSE)
 for(m in seq_along(PL_models$logworth_plot)){
   try(ggsave(paste0(chartdir, rank_dat$trait_code[m], "_logworth.png"),
          plot = PL_models$logworth_plot[[m]],
-         width = 18,
+         width = 21,
          height = 15,
          units = "cm",
          dpi = 200), silent = TRUE)
 }
 
-# plot worth
+# plot kendall tau plot
 try(ggsave(paste0(chartdir, "kendall_tau.png"),
            plot = PL_models$kendall$kendall_plot,
            width = 15,
-           height = 15,
+           height = 18,
            units = "cm",
            dpi = 200), silent = TRUE)
 
+# plot worth map
+try(ggsave(paste0(chartdir, "worth_map.png"),
+           plot = PL_models$worthmap,
+           width = 25,
+           height = 25,
+           units = "cm",
+           dpi = 200), silent = TRUE)
 
 if(length(unique(rank_dat$group)) > 1) {
   g <- unique(rank_dat$group)
@@ -367,7 +374,7 @@ if(length(unique(rank_dat$group)) > 1) {
   for(m in seq_along(PL_models$logworth_plot_groups)){
     try(ggsave(paste0(chartdir, "Group", m, "_", g[m], "_logworth_grouped_rank.png"),
            plot = PL_models$logworth_plot_groups[[m]],
-           width = 15,
+           width = 21,
            height = 15,
            units = "cm",
            dpi = 200), silent = TRUE)
@@ -377,8 +384,8 @@ if(length(unique(rank_dat$group)) > 1) {
 if(PL_tree$isTREE){
   try(ggsave(paste0(chartdir, "PlackettLuce.png"),
              plot = PL_tree$PLtree_plot,
-             width = 15,
-             height = 15,
+             width = 18,
+             height = 25,
              units = "cm",
              dpi = 200), silent = TRUE)
 }

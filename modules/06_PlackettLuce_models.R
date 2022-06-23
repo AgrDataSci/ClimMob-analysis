@@ -223,7 +223,7 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
   worthmap <- worth_map(mod[-reference_trait_index],
                         labels = trait_names[-reference_trait_index],
                         ref = reference_tech) +
-    labs(x = title_case(option), y = "Traits") +
+    labs(x = title_case(option), y = "Trait") +
     theme(axis.text.y = ggplot2::element_text(color = "grey20", angle = 0))
     
   
@@ -276,7 +276,6 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
   RG <- group(RG, index = index)
   
   # PlackettLuce of aggregated rankings
-  # TO DO: add weights to rankings  
   modRG <- PlackettLuce(RG, weights = weight)
  
   logworth_grouped_rank <- 

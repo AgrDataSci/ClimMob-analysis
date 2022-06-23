@@ -235,7 +235,13 @@ get_PlackettLuce_tree <- function(cmdata, rank_dat, agroclimate) {
   
   # add agroclimate data if any
   if(use_agroclimate) {
-    Gdata <- cbind(Gdata, agroclimate$rainfall[keep, ], agroclimate$temperature[keep, ])
+    
+    if (isTRUE(nrow(agroclimate$rainfall[keep, ]) >= ceiling(nG * 0.95))) {
+      
+      Gdata <- cbind(Gdata, agroclimate$rainfall[keep, ], agroclimate$temperature[keep, ])
+      
+    }
+    
   }
   
   # perform a forward selection as pltree() 
