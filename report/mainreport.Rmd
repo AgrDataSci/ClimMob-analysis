@@ -38,7 +38,7 @@ This report will provide to you an overview of your ClimMob trial data and resul
 
 However, since this report was done in an automated process, is likely that it will not provide to you the full overview on the performance of the tested technologies as the automation may not capture all the factors that influence the performance of a technology in the target environment (under real-world conditions). 
 
-If you would like to have an in-deep analysis, or to merge data from different projects or is planning a peer-review publication with your tricot data, send a proposal/request to Kauê de Sousa (k.desousa@cgiar.org) and Jacob van Etten (j.vanetten@cgiar.org).
+If you would like to have an in-deep analysis, or to merge data from different projects or is planning a peer-review publication with your tricot data, send a proposal/request to Kauê de Sousa (k.desousa@cgiar.org) and Jacob van Etten (j.vanetten@cgiar.org). Even being implemented with high-quality statistical analysis, the automated process for the production of this report limits the ability to test specific hypothesis with the data to match the needs of international peer-review journals. Therefore, we recommend to extend the analysis beyond the results described here.
 
 # Methods
 
