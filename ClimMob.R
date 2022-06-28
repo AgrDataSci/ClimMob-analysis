@@ -151,6 +151,7 @@ try_quanti_data <- tryCatch({
     quanti_dat <- organize_quantitative_data(cmdata, 
                                              pars, 
                                              groups = groups, 
+                                             id = "id",
                                              tech_index = c("package_item_A", 
                                                             "package_item_B", 
                                                             "package_item_C"))

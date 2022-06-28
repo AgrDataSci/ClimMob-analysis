@@ -12,6 +12,7 @@
 organize_quantitative_data <- function(cmdata, 
                                        pars, 
                                        groups = NULL,
+                                       id = "id",
                                        tech_index = c("package_item_A", "package_item_B", "package_item_C")) {
   
   ntech <- length(tech_index)
@@ -94,7 +95,7 @@ organize_quantitative_data <- function(cmdata,
   # run over traits and get it in long format (unlist)
   for(i in seq_along(quanti_traits$codeQst)){
     
-    quanti <- data.frame(id = as.vector(unlist(cmdata[, "id" ])),
+    quanti <- data.frame(id = as.vector(unlist(cmdata[, id ])),
                          technology = as.vector(unlist(cmdata[, tech_index])), 
                          group = rep(group, ntech))
     
