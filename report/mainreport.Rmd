@@ -34,7 +34,7 @@ This report presents the results from your tricot project, designed and managed 
  
 # What you should expect from this report
 
-This report will provide to you an overview of your ClimMob trial data and results, with insights of the performance of the technologies tested in the ClimMob trial. This is a standard automated report that tries to accommodate the most important outputs from a tricot trial. After reading through this report, you should be able to: i) identify the technology that outperforms the others in your trial, and under which conditions; and ii) support a decision on advancement of a technology to the next stage of your product development program (e.g. breeding program, market impact assessment). 
+This report will provide to you an overview of your ClimMob trial data and results, with insights of the performance of the technologies tested in the tricot trial. This is a standard automated report that tries to accommodate the most important outputs from a tricot trial. After reading through this report, you should be able to: i) identify the technology that outperforms the others in your trial, and under which conditions; and ii) support a decision on advancement of a technology to the next stage of your product development program (e.g. breeding program, market impact assessment). 
 
 However, since this report was done in an automated process, is likely that it will not provide to you the full overview on the performance of the tested technologies as the automation may not capture all the factors that influence the performance of a technology in the target environment (under real-world conditions). 
 
@@ -103,8 +103,12 @@ plot(overview_and_summaries$partipation_plot)
 \
 
 ```{r trial_map_statement}
+trial_map_heading <- ""
 trial_map_statement <- ""
 if (isTRUE(trial_map$geoTRUE)){
+  
+  trial_map_heading <- "# Distribution of trial plots"
+  
   trial_map_statement <- paste0("The map below (Fig. 1.2) shows the distribution ",
                                "of the plots in this trial. To respect ",
                                participants, "' privacy, the coordinates ",
@@ -112,6 +116,8 @@ if (isTRUE(trial_map$geoTRUE)){
                                "the original coordinates in your ClimMob data.")
 }
 ```
+
+`r paste(trial_map_heading, collapse = '\n')`
 
 `r paste(trial_map_statement, collapse='\n')`
 
@@ -122,8 +128,10 @@ try(knitr::include_graphics(trial_map$map_path), silent = TRUE)
 ```
 
 ```{r agroclimate}
+agroclimate_heading <- ""
 agroclimate_text1 <- ""
 if (isTRUE(agroclimate$agroclimate)){
+  agroclimate_heading <- "# The climate during the trial's growing season"
   agroclimate_text1 <- paste0("Temperature and rainfall indices are presented in Fig. 1.3 and Fig. 1.4 ",
                               "obtained using the GPS data presented in the map. The timespan ",
                               "window used to capture the climate data was from ",
@@ -133,6 +141,8 @@ if (isTRUE(agroclimate$agroclimate)){
                               "R package climatrends [@climatrends].")
 }
 ```
+
+`r paste(agroclimate_heading, collapse = '\n')`
 
 `r paste(agroclimate_text1, collapse = '\n')`
 
@@ -152,6 +162,16 @@ plot(agroclimate$rain_plot)
 
 \
 
+# Trial design and allocation of incomplete blocks
+
+Figure 1.5 shows presents an illustration of the experimental design and indicates whether all `r options` are connected to each other in the trial network. This means that they all co-occurred at least once in an incomplete block of `r noptions` `r options`. The network is obtained using the network rankings generated with '`r reference_trait`'.
+
+```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.5. Experimental network representation of ", options, " tested in this trial.")}
+plot(overview_and_summaries$trial_connectivity)
+```
+
+\
+
 Table 1.2 shows the `r ntechnologies` `r options` assessed in this trial, with the frequency and percentage of `r participants` who assessed each `r option`. If the `r options` have large names (> 12 characters) an abbreviation is applied across the figures in this report.
 
 ```{r itemtable}
@@ -159,14 +179,6 @@ kable(overview_and_summaries$summary_table_tech,
           caption = paste0("Table 1.2. Frequency of ", options," assessed in this trial."),
           align = "l",
           row.names = FALSE)
-```
-
-\
-
-Figure 1.5 shows that the `r ntechnologies` are all connected to each other. That means that they all co-occurred at least once in an incomplete block of `r noptions` `r options`. 
-
-```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.5. Experimental network representation of ", options, " tested in this trial.")}
-plot(overview_and_summaries$trial_connectivity)
 ```
 
 \
@@ -268,7 +280,7 @@ tree_test2 <- ""
 tree_test3 <- ""
 if (isFALSE(PL_tree$isTREE)) {
   tree_test1 <- 
-    paste0("No differences based on the covariates provided were found. This could mean many things, some of the possible reasons is that there is no difference at all between groups, or that very few data was provided, or that a different set of covariates and model parameters should be used. Please contact the ClimMob team for further assistance.")
+    paste0("No differences based on the covariates provided were found. This could mean many things, th most common reasons are that there is no difference between groups, or that very few data was provided, or that a different set of covariates and model parameters should be used. Please contact the ClimMob team for further assistance.")
 }
 
 if (isTRUE(PL_tree$isTREE)) {
