@@ -1,4 +1,4 @@
-tag <- "testdata3/"
+tag <- "testdata9/"
 path <- paste0("tests/", tag)
 
 args <- c(paste0(path, "data.json"),
@@ -11,7 +11,7 @@ args <- c(paste0(path, "data.json"),
           "variety",
           paste0(getwd(), "/"),
           "gender",
-          "3")
+          "4")
 
 source("modules/01_functions.R")
 

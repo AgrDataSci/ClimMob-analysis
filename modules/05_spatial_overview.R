@@ -36,7 +36,7 @@ get_testing_sites_map <- function(cmdata, output_path){
       trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = TRUE, 
                             map_provider = "OpenStreetMap.Mapnik")
       
-      mapshot(trial_map, 
+      mapview::mapshot(trial_map, 
               url = paste0(output_path, "/trial_map.html"),
               file = paste0(output_path, "/trial_map.png"))
       

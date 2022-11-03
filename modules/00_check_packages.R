@@ -10,21 +10,6 @@ pkg <- c('caret', 'climatrends', 'ClimMobTools', 'ggparty', 'ggplot2', 'gosset',
          'PlackettLuce', 'plotrix', 'pls', 'png', 'psychotools', 'qvcalc',
          'remotes', 'rmarkdown')
 
-
 install.packages(pkg)
 
 webshot::install_phantomjs(force = TRUE)
-
-remotes::install_github("AgrDataSci/ClimMobTools",
-                        upgrade = "never",
-                        force = TRUE)
-
-remotes::install_github("AgrDataSci/gosset",
-                        upgrade = "never", 
-                        force = TRUE)
-
-# remotes::install_github("AgrDataSci/climatrends",
-#                         upgrade = "never", 
-#                         force = TRUE)
-
-

@@ -766,11 +766,16 @@ multcompPL <- function(mod, items = NULL, threshold = 0.05, adjust = "none", ...
 #' @param x a multicomp dataframe
 #' @param ci.level the confidence interval level
 #' @param multcomp logical to add group letters 
-plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, ...) {
+#' @param levels an optional vector with factor levels to plot
+plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, levels = NULL, ...) {
   
   frame <- qvcalc(x, ...)$qvframe
   
-  items <- factor(row.names(frame), levels = row.names(frame))
+  if (is.null(levels)) {
+    levels <- row.names(frame)
+  }
+  
+  items <- factor(row.names(frame), levels = levels)
   
   est <- frame$estimate
   
@@ -794,7 +799,7 @@ plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, ...) {
     pdat$group <- ""
   }
   
-  pdat$items <- factor(pdat$items, levels = sort(unique(as.character(pdat$items))))
+  pdat$items <- factor(pdat$items, levels = levels)
   
   p <- ggplot(data = pdat,
               aes(x = items, 
@@ -813,7 +818,7 @@ plot_logworth <- function(x, ci.level = 0.95, multcomp = TRUE, ...) {
                                      size = 10, color = "grey20"),
           axis.text.y = element_text(size = 10, color = "grey20"),
           text = element_text(color = "grey20")) +
-    labs(x = "Log-worth", y = "Item")
+    labs(x = "Item", y = "Log-worth")
   
   return(p)
   
