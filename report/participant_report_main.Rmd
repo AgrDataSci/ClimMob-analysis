@@ -1,0 +1,68 @@
+---
+output:
+  pdf_document: default
+  word_document:
+    reference_docx: participant_report.docx
+  html_document:
+    df_print: paged
+---
+```{r setup_opts, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning = FALSE)
+```
+
+```{r}
+# ranker description
+id_i <- participant_report$partitable$id[i]
+name <- participant_report$partitable$name[i]
+name <- paste0("**", name,  "**")
+thanks <- participant_report$reporttext[match("thanks", participant_report$reporttext[,1]), 2]
+thanks <- gsub("r name", name, thanks)
+your_items <- sort(as.vector(unlist(participant_report$partitable[i, c(3:5)])))
+your_ranking <- as.vector(unlist(participant_report$partitable[i, paste0("Position", 1:3)]))
+yourpackage <- paste(paste(your_items, paste0("(Option ", LETTERS[1:3], ")")), collapse = ", ")
+
+reporttext_i <- gsub("r yourpackage", yourpackage, participant_report$reporttext[3,2])
+
+# prepare the outputs for each participant
+podium_i <-
+  participant_report$podium +
+  annotate("text", 2, 2, label = your_ranking[1]) +
+  annotate("text", 1, 1, label = your_ranking[2]) +
+  annotate("text", 3, 0.5, label = your_ranking[3])
+```
+
+# `r paste(participant_report$reporttext[1, 2])`
+
+`r paste(thanks)`
+
+`r paste0(reporttext_i)`
+
+```{r, fig.width=4, fig.height=1, dpi=200}
+podium_i
+```
+
+`r paste(participant_report$reporttext[4,2])`
+
+```{r, fig.width=4, fig.height=2, dpi=200}
+participant_report$poverp
+```
+
+\pagebreak
+
+```{r}
+otr_text <- ""
+if(isTRUE(length(rank_dat$trait_list) > 1)){
+otr_text <- participant_report$reporttext[5,2]
+}
+```
+
+`r paste0(otr_text)`
+
+```{r}
+if(isTRUE(length(rank_dat$trait_list) > 1)){
+kable(participant_report$other_traits_table[[i]], 
+      caption = "",
+      row.names = FALSE,
+      align = "l")
+}
+```

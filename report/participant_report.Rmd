@@ -1,4 +1,4 @@
-# `r paste(reporttext[1, 2])`
+# `r paste(participant_report$reporttext[1, 2])`
 
 `r paste(thanks)`
 
@@ -8,18 +8,18 @@
 podium_i
 ```
 
-`r paste(reporttext[4,2])`
+`r paste(participant_report$reporttext[4,2])`
 
 ```{r, fig.width=2, fig.height=2, dpi=150}
-poverp_i
+participant_report$poverp
 ```
 
 \pagebreak
 
 ```{r}
 otr_text <- ""
-if(isTRUE(nothertraits > 0)){
-otr_text <- reporttext[5,2]
+if(isTRUE(length(rank_dat$trait_list) > 1)){
+otr_text <- participant_report$reporttext[5,2]
 }
 ```
 
@@ -28,8 +28,8 @@ otr_text <- reporttext[5,2]
 \n
 
 ```{r}
-if(isTRUE(nothertraits > 0)){
-kable(otrp[[i]], 
+if(isTRUE(length(rank_dat$trait_list) > 1)){
+kable(participant_report$other_traits_table[[i]], 
       caption = "",
       row.names = FALSE,
       align = "l")

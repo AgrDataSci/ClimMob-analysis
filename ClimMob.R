@@ -290,6 +290,24 @@ if (any_error(org_quantitative_summ)) {
   quantitative_traits <- error_data_quantitative_traits
 }
 
+# .......................................................
+# .......................................................
+# 12. Participant report  ####
+org_participant_report <- tryCatch({
+  
+  participant_report <- get_participant_report(cmdata, rank_dat, fullpath, language = language)
+  
+}, error = function(cond) {
+  return(cond)
+}
+)
+
+if (any_error(org_participant_report)) {
+  e <- paste("Participant report: \n", org_participant_report$message)
+  error <- c(error, e)
+  participant_report <- error_participant_report
+}
+
 
 # ................................................................
 # ................................................................
@@ -333,6 +351,21 @@ rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
                   output_dir = outputpath,
                   output_format = output_format,
                   output_file = paste0("climmob_main_report", ".", extension))
+
+
+participant_report_dir <- paste0(outputpath, "/participant-report/")
+dir.create(participant_report_dir, recursive = TRUE, showWarnings = FALSE)
+
+for (i in seq_along(participant_report$partitable$id)) {
+  
+  rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
+                    output_dir = participant_report_dir,
+                    output_format = output_format,
+                    output_file = paste0("participant_report_package_", i,  ".", extension))
+  
+}
+
+
 
 if (length(error) > 0) {
   print(error)

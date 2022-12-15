@@ -160,7 +160,8 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
   for(m in seq_along(mod)) {
     logworth_plot[[m]] <- 
       plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
-      labs(y = title_case(option), 
+      labs(x = title_case(option), 
+           y = "Log-worth",
            title = paste0(rank_dat$trait_names[m],
                           " (n = ", length(mod[[m]]$rankings),")"))
   }
@@ -227,60 +228,62 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
     theme(axis.text.y = ggplot2::element_text(color = "grey20", angle = 0))
     
   
+  # Disable this as the implementation needs to be tested first! 
+  # #..........................................................
+  # # PlackettLuce with aggregated rankings
+  # # this put the rankings from all traits into a single 
+  # # grouped rankings to assess "overall technology performance"
+  # # reference trait must be the first in this vector
+  # othertraits <- union(names(trait_list[reference_trait_index]),
+  #                      names(trait_list[-reference_trait_index]))
+  # indicesbase <- as.vector(which(trait_list[[reference_trait_index]]$keep))
+  # resetindices <- 1:length(indicesbase)
+  # 
+  # RG <- list()
+  # 
+  # index <- c()
+  # 
+  # for(i in seq_along(othertraits)) {
+  #   
+  #   trait_i <- which(names(trait_list) %in% othertraits[i])
+  #   
+  #   # this should be combined with the baseline trait
+  #   index_i <- as.vector(which(trait_list[[trait_i]]$keep))
+  #   
+  #   keep_i <- index_i %in% indicesbase
+  #   
+  #   index_i <- index_i[keep_i]
+  #   
+  #   r_i <- rankTricot(cmdata[index_i, ],
+  #                     technologies_index,
+  #                     c(trait_list[[trait_i]]$strings),
+  #                     group = FALSE)
+  #   
+  #   # reset indices to match with grouped_rankings later
+  #   index_i <- resetindices[indicesbase %in% index_i]
+  #   
+  #   index <- c(index, index_i)
+  #   
+  #   RG[[i]] <- r_i
+  #   
+  # }
+  # 
+  # # make weights based on response
+  # weight <- as.vector(table(index))
+  # weight <- weight / max(weight)
+  # 
+  # RG <- do.call("rbind", RG)
+  # 
+  # RG <- group(RG, index = index)
   
-  #..........................................................
-  # PlackettLuce with aggregated rankings
-  # this put the rankings from all traits into a single 
-  # grouped rankings to assess "overall technology performance"
-  # reference trait must be the first in this vector
-  othertraits <- union(names(trait_list[reference_trait_index]),
-                       names(trait_list[-reference_trait_index]))
-  indicesbase <- as.vector(which(trait_list[[reference_trait_index]]$keep))
-  resetindices <- 1:length(indicesbase)
-  
-  RG <- list()
-  
-  index <- c()
-  
-  for(i in seq_along(othertraits)) {
-    
-    trait_i <- which(names(trait_list) %in% othertraits[i])
-    
-    # this should be combined with the baseline trait
-    index_i <- as.vector(which(trait_list[[trait_i]]$keep))
-    
-    keep_i <- index_i %in% indicesbase
-    
-    index_i <- index_i[keep_i]
-    
-    r_i <- rankTricot(cmdata[index_i, ],
-                      technologies_index,
-                      c(trait_list[[trait_i]]$strings),
-                      group = FALSE)
-    
-    # reset indices to match with grouped_rankings later
-    index_i <- resetindices[indicesbase %in% index_i]
-    
-    index <- c(index, index_i)
-    
-    RG[[i]] <- r_i
-    
-  }
-  
-  # make weights based on response
-  weight <- as.vector(table(index))
-  weight <- weight / max(weight)
-  
-  RG <- do.call("rbind", RG)
-  
-  RG <- group(RG, index = index)
-  
-  # PlackettLuce of aggregated rankings
-  modRG <- PlackettLuce(RG, weights = weight)
+  # # PlackettLuce of aggregated rankings
+  # modRG <- PlackettLuce(RG, weights = weight)
  
   logworth_grouped_rank <- 
-    plot_logworth(modRG, ref = reference_tech, ci.level = 0.5) +
-    labs(y = title_case(option))
+    plot_logworth(mod[[reference_trait_index]],
+                  ref = reference_tech, ci.level = 0.5) +
+    labs(x = title_case(option), 
+         y = "Log-worth")
   
   
   # split by groups, if any 
