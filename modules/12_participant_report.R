@@ -235,7 +235,7 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
     labs(x = "", y = "") +
     theme(element_blank(),
           axis.text.x = element_blank(),
-          axis.text.y = element_text(size = 12),
+          axis.text.y = element_text(size = 5),
           panel.background = element_blank())
   
   # make a template of ggplot to assemble a podium
@@ -251,7 +251,7 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
     scale_fill_manual(values = c("#C0C0C0", "#FFD700", "#cd7f32")) +
     theme(element_blank(),
           axis.text.y = element_blank(),
-          axis.text.x = element_text(size = 12),
+          axis.text.x = element_text(size = 10),
           panel.background = element_blank())
   
   
@@ -269,8 +269,9 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
 # Error in data 
 # this is a file that is generated to be used in case of errors
 error_participant_report <- list(podium = 0L,
+                                 poverp = 0L, 
                                  partitable = list(),
-                                 reporttext = "",
+                                 reporttext = list(),
                                  other_traits_table = list())
 
 

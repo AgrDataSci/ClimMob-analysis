@@ -1,4 +1,4 @@
-tag <- "testdata9/"
+tag <- "testdata3/"
 path <- paste0("tests/", tag)
 
 args <- c(paste0(path, "data.json"),

@@ -352,10 +352,20 @@ rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
                   output_format = output_format,
                   output_file = paste0("climmob_main_report", ".", extension))
 
-rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
-                  output_dir = outputpath,
-                  output_format = output_format,
-                  output_file = paste0("participants_report", ".", extension))
+
+participant_report_dir <- paste0(outputpath, "/participant-report/")
+dir.create(participant_report_dir, recursive = TRUE, showWarnings = FALSE)
+
+for (i in seq_along(participant_report$partitable$id)) {
+  
+  rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
+                    output_dir = participant_report_dir,
+                    output_format = output_format,
+                    output_file = paste0("participant_report_package_", i,  ".", extension))
+  
+}
+
+
 
 if (length(error) > 0) {
   print(error)
