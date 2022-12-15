@@ -15,7 +15,7 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
   
   other_traits_list <- trait_list[-reference_trait]
   
-  nranker <- rank_dat$nranker - 1
+  nranker <- rank_dat$nranker
   
   nitems <- length(rank_dat$technologies)
   
@@ -132,6 +132,8 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
   # ................................................................
   # ................................................................
   # If any other trait, do the same ####
+  otrp <- list()
+  
   if(isTRUE(nothertraits > 0)){
     
     otr <- list()
@@ -218,7 +220,7 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
   }
   
   # use the coefficients from the overall model and plot it as bar plot
-  # to show the overall evaluation compared to the farmer evaluation
+  # to show the overall evaluation for all the farmers 
   pover <- coef(mod_overall, log = FALSE)
   pover <- sort(pover)
   pover <- data.frame(items = factor(names(pover), levels = names(pover)),
@@ -233,7 +235,7 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
     labs(x = "", y = "") +
     theme(element_blank(),
           axis.text.x = element_blank(),
-          axis.text.y = element_text(size = 5),
+          axis.text.y = element_text(size = 12),
           panel.background = element_blank())
   
   # make a template of ggplot to assemble a podium
@@ -249,10 +251,28 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
     scale_fill_manual(values = c("#C0C0C0", "#FFD700", "#cd7f32")) +
     theme(element_blank(),
           axis.text.y = element_blank(),
-          axis.text.x = element_text(size = 8),
+          axis.text.x = element_text(size = 12),
           panel.background = element_blank())
   
   
+  output <- list(podium = ggpodium,
+                 poverp = poverp,
+                 partitable = partitable,
+                 reporttext = reporttext,
+                 other_traits_table = otrp)
   
+  return(output)
   
 }
+
+# .......................................
+# Error in data 
+# this is a file that is generated to be used in case of errors
+error_participant_report <- list(podium = 0L,
+                                 partitable = list(),
+                                 reporttext = "",
+                                 other_traits_table = list())
+
+
+
+
