@@ -43,11 +43,11 @@ podium_i
 
 `r paste(participant_report$reporttext[4,2])`
 
-```{r, fig.width=4, fig.height=3, dpi=200}
+```{r, fig.width=4, fig.height=2, dpi=200}
 participant_report$poverp
 ```
 
-\n
+\pagebreak
 
 ```{r}
 otr_text <- ""
