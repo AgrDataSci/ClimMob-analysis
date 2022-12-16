@@ -350,7 +350,7 @@ quanti_test1 <- ""
 if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
   quanti_caption <- "# Summary of quantitative traits"
   quanti_test1 <- 
-    paste0("This section presents an exploratory analysis of the quantitative traits collected in the trial. Since each trait has its own distribution and requires individual data cleaning process, we cannot present models for the traits. Here we present density plots to help in the visualization of data distribution and possible outliers (which are fully described in the Appendix), to read more about density plots please visit this blog < https://www.data-to-viz.com/graph/density.html >. If you identify outliers, you can adjust the values on your ClimMob project and request a new report. The following presents the density plots for the traits measured in this trial.")
+    paste0("This section presents an visualization of the quantitative traits collected in the trial. Since each trait has its own distribution and requires individual data cleaning process, we cannot present models for the traits. Here we present boxplots to help in visualizing of data distribution and possible outliers (which are fully described in the Appendix), to read more about boxplots please visit this blog < https://www.data-to-viz.com/caveat/boxplot.html >. If you identify outliers, you can adjust the values on your ClimMob project and request a new report. The following presents the boxplots for the traits measured in this trial.")
 }
 
 ```
@@ -414,7 +414,7 @@ if (isTRUE(nrow(quanti_dat$outliers) > 0)){
 ```{r outlier}
 if (isTRUE(nrow(quanti_dat$outliers) > 0))
 kable(quanti_dat$outliers, 
-          caption = paste0("Appendix 1.1. Possible outliers identified in quantitative data collected in the trial. If you consider any of these as outliers, please adjust it in your ClimMob project and request a new report."),
+          caption = paste0("Appendix 1.1. Possible outliers identified in quantitative data collected in the trial. If you consider any of these as outliers, please fix it in your ClimMob project and request a new report."),
           align = "l",
           row.names = FALSE)
 ```
