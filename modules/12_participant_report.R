@@ -109,10 +109,11 @@ get_participant_report <- function(cmdata, rank_dat, path, language) {
   # ................................................................
   # ................................................................
   # Get the info from the participants ####
-  sel <- c("id", "package_farmername", paste0("package_item_", LETTERS[1:ncomp]))
+  names(cmdata)[names(cmdata) == "package_farmername"] <- "package_participant_name"
+  sel <- c("id", "package_participant_name", paste0("package_item_", LETTERS[1:ncomp]))
   partitable <- cmdata[, sel]
   
-  names(partitable) <- gsub("package_|farmer", "", names(partitable))
+  names(partitable) <- gsub("package_|farmer|participant_", "", names(partitable))
   
   # empty matrix to expand values from ord so it can fit partitable
   # in case of missing data when participants did not replied the reference trait

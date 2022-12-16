@@ -22,7 +22,6 @@ get_quantitative_summaries <- function(quanti_dat) {
       labs(title = paste(unique(ggdat_i$trait), unique(ggdat_i$data_collection), sep = " - "),
            x = "",
            y = "") +
-      scale_color_brewer(palette = "Dark2") + 
       theme_bw() + 
       theme(panel.grid = element_blank(),
             text = element_text(size = 16),
