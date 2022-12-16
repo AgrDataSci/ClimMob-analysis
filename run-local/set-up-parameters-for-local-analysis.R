@@ -50,15 +50,15 @@ for (i in seq_along(modules)) {
 }
 
 # Add API key, if data will be fetched from ClimMob using ClimMobTools
-keys <- "d71ce512-d1b4-4cfc-b294-e46f2ee5f1e3"
+keys <- ""
 
-projects <- getProjectsCM(keys)
+projects <- getProjectsCM(keys, server = "1000FARMS")
 
-projects <- projects[grepl("CASS21", projects$project_id), ]
+projects <- projects[grepl("Gnut2022", projects$project_id), ]
 
 # a vector with project ids 
 ids <- projects$project_id
-server <- "climmob3"
+server <- "1000FARMS"
 
 jsonlt <- list()
 lt <- list()
@@ -153,6 +153,10 @@ sort(names(cmdata))
 
 # This is the vector with string patterns to be searched in cmdata
 questions <- questions[!duplicated(questions$final_name),]
+questions[1:ncol(questions)] <- lapply(questions[1:ncol(questions)], function(x){
+  gsub("overallchar", "overall", x)
+})
+questions <- questions[!grepl("overallper", questions$name2), ]
 traitpattern <- unique(questions$final_name)
 newname <- title_case(unique(questions$final_name))
 
@@ -199,17 +203,15 @@ rownames(traits) <- 1:nrow(traits)
 # Define the reference trait
 # Select one among the vector in nameString1
 traits$nameString1
-referencetrait <- "postharvest2_overallperf_pos"
+referencetrait <- "physiologicalmaturity_overall_pos"
 traits[which(grepl(referencetrait, traits$nameString1)), "traitOrder"] <- "referenceTrait"
 
 # Make nice names for data collection
 oldnames <- unique(traits$assessmentName)
 
-newnames <- c("Pre-harvest 3", "Pre-harvest 2", "Pre-harvest 4", 
-              "Post-harvest 2", "Pre-harvest 1", "Post-harvest 1", 
-              "Yield data", "At harvest")
+newnames <- c("Vegetative", "Reproductive", "Agronomic Performance", "Physiological maturity")
 
-assessday <- c(180,90,270, 380, 30, 370, 366, 365) 
+assessday <- c(1, 2, 3, 4) 
 
 for (i in seq_along(oldnames)) {
   traits$assessmentName <- ifelse(traits$assessmentName == oldnames[i], newnames[i], traits$assessmentName)
@@ -278,7 +280,7 @@ for (i in seq_along(traitq)) {
 # check the item names
 sort(unique(unlist(cmdata[paste0("package_item_", LETTERS[1:3])])))
 
-table(cmdata$preharvest3_districtoffarmer)
+table(cmdata$registration_gender1)
 
 # ............................................
 # ............................................
@@ -290,6 +292,7 @@ table(cmdata$preharvest3_districtoffarmer)
 # codeQst = a vector with clean names to be displayed in the report, indicating what
 #  the covariates mean
 # namaString = a vector with names that match the covariates selected in cmdata 
+
 names(cmdata)[which(!grepl("_pos$|_neg$", names(cmdata)))]
 
 covariates <- data.frame(assessmentId = "",
@@ -312,8 +315,8 @@ rm(tr, traits, tricotVSlocal, covariates, i, traitpattern, keys, newname, index)
 # ................................................................
 # ................................................................
 # Dataset parameters ####
-tag <- "Cassava Rwanda" # the project name
-reference   <- "Mkumba" # the reference item for the analysis
+tag <- "Groundnut Nigeria" # the project name
+reference   <- "SAMNUT 28 (Check)" # the reference item for the analysis
 project_name <- paste(tag)
 outputpath  <- paste0(getwd(), "/run-local/output/", project_name)
 infosheets  <- FALSE # logical, if infosheets should be written TRUE FALSE
