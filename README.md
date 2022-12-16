@@ -14,14 +14,14 @@ This repository contains the code used in the workflow to analyse data and creat
 
 **ClimMob.R** is the main script in this repository. It performs the analysis, calls for the other supporting files and generates the automated reports for the ClimMob project and the individual reports for the participants in the project. 
 
-  - **R/** contains the supporting scripts used to organise the data and perform the analysis. They are called by ClimMob.R
+  - **modules/** contains the functions used to organise the data and perform the analysis. They are called by ClimMob.R
   - **report/** contains the markdown templates to produce the reports. 
   - **run-local** contains the script to prepare a set of ClimMob project(s) locally before sending it for analysis
 
 ## Meta
 
-  - Please [report any issues or bugs](https://github.com/agrdatasci/ClimMob-analysis/issues)
+  - Please [click here to report issues or bugs](https://github.com/agrdatasci/ClimMob-analysis/issues)
   - License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-  - The [Tricot user guide](https://hdl.handle.net/10568/109942) shows how the experimental method inside the ClimMob platform
+  - The [Tricot user guide](https://hdl.handle.net/10568/109942) presents the experimental approach used by the ClimMob platform
   - The [ClimMob](https://climmob.net/) platform is an free on-line software for experimental trials with the tricot citizen-science approach
   

@@ -1,3 +1,12 @@
+ClimMob-analysis v2.1 (2022-12-15)
+=========================
+
+### Improvements
+
+* Enables participant individual reports
+* Fix small issues in the text in main report 
+
+
 ClimMob-analysis v2 (2022-06-22)
 =========================
 
