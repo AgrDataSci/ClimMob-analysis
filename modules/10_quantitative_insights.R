@@ -16,18 +16,18 @@ get_quantitative_summaries <- function(quanti_dat) {
     
     ggdat_i <- quanti_dat$quanti_dat[[i]]
     
-    b_i <- ggplot(ggdat_i, aes(x = value, group = technology, fill = technology)) + 
-      geom_density(adjust = 1.5, alpha = 0.7, show.legend = FALSE) +
-      facet_wrap(~ technology) +
-      scale_fill_manual(values = col_pallet(length(unique(ggdat_i$technology)))) +
+    b_i <- ggplot(ggdat_i, aes(y = value, x = technology, color = technology)) +
+      geom_boxplot(show.legend = FALSE) +
+      geom_jitter(show.legend = FALSE) +
       labs(title = paste(unique(ggdat_i$trait), unique(ggdat_i$data_collection), sep = " - "),
-           x = '', 
-           y = "Density") +
+           x = "",
+           y = "") +
+      scale_color_brewer(palette = "Dark2") + 
       theme_bw() + 
       theme(panel.grid = element_blank(),
             text = element_text(size = 16),
-            title = element_text(size = 14),
-            axis.title = element_text(size = 15))
+            title = element_text(size = 12),
+            axis.text.x = element_text(angle = 45,  hjust = 1))
     
     densitplots[[i]] <- b_i
     density_file_names[[i]] <- tolower(gsub(" ", "", 
