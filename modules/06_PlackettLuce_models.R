@@ -24,6 +24,101 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
   kendall_plot <- NULL
   logworth_group_plot <- list()
   
+  #...........................................................
+  # Get the Kendall tau from individual trait rankings
+  isKendall = FALSE
+  strongest_link = c("", "")
+  weakest_link = c("", "")
+  kendall_plot = 0L
+  
+  if (isTRUE(length(trait_list) > 1)) {
+    
+    kendall <- lapply(trait_list[-reference_trait_index], function(x){
+      # update the vector keep to match with dimensions from reference trait and 
+      # the trait 'x' applied in this function 
+      k <- trait_list[[reference_trait_index]]$keep & x$keep
+      
+      n <- sum(k)
+      
+      if (isTRUE(n == 0)){
+        kendall <- data.frame(kendallTau = -1, N_effective = 0, n = 0)
+        return(kendall)
+      }
+      
+      r1 <- rankTricot(cmdata[k, c(technologies_index, trait_list[[reference_trait_index]]$strings)],
+                       items = technologies_index,
+                       input = trait_list[[reference_trait_index]]$strings)
+      
+      r2 <- rankTricot(cmdata[k, c(technologies_index, x$strings)],
+                       items = technologies_index,
+                       input = x$strings)
+      
+      kendall <- kendallTau(r1, r2)
+      
+      kendall$n <- n
+      
+      kendall
+      
+    })
+    
+    kendall <- do.call("rbind", kendall)
+    
+    kendall$trait <- unlist(lapply(trait_list[-reference_trait_index], function(x){
+      paste0(x$name, " [" , x$assessment, "]")
+    }))
+    
+    kendall <- kendall[rev(order(kendall$kendallTau)), ]
+    
+    kendall <- kendall[,-2]
+    
+    kendall$kendallTau[kendall$kendallTau < 0] <- 0
+    
+    isKendall <- nrow(kendall) > 1
+    
+    if (isKendall) {
+      
+      strongest_link <- c(kendall$trait[1],
+                          round(kendall$kendallTau[1], 2))
+      
+      weakest_link <- c(kendall$trait[nrow(kendall)],
+                        round(kendall$kendallTau[nrow(kendall)], 2))
+      
+      kendall <- kendall[,c("trait", "kendallTau", "n")]
+      
+      kendall[,"kendallTau"] <- round(kendall[,"kendallTau"], 3)
+      
+      kendall <- kendall[rev(order(kendall$kendallTau)), ]
+      
+      kendall$trait <- factor(kendall$trait, levels = rev(kendall$trait))
+      
+      # make a bar plot plot 
+      kendall_plot <- 
+        ggplot2::ggplot(data = kendall, 
+                        ggplot2::aes(x = kendallTau,
+                                     y = trait, 
+                                     fill = trait)) +
+        ggplot2::geom_bar(stat = "identity", 
+                          position = "dodge",
+                          show.legend = FALSE,
+                          width = 1, 
+                          color = "#ffffff") + 
+        ggplot2::scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(legend.position="bottom",
+                       legend.text = ggplot2::element_text(size = 9),
+                       axis.text.y = ggplot2::element_text(color = "grey20"),
+                       axis.text.x = ggplot2::element_text(vjust = 1,
+                                                           hjust=1, 
+                                                           color = "grey20")) +
+        ggplot2::labs(y = "Trait",
+                      x = "Kendall tau") 
+      
+    }
+    
+  }
+  
+  #...........................................................
+  # Fit PlackettLuce Model
   # first a list with rankings
   R <- list()
   
@@ -55,81 +150,10 @@ get_PlackettLuce_models <- function(cmdata, rank_dat) {
     }
   }
   
-  #...........................................................
-  # Fit Plackett-Luce model 
+  # fit the model 
   mod <- lapply(R, function(x){
     PlackettLuce(x)
   })
-  
-  
-  if (isTRUE(length(trait_list) > 1)) {
-    
-    # get the Kendall tau from model coefficients 
-    # this is not the best approach but it the one that 
-    # works better right now considering that the data is not
-    # often completed in all entries
-    compare_to <- mod[-reference_trait_index]
-    baseline_trait <- coef(mod[[reference_trait_index]], log = FALSE)
-    baseline_trait <- baseline_trait[technologies]
-    kendall <- lapply(compare_to, function(x){
-      x <- coef(x, log = FALSE)
-      x <- x[technologies]
-      kendallTau(x, baseline_trait)
-    })
-    
-    kendall <- do.call("rbind", kendall)
-    
-    kendall$trait <- trait_names[-reference_trait_index]
-    
-    kendall <- kendall[rev(order(kendall$kendallTau)), ]
-    
-    kendall <- kendall[,-2]
-    
-    kendall$kendallTau[kendall$kendallTau < 0] <- 0
-    
-    isKendall <- nrow(kendall) > 1
-    
-    if (isKendall) {
-      
-      strongest_link <- c(kendall$trait[1],
-                          round(kendall$kendallTau[1], 2))
-      
-      weakest_link <- c(kendall$trait[nrow(kendall)],
-                        round(kendall$kendallTau[nrow(kendall)], 2))
-      
-      kendall <- kendall[,c(2,1)]
-      
-      kendall[,2] <- round(kendall[,2], 3)
-      
-      kendall <- kendall[rev(order(kendall$kendallTau)), ]
-      
-      kendall$trait <- factor(kendall$trait, levels = rev(kendall$trait))
-      
-      # make a bar plot plot 
-      kendall_plot <- 
-        ggplot2::ggplot(data = kendall, 
-                        ggplot2::aes(x = kendallTau,
-                                     y = trait, 
-                                     fill = trait)) +
-        ggplot2::geom_bar(stat = "identity", 
-                          position = "dodge",
-                          show.legend = FALSE,
-                          width = 1, 
-                          color = "#ffffff") + 
-        ggplot2::scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
-        ggplot2::theme_bw() +
-        ggplot2::theme(legend.position="bottom",
-                       legend.text = ggplot2::element_text(size = 9),
-                       axis.text.y = ggplot2::element_text(color = "grey20"),
-                       axis.text.x = ggplot2::element_text(vjust = 1,
-                                                           hjust=1, 
-                                                           color = "grey20")) +
-        ggplot2::labs(y = "Trait",
-                      x = "Kendall tau") 
-      
-    }
-    
-  }
   
   #...........................................................
   # Analysis of variance
