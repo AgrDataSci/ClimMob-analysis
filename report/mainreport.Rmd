@@ -350,7 +350,7 @@ quanti_test1 <- ""
 if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
   quanti_caption <- "# Summary of quantitative traits"
   quanti_test1 <- 
-    paste0("This section presents an visualization of the quantitative traits collected in the trial. Since each trait has its own distribution and requires individual data cleaning process, we cannot present models for the traits. Here we present boxplots to help in visualizing of data distribution and possible outliers (which are fully described in the Appendix), to read more about boxplots please visit this blog < https://www.data-to-viz.com/caveat/boxplot.html >. If you identify outliers, you can adjust the values on your ClimMob project and request a new report. The following presents the boxplots for the traits measured in this trial.")
+    paste0("This section presents the quantitative traits collected in the trial. Since each trait has its own data distribution and requires individual data cleaning process, we cannot present models for the traits. Here we present boxplots to help in visualizing of data distribution and possible outliers (which are fully described in the Appendix), to read more about boxplots please visit this blog < https://www.data-to-viz.com/caveat/boxplot.html >. If you identify outliers, you can adjust the values on your ClimMob project and request a new report. The following presents the boxplots for the traits measured in this trial.")
 }
 
 ```
