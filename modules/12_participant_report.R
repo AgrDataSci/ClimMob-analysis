@@ -4,8 +4,9 @@
 #' 
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
+#' @param fullpath character with the backward path to read the file
 #' 
-get_participant_report <- function(cmdata, rank_dat, path, language) {
+get_participant_report <- function(cmdata, rank_dat, fullpath, language) {
   
   itemnames <- rank_dat$technologies_index
   

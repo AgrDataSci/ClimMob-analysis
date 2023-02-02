@@ -58,7 +58,7 @@ plot_map <- function(data,
   nd <- dim(d)[[1]]
   
   if (isTRUE(nd == 0)) {
-    stop("No remaining coordinates to plot. ",
+    stop("No coordinates to plot. ",
          "Please check for NAs or if the values can be coerced to numeric. \n")
   }
   
@@ -104,12 +104,18 @@ plot_map <- function(data,
                                    provider =  map_provider, 
                                    options = leaflet::providerTileOptions(maxNativeZoom = 17))
   
-  map <- leaflet::addMarkers(map)
+  map <- leaflet::addCircleMarkers(map, 
+                                   color = "#b30000", 
+                                   radius = 6,
+                                   stroke = FALSE,
+                                   fillOpacity = 0.5)
   
   if (isTRUE(minimap)) {
     
-    map <- leaflet::addMiniMap(map = map, position = minimap_position, 
-                               width = 100, height = 100)
+    map <- leaflet::addMiniMap(map = map, 
+                               position = minimap_position, 
+                               width = 100,
+                               height = 100)
     
   }
   

@@ -33,7 +33,10 @@ get_testing_sites_map <- function(cmdata, output_path){
     
     if (nlonlat > 0){
       
-      trial_map <- plot_map(lonlat, xy = c(1, 2), minimap = TRUE, 
+      trial_map <- plot_map(data = lonlat, 
+                            make.clusters = FALSE,
+                            xy = c(1, 2),
+                            minimap = TRUE, 
                             map_provider = "OpenStreetMap.Mapnik")
       
       mapview::mapshot(trial_map, 

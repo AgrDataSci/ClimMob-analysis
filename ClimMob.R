@@ -7,7 +7,8 @@
 # # ................................................................
 # Arguments ####
 # get the arguments from server's call
-# args = commandArgs(trailingOnly = TRUE)
+args = commandArgs(trailingOnly = TRUE)
+
 cmparameters = args[1] # a json file with parameters for the analysis
 cmdatajson = args[2] # a json file with the results
 
@@ -34,7 +35,11 @@ minsplit    = 10 # minimum n in each tree node
 groups = as.vector(strsplit(groups, ",")[[1]])
 
 # break the reference into a vector, if more than one
-reference = as.vector(strsplit(reference, ",")[[1]])
+reference = as.integer(strsplit(reference, ",")[[1]])
+
+if (length(reference) > 4) {
+  reference = reference[1:4]
+}
 
 # # ................................................................
 # # ................................................................
@@ -82,12 +87,26 @@ error = NULL
 # 1. Read data and organize the rankings #### 
 try_data = tryCatch({
   
+  # report parameters
+  pars = jsonlite::fromJSON(cmparameters)
+  pars = decode_pars(pars)
+  
   # the trial data 
   cmdata = jsonlite::fromJSON(cmdatajson)
   class(cmdata) = union("CM_list", class(cmdata))
-  project_name = cmdata$project$project_name
-  reference = cmdata$combination$elements[[reference]]$alias_name
-  cmdata = try(as.data.frame(x = cmdata, tidynames = FALSE, pivot.wider = TRUE),
+  
+  # project data as an independent object
+  project_data = cmdata$project
+  project_name = project_data$project_name
+  
+  # get the name of the check variety
+  reference = cmdata$combination$elements[reference]
+  reference = unlist(lapply(reference, function(x) x$alias_name))
+  
+  # trial data as data.frame
+  cmdata = try(as.data.frame(x = cmdata, 
+                             tidynames = FALSE, 
+                             pivot.wider = TRUE),
                 silent = TRUE)
   
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
@@ -169,7 +188,8 @@ if (any_error(org_summ)) {
 # 4. Make map ####
 org_lonlat = tryCatch({
   
-  trial_map = get_testing_sites_map(cmdata, output_path = outputpath)
+  trial_map = get_testing_sites_map(cmdata, 
+                                    output_path = outputpath)
   
 }, error = function(cond) {
   return(cond)
@@ -326,17 +346,23 @@ rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
                   output_file = paste0("climmob_main_report", ".", extension))
 
 
-participant_report_dir = paste0(outputpath, "/participant-report/")
-dir.create(participant_report_dir, recursive = TRUE, showWarnings = FALSE)
-
-for (i in seq_along(participant_report$partitable$id)) {
+if (isTRUE(infosheets)) {
   
-  rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
-                    output_dir = participant_report_dir,
-                    output_format = output_format,
-                    output_file = paste0("participant_report_package_", i,  ".", extension))
+  participant_report_dir = paste0(outputpath, "/participant-report/")
+  
+  dir.create(participant_report_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  for (i in seq_along(participant_report$partitable$id)) {
+    
+    rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
+                      output_dir = participant_report_dir,
+                      output_format = output_format,
+                      output_file = paste0("participant_report_package_", i,  ".", extension))
+    
+  }
   
 }
+
 
 
 
@@ -374,6 +400,17 @@ try(ggsave(paste0(chartdir, "worth_map.png"),
            height = 25,
            units = "cm",
            dpi = 200), silent = TRUE)
+
+# plot worth map
+try(ggsave(paste0(chartdir, "reliability.png"),
+           plot = PL_models$reliability_plot,
+           width = 25,
+           height = 25,
+           units = "cm",
+           dpi = 200), silent = TRUE)
+
+try(write.csv(paste0(chartdir, "reliability_data.csv"),
+           row.names = FALSE), silent = TRUE)
 
 if(length(unique(rank_dat$group)) > 1) {
   g = unique(rank_dat$group)
