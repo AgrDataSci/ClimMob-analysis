@@ -288,7 +288,10 @@ if (any_error(org_quantitative_summ)) {
 # 12. Participant report  ####
 org_participant_report = tryCatch({
   
-  participant_report = get_participant_report(cmdata, rank_dat, fullpath, language = language)
+  participant_report = get_participant_report(cmdata, 
+                                              rank_dat, 
+                                              fullpath, 
+                                              language = language)
   
 }, error = function(cond) {
   return(cond)
