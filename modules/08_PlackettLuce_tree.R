@@ -21,8 +21,8 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   nranker = sum(trait_list[[reference_trait_index]]$keep)
   # use <<- to assign these two variables to the .GlobalEnv
   use_agroclimate = isTRUE(agroclimate$agroclimate)
-  node_size <<- nranker * 0.1
-  tree_alpha <<- 0.5
+  node_size <<- ceiling(nranker * 0.25)
+  tree_alpha <<- 0.25
   reference_tech = rank_dat[["reference_tech"]]
   
   if (isTRUE(covarTRUE)) {
@@ -180,7 +180,6 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   
   #..........................................................
   # PlackettLuce tree
-  # .............................................
   # Prepare for PL tree
   # data frame of explanatory variables
   Gdata = as.data.frame(cmdata[keep, c(covar$nameString)], stringsAsFactors = TRUE)
@@ -194,7 +193,7 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   rownames(Gdata) = 1:nG
   
   # add agroclimate data if any
-  if(use_agroclimate) {
+  if(use_agroclimate > 1) {
     
     if (isTRUE(nrow(agroclimate$rainfall[keep, ]) >= ceiling(nG * 0.95))) {
       
@@ -315,10 +314,10 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   
   # now fit the tree with the selected covariates
   tree_f = pltree(as.formula(treeformula),
-                   data = Gdata,
-                   minsize = as.integer(node_size),
-                   alpha = tree_alpha,
-                   gamma = TRUE)
+                  data = Gdata,
+                  minsize = as.integer(node_size),
+                  alpha = tree_alpha,
+                  gamma = TRUE)
   
   isTREE = isTRUE(length(tree_f) > 1)
   
@@ -332,14 +331,14 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
     nodes_tree = predict(tree_f, type = "node")
     node_id_tree = sort(unique(nodes_tree))
     
-    if (isTRUE(length(nodes_tree) == length(RG))) {
+    if (isTRUE(length(nodes_tree) == length(Gdata$G))) {
       
       tree_mod = list()
       nobs_tree = integer()
 
       for (i in seq_along(node_id_tree)) {
         
-        Gi = RG[nodes_tree == node_id_tree[i]]
+        Gi = Gdata$G[nodes_tree == node_id_tree[i]]
         
         tree_mod[[i]] = PlackettLuce(Gi)
         
@@ -350,11 +349,12 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
       
       tree_branch = gosset:::build_tree_branches(tree_f)
       tree_nodes = gosset:::build_tree_nodes(tree_mod, 
-                                              log = FALSE,
-                                              ci.level = 0.5,
-                                              node.ids = node_id_tree,
-                                              n.obs = nobs_tree) +
-        theme(axis.text.x = element_text(angle = 45))
+                                             log = TRUE,
+                                             ref = reference_tech[1],
+                                             ci.level = 0.5,
+                                             node.ids = node_id_tree,
+                                             n.obs = nobs_tree) +
+        theme(axis.text.x = element_text(angle = 0))
       
       plottree = tree_branch / tree_nodes + plot_layout(heights =  c(1, 1))
       
@@ -404,7 +404,8 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
       
       node_summary  = rules[c(1,5,3,4,2)]
       
-      names(node_summary) = c("Node", "N", "Superior Performance", "Underperformance", "Variable and Threshold")
+      names(node_summary) = c("Node", "N", "Superior Performance", 
+                              "Underperformance", "Variable and Threshold")
       
     }
     

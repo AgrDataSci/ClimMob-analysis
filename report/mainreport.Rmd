@@ -251,7 +251,7 @@ if (isTRUE(PL_models$kendall$isKendall)) {
 plot(PL_models$worthmap)
 ```
 
-Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 8. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm [-@Eskridge1992]. The reliability estimates were calculated considering `paste(reference_tech, collapse = ", ")` as the check `r option`.
+Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 8. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering `r paste(reference_tech, collapse = ", ")` as the check `r option`.
 
 ```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.8. Reliability of tested ", options, " versus the check. The red vertical line set to 0.5 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0.5).")}
 plot(PL_models$reliability_plot)

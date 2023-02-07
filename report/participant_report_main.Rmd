@@ -58,7 +58,7 @@ otr_text <- participant_report$reporttext[5,2]
 
 `r paste0(otr_text)`
 
-```{r, fig.width=4, fig.height=4, dpi=200}
+```{r, fig.width=8, fig.height=5, dpi=200}
 if(isTRUE(length(rank_dat$trait_list) > 1)){
 plot(participant_report$other_traits_table[[i]])
 }

@@ -360,7 +360,8 @@ if (isTRUE(infosheets)) {
     rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
                       output_dir = participant_report_dir,
                       output_format = output_format,
-                      output_file = paste0("participant_report_package_", i,  ".", extension))
+                      output_file = paste0("participant_report_package_", i, 
+                                           ".", extension))
     
   }
   
@@ -468,7 +469,8 @@ if (isTRUE(agroclimate$agroclimate)) {
 if (isTRUE(quanti_dat$quantitative)) {
   
   write.csv(quanti_dat$outliers,
-            file = paste0(chartdir, "possible_outliers_in_quantitative_data.csv"),
+            file = paste0(chartdir, 
+                          "possible_outliers_in_quantitative_data.csv"),
             row.names = FALSE)
   
 }
