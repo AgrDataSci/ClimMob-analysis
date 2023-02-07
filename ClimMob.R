@@ -7,56 +7,38 @@
 # # ................................................................
 # Arguments ####
 # get the arguments from server's call
-args <- commandArgs(trailingOnly = TRUE)
-infoname    <- args[1] # a json file with parameters for the analysis
-outputname  <- args[2] # a json file with the results
-outputpath  <- args[3] # the path where results will be written
-infosheets  <- as.logical(args[4]) # logical, if infosheets should be written TRUE FALSE
-language    <- args[5] # the language to write the report "en" for english and "es" for spanish
-extension   <- args[6] # report file format it can be "docx", "pdf", and "html"
-ranker      <- args[7] # how the report will refer to participants/farmers
-option      <- args[8] # how the report will refer to tested technologies
-fullpath    <- args[9] # this is backward path
-groups      <- args[10] # any group to do the analysis 
-reference   <- as.integer(args[11]) # the reference item for the analysis
-minN        <- args[12] # minimum n of complete data required in a trait evaluation before it is excluded
-minitem     <- args[13] # minimum n of items tested, e.g. that all items are tested at least twice
-mincovar    <- args[14] # minimum proportion of covariates compared to total valid n
-sig_level   <- args[15] # significance level for the standard PL model
-sig_level_tree  <-  as.numeric(args[16]) # significance level for the tree
-minsplit    <- as.integer(args[17]) # minimum n in each tree node
-template    <- args[18] 
+args = commandArgs(trailingOnly = TRUE)
 
-if (isTRUE(is.na(reference))) {
-  reference <- 1
-}
+cmparameters = args[1] # a json file with parameters for the analysis
+cmdatajson = args[2] # a json file with the results
 
-if (isTRUE(is.na(minN))) {
-  minN <- 5
-}
+# get parameters from ClimMob request
+pars = jsonlite::fromJSON(cmparameters)
+report_parameters = pars[["Parameters"]]
+outputpath  = report_parameters[["OutputPath"]] # the path where results will be written
+infosheets  = as.logical(report_parameters[["InfoSheets"]]) # logical, if infosheets should be written TRUE FALSE
+language    = report_parameters[["Languaje"]] # the language to write the report "en" for english and "es" for spanish
+extension   = report_parameters[["Format"]] # report file format it can be "docx", "pdf", and "html"
+ranker      = report_parameters[["ReferToParticipants"]] # how the report will refer to participants/farmers
+option      = report_parameters[["ReferToTechnologies"]] # how the report will refer to tested technologies
+fullpath    = report_parameters[["BackwardPath"]] # this is backward path
+groups      = report_parameters[["Split"]] # any group to do the analysis 
+reference   = report_parameters[["Reference"]] # the reference item for the analysis
+minN        = 5 # minimum n of complete data required in a trait evaluation before it is excluded
+minitem     = 2 # minimum n of items tested, e.g. that all items are tested at least twice
+mincovar    = 0.95 # minimum proportion of covariates compared to total valid n
+sig_level   = 0.1 # significance level for the standard PL model
+sig_level_tree  =  0.1 # significance level for the tree
+minsplit    = 10 # minimum n in each tree node
 
-if (isTRUE(is.na(minitem))) {
-  minitem <- 2
-}
+# break the groups into a vector, if more than one
+groups = as.vector(strsplit(groups, ",")[[1]])
 
-if (isTRUE(is.na(mincovar))) {
-  mincovar <- 0.95
-}
+# break the reference into a vector, if more than one
+reference = as.integer(strsplit(reference, ",")[[1]])
 
-if (isTRUE(is.na(sig_level))) {
-  sig_level <- 0.1
-}
-
-if (isTRUE(is.na(sig_level_tree))) {
-  sig_level_tree <- sig_level
-}
-
-if (isTRUE(is.na(minsplit))) {
-  minsplit <- 10
-}
-
-if (isTRUE(is.na(language))) {
-  language <- "en"
+if (length(reference) > 4) {
+  reference = reference[1:4]
 }
 
 # # ................................................................
@@ -91,35 +73,45 @@ library("janitor")
 # ................................................................
 # ................................................................
 # Load modules ####
-modules <- list.files(paste0(fullpath, "/modules"), full.names = TRUE)
-modules <- modules[-which(grepl("check_packages.R", modules))]
+modules = list.files(paste0(fullpath, "/modules"), full.names = TRUE)
+modules = modules[-which(grepl("check_packages.R", modules))]
 for (i in seq_along(modules)) {
   source(modules[i])
 }
 
 # An object to capture error messages when running the analysis
-error <- NULL
+error = NULL
 
 # ................................................................
 # ................................................................
 # 1. Read data and organize the rankings #### 
-try_data <- tryCatch({
+try_data = tryCatch({
   
-  # call pars sent by ClimMob
-  pars <- jsonlite::fromJSON(infoname)
-  pars <- decode_pars(pars)
+  # report parameters
+  pars = jsonlite::fromJSON(cmparameters)
+  pars = decode_pars(pars)
   
   # the trial data 
-  cmdata <- jsonlite::fromJSON(outputname)
-  class(cmdata) <- union("CM_list", class(cmdata))
-  project_name <- cmdata$project$project_name
-  reference <- cmdata$combination$elements[[reference]]$alias_name
-  cmdata <- try(as.data.frame(x = cmdata, tidynames = FALSE, pivot.wider = TRUE),
+  cmdata = jsonlite::fromJSON(cmdatajson)
+  class(cmdata) = union("CM_list", class(cmdata))
+  
+  # project data as an independent object
+  project_data = cmdata$project
+  project_name = project_data$project_name
+  
+  # get the name of the check variety
+  reference = cmdata$combination$elements[reference]
+  reference = unlist(lapply(reference, function(x) x$alias_name))
+  
+  # trial data as data.frame
+  cmdata = try(as.data.frame(x = cmdata, 
+                             tidynames = FALSE, 
+                             pivot.wider = TRUE),
                 silent = TRUE)
   
   dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
   
-  rank_dat <- organize_ranking_data(cmdata, 
+  rank_dat = organize_ranking_data(cmdata, 
                                     pars, 
                                     project_name,
                                     groups, 
@@ -136,19 +128,19 @@ try_data <- tryCatch({
 )
 
 if (any_error(try_data)) {
-  e <- paste("Organize Ranking Data: \n", try_data$message)
-  error <- c(error, e)
-  rank_dat <- error_data_rank_dat
+  e = paste("Organize Ranking Data: \n", try_data$message)
+  error = c(error, e)
+  rank_dat = error_data_rank_dat
 }
 
 # ................................................................
 # ................................................................
 # 2. Organise quantitative data ####
-try_quanti_data <- tryCatch({
+try_quanti_data = tryCatch({
   
   if (isTRUE(length(pars[["linear"]]) > 0)) {
     
-    quanti_dat <- organize_quantitative_data(cmdata, 
+    quanti_dat = organize_quantitative_data(cmdata, 
                                              pars, 
                                              groups = groups, 
                                              id = "id",
@@ -157,7 +149,7 @@ try_quanti_data <- tryCatch({
                                                             "package_item_C"))
   }else{
     
-    quanti_dat <- error_data_quanti_dat
+    quanti_dat = error_data_quanti_dat
     
   }
   
@@ -168,17 +160,17 @@ try_quanti_data <- tryCatch({
 )
 
 if (any_error(try_quanti_data)) {
-  e <- paste("Organize Quantitative Data: \n", try_quanti_data$message)
-  error <- c(error, e)
-  quanti_dat <- error_data_quanti_dat
+  e = paste("Organize Quantitative Data: \n", try_quanti_data$message)
+  error = c(error, e)
+  quanti_dat = error_data_quanti_dat
 }
 
 # .......................................................
 # .......................................................
 # 3. Prepare summary tables / charts
-org_summ <- tryCatch({
+org_summ = tryCatch({
   
-  overview_and_summaries <- get_overview_summaries(cmdata, rank_dat)
+  overview_and_summaries = get_overview_summaries(cmdata, rank_dat)
   
 }, error = function(cond) {
   return(cond)
@@ -186,17 +178,18 @@ org_summ <- tryCatch({
 )
 
 if (any_error(org_summ)) {
-  e <- paste("Overview and Summary: \n", org_summ$message)
-  error <- c(error, e)
-  overview_and_summaries <- error_data_overview_and_summaries
+  e = paste("Overview and Summary: \n", org_summ$message)
+  error = c(error, e)
+  overview_and_summaries = error_data_overview_and_summaries
 }
 
 # .......................................................
 # .......................................................
 # 4. Make map ####
-org_lonlat <- tryCatch({
+org_lonlat = tryCatch({
   
-  trial_map <- get_testing_sites_map(cmdata, output_path = outputpath)
+  trial_map = get_testing_sites_map(cmdata, 
+                                    output_path = outputpath)
   
 }, error = function(cond) {
   return(cond)
@@ -204,18 +197,18 @@ org_lonlat <- tryCatch({
 )
 
 if (any_error(org_lonlat)) {
-  e <- paste("Trial map: \n", org_lonlat$message)
-  error <- c(error, e)
-  trial_map <- error_data_trial_map
+  e = paste("Trial map: \n", org_lonlat$message)
+  error = c(error, e)
+  trial_map = error_data_trial_map
 
 }
 
 # .......................................................
 # .......................................................
 # 9. Agroclimatic information  ####
-org_agroclim <- tryCatch({
+org_agroclim = tryCatch({
   
-  agroclimate <- get_agroclimatic_data(cmdata)
+  agroclimate = get_agroclimatic_data(cmdata)
   
 }, error = function(cond) {
   return(cond)
@@ -223,18 +216,18 @@ org_agroclim <- tryCatch({
 )
 
 if (any_error(org_agroclim)) {
-  e <- paste("Agroclimatic data: \n", org_agroclim$message)
-  error <- c(error, e)
-  agroclimate <- error_data_agroclimate
+  e = paste("Agroclimatic data: \n", org_agroclim$message)
+  error = c(error, e)
+  agroclimate = error_data_agroclimate
 }
 
 # .......................................................
 # .......................................................
 # .......................................................
 # 7. Fit PlackettLuce model ####
-org_pl <- tryCatch({
+org_pl = tryCatch({
   
-  PL_models <- get_PlackettLuce_models(cmdata, rank_dat)
+  PL_models = get_PlackettLuce_models(cmdata, rank_dat)
   
 }, error = function(cond) {
   return(cond)
@@ -242,9 +235,9 @@ org_pl <- tryCatch({
 )
 
 if (any_error(org_pl)) {
-  e <- paste("Plackett-Luce model: \n", org_pl$message)
-  error <- c(error, e)
-  PL_models <- error_data_PL_model
+  e = paste("Plackett-Luce model: \n", org_pl$message)
+  error = c(error, e)
+  PL_models = error_data_PL_model
 }
 
 # .......................................................
@@ -256,9 +249,9 @@ if (any_error(org_pl)) {
 # .......................................................
 # .......................................................
 # 8. Fit pltree ####
-org_pltree <- tryCatch({
+org_pltree = tryCatch({
   
-  PL_tree <- get_PlackettLuce_tree(cmdata, rank_dat, agroclimate)
+  PL_tree = get_PlackettLuce_tree(cmdata, rank_dat, agroclimate)
   
 }, error = function(cond) {
   return(cond)
@@ -266,18 +259,18 @@ org_pltree <- tryCatch({
 )
 
 if (any_error(org_pltree)) {
-  e <- paste("Plackett-Luce Tree: \n", org_pltree$message)
-  error <- c(error, e)
-  PL_tree <- error_data_PL_tree
+  e = paste("Plackett-Luce Tree: \n", org_pltree$message)
+  error = c(error, e)
+  PL_tree = error_data_PL_tree
 }
 
 
 # .......................................................
 # .......................................................
 # 10. Summaries from quantitative data  ####
-org_quantitative_summ <- tryCatch({
+org_quantitative_summ = tryCatch({
   
-  quantitative_traits <- get_quantitative_summaries(quanti_dat)
+  quantitative_traits = get_quantitative_summaries(quanti_dat)
   
 }, error = function(cond) {
   return(cond)
@@ -285,17 +278,20 @@ org_quantitative_summ <- tryCatch({
 )
 
 if (any_error(org_quantitative_summ)) {
-  e <- paste("Quantitative Traits: \n", org_quantitative_summ$message)
-  error <- c(error, e)
-  quantitative_traits <- error_data_quantitative_traits
+  e = paste("Quantitative Traits: \n", org_quantitative_summ$message)
+  error = c(error, e)
+  quantitative_traits = error_data_quantitative_traits
 }
 
 # .......................................................
 # .......................................................
 # 12. Participant report  ####
-org_participant_report <- tryCatch({
+org_participant_report = tryCatch({
   
-  participant_report <- get_participant_report(cmdata, rank_dat, fullpath, language = language)
+  participant_report = get_participant_report(cmdata, 
+                                              rank_dat, 
+                                              fullpath, 
+                                              language = language)
   
 }, error = function(cond) {
   return(cond)
@@ -303,9 +299,9 @@ org_participant_report <- tryCatch({
 )
 
 if (any_error(org_participant_report)) {
-  e <- paste("Participant report: \n", org_participant_report$message)
-  error <- c(error, e)
-  participant_report <- error_participant_report
+  e = paste("Participant report: \n", org_participant_report$message)
+  error = c(error, e)
+  participant_report = error_participant_report
 }
 
 
@@ -313,38 +309,38 @@ if (any_error(org_participant_report)) {
 # ................................................................
 # 9. Write outputs ####
 #determine format based on extensions
-output_format <- ifelse(extension == "docx","word_document", 
+output_format = ifelse(extension == "docx","word_document", 
                         paste0(extension,"_document"))
 
 
 # arguments to use in the report text
-project_name <- rank_dat$projname
-noptions <- length(rank_dat$technologies_index)
-ntechnologies <- length(rank_dat$technologies)
-option <- rank_dat$option
-options <- pluralize(rank_dat$option)
-participant <- rank_dat$ranker
-participants <- pluralize(rank_dat$ranker)
-nparticipants <- nrow(cmdata)
-ntraits <- length(rank_dat$trait_list)
-reference_trait <- title_case(rank_dat$reference_trait)
-reference_tech <- rank_dat$reference_tech
+project_name = rank_dat$projname
+noptions = length(rank_dat$technologies_index)
+ntechnologies = length(rank_dat$technologies)
+option = rank_dat$option
+options = pluralize(rank_dat$option)
+participant = rank_dat$ranker
+participants = pluralize(rank_dat$ranker)
+nparticipants = nrow(cmdata)
+ntraits = length(rank_dat$trait_list)
+reference_trait = title_case(rank_dat$reference_trait)
+reference_tech = rank_dat$reference_tech
 
 # resolution of display items
-dpi <- 400
-out_width <- "100%"
+dpi = 400
+out_width = "100%"
 
 # define height of plots based on number of technologies
-worthmap_h <- ntraits
-worthmap_w <- ntraits + 0.5
-favplot_h <- ntechnologies * 0.4
+worthmap_h = ntraits
+worthmap_w = ntraits + 0.5
+favplot_h = ntechnologies * 0.4
 
-if (worthmap_h < 7)  worthmap_h <- 7
-if (worthmap_h > 8)  worthmap_h <- 8
-if (worthmap_w < 7)  worthmap_w <- worthmap_h + 0.5
-if (worthmap_w > 8)  worthmap_w <- worthmap_h + 0.5
-if (favplot_h < 5) favplot_h <- 5
-if (favplot_h > 8) favplot_h <- 7.5
+if (worthmap_h < 7)  worthmap_h = 7
+if (worthmap_h > 8)  worthmap_h = 8
+if (worthmap_w < 7)  worthmap_w = worthmap_h + 0.5
+if (worthmap_w > 8)  worthmap_w = worthmap_h + 0.5
+if (favplot_h < 5) favplot_h = 5
+if (favplot_h > 8) favplot_h = 7.5
 
 # the main report
 rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
@@ -353,17 +349,24 @@ rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
                   output_file = paste0("climmob_main_report", ".", extension))
 
 
-participant_report_dir <- paste0(outputpath, "/participant-report/")
-dir.create(participant_report_dir, recursive = TRUE, showWarnings = FALSE)
-
-for (i in seq_along(participant_report$partitable$id)) {
+if (isTRUE(infosheets)) {
   
-  rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
-                    output_dir = participant_report_dir,
-                    output_format = output_format,
-                    output_file = paste0("participant_report_package_", i,  ".", extension))
+  participant_report_dir = paste0(outputpath, "/participant-report/")
+  
+  dir.create(participant_report_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  for (i in seq_along(participant_report$partitable$id)) {
+    
+    rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
+                      output_dir = participant_report_dir,
+                      output_format = output_format,
+                      output_file = paste0("participant_report_package_", i, 
+                                           ".", extension))
+    
+  }
   
 }
+
 
 
 
@@ -373,7 +376,7 @@ if (length(error) > 0) {
 
 
 # Now write the extra charts and tables
-chartdir <- paste0(outputpath, "/extra-outputs/")
+chartdir = paste0(outputpath, "/extra-outputs/")
 dir.create(chartdir, recursive = TRUE, showWarnings = FALSE)
 
 # log worth plot by trait
@@ -402,8 +405,19 @@ try(ggsave(paste0(chartdir, "worth_map.png"),
            units = "cm",
            dpi = 200), silent = TRUE)
 
+# plot worth map
+try(ggsave(paste0(chartdir, "reliability.png"),
+           plot = PL_models$reliability_plot,
+           width = 25,
+           height = 25,
+           units = "cm",
+           dpi = 200), silent = TRUE)
+
+try(write.csv(paste0(chartdir, "reliability_data.csv"),
+           row.names = FALSE), silent = TRUE)
+
 if(length(unique(rank_dat$group)) > 1) {
-  g <- unique(rank_dat$group)
+  g = unique(rank_dat$group)
   # log worth plot by group
   for(m in seq_along(PL_models$logworth_plot_groups)){
     try(ggsave(paste0(chartdir, "Group", m, "_", g[m], "_logworth_grouped_rank.png"),
@@ -455,7 +469,8 @@ if (isTRUE(agroclimate$agroclimate)) {
 if (isTRUE(quanti_dat$quantitative)) {
   
   write.csv(quanti_dat$outliers,
-            file = paste0(chartdir, "possible_outliers_in_quantitative_data.csv"),
+            file = paste0(chartdir, 
+                          "possible_outliers_in_quantitative_data.csv"),
             row.names = FALSE)
   
 }

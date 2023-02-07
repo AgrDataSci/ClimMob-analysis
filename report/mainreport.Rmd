@@ -23,26 +23,24 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Introduction  
 
-Triadic comparisons of technology options (tricot) is a research approach [@vanEtten2019tricot] to crowdsource the evaluation of suitable technologies for local conditions based on user preferences. Tricot (read: ‘try-cot’) engages participants as ‘citizen researchers’ in the testing or validation of new technologies and product concepts. Tricot is supported by the ClimMob digital platform (https://climmob.net). 
+Triadic comparisons of technology options (tricot) is a research approach [@vanEtten2019tricot] to decentralize the evaluation of suitable technologies for local conditions and obtain experimental data with higher external validity. Tricot (read ‘try-cot’) engages participants as ‘citizen scientists’ testing new technologies and product concepts. Tricot is supported by the ClimMob digital platform (https://climmob.net). 
 
-In agriculture, under climate uncertainty, many farmers need to change their agricultural practices, adopt new crop varieties, switch to using different inputs, or apply new management strategies. But there is no one-size-fits-all solution. With the tricot method, large numbers of participants carry out many small, simple trials on their own farms instead of a few big, complex trials conducted at research stations. 
+In agriculture, under climate uncertainty, many farmers need to change their agricultural practices, adopt new crop varieties, switch to using different inputs, or apply new management strategies. But there is no one-size-fits-all solution. With the tricot approach, large numbers of participants carry out small, simple trials on their own farms instead of a few big, complex trials conducted at research stations. 
 
 With tricot, research centres can validate and disseminate new agricultural technologies in
-a participatory way, collaborating with a large number of participants under diverse conditions. Large-scale tricot experiments, involving many participants, generate excellent/reliable results about the performance of different technology options (such as different crop varieties or different fertilizer types) in different environments. Farmers evaluate the new technology options on their own farms and under real conditions.
+a participatory way, collaborating with a large number of participants under diverse conditions. Large-scale tricot experiments, involving many participants, generate robust results about the performance of different technology options (such as different crop varieties or different fertilizer types) in different environments. Farmers evaluate the new technology options on their own farms and under real conditions.
 
-This report presents the results from your tricot project, designed and managed on ClimMob.
+This report presents the results from your tricot experiment entitled `r project_name`, designed and managed on ClimMob.
  
 # What you should expect from this report
 
-This report will provide to you an overview of your ClimMob trial data and results, with insights of the performance of the technologies tested in the tricot trial. This is a standard automated report that tries to accommodate the most important outputs from a tricot trial. After reading through this report, you should be able to: i) identify the technology that outperforms the others in your trial, and under which conditions; and ii) support a decision on advancement of a technology to the next stage of your product development program (e.g. breeding program, market impact assessment). 
+This report will provide to you an overview of your tricot experiment data and results, with insights of the performance of the technologies tested in the tricot trial. This is a standard automated report that tries to accommodate the most important outputs from a tricot trial. After reading through this report, you should be able to: (i) identify the technology that outperforms the others in your trial, and under which conditions, and (ii) support a decision on advancement of a technology to the next stage of your product development program (e.g. breeding program, market assessment). 
 
-However, since this report was done in an automated process, is likely that it will not provide to you the full overview on the performance of the tested technologies as the automation may not capture all the factors that influence the performance of a technology in the target environment (under real-world conditions). 
-
-If you would like to have an in-deep analysis, or to merge data from different projects or is planning a peer-review publication with your tricot data, send a proposal/request to Kauê de Sousa (k.desousa@cgiar.org) and Jacob van Etten (j.vanetten@cgiar.org). Even being implemented with high-quality statistical analysis, the automated process for the production of this report limits the ability to test specific hypothesis with the data to match the needs of international peer-review journals. Therefore, we recommend to extend the analysis beyond the results described here.
+However, since this report was done in an automated process, is likely that it will not provide to you the full overview on the performance of the tested technologies as the automation may not capture all the factors that influence the performance of a technology in the target environment (under real-world conditions). If you would like to have an in-deep analysis, or to merge data from different projects or is planning a peer-review publication with your tricot data, send a proposal/request to Kauê de Sousa (k.desousa@cgiar.org) and Jacob van Etten (j.vanetten@cgiar.org). Even being implemented with high-quality statistical analysis, the automated process for the production of this report limits the ability to test specific hypothesis with the data to match the needs of international peer-review journals. Therefore, we recommend to extend the analysis beyond the results described here.
 
 # Methods
 
-ClimMob applies the Plackett-Luce (PL) model, jointly proposed by Luce (1959) [@Luce1959] and Plackett (1975) [@Plackett1975] to analyze ranking data. It is implemented in R by the package 'PlackettLuce' [@Turner2020]. The Plackett-Luce model estimates the relative importance (probability of outperforming) of different technologies following the Luce’s Choice Axiom [@Luce1959], which states that the probability that one item (e.g. variety) beats another is independent from the presence or absence of any other items in the set.
+ClimMob applies the Plackett-Luce (PL) model, independently proposed by Luce (1959) [@Luce1959] and Plackett (1975) [@Plackett1975] to analyze ranking data. It is implemented in R by the package 'PlackettLuce' [@Turner2020]. The Plackett-Luce model estimates the relative importance (probability of outperforming) of different technologies following the Luce’s Choice Axiom [@Luce1959], which states that the probability that one item (e.g. variety) outperforms another is independent from the presence or absence of any other items in the set.
 
 Equation [1]
 
@@ -50,7 +48,7 @@ $$P (i \succ j) = \frac{p_i}{p_i + p_j}$$
 
 where $p_i$ is a positive real-valued score assigned to individual $i$. The comparison $i \succ j$ can be read as "$i$ is preferred over $j$".
 
-The PL model determines the values of positive-valued parameters $\alpha_i$ (*worth*) associated with each item $i$. These parameters $\alpha$ are related to the probability ($P$) that item $i$ outperforms all other $n$ items in the set. We report *log-worth* values that are centred to 0 using the item `r reference_tech` as the reference. 
+The PL model determines the values of positive-valued parameters $\alpha_i$ (*worth*) associated with each item $i$. These parameters $\alpha$ are related to the probability ($P$) that item $i$ outperforms all other $n$ items in the set. We report *log-worth* values that are centred to 0 using the item(s) `r paste(reference_tech, collapse = ", ")` as the control treatment (check). 
 
 Your tricot trial used rankings of three technologies $(i \succ j \succ k)$, which have the following probability of occurring according to the PL model:
 
@@ -69,11 +67,11 @@ Based on this approach, the following model was applied to the data:
 
 > `r PL_tree$tree_formula`
 
-It may happen that not all covariates displayed above appear in the PL tree as the tree is limited to a certain number of nodes (groups). The covariates that are displayed are the most important for the data set.
+It could happen that not all covariates displayed above appear in the PL tree as the tree is limited to a certain number of nodes (groups). The covariates that are displayed are the most important for the data set.
 
-This report takes the trait '`r reference_trait`' as the reference trait for the analysis. A summary of the p-values testing the hypothesis that there were differences in performance for each trait, and the list of options, which showed significance superior or weak performance are presented here.
+This report uses the trait '`r reference_trait`' as the reference trait for the analysis. A summary of the p-values testing the hypothesis that there were differences in performance for each trait, and the list of options, which showed significance superior or weak performance are presented here.
 
-The correlation between the '`r reference_trait`' and the other traits is estimated using the Kendall tau coefficient [@Kendall1938]. The coefficient is an equivalent of a Pearson correlation designed for ranking data, ranging from -1 to 1, where 1 means a total correlation and -1 a total negative correlation. This approach can be used, for example, to assess the drivers of participants choices or to prioritize traits to be tested in a next stage of tricot trials (e.g. a lite version of tricot with less questions).
+The correlation between the '`r reference_trait`' and the other traits is estimated using the Kendall tau coefficient [@Kendall1938]. The coefficient is an equivalent of a Pearson correlation designed for ranking data, ranging from -1 to 1, where 1 means a total correlation and -1 a total negative correlation. This approach can be used, for example, to assess the drivers of participants choices or to prioritize traits to be tested in a next stage of tricot trials.
 
 This report is generated in R [@RCoreTeam] using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls]. The decentralized experimental approach behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2022) [@climmobanalysis].
 
@@ -110,10 +108,7 @@ if (isTRUE(trial_map$geoTRUE)){
   trial_map_heading <- "# Distribution of trial plots"
   
   trial_map_statement <- paste0("The map below (Fig. 1.2) shows the distribution ",
-                               "of the plots in this trial. To respect ",
-                               participants, "' privacy, the coordinates ",
-                               "were clustered with a 0.05 arc-degree resolution. You can find ",
-                               "the original coordinates in your ClimMob data.")
+                               "of the plots in this trial.")
 }
 ```
 
@@ -121,7 +116,7 @@ if (isTRUE(trial_map$geoTRUE)){
 
 `r paste(trial_map_statement, collapse='\n')`
 
-```{r map, dpi=dpi, out.width = '70%', fig.cap=paste0("Figure 1.2. Distribution of trial plots. Coordinates were clustered with a 0.05 arc-degree resolution.")}
+```{r map, dpi=dpi, out.width = '70%', fig.cap=paste0("Figure 1.2. Distribution of trial plots.")}
 if (isTRUE(trial_map$geoTRUE)) {
 try(knitr::include_graphics(trial_map$map_path), silent = TRUE)
 }
@@ -133,8 +128,8 @@ agroclimate_text1 <- ""
 if (isTRUE(agroclimate$agroclimate)){
   agroclimate_heading <- "# The climate during the trial's growing season"
   agroclimate_text1 <- paste0("Temperature and rainfall indices are presented in Fig. 1.3 and Fig. 1.4 ",
-                              "obtained using the GPS data presented in the map. The timespan ",
-                              "window used to capture the climate data was from ",
+                              "obtained using the GPS data presented in the map (Fig. 2). The timespan ",
+                              "used to capture the climate data was from ",
                               paste(agroclimate$dates, collapse = " to "), ". The charts ",
                               "present the weekly agroclimatic indices (7-days). Data was obtained ",
                               " using the R package nasapower [@nasapower], indices were computed using the ",
@@ -164,9 +159,9 @@ plot(agroclimate$rain_plot)
 
 # Trial design and allocation of incomplete blocks
 
-Figure 1.5 shows presents an illustration of the experimental design and indicates whether all `r options` are connected to each other in the trial network. This means that they all co-occurred at least once in an incomplete block of `r noptions` `r options`. The network is obtained using the network rankings generated with '`r reference_trait`'.
+Figure 1.5 shows an illustration of the experimental design and indicates whether all `r options` are connected to each other in the trial network. This means that they all co-occurred at least once in an incomplete block of `r noptions` `r options`. The network is obtained using the network rankings generated with '`r reference_trait`'.
 
-```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.5. Experimental network representation of ", options, " tested in this trial.")}
+```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 1.5. Experimental network representation of ", options, " tested in this experiment. Arrows indicate direct paths of wins and losses between each pair of ", options, ", indicating that the ", option, " co-occur in at least one experimental block. ", title_case(options), " with a no direct path are connected using a Bayesian prior.")}
 plot(overview_and_summaries$trial_connectivity)
 ```
 
@@ -196,8 +191,7 @@ stat_diff_statement <- paste0("Performance of tested technologies are summarized
 
 ```{r pl_models_overview}
 kable(PL_models$PL_models_overview, 
-      caption = paste0("Table 1.3. Summary of ", option," performance trait. The table shows up to three ", options,
-                       " with best and worst performance based on the log-worth estimates obtained with Plackett-Luce models."),
+      caption = paste0("Table 1.3. Summary of ", option," performance trait. The table shows, for each trait, up to three ", options, " with best and worst performance based on the log-worth estimates obtained with Plackett-Luce models."),
       row.names = FALSE)
 ```
 
@@ -207,13 +201,10 @@ kable(PL_models$PL_models_overview,
 ```{r relation_other_chrs} 
 relation_other_chrs1 <- ""
 relation_other_chrs2 <- ""
-relation_other_chrs3 <- ""
 if ((isTRUE(PL_models$kendall$isKendall))) {
 relation_other_chrs1 <- 
-  paste0("Figure 1.6 shows the Kendall tau coefficient. ")
-
-relation_other_chrs2 <- 
-  paste0("The trait that had the strongest ", 
+  paste0("Figure 1.6 shows the Kendall tau coefficient. ",
+         "The trait that had the strongest ", 
         "correlation with '", reference_trait, "' was '", 
         PL_models$kendall$strongest_link[1], 
         "' with a Kendall tau of ",
@@ -226,17 +217,18 @@ relation_other_chrs2 <-
 }
 
 if (isTRUE(length(PL_models$worthmap) > 0)) {
-  relation_other_chrs3 <- paste0("The log-worth by trait of each ",
+  relation_other_chrs2 <- paste0("The log-worth by trait of each ",
                                  option, 
-                                 " tested in this trial is presented in Figure 1.7.",
-                                 " The chart shows for each trait the ", options, 
-                                 " with higher and weakest performance compared to",
-                                 " the reference ", option, " ", reference_tech, ".",
-                                 " The values are adjusted to the log scale",
+                                 " tested in this experiment is presented in Figure 1.7.",
+                                 " The chart shows for each trait the probability that each ",
+                                 option, 
+                                 " has in outperforming the check(s) ",
+                                 paste(reference_tech, collapse = ", "), ".",
+                                 " The worth parameters are adjusted to the log scale",
                                  " where log-worth > 0 (blue) represents the ", options, 
                                  " with superior performance for the given trait, ",
-                                 " whereas worth < 0 (red) represents the ", options, 
-                                 " with the lower performance for the given trait.")
+                                 " and worth < 0 (red) represents the ", options, 
+                                 " with the underperformance for the given trait.")
     
 }
 
@@ -254,19 +246,20 @@ if (isTRUE(PL_models$kendall$isKendall)) {
 
 `r paste(relation_other_chrs2, collapse='\n')`
 
-\
 
-`r paste(relation_other_chrs3, collapse='\n')`
-
-
-```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.7. ", title_case(option), " performance by trait. The chart display log-worth values where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with the lower performance for the given trait. The ", option, " ", reference_tech, " is set as refence (log-worth arbitrarily set to zero).")}
+```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.7. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with underperformance for the given trait. Log-worth for the reference(s) is arbitrarily set to zero.")}
 plot(PL_models$worthmap)
 ```
 
+Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 8. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering `r paste(reference_tech, collapse = ", ")` as the check `r option`.
 
-Figure 1.8 shows the estimated log-worth for the reference trait '`r reference_trait`'.. The purpose is to be able to distinguish the `r option` with the highest performance. As such, it can be concluded that a higher log-worth indicates that a `r option` has best performance overall. While the lowest log-worth shows `r option` with weakest performance overall. Mean separation analysis was also conducted to indicate, using letters, which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order at the alpha = `r sig_level`.
+```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.8. Reliability of tested ", options, " versus the check. The red vertical line set to 0.5 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0.5).")}
+plot(PL_models$reliability_plot)
+```
 
-```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 1.8. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. The ", option, " ", reference_tech, " is set as reference (log-worth arbitrarily set to zero). Intervals are based on quasi standard errors.")}
+Figure 1.9 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order at the alpha = `r sig_level`.
+
+```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 1.9. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. The ", option, " ", reference_tech[1], " is set as reference (log-worth arbitrarily set to zero). Intervals are based on quasi standard errors.")}
 plot(PL_models$logworth_grouped_rank)
 ```
 
@@ -280,7 +273,7 @@ tree_test2 <- ""
 tree_test3 <- ""
 if (isFALSE(PL_tree$isTREE)) {
   tree_test1 <- 
-    paste0("No differences based on the covariates provided were found. This could mean many things, th most common reasons are that there is no difference between groups, or that very few data was provided, or that a different set of covariates and model parameters should be used. Please contact the ClimMob team for further assistance.")
+    paste0("No differences based on the covariates provided were found. This could mean many things, the most common reasons are that there is no difference between groups, or that very few data was provided, or that a different set of covariates and model parameters should be used. Please contact the ClimMob team for further assistance.")
 }
 
 if (isTRUE(PL_tree$isTREE)) {
@@ -295,10 +288,10 @@ if (isTRUE(PL_tree$isTREE)) {
   }
   
   tree_test2 <- 
-    paste0("Figure 1.9 shows the Plackett-Luce tree obtained with the selected model.")
+    paste0("Figure 1.10 shows the Plackett-Luce tree obtained with the selected model.")
   
   tree_test3 <- 
-    paste0("Table 1.5 present the worth and regret values across the tree nodes. This provides an approach to select ", options, " with the higher performance across all nodes in the tree and can be used as a risk assessment approach.")
+    paste0("Table 1.5 present the worth and regret estimates [@Loomes1982; @Bleichrodt2015] across the tree nodes. Regret is an important heuristic in the behavioural sciences. Minimizing the loss under the worst possible outcome (worst regret) is a criterion that takes a conservative approach to risk analysis in diversification strategies. This provides a decision-making approach to select ", options, " with the superior performance across all scenarios (nodes) in the tree.")
 }
 
 ```
@@ -323,7 +316,7 @@ kable(PL_tree$node_summary,
 
 \
 
-```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Figure 1.9. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
+```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Figure 1.10. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
 if (isTRUE(PL_tree$isTREE)) {
 plot(PL_tree$PLtree_plot)
 }
@@ -338,7 +331,7 @@ plot(PL_tree$PLtree_plot)
 ```{r regret_table}
 if(isTRUE(PL_tree$isTREE)){
 kable(PL_tree$regret_table, 
-        caption = paste0("Table 1.5. Expected probability of winning (worth) and worst regret measures. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
+        caption = paste0("Table 1.5. Expected probability of winning (worth) and worst regret estimates. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
         row.names = FALSE)
 }
 
@@ -350,7 +343,7 @@ quanti_test1 <- ""
 if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
   quanti_caption <- "# Summary of quantitative traits"
   quanti_test1 <- 
-    paste0("This section presents the quantitative traits collected in the trial. Since each trait has its own data distribution and requires individual data cleaning process, we cannot present models for the traits. Here we present boxplots to help in visualizing of data distribution and possible outliers (which are fully described in the Appendix), to read more about boxplots please visit this blog < https://www.data-to-viz.com/caveat/boxplot.html >. If you identify outliers, you can adjust the values on your ClimMob project and request a new report. The following presents the boxplots for the traits measured in this trial.")
+    paste0("This section presents the quantitative traits collected in the trial. Since each trait has its own data distribution and requires individual data cleaning process, we cannot present models for each of the traits. Here we present boxplots to help visualizing the data distribution and possible outliers (which are fully described in the Appendix). To read more about boxplots please visit this blog < https://www.data-to-viz.com/caveat/boxplot.html >. If you identify outliers, you can adjust the values on your ClimMob project and request a new report. The following presents the boxplots for the traits measured in this trial.")
 }
 
 ```
