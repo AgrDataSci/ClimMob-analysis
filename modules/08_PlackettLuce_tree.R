@@ -193,7 +193,7 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   rownames(Gdata) = 1:nG
   
   # add agroclimate data if any
-  if(use_agroclimate > 1) {
+  if(use_agroclimate) {
     
     if (isTRUE(nrow(agroclimate$rainfall[keep, ]) >= ceiling(nG * 0.95))) {
       
@@ -204,20 +204,30 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   }
   
   # remove variables with near zero variance
-  out = nearZeroVar(Gdata, freqCut = 85/15)
+  out = nearZeroVar(Gdata, freqCut = 90/10)
   
   Gdata = Gdata[, -out]
   
-  # check correlation in continuous values
-  numbers = Gdata[, unlist(lapply(Gdata[1:ncol(Gdata)], is.numeric))]
-  
-  if (ncol(numbers) > 0) {
-    corr = cor(numbers)
-    corr[corr < 0.95 & corr > -0.95 | corr == 1] <- NA
-    rmv = names(which(rowSums(corr, na.rm = TRUE) != 0))
-    rmv = !names(Gdata) %in% rmv
-    Gdata = Gdata[rmv]
+  if (ncol(Gdata) < 2) {
+    Gdata$Intercept1 = FALSE
+    Gdata$Intercept2 = FALSE
   }
+  
+  # # check correlation in continuous values
+  # numbers = Gdata[, unlist(lapply(Gdata[1:ncol(Gdata)], is.numeric))]
+  # 
+  # if (ncol(numbers) == 0) {
+  #   corr = cor(numbers)
+  #   corr[corr < 0.95 & corr > -0.95 | corr == 1] <- NA
+  #   rmv = names(which(rowSums(corr, na.rm = TRUE) != 0))
+  #   rmv = !names(Gdata) %in% rmv
+  #   Gdata = Gdata[rmv]
+  # }
+  # 
+  # if (ncol(Gdata) < 2) {
+  #   Gdata$Intercept1 = FALSE
+  #   Gdata$Intercept2 = FALSE
+  # }
   
   # check correlation in continuous values
   categories = Gdata[, unlist(lapply(Gdata[1:ncol(Gdata)], is.factor))]
@@ -240,77 +250,10 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   Gdata = cbind(G, Gdata)
   
   # perform a forward selection as pltree() 
-  # sometimes don't split when G ~ . is used
-  var_keep = character(0L)
-  best = TRUE
-  counter = 1
-  exp_var = names(Gdata)[-1]
-  
-  cat("Selecting the best covariate for Plackett-Luce trees \n")
-  
-  while (best) {
-    
-    fs = length(exp_var)
-    models = data.frame()
-    
-    for(i in seq_len(fs)){
-      
-      t_i = try(pltree(as.formula(paste0("G ~ ", paste(c(var_keep, exp_var[i]), collapse = " + "))),
-                        data = Gdata,
-                        minsize = node_size,
-                        alpha = tree_alpha,
-                        gamma = TRUE), 
-                 silent = TRUE)
-      
-      if (isFALSE("try-error" %in% class(t_i))) {
-        validations = data.frame(nnodes = length(nodeids(t_i, terminal = TRUE)),
-                                  AIC = AIC(t_i),
-                                  noerror = TRUE)
-      }else{
-        validations = data.frame(nnodes = NA,
-                                  AIC = NA,
-                                  noerror = FALSE)
-      }
-      
-      models = rbind(models, validations)
-      
-    }
-    
-    counter = counter + 1
-    
-    if (length(exp_var) == 0) {
-      best = FALSE
-    }
-    
-    if (best) {
-      # update vector with covariates to keep only those with no error
-      # and those with no split
-      exp_var = exp_var[models$noerror & models$nnodes > 1]
-      # also take out from the models data frame
-      models = models[models$noerror == TRUE & models$nnodes > 1, ]
-      # find the index for the best model, the one with lowest AIC
-      index_bext = which.min(models$AIC)
-      # and the best model
-      best_model = exp_var[index_bext]
-      exp_var = exp_var[-index_bext]
-      var_keep = c(var_keep, best_model)
-    }
-    
-    if (length(exp_var) == 0) {
-      best = FALSE
-    }
-    
-  }
-  
-  if (length(var_keep) > 0) {
-    treeformula = paste0("G ~ ", paste(c(var_keep), collapse = " + "))
-  }
-  
-  if (length(var_keep) == 0) {
-    treeformula = "G ~ 1"
-  }
-  
-  message(treeformula)
+  treeformula = forward_selection(Gdata, 
+                                  minsize = node_size, 
+                                  alpha = tree_alpha,
+                                  gamma = TRUE)
   
   # now fit the tree with the selected covariates
   tree_f = pltree(as.formula(treeformula),
@@ -327,7 +270,6 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
     # ......................................
     # ......................................
     # Reconstruct the tree using individual nodes
-    # run this for the condensended rankings using predicted nodes
     nodes_tree = predict(tree_f, type = "node")
     node_id_tree = sort(unique(nodes_tree))
     
