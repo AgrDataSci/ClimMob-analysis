@@ -5,10 +5,10 @@
 # # ................................................................
 # # ................................................................
 # # ................................................................
-# Arguments ####
 # get the arguments from server's call
 args = commandArgs(trailingOnly = TRUE)
 
+# Arguments ####
 cmparameters = args[1] # a json file with parameters for the analysis
 cmdatajson = args[2] # a json file with the results
 
@@ -27,9 +27,7 @@ reference   = report_parameters[["Reference"]] # the reference item for the anal
 minN        = 5 # minimum n of complete data required in a trait evaluation before it is excluded
 minitem     = 2 # minimum n of items tested, e.g. that all items are tested at least twice
 mincovar    = 0.95 # minimum proportion of covariates compared to total valid n
-sig_level   = 0.1 # significance level for the standard PL model
-sig_level_tree  =  0.1 # significance level for the tree
-minsplit    = 10 # minimum n in each tree node
+sig_level   = 0.1 # significance level for the Plackett-Luce model
 
 # break the groups into a vector, if more than one
 groups = as.vector(strsplit(groups, ",")[[1]])
@@ -189,7 +187,8 @@ if (any_error(org_summ)) {
 org_lonlat = tryCatch({
   
   trial_map = get_testing_sites_map(cmdata, 
-                                    output_path = outputpath)
+                                    output_path = outputpath,
+                                    backward_path = fullpath)
   
 }, error = function(cond) {
   return(cond)

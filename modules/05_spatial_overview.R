@@ -1,7 +1,7 @@
 #' This module produces the map when GPS is available
 #' 
 #' @param cmdata a data frame with the ClimMob data
-get_testing_sites_map <- function(cmdata, output_path){
+get_testing_sites_map <- function(cmdata, output_path, backward_path){
   
   # Check if lonlat is provided
   lon <- grepl("_longitude", names(cmdata))
@@ -52,7 +52,7 @@ get_testing_sites_map <- function(cmdata, output_path){
   }
   
   result <- list(geoTRUE = geoTRUE,
-                 map_path = paste0(output_path, "/trial_map.png"))
+                 map_path = paste0(backward_path, "/", output_path, "trial_map.png"))
   
 }
 

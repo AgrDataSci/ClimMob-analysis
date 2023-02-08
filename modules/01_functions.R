@@ -877,3 +877,83 @@ reduce <- function(x, nchars = 8, ...){
   
   return(x)
 }
+
+#' Forward selection with PL trees
+#' @param data data.frame with ranking data and covariates
+#' @param ... additional arguments passed to methods 
+forward_selection = function(data, ...) {
+  
+  Gdata = data
+  var_keep = character(0L)
+  best = TRUE
+  counter = 1
+  exp_var = names(Gdata)[-1]
+  
+  cat("Selecting the best covariate for Plackett-Luce trees \n")
+  
+  while (best) {
+    
+    fs = length(exp_var)
+    models = data.frame()
+    
+    for(i in seq_len(fs)){
+      
+      t_i = try(pltree(as.formula(paste0("G ~ ", paste(c(var_keep, exp_var[i]), collapse = " + "))),
+                       data = Gdata,
+                       ...), silent = TRUE)
+      
+      if (isFALSE("try-error" %in% class(t_i))) {
+        validations = data.frame(nnodes = length(nodeids(t_i, terminal = TRUE)),
+                                 AIC = AIC(t_i),
+                                 noerror = TRUE)
+      }else{
+        validations = data.frame(nnodes = NA,
+                                 AIC = NA,
+                                 noerror = FALSE)
+      }
+      
+      models = rbind(models, validations)
+      
+    }
+    
+    counter = counter + 1
+    
+    if (length(exp_var) == 0) {
+      best = FALSE
+    }
+    
+    if (best) {
+      # update vector with covariates to keep only those with no error
+      # and those with no split
+      exp_var = exp_var[models$noerror & models$nnodes > 1]
+      # also take out from the models data frame
+      models = models[models$noerror == TRUE & models$nnodes > 1, ]
+      # find the index for the best model, the one with lowest AIC
+      index_bext = which.min(models$AIC)
+      # and the best model
+      best_model = exp_var[index_bext]
+      exp_var = exp_var[-index_bext]
+      var_keep = c(var_keep, best_model)
+    }
+    
+    if (length(exp_var) == 0) {
+      best = FALSE
+    }
+    
+  }
+  
+  if (length(var_keep) > 0) {
+    treeformula = paste0("G ~ ", paste(c(var_keep), collapse = " + "))
+  }
+  
+  if (length(var_keep) == 0) {
+    treeformula = "G ~ 1"
+  }
+  
+  return(treeformula)
+  
+}
+
+
+
+
