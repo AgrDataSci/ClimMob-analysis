@@ -50,7 +50,7 @@ for (i in seq_along(modules)) {
 }
 
 # Add API key, if data will be fetched from ClimMob using ClimMobTools
-# keys = ""
+keys = ""
 
 projects = getProjectsCM(keys, server = "1000FARMS")
 
@@ -200,15 +200,15 @@ rownames(traits) = 1:nrow(traits)
 # Define the reference trait
 # Select one among the vector in nameString1
 traits$nameString1
-referencetrait = "firstharvest_yield_pos"
+referencetrait = "secondharvestpartii_overall_pos"
 traits[which(grepl(referencetrait, traits$nameString1)), "traitOrder"] = "referenceTrait"
 
 # Make nice names for data collection
 oldnames = unique(traits$assessmentName)
 oldnames
-newnames = c("Germination", "FirstHarvest")
+newnames = c("SecondHarvest", "Germination", "FirstHarvest", "SecondHarvest")
 
-assessday = c(1, 2) 
+assessday = c(3, 1, 2, 3) 
 
 for (i in seq_along(oldnames)) {
   traits$assessmentName = ifelse(traits$assessmentName == oldnames[i], newnames[i], traits$assessmentName)
@@ -217,9 +217,20 @@ for (i in seq_along(oldnames)) {
 
 traits$assessmentDay = as.integer(traits$assessmentDay)
 
-
 traits = traits[order(traits$assessmentDay), ]
+
 traits
+
+# organize trait names
+traits$name = gsub("_qst_|_|tricot", "", traits$name)
+traits$name = title_case(traits$name)
+traits$name = gsub("resistance", "Resistance", traits$name)
+traits$name = gsub("tolerance", "Tolerance", traits$name)
+traits$name = gsub("colour", "Colour", traits$name)
+traits$name = gsub("feeding", "Feeding", traits$name)
+traits$name = gsub("colour", "Colour", traits$name)
+traits$name = gsub("requirement", "Requirement", traits$name)
+traits$name = gsub("population", "Population", traits$name)
 
 # Check if there is a comparison with the local
 # if not create this object 
@@ -277,7 +288,8 @@ for (i in seq_along(traitq)) {
 # check the item names
 sort(unique(unlist(cmdata[paste0("package_item_", LETTERS[1:3])])))
 
-table(cmdata$registration_gender1)
+table(cmdata$packagedistribution_gender1)
+table(cmdata$registration_district)
 
 # ............................................
 # ............................................
@@ -299,11 +311,11 @@ table(cmdata$registration_gender1)
 names(cmdata)[which(!grepl("_pos$|_neg$", names(cmdata)))]
 
 covariates = data.frame(assessmentId = "",
-                         assessmentName = "",
-                         codeQst = "",
+                         assessmentName = "Assessment",
+                         codeQst = c("registration_district", "packagedistribution_gender1"),
                          id = "",
-                         nameString = '',
-                         name = "",
+                         nameString = c("registration_district", "packagedistribution_gender1"),
+                         name = c("District", "Gender"),
                          questionAsked = "")
 
 # Check if the names match with the ones in cmdata
@@ -320,10 +332,10 @@ rm(tr, traits, tricotVSlocal, covariates, i, traitpattern, keys, newname, index)
 # Dataset parameters ####
 tag = "EthiopiaGrass" # the project name
 unique(cmdata$package_item_A)
-reference   = "Stylo" # the reference item for the analysis
+reference   = c("Stylo", "Desmodium ") # the reference item for the analysis
 project_name = paste(tag)
 outputpath  = paste0(getwd(), "/run-local/output/", project_name)
-infosheets  = FALSE # logical, if infosheets should be written TRUE FALSE
+infosheets  = TRUE # logical, if infosheets should be written TRUE FALSE
 language    = "en" # the language to write the report
 extension   = "docx" # report file format it can be "docx", "pdf", and "html"
 ranker      = "farmer" # how the system will refer to participants/farmers
@@ -331,10 +343,8 @@ option      = "variety" # how the system will refer to tested items
 fullpath    = getwd() # this is backward path
 minN        = 5 # minimum n of complete data required in a trait evaluation before it is excluded
 minitem     = 2 # minimum n of items tested, e.g. that all items are tested at least twice
-mincovar    = 0.90 # minimum proportion of covariates compared to total valid n
-sig_level   = 0.5 # significance level
-sig_level_tree   = 0.5 # significance tree level
-minsplit     = 30 # minimum n in each tree node
+mincovar    = 0.95 # minimum proportion of covariates compared to total valid n
+sig_level   = 0.1 # significance level for the Plackett-Luce model
 groups       = ""
 language = "en"
 
