@@ -183,10 +183,8 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   logworth_plot = list()
   for(m in seq_along(mod)) {
     logworth_plot[[m]] = 
-      plot_logworth(mod[[m]], ref = reference_tech[1], ci.level = 0.5) + 
-      labs(x = title_case(option), 
-           y = "Log-worth",
-           title = paste0(rank_dat$trait_names[m],
+      plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
+      labs(title = paste0(rank_dat$trait_names[m],
                           " (n = ", length(mod[[m]]$rankings),")"))
   }
   
@@ -302,9 +300,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   logworth_grouped_rank = 
     plot_logworth(mod[[reference_trait_index]],
-                  ref = reference_tech[1], ci.level = 0.5) +
-    labs(x = title_case(option), 
-         y = "Log-worth")
+                  ref = reference_tech, ci.level = 0.5) 
   
   
   #...........................................................
@@ -361,7 +357,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   shapes = suppressWarnings(as.vector(matrix(shapes, 
                                              nrow = length(unique(reliability_data$item)))))
   
-  reliability_data$Check = paste("Probability of outperforming",
+  reliability_data$Check = paste("Prob. of outperforming",
                                  reliability_data$Check)
   
   # plot the reliability
@@ -405,8 +401,8 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
                             silent = TRUE)
       
       logworth_group_plot[[i]] = 
-        try(plot_logworth(mod_group[[i]], ref = reference_tech[1], ci.level = 0.5) +
-        labs(y = title_case(option), title = unique_groups[i]),
+        try(plot_logworth(mod_group[[i]], ref = reference_tech, ci.level = 0.5) +
+        labs(title = unique_groups[i]),
         silent = TRUE)
       
       if("try-error" %in% class(logworth_group_plot[[i]])) {

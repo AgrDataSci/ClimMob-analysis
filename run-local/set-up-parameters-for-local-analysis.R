@@ -50,11 +50,13 @@ for (i in seq_along(modules)) {
 }
 
 # Add API key, if data will be fetched from ClimMob using ClimMobTools
-keys = ""
+keys = "ff05a174-28d0-4a40-ab5a-35dc486133a6"
 
 projects = getProjectsCM(keys, server = "1000FARMS")
 
-projects = projects[grepl("EthioGrass", projects$project_id), ]
+projects = projects[grepl("eggken22", projects$project_id), ]
+
+projects = rbind(projects, projects)
 
 # some empty objects to fill in
 jsonlt = list()
@@ -137,13 +139,6 @@ for(i in seq_along(jsonlt)) {
 assessments
 
 # rename cols of assessments
-for(i in seq_along(lt)) {
-  names(lt[[i]]) = gsub("21atricotcassavayielddatacollection_", "yielddata_", names(lt[[i]]))
-  names(lt[[i]]) = gsub("21btricotcassavayielddatacollection_", "yielddata_", names(lt[[i]]))
-}
-
-unique(unlist(lapply(lt, names)))
-
 cmdata = rowbind(lt)
 
 sort(names(cmdata))
@@ -200,15 +195,15 @@ rownames(traits) = 1:nrow(traits)
 # Define the reference trait
 # Select one among the vector in nameString1
 traits$nameString1
-referencetrait = "secondharvestpartii_overall_pos"
+referencetrait = "agronomicperformance_overall_pos"
 traits[which(grepl(referencetrait, traits$nameString1)), "traitOrder"] = "referenceTrait"
 
 # Make nice names for data collection
 oldnames = unique(traits$assessmentName)
 oldnames
-newnames = c("SecondHarvest", "Germination", "FirstHarvest", "SecondHarvest")
+newnames = c("Vegetative", "Agronomic")
 
-assessday = c(3, 1, 2, 3) 
+assessday = c(1, 2) 
 
 for (i in seq_along(oldnames)) {
   traits$assessmentName = ifelse(traits$assessmentName == oldnames[i], newnames[i], traits$assessmentName)
@@ -250,13 +245,15 @@ tricotVSlocal = data.frame()
 # ............................................
 # ............................................
 # Add quantitative data
-linear = y$assessments$fields[[3]]
+linear = y$assessments$fields[[2]]
 
 linear = linear[grepl("_a$|_b$|_c$", linear$name), ]
 
 linear = linear[,c("name", "desc")]
 
 traitq = unique(gsub("_a|_b|_c", "", linear$name))
+
+traitq = traitq[!grepl("date", traitq)]
 
 quanti = data.frame()
 
@@ -273,8 +270,8 @@ for (i in seq_along(traitq)) {
              questionAsked1 = "",
              questionAsked2 = "",
              questionAsked3 = "",
-             assessmentId = "Yield",
-             assessmentName = "Yield",
+             assessmentId = "AgronomicPerformance",
+             assessmentName = "AgronomicPerformance",
              assessmentDay = "0")
   
   quanti = rbind(quanti, q)
@@ -312,10 +309,10 @@ names(cmdata)[which(!grepl("_pos$|_neg$", names(cmdata)))]
 
 covariates = data.frame(assessmentId = "",
                          assessmentName = "Assessment",
-                         codeQst = c("registration_district", "packagedistribution_gender1"),
+                         codeQst = c("registration_gender1", "vegetative_irrigation"),
                          id = "",
-                         nameString = c("registration_district", "packagedistribution_gender1"),
-                         name = c("District", "Gender"),
+                         nameString = c("registration_gender1", "vegetative_irrigation"),
+                         name = c("Gender","Irrigated"),
                          questionAsked = "")
 
 # Check if the names match with the ones in cmdata
@@ -330,12 +327,12 @@ rm(tr, traits, tricotVSlocal, covariates, i, traitpattern, keys, newname, index)
 # ................................................................
 # ................................................................
 # Dataset parameters ####
-tag = "EthiopiaGrass" # the project name
+tag = "Eggplant Kenya and Tanzania" # the project name
 unique(cmdata$package_item_A)
-reference   = c("Stylo", "Desmodium ") # the reference item for the analysis
+reference   = c("Black beauty (check)", "Local Check") # the reference item for the analysis
 project_name = paste(tag)
 outputpath  = paste0(getwd(), "/run-local/output/", project_name)
-infosheets  = TRUE # logical, if infosheets should be written TRUE FALSE
+infosheets  = F # logical, if infosheets should be written TRUE FALSE
 language    = "en" # the language to write the report
 extension   = "docx" # report file format it can be "docx", "pdf", and "html"
 ranker      = "farmer" # how the system will refer to participants/farmers
