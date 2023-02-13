@@ -213,26 +213,11 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
     Gdata$Intercept2 = FALSE
   }
   
-  # # check correlation in continuous values
-  # numbers = Gdata[, unlist(lapply(Gdata[1:ncol(Gdata)], is.numeric))]
-  # 
-  # if (ncol(numbers) == 0) {
-  #   corr = cor(numbers)
-  #   corr[corr < 0.95 & corr > -0.95 | corr == 1] <- NA
-  #   rmv = names(which(rowSums(corr, na.rm = TRUE) != 0))
-  #   rmv = !names(Gdata) %in% rmv
-  #   Gdata = Gdata[rmv]
-  # }
-  # 
-  # if (ncol(Gdata) < 2) {
-  #   Gdata$Intercept1 = FALSE
-  #   Gdata$Intercept2 = FALSE
-  # }
-  
   # check correlation in continuous values
-  categories = Gdata[, unlist(lapply(Gdata[1:ncol(Gdata)], is.factor))]
+  categories = unlist(lapply(Gdata[1:ncol(Gdata)], is.factor))
   
-  if (ncol(categories) > 0) {
+  if (sum(categories) > 1) {
+    categories = Gdata[, categories]
     categories[1:ncol(categories)] = lapply(categories[1:ncol(categories)], as.integer)
     corr = cor(categories)
     corr[corr < 0.7 & corr > -0.7 | corr == 1] <- NA

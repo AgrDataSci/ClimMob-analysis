@@ -52,7 +52,7 @@ get_testing_sites_map <- function(cmdata, output_path, backward_path){
   }
   
   result <- list(geoTRUE = geoTRUE,
-                 map_path = paste0(backward_path, "/", output_path, "trial_map.png"))
+                 map_path = paste0(output_path, "trial_map.png"))
   
 }
 

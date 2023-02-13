@@ -322,7 +322,7 @@ plot(PL_tree$PLtree_plot)
 }
 ```
 
-\
+\pagebreak
 
 `r paste(tree_test3, collapse='\n')`
 
