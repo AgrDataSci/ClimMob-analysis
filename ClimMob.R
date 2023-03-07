@@ -282,28 +282,6 @@ if (any_error(org_quantitative_summ)) {
   quantitative_traits = error_data_quantitative_traits
 }
 
-# .......................................................
-# .......................................................
-# 12. Participant report  ####
-org_participant_report = tryCatch({
-  
-  participant_report = get_participant_report(cmdata, 
-                                              rank_dat, 
-                                              fullpath, 
-                                              language = language)
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_participant_report)) {
-  e = paste("Participant report: \n", org_participant_report$message)
-  error = c(error, e)
-  participant_report = error_participant_report
-}
-
-
 # ................................................................
 # ................................................................
 # 9. Write outputs ####
@@ -349,6 +327,27 @@ rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
 
 
 if (isTRUE(infosheets)) {
+  
+  # .......................................................
+  # .......................................................
+  # 12. Participant report  ####
+  org_participant_report = tryCatch({
+    
+    participant_report = get_participant_report(cmdata, 
+                                                rank_dat, 
+                                                fullpath, 
+                                                language = language)
+    
+  }, error = function(cond) {
+    return(cond)
+  }
+  )
+  
+  if (any_error(org_participant_report)) {
+    e = paste("Participant report: \n", org_participant_report$message)
+    error = c(error, e)
+    participant_report = error_participant_report
+  }
   
   participant_report_dir = paste0(outputpath, "/participant-report/")
   
@@ -412,7 +411,7 @@ try(ggsave(paste0(chartdir, "reliability.png"),
            units = "cm",
            dpi = 200), silent = TRUE)
 
-try(write.csv(paste0(chartdir, "reliability_data.csv"),
+try(write.csv(PL_models$reliability_data, paste0(chartdir, "reliability_data.csv"),
            row.names = FALSE), silent = TRUE)
 
 if(length(unique(rank_dat$group)) > 1) {

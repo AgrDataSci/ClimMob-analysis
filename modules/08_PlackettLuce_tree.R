@@ -20,7 +20,7 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   covar = rank_dat[["covar"]]
   nranker = sum(trait_list[[reference_trait_index]]$keep)
   # use <<- to assign these two variables to the .GlobalEnv
-  use_agroclimate = isTRUE(agroclimate$agroclimate)
+  use_agroclimate = FALSE #isTRUE(agroclimate$agroclimate)
   node_size <<- ceiling(nranker * 0.25)
   tree_alpha <<- 0.25
   reference_tech = rank_dat[["reference_tech"]]
@@ -155,10 +155,11 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
                              trait_list[[reference_trait_index]]$tricotVSlocal)],
               items = technologies_index,
               input = trait_list[[reference_trait_index]]$strings,
+              validate.rankings = TRUE,
               additional.rank = cmdata[keep, trait_list[[reference_trait_index]]$tricotVSlocal], 
               group = TRUE)
     
-    G = do.call("rankTricot", args = a)
+    G = do.call("rank_tricot", args = a)
     
     
   } 
@@ -172,9 +173,10 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
                              trait_list[[reference_trait_index]]$strings)],
               items = technologies_index,
               input = trait_list[[reference_trait_index]]$strings, 
+             validate.rankings = TRUE,
               group = TRUE)
     
-    G = do.call("rankTricot", args = a)
+    G = do.call("rank_tricot", args = a)
     
   }
   
@@ -272,6 +274,7 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
         nobs_tree = c(nobs_tree, length(Gi))
         
         rm(Gi)
+        
       }
       
       tree_branch = gosset:::build_tree_branches(tree_f)
