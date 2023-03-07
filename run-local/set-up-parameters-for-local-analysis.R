@@ -42,21 +42,30 @@ library("janitor")
 
 # ................................................................
 # ................................................................
-# Load modules ####
+# 1. Load modules ####
 modules = list.files(paste0("modules"), full.names = TRUE)
 modules = modules[-which(grepl("check_packages.R", modules))]
 for (i in seq_along(modules)) {
   source(modules[i])
 }
 
+# ...................................
+# ...................................
+# 2. Fetch ClimMob data ####
 # Add API key, if data will be fetched from ClimMob using ClimMobTools
 keys = "ff05a174-28d0-4a40-ab5a-35dc486133a6"
 
-projects = getProjectsCM(keys, server = "1000FARMS")
+server = "1000farms"
 
-projects = projects[grepl("eggken22", projects$project_id), ]
+projects = getProjectsCM(keys, server = server)
 
-projects = rbind(projects, projects)
+projects
+
+# select the projects to merge 
+sel = c("eggaru23", "eggken22")
+keep = projects$project_id %in% sel
+
+projects = projects[keep, ]
 
 # some empty objects to fill in
 jsonlt = list()
@@ -81,6 +90,9 @@ for(i in seq_along(projects$project_id)) {
   
 }
 
+# ...................................................
+# ...................................................
+# 3. Harmonize column names in ClimMob data ####
 # It is important to have all the data in one single data frame 
 # This means that all columns should match
 # You need to check the columns names in each data frame in the list 
@@ -105,6 +117,8 @@ questions$name2 = sapply(quest$name, function(x) {
 
 questions = questions[!duplicated(questions$name2), ]
 
+questions
+
 # some questions from the different project have different code but are the same 
 # we fix this by creating a single code
 questions$final_name = sapply(questions$name2, function(x){
@@ -127,22 +141,43 @@ for(i in seq_along(lt)) {
 }
 
 # now the same for the data collection moments
+# sometimes is the same data collection moment but recorded with 
+# a different name
 unique(unlist(lapply(lt, names)))
 
 assessments = data.frame()
+
 for(i in seq_along(jsonlt)) {
-  x = data.frame(assess = jsonlt[[i]]$assessments$desc,
-                  project_cod = jsonlt[[i]]$project$project_cod)
+  x = data.frame(name = jsonlt[[i]]$assessments$desc,
+                 code = gsub(" ", "", tolower(jsonlt[[i]]$assessments$desc)),
+                 project_cod = jsonlt[[i]]$project$project_cod)
   assessments = rbind(assessments, x)
 }
 
 assessments
 
 # rename cols of assessments
+assessments$final_name = sapply(assessments$code, function(x){
+  x[x == "agronomyperformance"] = "agronomicperformance"
+  x
+})
+
+assessments
+
+# now rename the data frames in the list to match
+for(i in seq_along(lt)) {
+  for(j in seq_along(assessments$code)){
+    names(lt[[i]]) = gsub(assessments$code[j], assessments$final_name[j], names(lt[[i]]))
+  }
+}
+
 cmdata = rowbind(lt)
 
 sort(names(cmdata))
 
+# ...................................................
+# ...................................................
+# 4. Prepare parameters of traits to analyse ####
 # This is the vector with string patterns to be searched in cmdata
 questions = questions[!duplicated(questions$final_name),]
 questions[1:ncol(questions)] = lapply(questions[1:ncol(questions)], function(x){
@@ -159,6 +194,7 @@ length(traitpattern) == length(newname)
 # this will be used internally by ClimMob.R to look for the string patterns in 
 # the data and sort out for the analysis 
 traits = data.frame()
+
 # Run over the vector traipattern
 for(i in seq_along(traitpattern)){
   
@@ -192,6 +228,8 @@ for(i in seq_along(traitpattern)){
 
 rownames(traits) = 1:nrow(traits)
 
+traits
+
 # Define the reference trait
 # Select one among the vector in nameString1
 traits$nameString1
@@ -216,7 +254,7 @@ traits = traits[order(traits$assessmentDay), ]
 
 traits
 
-# organize trait names
+# Now nice names for the traits 
 traits$name = gsub("_qst_|_|tricot", "", traits$name)
 traits$name = title_case(traits$name)
 traits$name = gsub("resistance", "Resistance", traits$name)
@@ -227,6 +265,13 @@ traits$name = gsub("colour", "Colour", traits$name)
 traits$name = gsub("requirement", "Requirement", traits$name)
 traits$name = gsub("population", "Population", traits$name)
 
+traits
+
+# ...................................................
+# ...................................................
+# 5. Add comparison with local ####
+# NOT SUPPORTED YET, create an empty data frame
+# This is the vector with string patterns to be searched in cmdata
 # Check if there is a comparison with the local
 # if not create this object 
 tricotVSlocal = data.frame()
@@ -242,9 +287,10 @@ tricotVSlocal = data.frame()
 #                             codeQst = "tricotVSlocal",
 #                             nQst = 3)
 
-# ............................................
-# ............................................
-# Add quantitative data
+# ...................................................
+# ...................................................
+# 6. Add parameters for continuous data ####
+# This is the vector with string patterns to be searched in cmdata
 linear = y$assessments$fields[[2]]
 
 linear = linear[grepl("_a$|_b$|_c$", linear$name), ]
@@ -278,25 +324,25 @@ for (i in seq_along(traitq)) {
   
 }
 
+quanti
+
 # ............................................
 # ............................................
-# Some data cleaning
+# 7. Some data cleaning ####
 # which will be dependent of the type of data and how it was collected
 # check the item names
 sort(unique(unlist(cmdata[paste0("package_item_", LETTERS[1:3])])))
 
-table(cmdata$packagedistribution_gender1)
+table(cmdata$registration_gender1)
 table(cmdata$registration_district)
 
-# ............................................
-# ............................................
 # Here you can add code to edit cmdata
 
 
 
 # ............................................
 # ............................................
-# Select the covariates
+# 8. Select the covariates #####
 # Here you select covariates from cmdata and/or 
 # can add external covariates to cmdata data like environmental indices
 # or socio-economic data from a different survey
@@ -309,10 +355,10 @@ names(cmdata)[which(!grepl("_pos$|_neg$", names(cmdata)))]
 
 covariates = data.frame(assessmentId = "",
                          assessmentName = "Assessment",
-                         codeQst = c("registration_gender1", "vegetative_irrigation"),
+                         codeQst = c("registration_gender1", "registration_district"),
                          id = "",
-                         nameString = c("registration_gender1", "vegetative_irrigation"),
-                         name = c("Gender","Irrigated"),
+                         nameString = c("registration_gender1", "registration_district"),
+                         name = c("Gender","District"),
                          questionAsked = "")
 
 # Check if the names match with the ones in cmdata
@@ -326,7 +372,7 @@ rm(tr, traits, tricotVSlocal, covariates, i, traitpattern, keys, newname, index)
 # ................................................................
 # ................................................................
 # ................................................................
-# Dataset parameters ####
+# 9. Run the analysis ####
 tag = "Eggplant Kenya and Tanzania" # the project name
 unique(cmdata$package_item_A)
 reference   = c("Black beauty (check)", "Local Check") # the reference item for the analysis
@@ -335,7 +381,7 @@ outputpath  = paste0(getwd(), "/run-local/output/", project_name)
 infosheets  = F # logical, if infosheets should be written TRUE FALSE
 language    = "en" # the language to write the report
 extension   = "docx" # report file format it can be "docx", "pdf", and "html"
-ranker      = "farmer" # how the system will refer to participants/farmers
+ranker      = "participant" # how the system will refer to participants/farmers
 option      = "variety" # how the system will refer to tested items
 fullpath    = getwd() # this is backward path
 minN        = 5 # minimum n of complete data required in a trait evaluation before it is excluded
@@ -358,9 +404,7 @@ rank_dat = organize_ranking_data(cmdata,
                                                  "package_item_B",
                                                  "package_item_C"))
 
-# ................................................................
-# ................................................................
-# Run analysis ####
+# Run analysis
 # read the file with the main script to check where to begin and end when
 # applying source2()
 checkfile = readLines("ClimMob.R")

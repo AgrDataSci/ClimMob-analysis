@@ -34,28 +34,20 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   if (isTRUE(length(trait_list) > 1)) {
     
     kendall = lapply(trait_list[-reference_trait_index], function(x){
-      # update the vector keep to match with dimensions from reference trait and 
-      # the trait 'x' applied in this function 
-      k = trait_list[[reference_trait_index]]$keep & x$keep
       
-      n = sum(k)
-      
-      if (isTRUE(n == 0)){
-        kendall = data.frame(kendallTau = -1, N_effective = 0, n = 0)
-        return(kendall)
-      }
-      
-      r1 = rankTricot(cmdata[k, c(technologies_index, trait_list[[reference_trait_index]]$strings)],
+      r1 = rank_tricot(cmdata[, c(technologies_index, trait_list[[reference_trait_index]]$strings)],
                        items = technologies_index,
-                       input = trait_list[[reference_trait_index]]$strings)
+                       input = trait_list[[reference_trait_index]]$strings,
+                       validate.rankings = TRUE)
       
-      r2 = rankTricot(cmdata[k, c(technologies_index, x$strings)],
+      r2 = rank_tricot(cmdata[, c(technologies_index, x$strings)],
                        items = technologies_index,
-                       input = x$strings)
+                       input = x$strings,
+                       validate.rankings = TRUE)
       
-      kendall = kendallTau(r1, r2)
+      kendall = kendallTau(r1, r2, na.omit = FALSE)
       
-      kendall$n = n
+      kendall$n = nrow(cmdata)
       
       kendall
       
@@ -103,7 +95,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
                           width = 1, 
                           color = "#ffffff") + 
         ggplot2::scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
-        ggplot2::theme_bw() +
+        ggplot2::theme_classic() +
         ggplot2::theme(legend.position="bottom",
                        legend.text = ggplot2::element_text(size = 9),
                        axis.text.y = ggplot2::element_text(color = "grey20"),
@@ -128,11 +120,12 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     
     # list of arguments for the function that will be used to 
     # create the rankings
-    a = list(cmdata[keep, c(technologies_index, trait_list[[i]]$strings)],
+    a = list(cmdata[, c(technologies_index, trait_list[[i]]$strings)],
               items = technologies_index,
-              input = trait_list[[i]]$strings)
+              input = trait_list[[i]]$strings,
+             validate.rankings = TRUE)
     
-    R[[i]] = do.call("rankTricot", args = a)
+    R[[i]] = do.call("rank_tricot", args = a)
     
     if (isTRUE(comparison_with_local)) {
       
@@ -143,9 +136,10 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
                                trait_list[[reference_trait_index]]$tricotVSlocal)],
                 items = technologies_index,
                 input = trait_list[[i]]$strings,
-                additional.rank = cmdata[keep, trait_list[[reference_trait_index]]$tricotVSlocal])
+                additional.rank = cmdata[keep, trait_list[[reference_trait_index]]$tricotVSlocal],
+               validate.rankings = TRUE)
       
-      R[[i]] = do.call("rankTricot", args = a)
+      R[[i]] = do.call("rank_tricot", args = a)
       
     }
   }
@@ -297,7 +291,6 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     
   #.......................
   # Log worth plot
-  
   logworth_grouped_rank = 
     plot_logworth(mod[[reference_trait_index]],
                   ref = reference_tech, ci.level = 0.5) 
@@ -372,7 +365,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     scale_x_continuous(limits=c(0, 1)) +
     geom_point() +
     scale_shape_manual(values = shapes) +
-    scale_color_brewer(palette = "Dark2") +
+    #scale_color_brewer(palette = "Dark2") +
     facet_wrap(~ Check, strip.position = "bottom") +
     theme_bw() +
     theme(panel.grid.major = element_blank(),
