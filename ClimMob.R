@@ -168,7 +168,8 @@ if (any_error(try_quanti_data)) {
 # 3. Prepare summary tables / charts
 org_summ = tryCatch({
   
-  overview_and_summaries = get_overview_summaries(cmdata, rank_dat)
+  overview_and_summaries = get_overview_summaries(cmdata,
+                                                  rank_dat)
   
 }, error = function(cond) {
   return(cond)
@@ -207,7 +208,8 @@ if (any_error(org_lonlat)) {
 # 9. Agroclimatic information  ####
 org_agroclim = tryCatch({
   
-  agroclimate = get_agroclimatic_data(cmdata)
+  agroclimate = get_agroclimatic_data(cmdata,
+                                      coords = trial_map$coords)
   
 }, error = function(cond) {
   return(cond)

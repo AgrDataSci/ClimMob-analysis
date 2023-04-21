@@ -104,11 +104,13 @@ plot_map = function(data,
                                    provider =  map_provider, 
                                    options = leaflet::providerTileOptions(maxNativeZoom = 17))
   
-  map = leaflet::addCircleMarkers(map, 
-                                   color = "#b30000", 
-                                   radius = 6,
-                                   stroke = FALSE,
-                                   fillOpacity = 0.5)
+  # map = leaflet::addCircleMarkers(map, 
+  #                                  color = "#b30000", 
+  #                                  radius = 6,
+  #                                  stroke = FALSE,
+  #                                  fillOpacity = 0.5)
+  
+  map <- leaflet::addMarkers(map)
   
   if (isTRUE(minimap)) {
     

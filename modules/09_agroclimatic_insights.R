@@ -1,15 +1,29 @@
 #' This module produces charts with temperature and rainfall indices
 #' 
 #' @param cmdata a data frame with the ClimMob data
-get_agroclimatic_data = function(cmdata){
+#' @param date.strings character for the column names with dates in cmdata data
+#' @param cmdata a data frame with coordinates 
+get_agroclimatic_data = function(cmdata, 
+                                 coords){
   
   result = list(agroclimate = FALSE)
   
-  # look for the first and last dates in the dataset
-  dates = sum(grepl("_start", names(cmdata)))
+  dates = grep("plantingdate", names(cmdata))
+  
+  # if no planting date, then the registration date
+  if (isTRUE(length(dates) == 0)) {
+    dates = grep("REG_clm_start", names(cmdata))
+  }
+  
+  # if no date, then no agroclimate data can be collected 
+  # if no planting date, then the registration date
+  if (isTRUE(length(dates) == 0)) {
+    return(list(agroclimate = FALSE))
+  }
+  
   
   # only run if more than one data collection moment
-  if (isTRUE(dates > 1)) {
+  if (isTRUE(dates > 0)) {
     
     # the first data is the registration of participants
     dates1 = which(grepl("REG_clm_start|registration_survey_start|planting_date", names(cmdata)))
@@ -29,7 +43,13 @@ get_agroclimatic_data = function(cmdata){
     lon = grepl("_longitude", names(cmdata))
     lat = grepl("_latitude", names(cmdata))
     
+    names(cmdata)[lon]
+    
+    cmdata[lon]
+    
     geoTRUE = all(any(lon), any(lat))
+    
+    
     
     if (isTRUE(geoTRUE)) {
       
