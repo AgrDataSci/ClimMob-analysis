@@ -27,8 +27,6 @@ get_testing_sites_map = function(cmdata, output_path, backward_path){
     
     lonlat[,2] = ifelse(lonlat[,2] > 70 | lonlat[,2] < -70, NA, lonlat[,2])
     
-    # lonlat = na.omit(lonlat)
-    
     nlonlat = dim(lonlat)[[1]]
     
     if (nlonlat > 0) {
@@ -45,14 +43,9 @@ get_testing_sites_map = function(cmdata, output_path, backward_path){
       
     }
     
-    if (nlonlat == 0) {
-      geoTRUE = FALSE
-    }
-    
   }
   
-  result = list(geoTRUE = geoTRUE,
-                map_path = paste0(output_path, "trial_map.png"),
+  result = list(map_path = paste0(output_path, "trial_map.png"),
                 map = trial_map,
                 coords = lonlat)
   
@@ -61,7 +54,7 @@ get_testing_sites_map = function(cmdata, output_path, backward_path){
 # .......................................
 # Error in data 
 # this is a file that is generated to be used in case of errors
-error_data_trial_map = list(geoTRUE = FALSE,
-                            map_path = "",
+error_data_trial_map = list(map_path = "",
+                            map = 0L,
                             coords = data.frame())
 

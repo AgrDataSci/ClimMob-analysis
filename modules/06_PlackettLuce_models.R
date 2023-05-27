@@ -11,7 +11,6 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   trait_list = rank_dat[["trait_list"]]
   nranker = rank_dat[["nranker"]]
   option = rank_dat[["option"]]
-  group = rank_dat[["group"]]
   technologies_index = rank_dat[["technologies_index"]]
   technologies = rank_dat[["technologies"]]
   reference_trait_index = rank_dat[["reference_trait_index"]]

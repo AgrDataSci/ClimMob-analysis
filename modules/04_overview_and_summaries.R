@@ -158,7 +158,7 @@ get_overview_summaries <- function(cmdata, rank_dat) {
   partiplot <- 
     ggplot(participation, aes(x = dc, y = value_perc, 
                               group = group, color = group)) +
-    geom_line(size = 1) +
+    geom_line(linewidth = 1) +
     scale_y_continuous(limits = c(0, 1)) +
     scale_colour_manual(values = col_pallet(length(unique(participation$group))), 
                         name = "") +
