@@ -71,7 +71,9 @@ library("janitor")
 # ................................................................
 # ................................................................
 # Load modules ####
-modules = list.files(paste0(fullpath, "/modules"), full.names = TRUE)
+modules = list.files(paste0(fullpath, "/modules"), 
+                     full.names = TRUE, 
+                     pattern = ".R")
 modules = modules[-which(grepl("check_packages.R", modules))]
 for (i in seq_along(modules)) {
   source(modules[i])
@@ -187,7 +189,7 @@ if (any_error(org_summ)) {
 # 4. Make map ####
 org_lonlat = tryCatch({
   
-  trial_map = get_testing_sites_map(cmdata, 
+  trial_map = get_testing_sites_map(cmdata,
                                     output_path = outputpath,
                                     backward_path = fullpath)
   

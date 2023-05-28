@@ -5,7 +5,20 @@
 #' 
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
-#' @param reference_tech a integer or character indicating the reference technology
+#' @examples 
+#' 
+#' modules = list.files("modules",
+#'                      full.names = TRUE,
+#'                      pattern = ".R")
+#' modules = modules[-which(grepl("check_packages.R", modules))]
+#' for (i in seq_along(modules)) {
+#'   source(modules[i])
+#' }
+#' 
+#' load("modules/example-data-structure.rda")
+#' 
+#' get_PlackettLuce_models(cmdata, rank_dat)
+
 get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   trait_list = rank_dat[["trait_list"]]
@@ -17,175 +30,26 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   comparison_with_local = rank_dat[["comparison_with_local"]]
   trait_names = rank_dat[["trait_names"]]
   reference_tech = rank_dat[["reference_tech"]]
-  isKendall = FALSE
-  strongest_link = ""
-  weakest_link = ""
-  kendall_plot = NULL
-  logworth_group_plot = list()
-  
+
   #...........................................................
-  # Get the Kendall tau from individual trait rankings
-  isKendall = FALSE
-  strongest_link = c("", "")
-  weakest_link = c("", "")
-  kendall_plot = 0L
-  
-  if (isTRUE(length(trait_list) > 1)) {
-    
-    kendall = lapply(trait_list[-reference_trait_index], function(x){
-      
-      r1 = rank_tricot(cmdata[, c(technologies_index, trait_list[[reference_trait_index]]$strings)],
-                       items = technologies_index,
-                       input = trait_list[[reference_trait_index]]$strings,
-                       validate.rankings = TRUE)
-      
-      r2 = rank_tricot(cmdata[, c(technologies_index, x$strings)],
-                       items = technologies_index,
-                       input = x$strings,
-                       validate.rankings = TRUE)
-      
-      kendall = kendallTau(r1, r2, na.omit = FALSE)
-      
-      kendall$n = nrow(cmdata)
-      
-      kendall
-      
-    })
-    
-    kendall = do.call("rbind", kendall)
-    
-    kendall$trait = unlist(lapply(trait_list[-reference_trait_index], function(x){
-      paste0(x$name, " [" , x$assessment, "]")
-    }))
-    
-    kendall = kendall[rev(order(kendall$kendallTau)), ]
-    
-    kendall = kendall[,-2]
-  
-    isKendall = nrow(kendall) > 1
-    
-    if (isKendall) {
-      
-      strongest_link = c(kendall$trait[1],
-                          round(kendall$kendallTau[1], 2))
-      
-      weakest_link = c(kendall$trait[nrow(kendall)],
-                        round(kendall$kendallTau[nrow(kendall)], 2))
-      
-      kendall = kendall[,c("trait", "kendallTau", "Zvalue", "Pr(>|z|)")]
-      
-      kendall[,"kendallTau"] = round(kendall[,"kendallTau"], 3)
-      
-      kendall[,"Zvalue"] = round(kendall[,"Zvalue"], 3)
-      
-      stars = stars.pval(kendall[,"Pr(>|z|)"])
-      
-      kendall[, "Pr(>|z|)"] = format(kendall[, "Pr(>|z|)"], 
-                                     scientific = TRUE, digits = 3)
-      
-      kendall[, "Pr(>|z|)"] = paste(kendall[, "Pr(>|z|)"], stars)
-      
-      kendall = kendall[rev(order(kendall$kendallTau)), ]
-      
-      kendall$trait = factor(kendall$trait, levels = rev(kendall$trait))
-      
-      # make a bar plot plot 
-      kendall_plot = 
-        ggplot2::ggplot(data = kendall, 
-                        ggplot2::aes(x = kendallTau,
-                                     y = trait, 
-                                     fill = trait)) +
-        ggplot2::geom_bar(stat = "identity", 
-                          position = "dodge",
-                          show.legend = FALSE,
-                          width = 1, 
-                          color = "#ffffff") + 
-        ggplot2::scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
-        ggplot2::theme_classic() +
-        ggplot2::theme(legend.position="bottom",
-                       legend.text = ggplot2::element_text(size = 9),
-                       axis.text.y = ggplot2::element_text(color = "grey20"),
-                       axis.text.x = ggplot2::element_text(vjust = 1,
-                                                           hjust=1, 
-                                                           color = "grey20")) +
-        ggplot2::labs(y = "Trait",
-                      x = "Kendall tau") 
-      
-      
-      names(kendall) = c("Trait", "Kendall tau", "Z value", "Pr(>|z|)")
-      
-      row.names(kendall) = 1:nrow(kendall)
-      
-    }
-    
-  }
-  
-  #...........................................................
-  # Fit PlackettLuce Model
+  # Fit PlackettLuce Model ####
   # first a list with rankings
-  R = list()
-  
-  for (i in seq_along(trait_list)) {
-    
-    keep = trait_list[[i]]$keep
-    
-    # list of arguments for the function that will be used to 
-    # create the rankings
-    a = list(cmdata[, c(technologies_index, trait_list[[i]]$strings)],
-             items = technologies_index,
-             input = trait_list[[i]]$strings,
-             validate.rankings = TRUE)
-    
-    R[[i]] = do.call("rank_tricot", args = a)
-    
-    if (isTRUE(comparison_with_local)) {
-      
-      keep = trait_list[[reference_trait_index]]$keep2 & trait_list[[i]]$keep
-      
-      a = list(cmdata[keep, c(technologies_index, 
-                               trait_list[[i]]$strings, 
-                               trait_list[[reference_trait_index]]$tricotVSlocal)],
+  R = lapply(trait_list, function(x){
+    rank_tricot(cmdata[, c(technologies_index, x$strings)],
                 items = technologies_index,
-                input = trait_list[[i]]$strings,
-                additional.rank = cmdata[keep, trait_list[[reference_trait_index]]$tricotVSlocal],
-               validate.rankings = TRUE)
-      
-      R[[i]] = do.call("rank_tricot", args = a)
-      
-    }
-  }
+                input = x$strings,
+                validate.rankings = TRUE)
+  })
+  
   
   # fit the model 
   mod = lapply(R, function(x){
     PlackettLuce(x)
   })
   
-  #...........................................................
-  # Analysis of variance
-  anovas = lapply(mod, function(x){
-    a = anova.PL(x)
-    a
-  })
-  
-  # and the tables with rounded p-values and sig stars
-  aov_tbl = list()
-  for (i in seq_along(trait_list)) {
-    a = anovas[[i]]
-    a[2, "Model"] = trait_list[[i]]$name
-    a[,5] = paste(formatC(a[,5], format = "e", digits = 2),
-                   stars.pval(a[,5]))
-    aov_tbl[[i]] = a
-  }
-  
-  #...........................................................
-  # Bar plot with worth parameters for each trait
-  worth_plot = lapply(mod, function(x){
-    worth_bar(x, ref = reference_tech[1]) +
-      labs(y = title_case(option), x = "Worth")
-  })
-  
   # Plot log worth
   logworth_plot = list()
+  
   for(m in seq_along(mod)) {
     logworth_plot[[m]] = 
       plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
@@ -218,7 +82,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   }
   
   worth_map_data$labels = factor(worth_map_data$labels, 
-                                  levels = rev(trait_names))
+                                 levels = rev(trait_names))
   
   lims = max(abs(worth_map_data$winprob)) * c(-1, 1)
   
@@ -246,16 +110,31 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
           strip.background.x = element_blank(),
           strip.placement = "outside") +
     labs(x = "", y = "", fill = "")
-    
-  #.......................
-  # Log worth plot
-  logworth_grouped_rank = 
-    plot_logworth(mod[[reference_trait_index]],
-                  ref = reference_tech, ci.level = 0.5) 
-  
   
   #...........................................................
-  # Reliability 
+  # Analysis of variance ####
+  anovas = lapply(mod, function(x){
+    a = anova.PL(x)
+    a
+  })
+  
+  # and the tables with rounded p-values and sig stars
+  aov_tbl = list()
+  for (i in seq_along(trait_list)) {
+    a = anovas[[i]]
+    a = a[-1, ]
+    a[1, "Model"] = paste0(trait_list[[i]]$name, " [" , trait_list[[i]]$assessment, "]")
+    aov_tbl[[i]] = a
+  }
+  
+  aov_tbl = do.call("rbind", aov_tbl)
+  
+  rownames(aov_tbl) = 1:nrow(aov_tbl)
+  
+  names(aov_tbl)[names(aov_tbl) == "Model"] = "Trait"
+  
+  #...........................................................
+  # Reliability ####
   # run reliability over the different check varieties
   items = sort(unique(unlist(cmdata[technologies_index])))
   
@@ -265,7 +144,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   for (i in seq_along(checks)) {
     
-    rel_i = lapply(mod, function(x){
+    rel_i = lapply(mod[reference_trait_index], function(x){
       
       r = try(reliability(x, ref = checks[i]), silent = TRUE)
       
@@ -279,13 +158,13 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
       
     })
     
-    for(j in seq_along(trait_names)) {
-      
-      if (is.null(rel_i[[j]])) next
-      
-      rel_i[[j]]$Trait = trait_names[j]
-      
-    }
+    # for(j in seq_along(trait_names)) {
+    #   
+    #   if (is.null(rel_i[[j]])) next
+    #   
+    #   rel_i[[j]]$Trait = trait_names[j]
+    #   
+    # }
     
     rel_i = do.call("rbind", rel_i)
     
@@ -296,97 +175,150 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   # remove the checks
   reliability_data = reliability_data[!reliability_data$item %in% checks, ]
   
-  # put traits in the right order
-  reliability_data$Trait = factor(reliability_data$Trait,
-                                  levels = rev(trait_names))
+  # # put traits in the right order
+  # reliability_data$Trait = factor(reliability_data$Trait,
+  #                                 levels = rev(trait_names))
   
-  #set.seed(113)
-  shapes = c(15:19, 21:24, 0:7, 9:10, 12)
-  shapes = suppressWarnings(as.vector(matrix(shapes, 
-                                             nrow = length(unique(reliability_data$item)))))
   
   # plot the reliability
-  reliability_plot = ggplot(data = reliability_data,
-                   aes(x = reliability, 
-                       y = Trait,
-                       shape = item,
-                       color = item)) +
-    geom_vline(xintercept = 0.5, 
-               colour = "#7f2704",
-               linewidth = 0.3) +
-    scale_x_continuous(limits=c(0, 1)) +
-    geom_point() +
-    scale_shape_manual(values = shapes) +
-    #scale_color_brewer(palette = "Dark2") +
+  reliability_plot = 
+    ggplot(data = reliability_data,
+           aes(x = reliability, 
+               y = item)) +
+    geom_bar(stat = "identity", 
+             position = "dodge",
+             show.legend = FALSE,
+             width = 1, 
+             color = "#e5f5f9",
+             fill = "#2ca25f") +
+    geom_vline(xintercept = 0.5,
+               colour = "#de2d26",
+               linewidth = 1) +
     facet_wrap(~ Check, strip.position = "bottom") +
     theme_bw() +
     theme(panel.grid.major = element_blank(),
           strip.background =element_rect(fill="white"),
           text = element_text(color = "grey20"),
-          #legend.position = "bottom",
-          legend.title = element_blank(),
           strip.background.x = element_blank(),
           strip.placement = "outside") +
-    labs(x = "Prob. in outperforming",
+    labs(x = "Probability of outperforming",
          y = "")
   
-
-  # split by groups, if any 
-  if (length(unique(rank_dat$group) > 1)) {
-    
-    group = group[rank_dat$trait_list[[reference_trait_index]]$keep]
-    
-    unique_groups = unique(rank_dat$group)
-    
-    mod_group = list()
-    
-    for (i in seq_along(unique_groups)) {
-      
-      mod_group[[i]] = try(PlackettLuce(RG[group == unique_groups[i], ]),
-                            silent = TRUE)
-      
-      logworth_group_plot[[i]] = 
-        try(plot_logworth(mod_group[[i]], ref = reference_tech, ci.level = 0.5) +
-        labs(title = unique_groups[i]),
-        silent = TRUE)
-      
-      if("try-error" %in% class(logworth_group_plot[[i]])) {
-        logworth_group_plot[[i]] = 0L
-      }
-      
-    }
-    
-  }
   
+  #.....................................................
+  #.....................................................
+  #.....................................................
+  # Get the Kendall tau ####
+  kendall = lapply(trait_list[-reference_trait_index], function(x){
+    
+    r1 = rank_tricot(cmdata[, c(technologies_index, 
+                                trait_list[[reference_trait_index]]$strings)],
+                     items = technologies_index,
+                     input = trait_list[[reference_trait_index]]$strings,
+                     validate.rankings = TRUE)
+    
+    r2 = rank_tricot(cmdata[, c(technologies_index, x$strings)],
+                     items = technologies_index,
+                     input = x$strings,
+                     validate.rankings = TRUE)
+    
+    kendall = kendallTau(r1, r2, na.omit = FALSE)
+    
+    kendall
+    
+  })
+  
+  kendall = do.call("rbind", kendall)
+  
+  kendall$trait = unlist(lapply(trait_list[-reference_trait_index], function(x){
+    paste0(x$name, " [" , x$assessment, "]")
+  }))
+  
+  kendall = kendall[rev(order(kendall$kendallTau)), ]
+  
+  kendall = kendall[, -2]
+  
+  strongest_link = c(kendall$trait[1],
+                     round(kendall$kendallTau[1], 2))
+  
+  weakest_link = c(kendall$trait[nrow(kendall)],
+                   round(kendall$kendallTau[nrow(kendall)], 2))
+  
+  kendall = kendall[,c("trait", "kendallTau", "Zvalue", "Pr(>|z|)")]
+  
+  kendall[,"kendallTau"] = round(kendall[,"kendallTau"], 3)
+  
+  kendall[,"Zvalue"] = round(kendall[,"Zvalue"], 3)
+  
+  stars = stars.pval(kendall[,"Pr(>|z|)"])
+  
+  kendall[, "Pr(>|z|)"] = format(kendall[, "Pr(>|z|)"], 
+                                 scientific = TRUE,
+                                 digits = 3)
+  
+  kendall[, "Pr(>|z|)"] = paste(kendall[, "Pr(>|z|)"], stars)
+  
+  kendall = kendall[rev(order(kendall$kendallTau)), ]
+  
+  kendall$trait = factor(kendall$trait, levels = rev(kendall$trait))
+  
+  # make a bar plot plot 
+  kendall_plot = 
+    ggplot(data = kendall, 
+           aes(x = kendallTau,
+               y = trait, 
+               fill = trait)) +
+    geom_bar(stat = "identity", 
+             position = "dodge",
+             show.legend = FALSE,
+             width = 1, 
+             color = "#ffffff") + 
+    scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
+    theme_classic() +
+    theme(legend.position = "bottom",
+          legend.text = element_text(size = 9),
+          axis.text.y = element_text(color = "grey20"),
+          axis.text.x = element_text(vjust = 1,
+                                     hjust=1, 
+                                     color = "grey20")) +
+    labs(y = "Trait",
+         x = "Kendall tau") 
+  
+  
+  names(kendall) = c("Trait", "Kendall tau", "Z value", "Pr(>|z|)")
+  
+  row.names(kendall) = 1:nrow(kendall)
+  
+  # export results
   result = list(PL_models = mod,
-                 logworth_grouped_rank = logworth_grouped_rank,
-                 worthmap = worthmap,
-                 logworth_plot = logworth_plot,
-                 logworth_plot_groups = logworth_group_plot,
-                 kendall = list(isKendall = isKendall,
-                                kendall = kendall,
-                                strongest_link = strongest_link, 
-                                weakest_link = weakest_link,
-                                kendall_plot = kendall_plot),
+                logworth_overall = logworth_plot[[reference_trait_index]],
+                worthmap = worthmap,
+                ANOVA = aov_tbl,
+                logworth_plot = logworth_plot,
+                kendall = list(kendall = kendall,
+                               strongest_link = strongest_link, 
+                               weakest_link = weakest_link,
+                               kendall_plot = kendall_plot),
                 reliability_plot = reliability_plot,
                 reliability_data = reliability_data)
   
+  
+  return(result)
+  
 }
-
 
 # .......................................
 # Error in data 
 # this is a file that is generated to be used in case of errors
 error_data_PL_model = list(PL_models = list(),
-                            logworth_grouped_rank = 0L,
-                            worthmap = 0L,
-                            logworth_plot = 0L,
-                            logworth_plot_groups = 0L,
-                            kendall = list(isKendall = FALSE,
-                                           kendall = data.frame(),
-                                           strongest_link = c("", ""), 
-                                           weakest_link = c("", ""),
-                                           kendall_plot = 0L),
+                           logworth_overall = 0L,
+                           worthmap = 0L,
+                           ANOVA = data.frame(),
+                           logworth_plot = list(),
+                           kendall = list(kendall = data.frame(),
+                                          strongest_link = "", 
+                                          weakest_link = "",
+                                          kendall_plot = ""),
                            reliability_plot = 0L,
                            reliability_data = data.frame())
 

@@ -1,12 +1,10 @@
-#' This module analyses the ranking data
-#' 
-#' The analysis is performed iteratively for each trait 
-#' retained in the rank_dat object
+#' Analyze ranking data using Plackett-Luce trees
 #' 
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
 #' @param agroclimate a list with agroclimatic parameters 
-get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
+
+get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
   
   trait_list = rank_dat[["trait_list"]]
   option = rank_dat[["option"]]
