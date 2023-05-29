@@ -24,10 +24,6 @@ option      = report_parameters[["ReferToTechnologies"]] # how the report will r
 fullpath    = report_parameters[["BackwardPath"]] # this is backward path
 groups      = report_parameters[["Split"]] # any group to do the analysis 
 reference   = report_parameters[["Reference"]] # the reference item for the analysis
-minN        = 5 # minimum n of complete data required in a trait evaluation before it is excluded
-minitem     = 2 # minimum n of items tested, e.g. that all items are tested at least twice
-mincovar    = 0.95 # minimum proportion of covariates compared to total valid n
-sig_level   = 0.1 # significance level for the Plackett-Luce model
 
 # break the groups into a vector, if more than one
 groups = as.vector(strsplit(groups, ",")[[1]])
@@ -38,35 +34,6 @@ reference = as.integer(strsplit(reference, ",")[[1]])
 if (length(reference) > 4) {
   reference = reference[1:4]
 }
-
-# # ................................................................
-# # ................................................................
-## Packages ####
-library("ClimMobTools")
-library("gosset")
-library("nasapower")
-library("climatrends")
-library("PlackettLuce")
-library("partykit")
-library("qvcalc")
-library("psychotools")
-library("jsonlite")
-library("knitr")
-library("rmarkdown")
-library("pls")
-library("gtools")
-library("ggplot2")
-library("igraph")
-library("ggparty")
-library("patchwork")
-library("leaflet")
-library("mapview")
-library("multcompView")
-library("png")
-library("plotrix")
-library("gridExtra")
-library("caret")
-library("janitor")
 
 # ................................................................
 # ................................................................
@@ -87,6 +54,8 @@ error = NULL
 # 1. Read data and organize the rankings #### 
 try_data = tryCatch({
   
+  dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
+  
   # report parameters
   pars = jsonlite::fromJSON(cmparameters)
   pars = decode_pars(pars)
@@ -95,32 +64,17 @@ try_data = tryCatch({
   cmdata = jsonlite::fromJSON(cmdatajson)
   class(cmdata) = union("CM_list", class(cmdata))
   
-  # project data as an independent object
-  project_data = cmdata$project
-  project_name = project_data$project_name
-  
-  # get the name of the check variety
-  reference = cmdata$combination$elements[reference]
-  reference = unlist(lapply(reference, function(x) x$alias_name))
-  
-  # trial data as data.frame
-  cmdata = try(as.data.frame(x = cmdata, 
-                             tidynames = FALSE, 
-                             pivot.wider = TRUE),
-                silent = TRUE)
-  
-  dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
-  
   rank_dat = organize_ranking_data(cmdata, 
-                                    pars, 
-                                    project_name,
-                                    groups, 
-                                    option_label = option,
-                                    ranker_label = ranker,
-                                    reference_tech = reference,
-                                    tech_index = c("package_item_A", 
-                                                   "package_item_B",
-                                                   "package_item_C"))
+                                   pars, 
+                                   groups, 
+                                   option_label = option,
+                                   ranker_label = ranker,
+                                   reference_tech = reference,
+                                   tech_index = paste0("package_item_", LETTERS[1:3]),
+                                   minN = 5,
+                                   minitem = 2,
+                                   mincovar = 0.95,
+                                   sig_level = 0.1)
   
 }, error = function(cond) {
     return(cond)
@@ -138,20 +92,11 @@ if (any_error(try_data)) {
 # 2. Organise quantitative data ####
 try_quanti_data = tryCatch({
   
-  if (isTRUE(length(pars[["linear"]]) > 0)) {
-    
-    quanti_dat = organize_quantitative_data(cmdata, 
-                                             pars, 
-                                             groups = groups, 
-                                             id = "id",
-                                             tech_index = c("package_item_A", 
-                                                            "package_item_B", 
-                                                            "package_item_C"))
-  }else{
-    
-    quanti_dat = error_data_quanti_dat
-    
-  }
+  quanti_dat = organize_quantitative_data(cmdata, 
+                                          pars, 
+                                          groups = groups, 
+                                          id = "id",
+                                          tech_index = paste0("package_item_", LETTERS[1:3]))
   
   
 }, error = function(cond) {

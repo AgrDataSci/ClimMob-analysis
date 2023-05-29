@@ -1,11 +1,35 @@
-#' This module produces charts with temperature and rainfall indices
+#' Produces charts with agroclimatic indices
 #' 
 #' @param cmdata a data frame with the ClimMob data
 #' @param coords a data frame with coordinates 
 #' @param ndays an integer for the number of days from planting date to be used
+#' @param climate.date character specifying the source of climate data, 
+#'  currently only NASAPOWER is available
+#' @examples
+#' modules = list.files("modules",
+#'                      full.names = TRUE,
+#'                      pattern = ".R")
+#' modules = modules[-which(grepl("check_packages.R", modules))]
+#' for (i in seq_along(modules)) {
+#'   source(modules[i])
+#' }
+#' 
+#' load("modules/example-data-structure.rda")
+#' 
+#' coords = get_testing_sites_map(cmdata, 
+#'                                output_path = "tests/output/testdata12", 
+#'                                backward_path = getwd())
+#' 
+#' coords$coords
+#' 
+#' ag = get_agroclimatic_data(cmdata, 
+#'                            coords = coords$coords,
+#'                            ndays = 60)
+#' @export
 get_agroclimatic_data = function(cmdata, 
                                  coords, 
-                                 ndays = 60){
+                                 ndays = 60, 
+                                 climate.data = "NASAPOWER"){
   
   ncoords = nrow(coords)
   
@@ -136,15 +160,4 @@ get_agroclimatic_data = function(cmdata,
 # .......................................
 # Error in data 
 # this is a file that is generated to be used in case of errors
-error_data_agroclimate = list(agroclimate = FALSE, 
-                              rain_plot = 0L,
-                              temperature_plot = 0L,
-                              rainfall_weekly = data.frame(),
-                              temperature_weekly = data.frame(),
-                              rainfall = data.frame(),
-                              temperature = data.frame(),
-                              dates = vector(),
-                              noNAs = FALSE,
-                              date_used = "")
-
-
+error_data_agroclimate = list(agroclimate = FALSE)

@@ -1,6 +1,27 @@
-#' This module produces the map when GPS is available
+#' Produces a trial location map from GPS coordinates
 #' 
 #' @param cmdata a data frame with the ClimMob data
+#' @param output_path the working directory to write the leaflet map
+#' @param backward_path an absolute filepath representing the current working directory
+#' @examples 
+#' modules = list.files("modules",
+#' full.names = TRUE,
+#' pattern = ".R")
+#' modules = modules[-which(grepl("check_packages.R", modules))]
+#' for (i in seq_along(modules)) {
+#'   source(modules[i])
+#' }
+#' 
+#' load("modules/example-data-structure.rda")
+#' 
+#' coords = get_testing_sites_map(cmdata, 
+#'                                output_path = "tests/output/testdata12", 
+#'                                backward_path = getwd())
+#' 
+#' coords$map
+#' coords$coords
+#' 
+#' @export
 get_testing_sites_map = function(cmdata, output_path, backward_path){
   
   # Check if lonlat is provided
