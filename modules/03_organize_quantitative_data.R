@@ -10,6 +10,26 @@
 #' @param groups a vector with characters for the index in cmdata indicating 
 #'  columns to aggregate and make segments of participants 
 #' @param id the column name in cmdata with the package id
+#' @examples 
+#' modules = list.files("modules",
+#' full.names = TRUE,
+#' pattern = ".R")
+#' modules = modules[-which(grepl("check_packages.R", modules))]
+#' for (i in seq_along(modules)) {
+#'   source(modules[i])
+#' }
+#' 
+#' load("modules/example-data-structure.rda")
+#' 
+#' # ClimMob parameters
+#' pars = decode_pars(cmpars)
+#' 
+#' quanti_dat =  organize_quantitative_data(cmdata, 
+#'                                          pars, 
+#'                                          groups = "gender1", 
+#'                                          id = "id",
+#'                                          tech_index = paste0("package_item_", LETTERS[1:3]))
+#' @export                                         
 organize_quantitative_data = function(cmdata, 
                                       pars, 
                                       groups = NULL,
