@@ -1,12 +1,30 @@
-#' This module analyses the ranking data
-#' 
-#' The analysis is performed iteratively for each trait 
-#' retained in the rank_dat object
+#' Analyze ranking data using Plackett-Luce trees
 #' 
 #' @param cmdata a data frame with the ClimMob data
 #' @param rank_dat a list with parameters
 #' @param agroclimate a list with agroclimatic parameters 
-get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
+#' @examples 
+#' modules = list.files("modules",
+#' full.names = TRUE,
+#' pattern = ".R")
+#' modules = modules[-which(grepl("check_packages.R", modules))]
+#' for (i in seq_along(modules)) {
+#'   source(modules[i])
+#' }
+#' 
+#' load("modules/example-data-structure.rda")
+#' 
+#' get_PlackettLuce_tree(cmdata, rank_dat)
+#' @export
+get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
+  
+  empty_result = list(isTREE = FALSE,
+                      tree_formula = "G  ~ 1",
+                      nobservations_used_tree = 0,
+                      PLtree = list(),
+                      PLtree_plot = NULL,
+                      node_summary = data.frame(),
+                      regret_table = data.frame())
   
   trait_list = rank_dat[["trait_list"]]
   option = rank_dat[["option"]]
@@ -20,33 +38,20 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   covar = rank_dat[["covar"]]
   nranker = sum(trait_list[[reference_trait_index]]$keep)
   # use <<- to assign these two variables to the .GlobalEnv
-  use_agroclimate = FALSE #isTRUE(agroclimate$agroclimate)
   node_size <<- ceiling(nranker * 0.25)
   tree_alpha <<- 0.25
   reference_tech = rank_dat[["reference_tech"]]
   
+  # .................................................
+  # .................................................
+  # .................................................
+  # Organize covariates to be used in the tree ####
   if (isTRUE(covarTRUE)) {
     
     # rename covariates to avoid duplicated strings, in case the same 
     # question was made in different data collection moments 
     covar$codeQst = rename_duplicates(covar$codeQst)
     covar$name    = rename_duplicates(covar$name, sep = " ")
-    
-    # check if longlat is required
-    if (any(grepl("geotrial", covar$codeQst))) {
-      
-      index = which(grepl("geotrial", covar$codeQst))[1]
-      
-      if (is.na(index)) next
-      
-      covar[index, "nameString"] = paste0("ASS",covar$assessmentId[index],"__longitude")
-      covar[index, "name"] = paste(covar[index, "name"], "Longitude")
-      
-      covar[nrow(covar) + 1, ] = covar[index, ]
-      covar[nrow(covar), "nameString"] = paste0("ASS",covar$assessmentId[index],"__latitude")
-      covar[nrow(covar), "name"] = paste(covar[nrow(covar), "name"], "Latitude")
-      
-    }
     
     # add the string $ to indicate the end of pattern
     strings = paste0(covar$nameString, "$")
@@ -107,8 +112,8 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
       keep = cbind(keep, k)
     }
     
-    # find those that are above the threshold of missexp
-    dropit = mincovar > (colSums(keep) / nranker)
+    # find those that are above the threshold
+    dropit = 0.6 > (colSums(keep) / nranker)
     
     # drop those bellow threshold
     keep = as.data.frame(keep[, !dropit])
@@ -132,57 +137,23 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   }
   
   if (isFALSE(covarTRUE)) {
-    
-    cmdata$Intercept = rep(0, nranker)
-    
-    trait_list[[reference_trait]]$keep_covariate = rep(TRUE, nranker)
-    
-    covar = data.frame(codeQst = "xinterceptx", 
-                        nameString = "Intercept",
-                        name = "Intercept-only model",
-                        questionAsked = "",
-                        assessmentName = "",
-                        assessmentId = "")
+    return(empty_result)
   }
   
-  if (isTRUE(comparison_with_local)) {
-    
-    keep = trait_list[[reference_trait_index]]$keep2 & 
-      trait_list[[reference_trait_index]]$keep_covariate
-    
-    a = list(cmdata[keep, c(technologies_index, 
-                             trait_list[[reference_trait_index]]$strings, 
-                             trait_list[[reference_trait_index]]$tricotVSlocal)],
-              items = technologies_index,
-              input = trait_list[[reference_trait_index]]$strings,
-              validate.rankings = TRUE,
-              additional.rank = cmdata[keep, trait_list[[reference_trait_index]]$tricotVSlocal], 
-              group = TRUE)
-    
-    G = do.call("rank_tricot", args = a)
-    
-    
-  } 
+  # Prepare the data frame for the analysis
+  keep = trait_list[[reference_trait_index]]$keep & 
+    trait_list[[reference_trait_index]]$keep_covariate
   
-  if (isFALSE(comparison_with_local)) {
-    
-    keep = trait_list[[reference_trait_index]]$keep & 
-      trait_list[[reference_trait_index]]$keep_covariate
-    
-    a = list(cmdata[keep, c(technologies_index, 
-                             trait_list[[reference_trait_index]]$strings)],
-              items = technologies_index,
-              input = trait_list[[reference_trait_index]]$strings, 
-             validate.rankings = TRUE,
-              group = TRUE)
-    
-    G = do.call("rank_tricot", args = a)
-    
-  }
+  G = rank_tricot(data = cmdata[keep, c(technologies_index, 
+                                        trait_list[[reference_trait_index]]$strings)],
+                  items = technologies_index,
+                  input = trait_list[[reference_trait_index]]$strings, 
+                  validate.rankings = TRUE,
+                  group = TRUE)
+  
   
   #..........................................................
-  # PlackettLuce tree
-  # Prepare for PL tree
+  # PlackettLuce tree ####
   # data frame of explanatory variables
   Gdata = as.data.frame(cmdata[keep, c(covar$nameString)], stringsAsFactors = TRUE)
   nvar = length(covar$nameString)
@@ -193,17 +164,6 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   nG = nrow(Gdata)
   
   rownames(Gdata) = 1:nG
-  
-  # add agroclimate data if any
-  if(use_agroclimate) {
-    
-    if (isTRUE(nrow(agroclimate$rainfall[keep, ]) >= ceiling(nG * 0.95))) {
-      
-      Gdata = cbind(Gdata, agroclimate$rainfall[keep, ], agroclimate$temperature[keep, ])
-      
-    }
-    
-  }
   
   # remove variables with near zero variance
   out = nearZeroVar(Gdata, freqCut = 90/10)
@@ -242,6 +202,11 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
                                   alpha = tree_alpha,
                                   gamma = TRUE)
   
+  
+  if (treeformula == "G ~ 1") {
+    return(empty_result)
+  }
+  
   # now fit the tree with the selected covariates
   tree_f = pltree(as.formula(treeformula),
                   data = Gdata,
@@ -251,108 +216,103 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
   
   isTREE = isTRUE(length(tree_f) > 1)
   
+  if (isFALSE(isTREE)) {
+    return(empty_result)
+  }
+  
   # if the tree has splits, extract coeffs from nodes
-  if (isTREE) { 
+  # ......................................
+  # ......................................
+  # Reconstruct the tree using individual nodes
+  nodes_tree = predict(tree_f, type = "node")
+  node_id_tree = sort(unique(nodes_tree))
+  
+  if (isTRUE(length(nodes_tree) == length(Gdata$G))) {
     
-    # ......................................
-    # ......................................
-    # Reconstruct the tree using individual nodes
-    nodes_tree = predict(tree_f, type = "node")
-    node_id_tree = sort(unique(nodes_tree))
+    tree_mod = list()
+    nobs_tree = integer()
     
-    if (isTRUE(length(nodes_tree) == length(Gdata$G))) {
+    for (i in seq_along(node_id_tree)) {
       
-      tree_mod = list()
-      nobs_tree = integer()
-
-      for (i in seq_along(node_id_tree)) {
-        
-        Gi = Gdata$G[nodes_tree == node_id_tree[i]]
-        
-        tree_mod[[i]] = PlackettLuce(Gi)
-        
-        nobs_tree = c(nobs_tree, length(Gi))
-        
-        rm(Gi)
-        
-      }
+      Gi = Gdata$G[nodes_tree == node_id_tree[i]]
       
-      tree_branch = gosset:::build_tree_branches(tree_f)
-      tree_nodes = gosset:::build_tree_nodes(tree_mod, 
-                                             log = TRUE,
-                                             ref = reference_tech[1],
-                                             ci.level = 0.5,
-                                             node.ids = node_id_tree,
-                                             n.obs = nobs_tree) +
-        theme(axis.text.x = element_text(angle = 0))
+      tree_mod[[i]] = PlackettLuce(Gi)
       
-      plottree = tree_branch / tree_nodes + plot_layout(heights =  c(1, 1))
+      nobs_tree = c(nobs_tree, length(Gi))
       
-      # get regret tables
-      regret_tbl = regret(tree_mod, n1 = 1000)
-      
-      names(regret_tbl) = c(title_case(option), "Worth", "Worst Regret", "Regret")
-      
-      regret_tbl[2:4] = lapply(regret_tbl[2:4], function(x) round(x, 3))
-      
-      # .................................
-      # get node summaries
-      node_ids = nodeids(tree_f, terminal = TRUE)
-      
-      rules = node_rules(tree_f)
-      
-      for(i in seq_along(node_ids)){
-        
-        summ = coef(tree_mod[[i]], log = TRUE, ref = reference_tech)
-        
-        summ = summ[!grepl("tie", names(summ))]
-        
-        bests = names(rev(sort(summ[summ >= 0])))
-        # if more than three, subset to get only three
-        if (isTRUE(length(bests) > 3)) {
-          bests = bests[1:3]
-        }
-        
-        worsts = names(sort(summ[summ < 0]))
-        # if more than three, subset to get only three
-        if (isTRUE(length(worsts) > 3)) {
-          worsts = worsts[1:3]
-        }
-        
-        # avoid bests and worst in the same column, this when very few items are tested
-        b = bests[!bests %in% worsts]
-        w = worsts[!worsts %in% bests]
-        
-        bests = paste(b, collapse =", ")
-        worsts = paste(w, collapse = ", ")
-        
-        rules[i, 3] = bests
-        rules[i, 4] = worsts
-        rules[i, 5] = nobs_tree[i]
-        
-      }
-      
-      node_summary  = rules[c(1,5,3,4,2)]
-      
-      names(node_summary) = c("Node", "N", "Superior Performance", 
-                              "Underperformance", "Variable and Threshold")
+      rm(Gi)
       
     }
     
+    tree_branch = gosset:::build_tree_branches(tree_f)
+    tree_nodes = gosset:::build_tree_nodes(tree_mod, 
+                                           log = TRUE,
+                                           ref = reference_tech[1],
+                                           ci.level = 0.5,
+                                           node.ids = node_id_tree,
+                                           n.obs = nobs_tree) +
+      theme(axis.text.x = element_text(angle = 0))
     
-  } else {
-    node_summary = data.frame()
-    regret_tbl = data.frame()
-    plottree = 0L
+    plottree = tree_branch / tree_nodes + plot_layout(heights =  c(1, 1))
+    
+    # get regret tables
+    regret_tbl = regret(tree_mod, n1 = 1000)
+    
+    names(regret_tbl) = c(title_case(option), "Worth", "Worst Regret", "Regret")
+    
+    regret_tbl[2:4] = lapply(regret_tbl[2:4], function(x) round(x, 3))
+    
+    # .................................
+    # get node summaries
+    node_ids = nodeids(tree_f, terminal = TRUE)
+    
+    rules = node_rules(tree_f)
+    
+    for(i in seq_along(node_ids)){
+      
+      summ = coef(tree_mod[[i]], log = TRUE, ref = reference_tech)
+      
+      summ = summ[!grepl("tie", names(summ))]
+      
+      bests = names(rev(sort(summ[summ >= 0])))
+      # if more than three, subset to get only three
+      if (isTRUE(length(bests) > 3)) {
+        bests = bests[1:3]
+      }
+      
+      worsts = names(sort(summ[summ < 0]))
+      # if more than three, subset to get only three
+      if (isTRUE(length(worsts) > 3)) {
+        worsts = worsts[1:3]
+      }
+      
+      # avoid bests and worst in the same column, this when very few items are tested
+      b = bests[!bests %in% worsts]
+      w = worsts[!worsts %in% bests]
+      
+      bests = paste(b, collapse =", ")
+      worsts = paste(w, collapse = ", ")
+      
+      rules[i, 3] = bests
+      rules[i, 4] = worsts
+      rules[i, 5] = nobs_tree[i]
+      
+    }
+    
+    node_summary  = rules[c(1,5,3,4,2)]
+    
+    names(node_summary) = c("Node", "N", "Superior Performance", 
+                            "Underperformance", "Variable and Threshold")
+    
   }
   
   result = list(isTREE = isTREE,
-                 tree_formula = treeformula,
-                 nobservations_used_tree = dim(Gdata)[1],
-                 PLtree = tree_f,
-                 PLtree_plot = plottree,
-                 node_summary = node_summary,
-                 regret_table = regret_tbl)
+                tree_formula = treeformula,
+                nobservations_used_tree = dim(Gdata)[1],
+                PLtree = tree_f,
+                PLtree_plot = plottree,
+                node_summary = node_summary,
+                regret_table = regret_tbl)
   
 }
 
@@ -361,11 +321,12 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate) {
 # Error in data 
 # this is a file that is generated to be used in case of errors
 error_data_PL_tree = list(isTREE = FALSE,
-                           tree_formula = "",
-                           nobservations_used_tree = 0,
-                           PLtree = list(),
-                           PLtree_plot = 0L,
-                           node_summary = data.frame(),
-                           regret_table = data.frame())
+                          tree_formula = "G  ~ 1",
+                          nobservations_used_tree = 0,
+                          PLtree = list(),
+                          PLtree_plot = NULL,
+                          node_summary = data.frame(),
+                          regret_table = data.frame())
+
 
 

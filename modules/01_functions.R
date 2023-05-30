@@ -4,6 +4,35 @@
 # # ................................................................
 # # ................................................................
 
+# # ................................................................
+# # ................................................................
+## Packages ####
+library("ClimMobTools")
+library("gosset")
+library("nasapower")
+library("climatrends")
+library("PlackettLuce")
+library("partykit")
+library("qvcalc")
+library("psychotools")
+library("jsonlite")
+library("knitr")
+library("rmarkdown")
+library("pls")
+library("gtools")
+library("ggplot2")
+library("igraph")
+library("ggparty")
+library("patchwork")
+library("leaflet")
+library("mapview")
+library("multcompView")
+library("png")
+library("plotrix")
+library("gridExtra")
+library("caret")
+library("janitor")
+
 #'Get colour pallet
 #' @param x an integer
 #' @examples 
@@ -104,11 +133,13 @@ plot_map = function(data,
                                    provider =  map_provider, 
                                    options = leaflet::providerTileOptions(maxNativeZoom = 17))
   
-  map = leaflet::addCircleMarkers(map, 
-                                   color = "#b30000", 
-                                   radius = 6,
-                                   stroke = FALSE,
-                                   fillOpacity = 0.5)
+  # map = leaflet::addCircleMarkers(map, 
+  #                                  color = "#b30000", 
+  #                                  radius = 6,
+  #                                  stroke = FALSE,
+  #                                  fillOpacity = 0.5)
+  
+  map <- leaflet::addMarkers(map)
   
   if (isTRUE(minimap)) {
     
@@ -823,7 +854,8 @@ plot_logworth = function(x, ci.level = 0.95, ref = NULL, multcomp = TRUE, levels
                   ymin = tails, 
                   label = group)) +
     geom_hline(yintercept = 0, 
-               colour = "#E5E7E9", size = 0.8) +
+               colour = "#E5E7E9",
+               linewidth = 0.8) +
     geom_point() +
     geom_errorbar(width = 0.1) +
     geom_text(vjust = 1.2, hjust = 1.2) +

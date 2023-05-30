@@ -23,12 +23,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Introduction  
 
-Triadic comparisons of technology options (tricot) is a research approach [@vanEtten2019tricot] to decentralize the evaluation of suitable technologies for local conditions and obtain experimental data with higher external validity. Tricot (read ‘try-cot’) engages participants as ‘citizen scientists’ testing new technologies and product concepts. Tricot is supported by the ClimMob digital platform (https://climmob.net). 
-
-In agriculture, under climate uncertainty, many farmers need to change their agricultural practices, adopt new crop varieties, switch to using different inputs, or apply new management strategies. But there is no one-size-fits-all solution. With the tricot approach, large numbers of participants carry out small, simple trials on their own farms instead of a few big, complex trials conducted at research stations. 
-
-With tricot, research centres can validate and disseminate new agricultural technologies in
-a participatory way, collaborating with a large number of participants under diverse conditions. Large-scale tricot experiments, involving many participants, generate robust results about the performance of different technology options (such as different crop varieties or different fertilizer types) in different environments. Farmers evaluate the new technology options on their own farms and under real conditions.
+The triadic comparisons of technology options (tricot) is a research approach [@vanEtten2019tricot] to decentralize the evaluation of suitable technologies for local conditions and obtain experimental data with higher external validity. Tricot (read ‘try-cot’) engages participants to test new technologies and product concepts. The approach is supported by the ClimMob digital platform (https://climmob.net). With tricot, research centres can validate and disseminate new agricultural technologies in a participatory way, collaborating with a large number of participants under diverse conditions. Large-scale tricot experiments, involving many participants, generate robust results about the performance of different technology options (such as different crop varieties or different fertilizer types) in different environments. 
 
 This report presents the results from your tricot experiment entitled `r project_name`, designed and managed on ClimMob.
  
@@ -56,7 +51,7 @@ Equation [2]
 
 $$P(i \succ j \succ k) = P(i \succ {j,k}) \cdot P(j \succ k)$$
 
-Covariates, if any, are linked to the rankings using the Model-Based Recursive Partitioning approach [@Zeileis2008] which builds the Plackett-Luce trees. This approach identifies sub-groups in the data for which the technology performance is significantly different. This analysis required that all rankings and covariates are completely available for the entire data set. Here we used `r PL_tree$nobservations_used_tree` out of `r nparticipants` data points. To obtain agroclimatic covariates, if coordinates and dates were available in your project, we used NASA POWER, a free publicly available dataset with coverage across the research site. We derived rainfall and temperature indices using R package 'climatrends' [@climatrends] and 'nasapower' [@nasapower]. Please check the documentation of the climatrends package for a full description of agroclimatic covariates (https://agrdatasci.github.io/climatrends/).
+Covariates, if any, are linked to the rankings using the Model-Based Recursive Partitioning approach [@Zeileis2008] which builds the Plackett-Luce trees. This approach identifies sub-groups in the data for which the technology performance is significantly different. This analysis required that all rankings and covariates are completely available for the entire data set. To obtain agroclimatic covariates, if coordinates and dates were available in your project, we used NASA POWER, a free publicly available dataset with coverage across the research site. We derived rainfall and temperature indices using R package 'climatrends' [@climatrends] and 'nasapower' [@nasapower]. Please check the documentation of the climatrends package for a full description of agroclimatic covariates (https://agrdatasci.github.io/climatrends/).
 
 To select the covariate(s) that best represent the data set, a stepwise regression based on the forward selection approach was used. The procedure begins by fitting each covariate individually and adding new covariates one by one when it makes a single best improvement to the model based on the Akaike Information Criterion (AIC) [@Sakamoto1986]. The AIC estimates the relative amount of information lost by a given model, the less information a model loses, the higher the quality of that model. In the Plackett-Luce trees, the AIC is obtained by adding the maximized log likelihood ($L$) to the degrees of freedom ($\nu$). 
 
@@ -130,7 +125,7 @@ if (isTRUE(agroclimate$agroclimate)){
   agroclimate_text1 <- paste0("Temperature and rainfall indices are presented in Fig. 1.3 and Fig. 1.4 ",
                               "obtained using the GPS data presented in the map (Fig. 2). The timespan ",
                               "used to capture the climate data was from ",
-                              paste(agroclimate$dates, collapse = " to "), ". The charts ",
+                              min(agroclimate$dates), " to ", (max(agroclimate$dates) + 60), ". The charts ",
                               "present the weekly agroclimatic indices (7-days). Data was obtained ",
                               " using the R package nasapower [@nasapower], indices were computed using the ",
                               "R package climatrends [@climatrends].")
@@ -141,7 +136,7 @@ if (isTRUE(agroclimate$agroclimate)){
 
 `r paste(agroclimate_text1, collapse = '\n')`
 
-```{r temperature_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Figure 1.3. Temperature indices from ", paste(agroclimate$dates, collapse = " to "), ". The chart presents weekly (7-days) maximum day temperature (maxDT), the minimum day temperature (minDT), the maximum night temperature (maxNT), and the minimum nigth temperature (minNT).")}
+```{r temperature_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Figure 1.3. Temperature indices from ", min(agroclimate$dates), " to ", (max(agroclimate$dates) + 60), ". The chart presents weekly (7-days) maximum day temperature (maxDT), the minimum day temperature (minDT), the maximum night temperature (maxNT), and the minimum nigth temperature (minNT).")}
 if (isTRUE(agroclimate$agroclimate)){
 plot(agroclimate$temperature_plot)
 }
@@ -149,7 +144,7 @@ plot(agroclimate$temperature_plot)
 
 \
 
-```{r rainfall_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Figure 1.4. Rainfall indices from ", paste(agroclimate$dates, collapse = " to "), ". The chart presents weekly (7-days) total rainfall (Rtotal), simple daily intensity index, total precipitation divided by the number of wet days (mm/days, SDII), maximum length of consecutive dry day, rain < 1 mm (MLDS), and the maximum length of consecutive wet days, rain >= 1 mm (MLWS).")}
+```{r rainfall_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Figure 1.4. Rainfall indices from ", min(agroclimate$dates), " to ", (max(agroclimate$dates) + 60), ". The chart presents weekly (7-days) total rainfall (Rtotal), simple daily intensity index, total precipitation divided by the number of wet days (mm/days, SDII), maximum length of consecutive dry day, rain < 1 mm (MLDS), and the maximum length of consecutive wet days, rain >= 1 mm (MLWS).")}
 if (isTRUE(agroclimate$agroclimate)){
 plot(agroclimate$rain_plot)
 }
@@ -180,30 +175,20 @@ kable(overview_and_summaries$summary_table_tech,
 
 # Summary of `r options`' performance
 
-```{r stat_diff_statement}
-# make the statement for the report about the statistical significance
-stat_diff_statement <- paste0("Performance of tested technologies are summarized in Table 1.3.")
-```
-
-`r paste(stat_diff_statement, collapse='\n')`
-
-\
-
-```{r pl_models_overview}
-kable(PL_models$PL_models_overview, 
-      caption = paste0("Table 1.3. Summary of ", option," performance trait. The table shows, for each trait, up to three ", options, " with best and worst performance based on the log-worth estimates obtained with Plackett-Luce models."),
-      row.names = FALSE)
-```
-
-
-\
 
 ```{r relation_other_chrs} 
+anovatext = ""
+
+if (isTRUE(nrow(PL_models$ANOVA) > 0)) {
+  anovatext = paste0("Results from an analysis of variance (ANOVA) testing the hypothesis that at least one ", option, " has a superior performance when compared to the others in the set is provided in Table 1.3. Traits with p < 0.05 indicate that there is no random effect in the performance of ", option, " and that at least one has a higher performance.") 
+}
+
+
 relation_other_chrs1 <- ""
 relation_other_chrs2 <- ""
-if ((isTRUE(PL_models$kendall$isKendall))) {
+if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
 relation_other_chrs1 <- 
-  paste0("Figure 1.6 shows the Kendall tau coefficient. ",
+  paste0("Table 1.4 shows the Kendall tau coefficient. ",
          "The trait that had the strongest ", 
         "correlation with '", reference_trait, "' was '", 
         PL_models$kendall$strongest_link[1], 
@@ -219,7 +204,7 @@ relation_other_chrs1 <-
 if (isTRUE(length(PL_models$worthmap) > 0)) {
   relation_other_chrs2 <- paste0("The log-worth by trait of each ",
                                  option, 
-                                 " tested in this experiment is presented in Figure 1.7.",
+                                 " tested in this experiment is presented in Figure 1.6.",
                                  " The chart shows for each trait the probability that each ",
                                  option, 
                                  " has in outperforming the check(s) ",
@@ -234,11 +219,28 @@ if (isTRUE(length(PL_models$worthmap) > 0)) {
 
 ```
 
+`r paste(anovatext, collapse='\n')`
+
+```{r ANOVA}
+if (isTRUE(nrow(PL_models$ANOVA) > 0)) {
+kable(PL_models$ANOVA, 
+          caption = paste0("Table 1.3. Analysis of variance (ANOVA) for the performance of ", options, " by trait. A p < 0.05 indicates no random effect and that, at least, one ", option, " has superior performance."),
+          align = "l",
+          row.names = FALSE)
+}
+```
+
+\
+\
+
 `r paste(relation_other_chrs1, collapse='\n')`
 
-```{r kendall_tau_plot, dpi = dpi, fig.height=7, fig.width=7, fig.cap=paste0("Fig. 1.6. Correlation between '", reference_trait, "' and the other traits assessed in this trial. The chart displays Kendall correlation coefficients.")}
-if (isTRUE(PL_models$kendall$isKendall)) {
-  plot(PL_models$kendall$kendall_plot)
+```{r kendall_tau_plot}
+if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
+  kable(PL_models$kendall$kendall,
+        caption = paste0("Table 1.4. Correlation between '", reference_trait, "' and the other traits assessed in this trial. The table displays Kendall correlation coefficients with p < 0.05 indicating significant correlation between traits."),
+          align = "l",
+          row.names = FALSE)
 }
 ```
 
@@ -247,20 +249,20 @@ if (isTRUE(PL_models$kendall$isKendall)) {
 `r paste(relation_other_chrs2, collapse='\n')`
 
 
-```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.7. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with underperformance for the given trait. Log-worth for the reference(s) is arbitrarily set to zero.")}
+```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.6. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with underperformance for the given trait. Log-worth for the reference(s) is arbitrarily set to zero.")}
 plot(PL_models$worthmap)
 ```
 
-Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 8. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering `r paste(reference_tech, collapse = ", ")` as the check `r option`.
+Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 7. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering the `r paste(reference_trait, collapse = ", ")` with `r paste(reference_tech, collapse = ", ")` as the check `r option`.
 
-```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.8. Reliability of tested ", options, " versus the check. The red vertical line set to 0.5 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0.5).")}
+```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 1.7. Reliability of tested ", options, " versus the check. The red vertical line set to 0.5 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0.5).")}
 plot(PL_models$reliability_plot)
 ```
 
-Figure 1.9 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order at the alpha = `r sig_level`.
+Figure 1.8 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order with p = 0.05.
 
-```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 1.9. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. The ", option, " ", reference_tech[1], " is set as reference (log-worth arbitrarily set to zero). Intervals are based on quasi standard errors.")}
-plot(PL_models$logworth_grouped_rank)
+```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 1.8. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. The ", option, " ", reference_tech[1], " is set as reference (log-worth arbitrarily set to zero). Intervals are based on quasi standard errors.")}
+plot(PL_models$logworth_overall)
 ```
 
 \
@@ -282,16 +284,14 @@ if (isTRUE(PL_tree$isTREE)) {
   
   if (isTRUE(agroclimate$agroclimate)) {
    tree_test1 <- paste0(tree_test1, 
-           " We also included a set of agroclimatic covariates to the PlackettLuce trees.",
-           " The indices are computed for each recorded location from the ",
-           paste(agroclimate$dates, collapse = " to "), ".")
+           "")
   }
   
   tree_test2 <- 
-    paste0("Figure 1.10 shows the Plackett-Luce tree obtained with the selected model.")
+    paste0("Figure 1.9 shows the Plackett-Luce tree obtained with the selected model.")
   
   tree_test3 <- 
-    paste0("Table 1.5 present the worth and regret estimates [@Loomes1982; @Bleichrodt2015] across the tree nodes. Regret is an important heuristic in the behavioural sciences. Minimizing the loss under the worst possible outcome (worst regret) is a criterion that takes a conservative approach to risk analysis in diversification strategies. This provides a decision-making approach to select ", options, " with the superior performance across all scenarios (nodes) in the tree.")
+    paste0("Table 1.6 present the worth and regret estimates [@Loomes1982; @Bleichrodt2015] across the tree nodes. Regret is an important heuristic in the behavioural sciences. Minimizing the loss under the worst possible outcome (worst regret) is a criterion that takes a conservative approach to risk analysis in diversification strategies. This provides a decision-making approach to select ", options, " with the superior performance across all scenarios (nodes) in the tree.")
 }
 
 ```
@@ -303,7 +303,7 @@ if (isTRUE(PL_tree$isTREE)) {
 ```{r tree_node_table}
 if(isTRUE(PL_tree$isTREE)){
 kable(PL_tree$node_summary, 
-        caption = paste0("Table 1.4. Summary of node groups identified",
+        caption = paste0("Table 1.5. Summary of node groups identified",
                          " by the model-based recursive partitioning tree applied to the Plackett-Luce rankings."),
         row.names = FALSE)
 }
@@ -316,7 +316,7 @@ kable(PL_tree$node_summary,
 
 \
 
-```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Figure 1.10. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
+```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Figure 1.9. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
 if (isTRUE(PL_tree$isTREE)) {
 plot(PL_tree$PLtree_plot)
 }
@@ -331,7 +331,7 @@ plot(PL_tree$PLtree_plot)
 ```{r regret_table}
 if(isTRUE(PL_tree$isTREE)){
 kable(PL_tree$regret_table, 
-        caption = paste0("Table 1.5. Expected probability of winning (worth) and worst regret estimates. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
+        caption = paste0("Table 1.6. Expected probability of winning (worth) and worst regret estimates. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
         row.names = FALSE)
 }
 
