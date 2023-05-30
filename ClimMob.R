@@ -61,10 +61,15 @@ try_data = tryCatch({
   pars = decode_pars(pars)
   
   # the trial data 
-  cmdata = jsonlite::fromJSON(cmdatajson)
-  class(cmdata) = union("CM_list", class(cmdata))
+  cmdatajson = jsonlite::fromJSON(cmdatajson)
+  class(cmdatajson) = union("CM_list", class(cmdatajson))
   
-  rank_dat = organize_ranking_data(cmdata, 
+  # from json to data.frame
+  cmdata = as.data.frame(x = cmdatajson, 
+                         tidynames = FALSE, 
+                         pivot.wider = TRUE)
+  
+  rank_dat = organize_ranking_data(cmdatajson, 
                                    pars, 
                                    groups, 
                                    option_label = option,
@@ -92,7 +97,7 @@ if (any_error(try_data)) {
 # 2. Organise quantitative data ####
 try_quanti_data = tryCatch({
   
-  quanti_dat = organize_quantitative_data(cmdata, 
+  quanti_dat = organize_quantitative_data(cmdatajson, 
                                           pars, 
                                           groups = groups, 
                                           id = "id",

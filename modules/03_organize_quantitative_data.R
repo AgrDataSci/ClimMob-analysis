@@ -36,6 +36,11 @@ organize_quantitative_data = function(cmdata,
                                       id = "id",
                                       tech_index = c("package_item_A", "package_item_B", "package_item_C")) {
   
+  # from json to data.frame
+  cmdata = as.data.frame(x = cmdata, 
+                         tidynames = FALSE, 
+                         pivot.wider = TRUE)
+  
   ntech = length(tech_index)
   
   quanti_traits = pars[["linear"]]

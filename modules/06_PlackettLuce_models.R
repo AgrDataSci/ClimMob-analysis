@@ -17,8 +17,8 @@
 #' 
 #' load("modules/example-data-structure.rda")
 #' 
-#' get_PlackettLuce_models(cmdata, rank_dat)
-
+#' models = get_PlackettLuce_models(cmdata, rank_dat)
+#' @export
 get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   trait_list = rank_dat[["trait_list"]]
@@ -190,9 +190,9 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
              show.legend = FALSE,
              width = 1, 
              color = "#e5f5f9",
-             fill = "#2ca25f") +
+             fill = "#b2df8a") +
     geom_vline(xintercept = 0.5,
-               colour = "#de2d26",
+               colour = "#1f78b4",
                linewidth = 1) +
     facet_wrap(~ Check, strip.position = "bottom") +
     theme_bw() +

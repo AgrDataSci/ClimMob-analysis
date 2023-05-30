@@ -18,6 +18,14 @@
 #' @export
 get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
   
+  empty_result = list(isTREE = FALSE,
+                      tree_formula = "G  ~ 1",
+                      nobservations_used_tree = 0,
+                      PLtree = list(),
+                      PLtree_plot = NULL,
+                      node_summary = data.frame(),
+                      regret_table = data.frame())
+  
   trait_list = rank_dat[["trait_list"]]
   option = rank_dat[["option"]]
   group = rank_dat[["group"]]
@@ -129,7 +137,7 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
   }
   
   if (isFALSE(covarTRUE)) {
-    return(list(isTREE = FALSE))
+    return(empty_result)
   }
   
   # Prepare the data frame for the analysis
@@ -196,7 +204,7 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
   
   
   if (treeformula == "G ~ 1") {
-    return(list(isTREE = FALSE))
+    return(empty_result)
   }
   
   # now fit the tree with the selected covariates
@@ -209,7 +217,7 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
   isTREE = isTRUE(length(tree_f) > 1)
   
   if (isFALSE(isTREE)) {
-    return(list(isTREE = FALSE))
+    return(empty_result)
   }
   
   # if the tree has splits, extract coeffs from nodes
@@ -312,6 +320,13 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
 # .......................................
 # Error in data 
 # this is a file that is generated to be used in case of errors
-error_data_PL_tree = list(isTREE = FALSE)
+error_data_PL_tree = list(isTREE = FALSE,
+                          tree_formula = "G  ~ 1",
+                          nobservations_used_tree = 0,
+                          PLtree = list(),
+                          PLtree_plot = NULL,
+                          node_summary = data.frame(),
+                          regret_table = data.frame())
+
 
 
