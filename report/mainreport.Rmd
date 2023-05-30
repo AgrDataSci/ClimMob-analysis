@@ -237,8 +237,8 @@ kable(PL_models$ANOVA,
 
 ```{r kendall_tau_plot}
 if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
-  kable(PL_models$kendall$kendall_plot,
-        caption = paste0("Correlation between '", reference_trait, "' and the other traits assessed in this trial. The table displays Kendall correlation coefficients with p < 0.05 indicating significant correlation between traits."),
+  kable(PL_models$kendall$kendall,
+        caption = paste0("Table 1.4. Correlation between '", reference_trait, "' and the other traits assessed in this trial. The table displays Kendall correlation coefficients with p < 0.05 indicating significant correlation between traits."),
           align = "l",
           row.names = FALSE)
 }
@@ -291,7 +291,7 @@ if (isTRUE(PL_tree$isTREE)) {
     paste0("Figure 1.9 shows the Plackett-Luce tree obtained with the selected model.")
   
   tree_test3 <- 
-    paste0("Table 1.5 present the worth and regret estimates [@Loomes1982; @Bleichrodt2015] across the tree nodes. Regret is an important heuristic in the behavioural sciences. Minimizing the loss under the worst possible outcome (worst regret) is a criterion that takes a conservative approach to risk analysis in diversification strategies. This provides a decision-making approach to select ", options, " with the superior performance across all scenarios (nodes) in the tree.")
+    paste0("Table 1.6 present the worth and regret estimates [@Loomes1982; @Bleichrodt2015] across the tree nodes. Regret is an important heuristic in the behavioural sciences. Minimizing the loss under the worst possible outcome (worst regret) is a criterion that takes a conservative approach to risk analysis in diversification strategies. This provides a decision-making approach to select ", options, " with the superior performance across all scenarios (nodes) in the tree.")
 }
 
 ```
@@ -303,7 +303,7 @@ if (isTRUE(PL_tree$isTREE)) {
 ```{r tree_node_table}
 if(isTRUE(PL_tree$isTREE)){
 kable(PL_tree$node_summary, 
-        caption = paste0("Table 1.4. Summary of node groups identified",
+        caption = paste0("Table 1.5. Summary of node groups identified",
                          " by the model-based recursive partitioning tree applied to the Plackett-Luce rankings."),
         row.names = FALSE)
 }
@@ -331,7 +331,7 @@ plot(PL_tree$PLtree_plot)
 ```{r regret_table}
 if(isTRUE(PL_tree$isTREE)){
 kable(PL_tree$regret_table, 
-        caption = paste0("Table 1.5. Expected probability of winning (worth) and worst regret estimates. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
+        caption = paste0("Table 1.6. Expected probability of winning (worth) and worst regret estimates. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
         row.names = FALSE)
 }
 
