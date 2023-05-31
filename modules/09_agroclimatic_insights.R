@@ -59,7 +59,7 @@ get_agroclimatic_data = function(cmdata,
   
   dates = cmdata[dates[1]]
   
-  dates = climatrends:::.coerce2Date(dates[,1])
+  dates = lubridate::as_date(dates[,1])
   
   rain = rainfall(coords[noNAs, ],
                   day.one = dates[noNAs],
@@ -150,6 +150,8 @@ get_agroclimatic_data = function(cmdata,
                 rainfall = rain1,
                 temperature = temp1,
                 dates = dates,
+                window = c(min(dates, na.rm = TRUE),
+                           max(dates, na.rm = TRUE) + ndays),
                 noNAs = noNAs,
                 date_used = date_used)
   
