@@ -32,6 +32,7 @@ library("plotrix")
 library("gridExtra")
 library("caret")
 library("janitor")
+library("lubridate")
 
 #'Get colour pallet
 #' @param x an integer

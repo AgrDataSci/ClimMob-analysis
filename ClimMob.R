@@ -69,7 +69,7 @@ try_data = tryCatch({
                          tidynames = FALSE, 
                          pivot.wider = TRUE)
   
-  rank_dat = organize_ranking_data(cmdatajson, 
+  rank_dat = organize_ranking_data(cmdata = cmdatajson, 
                                    pars, 
                                    groups, 
                                    option_label = option,
@@ -97,7 +97,7 @@ if (any_error(try_data)) {
 # 2. Organise quantitative data ####
 try_quanti_data = tryCatch({
   
-  quanti_dat = organize_quantitative_data(cmdatajson, 
+  quanti_dat = organize_quantitative_data(cmdata = cmdatajson, 
                                           pars, 
                                           groups = groups, 
                                           id = "id",
@@ -425,6 +425,10 @@ if (isTRUE(quanti_dat$quantitative)) {
                           "possible_outliers_in_quantitative_data.csv"),
             row.names = FALSE)
   
+}
+
+if (isTRUE(trial_map$geoTRUE)) {
+  unlink(trial_map$mapDIR, recursive = TRUE)
 }
 
 # End of analysis
