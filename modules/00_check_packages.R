@@ -12,4 +12,6 @@ pkg <- c('caret', 'climatrends', 'ClimMobTools', 'ggparty', 'ggplot2', 'gosset',
 
 install.packages(pkg)
 
+install.packages("ggchicklet", repos = "https://cinc.rud.is")
+
 webshot::install_phantomjs(force = TRUE)

@@ -19,6 +19,7 @@ get_quantitative_summaries <- function(quanti_dat) {
     b_i <- ggplot(ggdat_i, aes(y = value, x = technology, color = technology)) +
       geom_boxplot(show.legend = FALSE) +
       geom_jitter(show.legend = FALSE) +
+      scale_color_brewer(palette = "BrBG", name = "") +
       labs(title = paste(unique(ggdat_i$trait), unique(ggdat_i$data_collection), sep = " - "),
            x = "",
            y = "") +

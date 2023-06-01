@@ -154,7 +154,7 @@ plot(agroclimate$rain_plot)
 
 # Trial design and allocation of incomplete blocks
 
-Figure 5 shows an illustration of the experimental design and indicates whether all `r options` are connected to each other in the trial network. This means that they all co-occurred at least once in an incomplete block of `r noptions` `r options`. The network is obtained using the network rankings generated with '`r reference_trait`'.
+Figure 5 shows a graphic representation of the experimental design and indicates whether all `r options` are connected to each other in the trial network. A complete network connection means that all `r options` co-occurred at least once in an incomplete block of `r noptions` `r options`. The network is obtained using the rankings generated with '`r reference_trait`'.
 
 ```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 5. Experimental network representation of ", options, " tested in this experiment. Arrows indicate direct paths of wins and losses between each pair of ", options, ", indicating that the ", option, " co-occur in at least one experimental block. ", title_case(options), " with a no direct path are connected using a Bayesian prior.")}
 plot(overview_and_summaries$trial_connectivity)
@@ -248,17 +248,17 @@ if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
 `r paste(relation_other_chrs2, collapse='\n')`
 
 
-```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 6. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (blue) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (red) represents the ", options, " with underperformance for the given trait. Log-worth for the reference(s) is arbitrarily set to zero.")}
+```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 6. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (green) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (brown) represents the ", options, " with underperformance for the given trait. Log-worth for the reference(s) is arbitrarily set to zero.")}
 plot(PL_models$worthmap)
 ```
 
 Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 7. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering the `r paste(reference_trait, collapse = ", ")` with `r paste(reference_tech, collapse = ", ")` as the check `r option`.
 
-```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 7. Reliability of tested ", options, " versus the check. The red vertical line set to 0.5 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0.5).")}
+```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 7. Reliability of tested ", options, " versus the check. The blue vertical line set to 0.5 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0.5).")}
 plot(PL_models$reliability_plot)
 ```
 
-Figure 8 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order with p = 0.05.
+Figure 8 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order with p-value = 0.05.
 
 ```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 8. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. The ", option, " ", reference_tech[1], " is set as reference (log-worth arbitrarily set to zero). Intervals are based on quasi standard errors.")}
 plot(PL_models$logworth_overall)

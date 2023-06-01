@@ -171,21 +171,29 @@ get_overview_summaries = function(cmdata, rank_dat) {
   participation$group = factor(participation$group, levels = c("Whole group",
                                                                 unique(group)))
   
+  groups = length(levels(participation$group)) == 1
+  
+  if (isTRUE(groups)) {
+    participation$group = ""
+    legendshow = FALSE
+  }else{
+    legendshow = TRUE
+  }
+  
   partiplot = 
     ggplot(participation, aes(x = dc, y = value_perc, 
                               group = group, color = group)) +
-    geom_line(linewidth = 1) +
+    geom_line(linewidth = 1.5, show.legend = legendshow) +
     scale_y_continuous(limits = c(0, 1)) +
-    scale_colour_manual(values = col_pallet(length(unique(participation$group))), 
-                        name = "") +
+    scale_color_brewer(palette = "BrBG", name = "") +
     theme_bw() +
     theme(panel.background = element_blank(),
           panel.grid = element_blank(), 
-          axis.text.x = element_text(angle = 35, hjust = 1),
+          axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = "top",
-          legend.text = element_text(size = 10, color = "grey20"),
-          axis.text = element_text(size = 10, color = "grey20"),
-          axis.title = element_text(size = 10, color = "grey20")) +
+          legend.text = element_text(size = 14, color = "grey20"),
+          axis.text = element_text(size = 14, color = "grey20"),
+          axis.title = element_text(size = 14, color = "grey20")) +
     labs(x = "Trial stage", y = "Rate of response")
   
   
