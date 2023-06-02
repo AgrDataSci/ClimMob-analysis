@@ -54,7 +54,16 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     logworth_plot[[m]] = 
       plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
       labs(title = paste0(rank_dat$trait_names[m],
-                          " (n = ", length(mod[[m]]$rankings),")"))
+                          " (n = ", length(mod[[m]]$rankings),")")) +
+      coord_flip() +
+      theme(axis.text.x = element_text(angle = 0,
+                                       vjust = 0.5,
+                                       hjust = 0.5),
+            strip.background.x = element_blank(),
+            strip.placement = "outside",
+            strip.text = element_text(size = 10, color = "grey20"),
+            legend.text = element_text(size = 10, color = "grey20"),
+            axis.title = element_text(size = 10, color = "grey20"))
   }
   
   #...........................................................
@@ -92,7 +101,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
                         fill = winprob,
                         label = as.character(round(winprob, 2)))) + 
     geom_tile() + 
-    scale_fill_distiller(palette = "RdBu", 
+    scale_fill_distiller(palette = "BrBG", 
                          limit = lims, 
                          direction = 1, 
                          na.value = "white", 
@@ -101,15 +110,25 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     theme_bw() +  
     theme(axis.text = element_text(color = "grey20"), 
           strip.text.x = element_text(color = "grey20"), 
-          axis.text.x = element_text(angle = 40, 
+          axis.text.x = element_text(size = 10, 
+                                     angle = 45, 
                                      vjust = 1, 
-                                     hjust = 1), 
-          axis.text.y = element_text(angle = 0, 
-                                     vjust = 1, hjust = 1), 
+                                     hjust = 1,
+                                     color = "grey20"), 
+          axis.text.y = element_text(size = 10, 
+                                     angle = 0, 
+                                     vjust = 1, 
+                                     hjust = 1,
+                                     color = "grey20"), 
           panel.grid = element_blank(),
           strip.background.x = element_blank(),
-          strip.placement = "outside") +
+          strip.placement = "outside",
+          strip.text = element_text(size = 10, color = "grey20"),
+          legend.text = element_text(size = 10, color = "grey20"),
+          axis.title = element_text(size = 10, color = "grey20")) +
     labs(x = "", y = "", fill = "")
+  
+  worthmap
   
   #...........................................................
   # Analysis of variance ####
@@ -183,28 +202,33 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   # plot the reliability
   reliability_plot = 
     ggplot(data = reliability_data,
-           aes(x = reliability, 
-               y = item)) +
-    geom_bar(stat = "identity", 
-             position = "dodge",
-             show.legend = FALSE,
-             width = 1, 
-             color = "#e5f5f9",
-             fill = "#b2df8a") +
-    geom_vline(xintercept = 0.5,
+           aes(y = reliability, 
+               x = item, 
+               fill = "#b2df8a")) +
+    geom_chicklet(show.legend = FALSE) +
+    coord_flip() +
+    geom_hline(yintercept = 0.5,
                colour = "#1f78b4",
                linewidth = 1) +
+    scale_fill_manual(values = "#b2df8a") +
     facet_wrap(~ Check, strip.position = "bottom") +
-    theme_bw() +
+    #theme_bw() +
+    theme_classic() +
     theme(panel.grid.major = element_blank(),
           strip.background =element_rect(fill="white"),
           text = element_text(color = "grey20"),
           strip.background.x = element_blank(),
-          strip.placement = "outside") +
-    labs(x = "Probability of outperforming",
-         y = "")
+          strip.placement = "outside",
+          strip.text = element_text(size = 12, color = "grey20"),
+          legend.text = element_text(size = 12, color = "grey20"),
+          axis.text = element_text(size = 12, color = "grey20"),
+          axis.title = element_text(size = 12, color = "grey20")) +
+    labs(y = "Probability of outperforming",
+         x = "")
   
   
+  reliability_plot
+
   #.....................................................
   #.....................................................
   #.....................................................
@@ -265,25 +289,23 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   # make a bar plot plot 
   kendall_plot = 
     ggplot(data = kendall, 
-           aes(x = kendallTau,
-               y = trait, 
+           aes(y = kendallTau,
+               x = trait, 
                fill = trait)) +
-    geom_bar(stat = "identity", 
-             position = "dodge",
-             show.legend = FALSE,
-             width = 1, 
-             color = "#ffffff") + 
-    scale_fill_manual(values = rev(col_pallet(nrow(kendall)))) +
+    geom_chicklet(show.legend = FALSE) +
+    coord_flip() +
+    scale_fill_manual(values = col_pallet(nrow(kendall))) +
     theme_classic() +
     theme(legend.position = "bottom",
-          legend.text = element_text(size = 9),
-          axis.text.y = element_text(color = "grey20"),
-          axis.text.x = element_text(vjust = 1,
+          legend.text = element_text(size = 12, color = "grey20"),
+          axis.text.y = element_text(size = 12, color = "grey20"),
+          axis.title = element_text(size = 12, color = "grey20"),
+          axis.text.x = element_text(size = 12,
+                                     vjust = 1,
                                      hjust=1, 
                                      color = "grey20")) +
-    labs(y = "Trait",
-         x = "Kendall tau") 
-  
+    labs(x = "Trait",
+         y = "Kendall tau") 
   
   names(kendall) = c("Trait", "Kendall tau", "Z value", "Pr(>|z|)")
   
@@ -318,7 +340,7 @@ error_data_PL_model = list(PL_models = list(),
                            kendall = list(kendall = data.frame(),
                                           strongest_link = "", 
                                           weakest_link = "",
-                                          kendall_plot = ""),
+                                          kendall_plot = 0L),
                            reliability_plot = 0L,
                            reliability_data = data.frame())
 

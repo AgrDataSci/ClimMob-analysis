@@ -33,25 +33,14 @@ library("gridExtra")
 library("caret")
 library("janitor")
 library("lubridate")
+library("ggchicklet")
 
 #'Get colour pallet
 #' @param x an integer
 #' @examples 
 #' col_pallet(3)
-col_pallet = function(x, ...) {
-  
-  p = c('#d73027','#4575b4', '#f46d43','#74add1', 
-         '#fdae61','#abd9e9', '#fee090', '#762a83',
-         '#a6dba0','#9970ab','#5aae61', '#c2a5cf', 
-         '#1b7837','#ffffe5','#fff7bc','#fee391',
-         '#fec44f','#fe9929','#ec7014','#cc4c02',
-         '#993404','#662506')
-  
-  v = p[1:x]
-  
-  return(v)
-  
-}
+col_pallet = colorRampPalette(c('#ccece6','#99d8c9','#66c2a4','#41ae76',
+                                '#238b45','#006d2c','#00441b'))
 
 #' Plot map using leaflet
 #' @param data a data frame

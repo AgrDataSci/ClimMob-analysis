@@ -19,6 +19,7 @@ get_quantitative_summaries <- function(quanti_dat) {
     b_i <- ggplot(ggdat_i, aes(y = value, x = technology, color = technology)) +
       geom_boxplot(show.legend = FALSE) +
       geom_jitter(show.legend = FALSE) +
+      scale_color_brewer(palette = "BrBG", name = "") +
       labs(title = paste(unique(ggdat_i$trait), unique(ggdat_i$data_collection), sep = " - "),
            x = "",
            y = "") +
@@ -51,3 +52,47 @@ error_data_quantitative_traits <- list(density_plots = list(),
                                        density_file_names = list())
 
 
+
+# 
+# 
+# # first for yield
+# yield = unlist(lapply(quanti_dat$quanti_dat, function(x){
+#   grepl("yieldperse", x$trait_code[1])
+# }))
+# 
+# yield = quanti_dat$quanti_dat[yield]
+# 
+# dat = yield[[2]]
+# 
+# dat = split(dat, dat$technology)
+# 
+# unlist(lapply(dat, nrow))
+# 
+# dat = lapply(dat, function(x){
+#   out = boxplot.stats(x[, "value"])$out
+#   rmv = !x[, "value"] %in% out
+#   x = x[rmv, ]
+#   x
+# })
+# 
+# dat = do.call("rbind", dat)
+# 
+# 
+# ggplot(dat, aes(y = value, x = technology, color = technology)) +
+# geom_boxplot(show.legend = FALSE) +
+#      geom_jitter(show.legend = FALSE) +
+#      scale_color_brewer(palette = "BrBG", name = "") +
+#      labs(title = paste(unique(dat$trait), unique(dat$data_collection), sep = " - "),
+#                   x = "",
+#                    y = "") +
+#      theme_bw() + 
+#      theme(panel.grid = element_blank(),
+#                      text = element_text(size = 16),
+#                      title = element_text(size = 12),
+#                      axis.text.x = element_text(angle = 45,  hjust = 1))
+# 
+# mod = lm(value ~ technology, data = dat)
+# 
+# summary(mod)
+# 
+# 
