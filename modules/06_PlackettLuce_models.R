@@ -54,7 +54,16 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     logworth_plot[[m]] = 
       plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
       labs(title = paste0(rank_dat$trait_names[m],
-                          " (n = ", length(mod[[m]]$rankings),")"))
+                          " (n = ", length(mod[[m]]$rankings),")")) +
+      coord_flip() +
+      theme(axis.text.x = element_text(angle = 0,
+                                       vjust = 0.5,
+                                       hjust = 0.5),
+            strip.background.x = element_blank(),
+            strip.placement = "outside",
+            strip.text = element_text(size = 10, color = "grey20"),
+            legend.text = element_text(size = 10, color = "grey20"),
+            axis.title = element_text(size = 10, color = "grey20"))
   }
   
   #...........................................................
@@ -101,17 +110,22 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     theme_bw() +  
     theme(axis.text = element_text(color = "grey20"), 
           strip.text.x = element_text(color = "grey20"), 
-          axis.text.x = element_text(angle = 45, 
+          axis.text.x = element_text(size = 10, 
+                                     angle = 45, 
                                      vjust = 1, 
-                                     hjust = 1), 
-          axis.text.y = element_text(angle = 0, 
-                                     vjust = 1, hjust = 1), 
+                                     hjust = 1,
+                                     color = "grey20"), 
+          axis.text.y = element_text(size = 10, 
+                                     angle = 0, 
+                                     vjust = 1, 
+                                     hjust = 1,
+                                     color = "grey20"), 
           panel.grid = element_blank(),
           strip.background.x = element_blank(),
           strip.placement = "outside",
-          legend.text = element_text(size = 14, color = "grey20"),
-          axis.text = element_text(size = 14, color = "grey20"),
-          axis.title = element_text(size = 14, color = "grey20")) +
+          strip.text = element_text(size = 10, color = "grey20"),
+          legend.text = element_text(size = 10, color = "grey20"),
+          axis.title = element_text(size = 10, color = "grey20")) +
     labs(x = "", y = "", fill = "")
   
   worthmap
@@ -205,9 +219,10 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
           text = element_text(color = "grey20"),
           strip.background.x = element_blank(),
           strip.placement = "outside",
-          legend.text = element_text(size = 14, color = "grey20"),
-          axis.text = element_text(size = 14, color = "grey20"),
-          axis.title = element_text(size = 14, color = "grey20")) +
+          strip.text = element_text(size = 12, color = "grey20"),
+          legend.text = element_text(size = 12, color = "grey20"),
+          axis.text = element_text(size = 12, color = "grey20"),
+          axis.title = element_text(size = 12, color = "grey20")) +
     labs(y = "Probability of outperforming",
          x = "")
   
@@ -282,10 +297,11 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     scale_fill_manual(values = col_pallet(nrow(kendall))) +
     theme_classic() +
     theme(legend.position = "bottom",
-          legend.text = element_text(size = 14, color = "grey20"),
-          axis.text = element_text(size = 14, color = "grey20"),
-          axis.title = element_text(size = 14, color = "grey20"),
-          axis.text.x = element_text(vjust = 1,
+          legend.text = element_text(size = 12, color = "grey20"),
+          axis.text.y = element_text(size = 12, color = "grey20"),
+          axis.title = element_text(size = 12, color = "grey20"),
+          axis.text.x = element_text(size = 12,
+                                     vjust = 1,
                                      hjust=1, 
                                      color = "grey20")) +
     labs(x = "Trait",

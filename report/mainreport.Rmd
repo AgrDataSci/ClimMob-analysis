@@ -188,7 +188,7 @@ relation_other_chrs1 <- ""
 relation_other_chrs2 <- ""
 if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
 relation_other_chrs1 <- 
-  paste0("Table 4 shows the Kendall tau coefficient. ",
+  paste0("Figure 6 shows the Kendall tau coefficient. ",
          "The trait that had the strongest ", 
         "correlation with '", reference_trait, "' was '", 
         PL_models$kendall$strongest_link[1], 
@@ -198,13 +198,13 @@ relation_other_chrs1 <-
         reference_trait,
         "' was '", PL_models$kendall$weakest_link[1], 
         "' with a Kendall tau of ", 
-        PL_models$kendall$weakest_link[2], ".")
+        PL_models$kendall$weakest_link[2], ". A table with Kendall tau and a significance test is provided in the Appendix.")
 }
 
 if (isTRUE(length(PL_models$worthmap) > 0)) {
   relation_other_chrs2 <- paste0("The log-worth by trait of each ",
                                  option, 
-                                 " tested in this experiment is presented in Figure 6.",
+                                 " tested in this experiment is presented in Figure 7.",
                                  " The chart shows for each trait the probability that each ",
                                  option, 
                                  " has in outperforming the check(s) ",
@@ -234,12 +234,10 @@ kable(PL_models$ANOVA,
 
 `r paste(relation_other_chrs1, collapse='\n')`
 
-```{r kendall_tau_plot}
+
+```{r kendall_tau_plot, dpi = dpi, fig.height=7, fig.width=7, fig.cap=paste0("Fig. 6. Kendall correlation coefficient between '", reference_trait, "' and the other traits assessed in this trial.")}
 if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
-  kable(PL_models$kendall$kendall,
-        caption = paste0("Table 4. Kendall correlation between '", reference_trait, "' and the other traits assessed in this trial. A p-value < 0.05 indicates significant correlation between traits."),
-          align = "l",
-          row.names = FALSE)
+  plot(PL_models$kendall$kendall_plot)
 }
 ```
 
@@ -248,19 +246,19 @@ if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
 `r paste(relation_other_chrs2, collapse='\n')`
 
 
-```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 6. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (green) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (brown) represents the ", options, " with underperformance for the given trait. Log-worth for the reference(s) is arbitrarily set to zero.")}
+```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 7. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (green) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (brown) represents the ", options, " with underperformance for the given trait. Log-worth for the reference(s) is arbitrarily set to zero.")}
 plot(PL_models$worthmap)
 ```
 
-Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 7. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering the `r paste(reference_trait, collapse = ", ")` with `r paste(reference_tech, collapse = ", ")` as the check `r option`.
+Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 8. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering the `r paste(reference_trait, collapse = ", ")` with `r paste(reference_tech, collapse = ", ")` as the check `r option`.
 
-```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 7. Reliability of tested ", options, " versus the check. The blue vertical line set to 0.5 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0.5).")}
+```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 8. Reliability of tested ", options, " versus the check. The blue vertical line set to 0.5 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0.5).")}
 plot(PL_models$reliability_plot)
 ```
 
-Figure 8 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order with p-value = 0.05.
+Figure 9 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order with p-value = 0.05.
 
-```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 8. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. The ", option, " ", reference_tech[1], " is set as reference (log-worth arbitrarily set to zero). Intervals are based on quasi standard errors.")}
+```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 9. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. Intervals are based on quasi standard errors.")}
 plot(PL_models$logworth_overall)
 ```
 
@@ -287,10 +285,10 @@ if (isTRUE(PL_tree$isTREE)) {
   }
   
   tree_test2 <- 
-    paste0("Figure 9 shows the Plackett-Luce tree obtained with the selected model.")
+    paste0("Figure 10 shows the Plackett-Luce tree obtained with the selected model.")
   
   tree_test3 <- 
-    paste0("Table 6 present the worth and regret estimates [@Loomes1982; @Bleichrodt2015] across the tree nodes. Regret is an important heuristic in the behavioural sciences. Minimizing the loss under the worst possible outcome (worst regret) is a criterion that takes a conservative approach to risk analysis in diversification strategies. This provides a decision-making approach to select ", options, " with the superior performance across all scenarios (nodes) in the tree.")
+    paste0("Table 5 present the worth and regret estimates [@Loomes1982; @Bleichrodt2015] across the tree nodes. Regret is an important heuristic in the behavioural sciences. Minimizing the loss under the worst possible outcome (worst regret) is a criterion that takes a conservative approach to risk analysis in diversification strategies. This provides a decision-making approach to select ", options, " with the superior performance across all scenarios (nodes) in the tree.")
 }
 
 ```
@@ -302,7 +300,7 @@ if (isTRUE(PL_tree$isTREE)) {
 ```{r tree_node_table}
 if(isTRUE(PL_tree$isTREE)){
 kable(PL_tree$node_summary, 
-        caption = paste0("Table 5. Summary of node groups identified",
+        caption = paste0("Table 4. Summary of node groups identified",
                          " by the model-based recursive partitioning tree applied to the Plackett-Luce rankings."),
         row.names = FALSE)
 }
@@ -315,7 +313,7 @@ kable(PL_tree$node_summary,
 
 \
 
-```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Figure 9. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
+```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Figure 10. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
 if (isTRUE(PL_tree$isTREE)) {
 plot(PL_tree$PLtree_plot)
 }
@@ -330,7 +328,7 @@ plot(PL_tree$PLtree_plot)
 ```{r regret_table}
 if(isTRUE(PL_tree$isTREE)){
 kable(PL_tree$regret_table, 
-        caption = paste0("Table 6. Expected probability of winning (worth) and worst regret estimates. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
+        caption = paste0("Table 5. Expected probability of winning (worth) and worst regret estimates. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
         row.names = FALSE)
 }
 
@@ -368,6 +366,23 @@ for(i in seq_along(quantitative_traits$density_plots)) {
 :::
 
 # Appendix
+
+```{r kendall_caption}
+kendall_caption <- ""
+if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
+  kendall_caption <- "## Kendall correlation table"
+}
+```
+
+```{r kendall_tau_table}
+if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
+  kable(PL_models$kendall$kendall,
+        caption = paste0("Table Appendix 1. Kendall correlation between '", reference_trait, "' and the other traits assessed in this trial. A p-value < 0.05 indicates significant correlation between traits."),
+          align = "l",
+          row.names = FALSE)
+}
+```
+
 
 ```{r error}
 error_caption <- ""
