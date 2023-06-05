@@ -64,9 +64,10 @@ get_testing_sites_map = function(cmdata, output_path, backward_path){
     
     dir.create(tempmap, recursive = TRUE, showWarnings = FALSE)
     
-    mapview::mapshot(trial_map, 
+    try(mapview::mapshot(trial_map, 
                      url = paste0(tempmap, "/trial_map.html"),
-                     file = paste0(tempmap, "/trial_map.png"))
+                     file = paste0(tempmap, "/trial_map.png")),
+        silent = TRUE)
     
   }
   
