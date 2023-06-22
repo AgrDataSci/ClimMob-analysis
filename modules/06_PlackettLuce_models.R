@@ -36,9 +36,9 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   # first a list with rankings
   R = lapply(trait_list, function(x){
     rank_tricot(cmdata[, c(technologies_index, x$strings)],
-                items = technologies_index,
-                input = x$strings,
-                validate.rankings = TRUE)
+                    items = technologies_index,
+                    input = x$strings,
+                    validate.rankings = TRUE)
   })
   
   
@@ -51,8 +51,8 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   logworth_plot = list()
   
   for(m in seq_along(mod)) {
-    logworth_plot[[m]] = 
-      plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
+    lwp = 
+      try(plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
       labs(title = paste0(rank_dat$trait_names[m],
                           " (n = ", length(mod[[m]]$rankings),")")) +
       coord_flip() +
@@ -63,8 +63,24 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
             strip.placement = "outside",
             strip.text = element_text(size = 10, color = "grey20"),
             legend.text = element_text(size = 10, color = "grey20"),
-            axis.title = element_text(size = 10, color = "grey20"))
+            axis.title = element_text(size = 10, color = "grey20")),
+      silent = TRUE)
+    
+    if ("try-error" %in% class(lwp)) next
+    
+    logworth_plot[[m]] = lwp
+    
   }
+  
+  logworth_overall = logworth_plot[[reference_trait_index]]
+  
+  if ("try-error" %in% class(logworth_overall)) {
+    logworth_overall = ggplot()
+  }
+  
+  rmv = unlist(lapply(logworth_plot, is.null))
+  
+  logworth_plot = logworth_plot[!rmv]
   
   #...........................................................
   # Head to head visualization of each technology performance by trait
@@ -177,14 +193,6 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
       
     })
     
-    # for(j in seq_along(trait_names)) {
-    #   
-    #   if (is.null(rel_i[[j]])) next
-    #   
-    #   rel_i[[j]]$Trait = trait_names[j]
-    #   
-    # }
-    
     rel_i = do.call("rbind", rel_i)
     
     reliability_data = rbind(reliability_data, rel_i)
@@ -193,12 +201,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   # remove the checks
   reliability_data = reliability_data[!reliability_data$item %in% checks, ]
-  
-  # # put traits in the right order
-  # reliability_data$Trait = factor(reliability_data$Trait,
-  #                                 levels = rev(trait_names))
-  
-  
+
   # plot the reliability
   reliability_plot = 
     ggplot(data = reliability_data,
@@ -212,7 +215,6 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
                linewidth = 1) +
     scale_fill_manual(values = "#b2df8a") +
     facet_wrap(~ Check, strip.position = "bottom") +
-    #theme_bw() +
     theme_classic() +
     theme(panel.grid.major = element_blank(),
           strip.background =element_rect(fill="white"),
@@ -225,11 +227,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
           axis.title = element_text(size = 12, color = "grey20")) +
     labs(y = "Probability of outperforming",
          x = "")
-  
-  
-  reliability_plot
 
-  #.....................................................
   #.....................................................
   #.....................................................
   # Get the Kendall tau ####
@@ -313,7 +311,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   # export results
   result = list(PL_models = mod,
-                logworth_overall = logworth_plot[[reference_trait_index]],
+                logworth_overall = logworth_overall,
                 worthmap = worthmap,
                 ANOVA = aov_tbl,
                 logworth_plot = logworth_plot,

@@ -36,14 +36,19 @@ organize_quantitative_data = function(cmdata,
                                       id = "id",
                                       tech_index = c("package_item_A", "package_item_B", "package_item_C")) {
   
+  
+  quanti_traits = pars[["linear"]]
+  
+  if (length(quanti_traits) == 0) {
+    return(list(quantitative =  FALSE))
+  }
+  
   # from json to data.frame
   cmdata = as.data.frame(x = cmdata, 
                          tidynames = FALSE, 
                          pivot.wider = TRUE)
   
   ntech = length(tech_index)
-  
-  quanti_traits = pars[["linear"]]
   
   # check if a request to split the data by groups (segments)
   # (gender, location, etc.) is provided

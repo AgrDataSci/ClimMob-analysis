@@ -161,7 +161,8 @@ if (any_error(org_lonlat)) {
 org_agroclim = tryCatch({
   
   agroclimate = get_agroclimatic_data(cmdata,
-                                      coords = trial_map$coords)
+                                      coords = trial_map$coords,
+                                      ndays = 60)
   
 }, error = function(cond) {
   return(cond)
@@ -333,7 +334,7 @@ dir.create(chartdir, recursive = TRUE, showWarnings = FALSE)
 
 # log worth plot by trait
 for(m in seq_along(PL_models$logworth_plot)){
-  try(ggsave(paste0(chartdir, rank_dat$trait_code[m], "_logworth.png"),
+  try(ggsave(paste0(chartdir, m, "-logworth.pdf"),
          plot = PL_models$logworth_plot[[m]],
          width = 21,
          height = 15,
@@ -342,7 +343,7 @@ for(m in seq_along(PL_models$logworth_plot)){
 }
 
 # plot kendall tau plot
-try(ggsave(paste0(chartdir, "kendall_tau.png"),
+try(ggsave(paste0(chartdir, "kendall_tau.pdf"),
            plot = PL_models$kendall$kendall_plot,
            width = 15,
            height = 18,
@@ -350,7 +351,7 @@ try(ggsave(paste0(chartdir, "kendall_tau.png"),
            dpi = 200), silent = TRUE)
 
 # plot worth map
-try(ggsave(paste0(chartdir, "worth_map.png"),
+try(ggsave(paste0(chartdir, "worth_map.pdf"),
            plot = PL_models$worthmap,
            width = 25,
            height = 25,
@@ -358,7 +359,7 @@ try(ggsave(paste0(chartdir, "worth_map.png"),
            dpi = 200), silent = TRUE)
 
 # plot worth map
-try(ggsave(paste0(chartdir, "reliability.png"),
+try(ggsave(paste0(chartdir, "reliability.pdf"),
            plot = PL_models$reliability_plot,
            width = 25,
            height = 25,
@@ -368,21 +369,8 @@ try(ggsave(paste0(chartdir, "reliability.png"),
 try(write.csv(PL_models$reliability_data, paste0(chartdir, "reliability_data.csv"),
            row.names = FALSE), silent = TRUE)
 
-if(length(unique(rank_dat$group)) > 1) {
-  g = unique(rank_dat$group)
-  # log worth plot by group
-  for(m in seq_along(PL_models$logworth_plot_groups)){
-    try(ggsave(paste0(chartdir, "Group", m, "_", g[m], "_logworth_grouped_rank.png"),
-           plot = PL_models$logworth_plot_groups[[m]],
-           width = 21,
-           height = 15,
-           units = "cm",
-           dpi = 200), silent = TRUE)
-  }
-}
-
 if(PL_tree$isTREE){
-  try(ggsave(paste0(chartdir, "PlackettLuce.png"),
+  try(ggsave(paste0(chartdir, "PlackettLuceTree.pdf"),
              plot = PL_tree$PLtree_plot,
              width = 18,
              height = 25,
@@ -401,14 +389,14 @@ if (isTRUE(agroclimate$agroclimate)) {
             file = paste0(chartdir, "weekly_temperature_indices.csv"),
             row.names = FALSE)
   
-  try(ggsave(paste0(chartdir, "weekly_precipitation_indices.png"),
+  try(ggsave(paste0(chartdir, "weekly_precipitation_indices.pdf"),
              plot = agroclimate$rain_plot,
              width = 20,
              height = 20,
              units = "cm",
              dpi = 200), silent = TRUE)
   
-  try(ggsave(paste0(chartdir, "weekly_temperature_indices.png"),
+  try(ggsave(paste0(chartdir, "weekly_temperature_indices.pdf"),
              plot = agroclimate$temperature_plot,
              width = 20,
              height = 20,
