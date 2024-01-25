@@ -10,7 +10,6 @@ ClimMob-analysis v3.0 (2024-01-25)
 
 * Fixes changes in reference for the log-worth plot
 
-
 ClimMob-analysis v2.1 (2022-12-15)
 =========================
 
