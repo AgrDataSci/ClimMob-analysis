@@ -41,7 +41,14 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
                     validate.rankings = TRUE)
   })
   
+  # # Handle rankings with poor connectivity
+  connection = lapply(R, function(x) connectivity(x, verbose = FALSE)$no)
   
+  connection = as.vector(unlist(connection) > 1)
+  
+  # force a pseudo rank  
+  R[connection] = lapply(R[connection], force_pseudo_rank)
+
   # fit the model 
   mod = lapply(R, function(x){
     PlackettLuce(x)
@@ -51,19 +58,11 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   logworth_plot = list()
   
   for(m in seq_along(mod)) {
-    lwp = 
-      try(plot_logworth(mod[[m]], ref = reference_tech, ci.level = 0.5) + 
+    lwp = try(plot_logworth(mod[[m]], 
+                        ref = reference_tech, 
+                        ci.level = 0.5) + 
       labs(title = paste0(rank_dat$trait_names[m],
-                          " (n = ", length(mod[[m]]$rankings),")")) +
-      coord_flip() +
-      theme(axis.text.x = element_text(angle = 0,
-                                       vjust = 0.5,
-                                       hjust = 0.5),
-            strip.background.x = element_blank(),
-            strip.placement = "outside",
-            strip.text = element_text(size = 10, color = "grey20"),
-            legend.text = element_text(size = 10, color = "grey20"),
-            axis.title = element_text(size = 10, color = "grey20")),
+                          " (n = ", length(mod[[m]]$rankings),")")),
       silent = TRUE)
     
     if ("try-error" %in% class(lwp)) next

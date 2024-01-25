@@ -151,7 +151,6 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
                   validate.rankings = TRUE,
                   group = TRUE)
   
-  
   #..........................................................
   # PlackettLuce tree ####
   # data frame of explanatory variables
