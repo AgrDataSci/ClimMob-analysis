@@ -1,3 +1,16 @@
+ClimMob-analysis v3.0 (2024-01-25)
+=========================
+
+### Improvements 
+
+* Adds analysis of variance for variety performance
+* Adds pseudo ranking when network is poorly connected
+
+### Bug fixes 
+
+* Fixes changes in reference for the log-worth plot
+
+
 ClimMob-analysis v2.1 (2022-12-15)
 =========================
 

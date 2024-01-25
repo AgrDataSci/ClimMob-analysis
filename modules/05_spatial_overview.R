@@ -60,20 +60,15 @@ get_testing_sites_map = function(cmdata, output_path, backward_path){
                          minimap = TRUE, 
                          map_provider = "OpenStreetMap.Mapnik")
     
-    tempmap = paste0(getwd(), "/tempmap/")
-    
-    dir.create(tempmap, recursive = TRUE, showWarnings = FALSE)
-    
     try(mapview::mapshot(trial_map, 
-                     url = paste0(tempmap, "/trial_map.html"),
-                     file = paste0(tempmap, "/trial_map.png")),
+                     url = paste0(output_path, "/trial_map.html"),
+                     file = paste0(output_path, "/trial_map.png")),
         silent = TRUE)
     
   }
   
   result = list(geoTRUE = TRUE, 
-                mapDIR = tempmap,
-                map_path = paste0(tempmap, "/trial_map.png"),
+                map_path = paste0(fullpath, "/", output_path, "/trial_map.png"),
                 map = trial_map,
                 coords = lonlat)
   

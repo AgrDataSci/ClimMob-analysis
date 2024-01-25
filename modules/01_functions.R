@@ -35,6 +35,59 @@ library("janitor")
 library("lubridate")
 library("ggchicklet")
 
+
+#' Add pseudo ranking
+#' Adds pseudo values to weakly connected networks
+#' @param x a PlackettLuce ranking object
+force_pseudo_rank = function(x) {
+ 
+  # get membership in the network
+  members = PlackettLuce::connectivity(x)$membership
+  # put the members in order
+  members = sort(members)
+  # rankings into a matrix
+  r = unclass(x)
+  
+  performance = coefficients(PlackettLuce::PlackettLuce(r))
+  
+  # get the worst item per cluster
+  members = split(members, members)
+  
+  members = lapply(members, function(z){
+    p = performance[names(z)]
+    worst = which.min(p)
+    names(p)[worst]
+  })
+  
+  members = as.character(unlist(members))
+  
+  # create a pseudo ranking for these members where they will always
+  # lose and win to each other
+  # number to start ranking
+  max_rank = max(r) + 1
+  
+  # rows to add the pseudo rankings 
+  to_input = rowSums(r) != 0
+  
+  to_sample = c(rep(0, ceiling(length(members)/2)), 
+                    max_rank:(max_rank + ceiling(length(members)/2)))
+  
+  # rows to add the pseudo rankings 
+  r[to_input, members] = apply(r[to_input, members], 1, function(y){
+    
+    where = y == 0
+    
+    y[where] = sample(to_sample, size = length(y[where]))
+    
+    y
+    
+  })
+  
+  r = as.rankings(r)
+  
+}
+
+
 #'Get colour pallet
 #' @param x an integer
 #' @examples 
@@ -577,6 +630,12 @@ decode_pars = function(x) {
       tr = toupper(tr)
     }
     
+    if (any(grepl("generalappreciation", tr))) {
+      i = which(grepl("generalappreciation", tr))[1]
+      questions$traitOrder[i] = "referenceTrait"
+      tr = toupper(tr)
+    }
+    
     if (any(grepl("yield", tr))) {
       i = which(grepl("yield", tr))[1]
       questions$traitOrder[i] = "referenceTrait"
@@ -794,7 +853,8 @@ multcompPL = function(mod, items = NULL, threshold = 0.05, adjust = "none", ...)
 #' @param ci.level the confidence interval level
 #' @param multcomp logical to add group letters 
 #' @param levels an optional vector with factor levels to plot
-plot_logworth = function(x, ci.level = 0.95, ref = NULL, multcomp = TRUE, levels = NULL, ...) {
+plot_logworth = function(x, ci.level = 0.95, ref = NULL, 
+                         multcomp = TRUE, levels = NULL, ...) {
   
   frame = data.frame()
 
@@ -806,7 +866,7 @@ plot_logworth = function(x, ci.level = 0.95, ref = NULL, multcomp = TRUE, levels
   }
   
   if (is.null(levels)) {
-    levels = unique(frame$items)
+    levels = union(ref, sort(unique(frame$items)))
   }
   
   items = factor(frame$items, levels = levels)
@@ -838,29 +898,29 @@ plot_logworth = function(x, ci.level = 0.95, ref = NULL, multcomp = TRUE, levels
   pdat$items = factor(pdat$items, levels = levels)
   
   p = ggplot(data = pdat,
-              aes(x = items, 
-                  y = est,
-                  ymax = tops,
-                  ymin = tails, 
+              aes(y = items, 
+                  x = est,
+                  xmax = tops,
+                  xmin = tails, 
                   label = group)) +
-    geom_hline(yintercept = 0, 
+    geom_vline(xintercept = 0, 
                colour = "#E5E7E9",
                linewidth = 0.8) +
     geom_point() +
     geom_errorbar(width = 0.1) +
-    geom_text(vjust = 1.2, hjust = 1.2) +
+    geom_text(hjust = 1.2, vjust = 1.2) +
     theme_bw() +
     facet_wrap(~ ref, strip.position = "bottom") +
     theme(panel.grid.major = element_blank(),
-          axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,
-                                     size = 10, color = "grey20"),
+          strip.background.x = element_blank(),
           axis.text.y = element_text(size = 10, color = "grey20"),
+          axis.text.x = element_text(size = 10, color = "grey20"),
           text = element_text(color = "grey20"),
           legend.position = "bottom",
           legend.title = element_blank(),
-          strip.background.x = element_blank(),
+          strip.background.y = element_blank(),
           strip.placement = "outside") +
-    labs(x = "", y = "Log-worth")
+    labs(y = "", x = "Log-worth")
   
   p
   
