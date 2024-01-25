@@ -230,83 +230,93 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   #.....................................................
   #.....................................................
   # Get the Kendall tau ####
-  kendall = lapply(trait_list[-reference_trait_index], function(x){
+  if (length(trait_list) > 1){
+    kendall = lapply(trait_list[-reference_trait_index], function(x){
+      
+      r1 = rank_tricot(cmdata[, c(technologies_index, 
+                                  trait_list[[reference_trait_index]]$strings)],
+                       items = technologies_index,
+                       input = trait_list[[reference_trait_index]]$strings,
+                       validate.rankings = TRUE)
+      
+      r2 = rank_tricot(cmdata[, c(technologies_index, x$strings)],
+                       items = technologies_index,
+                       input = x$strings,
+                       validate.rankings = TRUE)
+      
+      kendall = kendallTau(r1, r2, na.omit = FALSE)
+      
+      kendall
+      
+    })
     
-    r1 = rank_tricot(cmdata[, c(technologies_index, 
-                                trait_list[[reference_trait_index]]$strings)],
-                     items = technologies_index,
-                     input = trait_list[[reference_trait_index]]$strings,
-                     validate.rankings = TRUE)
+    kendall = do.call("rbind", kendall)
     
-    r2 = rank_tricot(cmdata[, c(technologies_index, x$strings)],
-                     items = technologies_index,
-                     input = x$strings,
-                     validate.rankings = TRUE)
+    kendall$trait = unlist(lapply(trait_list[-reference_trait_index], function(x){
+      paste0(x$name, " [" , x$assessment, "]")
+    }))
     
-    kendall = kendallTau(r1, r2, na.omit = FALSE)
+    kendall = kendall[rev(order(kendall$kendallTau)), ]
     
-    kendall
+    kendall = kendall[, -2]
     
-  })
-  
-  kendall = do.call("rbind", kendall)
-  
-  kendall$trait = unlist(lapply(trait_list[-reference_trait_index], function(x){
-    paste0(x$name, " [" , x$assessment, "]")
-  }))
-  
-  kendall = kendall[rev(order(kendall$kendallTau)), ]
-  
-  kendall = kendall[, -2]
-  
-  strongest_link = c(kendall$trait[1],
-                     round(kendall$kendallTau[1], 2))
-  
-  weakest_link = c(kendall$trait[nrow(kendall)],
-                   round(kendall$kendallTau[nrow(kendall)], 2))
-  
-  kendall = kendall[,c("trait", "kendallTau", "Zvalue", "Pr(>|z|)")]
-  
-  kendall[,"kendallTau"] = round(kendall[,"kendallTau"], 3)
-  
-  kendall[,"Zvalue"] = round(kendall[,"Zvalue"], 3)
-  
-  stars = stars.pval(kendall[,"Pr(>|z|)"])
-  
-  kendall[, "Pr(>|z|)"] = format(kendall[, "Pr(>|z|)"], 
-                                 scientific = TRUE,
-                                 digits = 3)
-  
-  kendall[, "Pr(>|z|)"] = paste(kendall[, "Pr(>|z|)"], stars)
-  
-  kendall = kendall[rev(order(kendall$kendallTau)), ]
-  
-  kendall$trait = factor(kendall$trait, levels = rev(kendall$trait))
-  
-  # make a bar plot plot 
-  kendall_plot = 
-    ggplot(data = kendall, 
-           aes(y = kendallTau,
-               x = trait, 
-               fill = trait)) +
-    geom_chicklet(show.legend = FALSE) +
-    coord_flip() +
-    scale_fill_manual(values = col_pallet(nrow(kendall))) +
-    theme_classic() +
-    theme(legend.position = "bottom",
-          legend.text = element_text(size = 12, color = "grey20"),
-          axis.text.y = element_text(size = 12, color = "grey20"),
-          axis.title = element_text(size = 12, color = "grey20"),
-          axis.text.x = element_text(size = 12,
-                                     vjust = 1,
-                                     hjust=1, 
-                                     color = "grey20")) +
-    labs(x = "Trait",
-         y = "Kendall tau") 
-  
-  names(kendall) = c("Trait", "Kendall tau", "Z value", "Pr(>|z|)")
-  
-  row.names(kendall) = 1:nrow(kendall)
+    strongest_link = c(kendall$trait[1],
+                       round(kendall$kendallTau[1], 2))
+    
+    weakest_link = c(kendall$trait[nrow(kendall)],
+                     round(kendall$kendallTau[nrow(kendall)], 2))
+    
+    kendall = kendall[,c("trait", "kendallTau", "Zvalue", "Pr(>|z|)")]
+    
+    kendall[,"kendallTau"] = round(kendall[,"kendallTau"], 3)
+    
+    kendall[,"Zvalue"] = round(kendall[,"Zvalue"], 3)
+    
+    stars = stars.pval(kendall[,"Pr(>|z|)"])
+    
+    kendall[, "Pr(>|z|)"] = format(kendall[, "Pr(>|z|)"], 
+                                   scientific = TRUE,
+                                   digits = 3)
+    
+    kendall[, "Pr(>|z|)"] = paste(kendall[, "Pr(>|z|)"], stars)
+    
+    kendall = kendall[rev(order(kendall$kendallTau)), ]
+    
+    kendall$trait = factor(kendall$trait, levels = rev(kendall$trait))
+    
+    # make a bar plot plot 
+    kendall_plot = 
+      ggplot(data = kendall, 
+             aes(y = kendallTau,
+                 x = trait, 
+                 fill = trait)) +
+      geom_chicklet(show.legend = FALSE) +
+      coord_flip() +
+      scale_fill_manual(values = col_pallet(nrow(kendall))) +
+      theme_classic() +
+      theme(legend.position = "bottom",
+            legend.text = element_text(size = 12, color = "grey20"),
+            axis.text.y = element_text(size = 12, color = "grey20"),
+            axis.title = element_text(size = 12, color = "grey20"),
+            axis.text.x = element_text(size = 12,
+                                       vjust = 1,
+                                       hjust=1, 
+                                       color = "grey20")) +
+      labs(x = "Trait",
+           y = "Kendall tau") 
+    
+    names(kendall) = c("Trait", "Kendall tau", "Z value", "Pr(>|z|)")
+    
+    row.names(kendall) = 1:nrow(kendall)
+    
+  }else{
+    
+    kendall = data.frame()
+    strongest_link = ""
+    weakest_link = ""
+    kendall_plot = 0L
+    
+  }
   
   # export results
   result = list(PL_models = mod,
