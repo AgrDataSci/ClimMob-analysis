@@ -648,7 +648,7 @@ decode_pars = function(x) {
       tr = toupper(tr)
     }
     
-    if (sum(grepl("performance|yield|overall|overallperf|market", tolower(tr))) == 0) {
+    if (sum(grepl("performance|yield|overall|overallperf|market|generalappreciation", tolower(tr))) == 0) {
       questions$traitOrder[length(questions$codeQst)] = "referenceTrait"
       tr = toupper(tr)
     }
