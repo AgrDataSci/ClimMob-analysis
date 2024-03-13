@@ -853,14 +853,13 @@ multcompPL = function(mod, items = NULL, threshold = 0.05, adjust = "none", ...)
 #' @param ci.level the confidence interval level
 #' @param multcomp logical to add group letters 
 #' @param levels an optional vector with factor levels to plot
-#' @param log logical, to return log-worth 
 plot_logworth = function(x, ci.level = 0.95, ref = NULL, 
-                         multcomp = TRUE, levels = NULL, log = TRUE, ...) {
+                         multcomp = TRUE, levels = NULL, ...) {
   
   frame = data.frame()
-
+  
   for (i in seq_along(ref)) {
-    fi = qvcalc::qvcalc(psychotools::itempar(x, ref = ref[i], log = log))$qvframe
+    fi = qvcalc(x, ref = ref[i], ...)$qvframe
     fi$ref = ref[i]
     fi$items = rownames(fi)
     frame = rbind(frame, fi)
@@ -898,19 +897,13 @@ plot_logworth = function(x, ci.level = 0.95, ref = NULL,
   
   pdat$items = factor(pdat$items, levels = levels)
   
-  if (isFALSE(log)) {
-    intercept = 1/length(items)
-  } else {
-    intercept = 0
-  }
-  
   p = ggplot(data = pdat,
-              aes(y = items, 
-                  x = est,
-                  xmax = tops,
-                  xmin = tails, 
-                  label = group)) +
-    geom_vline(xintercept = intercept, 
+             aes(y = items, 
+                 x = est,
+                 xmax = tops,
+                 xmin = tails, 
+                 label = group)) +
+    geom_vline(xintercept = 0, 
                colour = "#E5E7E9",
                linewidth = 0.8) +
     geom_point() +
@@ -932,6 +925,95 @@ plot_logworth = function(x, ci.level = 0.95, ref = NULL,
   p
   
   return(p)
+  
+}
+
+
+#' Plot log-worth
+#' @param x a multicomp dataframe
+#' @param ci.level the confidence interval level
+#' @param multcomp logical to add group letters 
+#' @param levels an optional vector with factor levels to plot
+plot_worth = function(x, ci.level = 0.95, multcomp = TRUE, levels = NULL, ...) {
+  
+  frame = qvcalc(itempar(x))$qvframe
+  
+  frame$items = rownames(frame)
+  
+  if (is.null(levels)) {
+    levels = sort(unique(frame$items))
+  }
+  
+  pdat = data.frame(est = frame$estimate,
+                    se = frame$quasiSE,
+                    items = factor(frame$items, levels = levels),  
+                    tops = frame$estimate + stats::qnorm(1-(1 - ci.level) / 2) * mean(frame$quasiSE),
+                    tails = frame$estimate - stats::qnorm(1-(1 - ci.level) / 2) * mean(frame$quasiSE))
+  
+  range = max(pdat$tops) - min(pdat$tails)
+  
+  if (isTRUE(multcomp)) {
+    lettersdat = multcompPL(mod = x, ...)
+    lettersdat = lettersdat[, c("items", "group")]
+    pdat = merge(pdat, lettersdat, by = "items")
+  } 
+  
+  if (!isTRUE(multcomp)) {
+    pdat$group = ""
+  }
+  
+  pdat$items = factor(pdat$items, levels = levels)
+  
+  p = ggplot(data = pdat,
+             aes(y = items, 
+                 x = est,
+                 xmax = tops,
+                 xmin = tails, 
+                 label = group)) +
+    geom_vline(xintercept = 0, 
+               colour = "#E5E7E9",
+               linewidth = 0.8) +
+    geom_point() +
+    geom_errorbar(width = 0.1) +
+    geom_text(hjust = 1.2, vjust = 1.2) +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(),
+          strip.background.x = element_blank(),
+          axis.text.y = element_text(size = 10, color = "grey20"),
+          axis.text.x = element_text(size = 10, color = "grey20"),
+          text = element_text(color = "grey20"),
+          legend.position = "bottom",
+          legend.title = element_blank(),
+          strip.background.y = element_blank(),
+          strip.placement = "outside") +
+    labs(y = "", x = "Log-worth")
+
+  p
+  
+  return(p)
+  
+}
+
+#' Pluralize
+#' @param x a character
+pluralize = function(x, p = "s") {
+  
+  pl = matrix(c("variety","varieties",
+                "variedad","variedades",
+                "opcion", "opciones",
+                "technology", "technologies"), 
+              nrow = 4, ncol = 2, byrow = TRUE)
+  
+  is_here = x %in% pl[,1]
+  if (isTRUE(is_here)) {
+    x = pl[pl[,1] %in% x, 2]
+  }
+  
+  if (isFALSE(is_here)) {
+    x = paste0(x, p)
+  }
+  
+  return(x)
   
 }
 
