@@ -853,17 +853,14 @@ multcompPL = function(mod, items = NULL, threshold = 0.05, adjust = "none", ...)
 #' @param ci.level the confidence interval level
 #' @param multcomp logical to add group letters 
 #' @param levels an optional vector with factor levels to plot
+#' @param log logical, to return log-worth 
 plot_logworth = function(x, ci.level = 0.95, ref = NULL, 
-                         multcomp = TRUE, levels = NULL, ...) {
+                         multcomp = TRUE, levels = NULL, log = TRUE, ...) {
   
   frame = data.frame()
 
-  dots = list(...)
-  
-  log = dots[["log"]]
-  
   for (i in seq_along(ref)) {
-    fi = qvcalc::qvcalc(psychotools::itempar(x), ref = ref[i], ...)$qvframe
+    fi = qvcalc::qvcalc(psychotools::itempar(x, ref = ref[i], log = log))$qvframe
     fi$ref = ref[i]
     fi$items = rownames(fi)
     frame = rbind(frame, fi)
