@@ -858,8 +858,12 @@ plot_logworth = function(x, ci.level = 0.95, ref = NULL,
   
   frame = data.frame()
 
+  dots = list(...)
+  
+  log = dots[["log"]]
+  
   for (i in seq_along(ref)) {
-    fi = qvcalc(x, ref = ref[i], ...)$qvframe
+    fi = qvcalc::qvcalc(psychotools::itempar(x), ref = ref[i], ...)$qvframe
     fi$ref = ref[i]
     fi$items = rownames(fi)
     frame = rbind(frame, fi)
@@ -897,13 +901,19 @@ plot_logworth = function(x, ci.level = 0.95, ref = NULL,
   
   pdat$items = factor(pdat$items, levels = levels)
   
+  if (isFALSE(log)) {
+    intercept = 1/length(items)
+  } else {
+    intercept = 0
+  }
+  
   p = ggplot(data = pdat,
               aes(y = items, 
                   x = est,
                   xmax = tops,
                   xmin = tails, 
                   label = group)) +
-    geom_vline(xintercept = 0, 
+    geom_vline(xintercept = intercept, 
                colour = "#E5E7E9",
                linewidth = 0.8) +
     geom_point() +
