@@ -1169,7 +1169,7 @@ plot_pca = function(object, scale = 3){
   
   pcd_text = do.call("rbind", pcd_text)
   
-  loadings = as.data.frame(object$loadings[1:length(traitlabels), ])
+  loadings = as.data.frame(object$loadings[1:length(vars), ])
   names(loadings) = paste0("dim", 1:ncol(loadings))
   loadings$traits = rownames(loadings)
   
