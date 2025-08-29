@@ -1,8 +1,6 @@
 #' Produces a trial location map from GPS coordinates
 #' 
-#' @param cmdata a data frame with the ClimMob data
-#' @param output_path the working directory to write the leaflet map
-#' @param backward_path an absolute filepath representing the current working directory
+#' @param x an object of class CM_list
 #' @examples 
 #' modules = list.files("modules",
 #' full.names = TRUE,
@@ -15,62 +13,36 @@
 #' load("modules/example-data-structure.rda")
 #' 
 #' coords = get_testing_sites_map(cmdata, 
-#'                                output_path = "tests/output/testdata12", 
-#'                                backward_path = getwd())
+#'                                path = "tests/output/testdata16")
 #' 
 #' coords$map
 #' coords$coords
 #' 
 #' @export
-get_testing_sites_map = function(cmdata, output_path, backward_path){
+get_testing_sites_map = function(x, path = getwd()){
   
-  # Check if lonlat is provided
-  lon = grepl("geotrial_longitude", names(cmdata))
-  lat = grepl("geotrial_latitude", names(cmdata))
+  # extract coordinates
+  coords = ClimMobTools:::.get_trial_coordinates(x, return = c("coordinates"), dist = 0.000001)
   
-  geoTRUE = all(any(lon), any(lat))
+  # extract country ISO2 code
+  ctry = ClimMobTools:::.safe_extract(x, c("project", "project_cnty"), default = NA)
   
-  if (isFALSE(geoTRUE)) {
-    return(list(geoTRUE = FALSE))
-  }
+  # download GADM map using geodata
+  adm = geodata::gadm(country = ctry, level = 1, path = path)
   
-  # find the vector with most completeness 
-  less_nas = lapply(cmdata[lon], function(x){
-    sum(is.na(x))
-  })
+  adm = st_as_sf(adm)
   
-  lon = names(which.min(unlist(less_nas)))
-  lat = gsub("_longitude", "_latitude", lon)
+  xy = st_as_sf(coords, coords = c("longitude", "latitude"), crs = 4326)
   
-  lonlat = cmdata[, c(lon,lat)]
-  
-  lonlat[1:2] = lapply(lonlat[1:2], as.numeric)
-  
-  lonlat[,1] = ifelse(lonlat[,1] > 180 | lonlat[,1] < -180, NA, lonlat[,1])
-  
-  lonlat[,2] = ifelse(lonlat[,2] > 70 | lonlat[,2] < -70, NA, lonlat[,2])
-  
-  nlonlat = dim(lonlat)[[1]]
-  
-  if (nlonlat > 0) {
-    
-    trial_map = plot_map(data = lonlat, 
-                         make.clusters = FALSE,
-                         xy = c(1, 2),
-                         minimap = TRUE, 
-                         map_provider = "OpenStreetMap.Mapnik")
-    
-    try(mapview::mapshot(trial_map, 
-                     url = paste0(output_path, "/trial_map.html"),
-                     file = paste0(output_path, "/trial_map.png")),
-        silent = TRUE)
-    
-  }
+  trial_map = 
+    ggplot2::ggplot() +
+    ggplot2::geom_sf(data = adm, fill = "#ffffe5", color = "black", alpha = 1) +
+    ggplot2::geom_sf(data = xy, color = "blue", size = 1.5, shape = 21, fill = "red", stroke = 1) +
+    ggplot2::theme_minimal() 
   
   result = list(geoTRUE = TRUE, 
-                map_path = paste0(fullpath, "/", output_path, "/trial_map.png"),
                 map = trial_map,
-                coords = lonlat)
+                coords = coords)
   
 }
 
@@ -78,7 +50,6 @@ get_testing_sites_map = function(cmdata, output_path, backward_path){
 # Error in data 
 # this is a file that is generated to be used in case of errors
 error_data_trial_map = list(geoTRUE = FALSE, 
-                            map_path = "",
                             map = 0L,
                             coords = data.frame())
 

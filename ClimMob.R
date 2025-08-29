@@ -69,7 +69,7 @@ try_data = tryCatch({
                          tidynames = FALSE, 
                          pivot.wider = TRUE)
   
-  rank_dat = organize_ranking_data(cmdata = cmdatajson, 
+  rank_dat = organize_ranking_data(cmdata = cmdata, 
                                    pars, 
                                    groups, 
                                    option_label = option,
@@ -97,10 +97,10 @@ if (any_error(try_data)) {
 # 2. Organise quantitative data ####
 try_quanti_data = tryCatch({
   
-  quanti_dat = organize_quantitative_data(cmdata = cmdatajson, 
+  quanti_dat = organize_quantitative_data(cmdata, 
                                           pars, 
-                                          groups = groups, 
-                                          id = "id",
+                                          groups, 
+                                          id = "REG_qst162",
                                           tech_index = paste0("package_item_", LETTERS[1:3]))
   
   
@@ -139,9 +139,8 @@ if (any_error(org_summ)) {
 # 4. Make map ####
 org_lonlat = tryCatch({
   
-  trial_map = get_testing_sites_map(cmdata,
-                                    output_path = outputpath,
-                                    backward_path = fullpath)
+  trial_map = get_testing_sites_map(cmdatajson,
+                                    path = outputpath)
   
 }, error = function(cond) {
   return(cond)
@@ -246,7 +245,7 @@ output_format = ifelse(extension == "docx","word_document",
 
 
 # arguments to use in the report text
-project_name = rank_dat$projname
+project_name = ClimMobTools:::.safe_extract(cmdatajson, c("project", "project_name"), default = NA)
 noptions = length(rank_dat$technologies_index)
 ntechnologies = length(rank_dat$technologies)
 option = rank_dat$option
@@ -332,6 +331,15 @@ if (length(error) > 0) {
 chartdir = paste0(outputpath, "/extra-outputs/")
 dir.create(chartdir, recursive = TRUE, showWarnings = FALSE)
 
+# trial map
+if(isTRUE(trial_map$geoTRUE)){
+  try(ggsave(paste0(chartdir, "trial-map.pdf"),
+             plot = trial_map$map,
+             width = 18,
+             height = 18,
+             units = "cm"), silent = TRUE)
+}
+
 # log worth plot by trait
 for(m in seq_along(PL_models$logworth_plot)){
   try(ggsave(paste0(chartdir, m, "-logworth.pdf"),
@@ -343,7 +351,7 @@ for(m in seq_along(PL_models$logworth_plot)){
 }
 
 # plot kendall tau plot
-try(ggsave(paste0(chartdir, "kendall_tau.pdf"),
+try(ggsave(paste0(chartdir, "kendall-tau.pdf"),
            plot = PL_models$kendall$kendall_plot,
            width = 15,
            height = 18,
@@ -351,7 +359,7 @@ try(ggsave(paste0(chartdir, "kendall_tau.pdf"),
            dpi = 200), silent = TRUE)
 
 # plot worth map
-try(ggsave(paste0(chartdir, "worth_map.pdf"),
+try(ggsave(paste0(chartdir, "worth-map.pdf"),
            plot = PL_models$worthmap,
            width = 25,
            height = 25,
@@ -366,11 +374,11 @@ try(ggsave(paste0(chartdir, "reliability.pdf"),
            units = "cm",
            dpi = 200), silent = TRUE)
 
-try(write.csv(PL_models$reliability_data, paste0(chartdir, "reliability_data.csv"),
+try(write.csv(PL_models$reliability_data, paste0(chartdir, "reliability-data.csv"),
            row.names = FALSE), silent = TRUE)
 
 if(PL_tree$isTREE){
-  try(ggsave(paste0(chartdir, "PlackettLuceTree.pdf"),
+  try(ggsave(paste0(chartdir, "plackettluce-tree.pdf"),
              plot = PL_tree$PLtree_plot,
              width = 18,
              height = 25,
@@ -382,21 +390,21 @@ if(PL_tree$isTREE){
 if (isTRUE(agroclimate$agroclimate)) {
    
   write.csv(agroclimate$rainfall_season,
-            file = paste0(chartdir, "weekly_precipitation_indices.csv"),
+            file = paste0(chartdir, "weekly-precipitation-indices.csv"),
             row.names = FALSE)
   
   write.csv(agroclimate$temperature_season,
-            file = paste0(chartdir, "weekly_temperature_indices.csv"),
+            file = paste0(chartdir, "weekly-temperature-indices.csv"),
             row.names = FALSE)
   
-  try(ggsave(paste0(chartdir, "weekly_precipitation_indices.pdf"),
+  try(ggsave(paste0(chartdir, "weekly-precipitation-indices.pdf"),
              plot = agroclimate$rain_plot,
              width = 20,
              height = 20,
              units = "cm",
              dpi = 200), silent = TRUE)
   
-  try(ggsave(paste0(chartdir, "weekly_temperature_indices.pdf"),
+  try(ggsave(paste0(chartdir, "weekly-temperature-indices.pdf"),
              plot = agroclimate$temperature_plot,
              width = 20,
              height = 20,
@@ -410,7 +418,7 @@ if (isTRUE(quanti_dat$quantitative)) {
   
   write.csv(quanti_dat$outliers,
             file = paste0(chartdir, 
-                          "possible_outliers_in_quantitative_data.csv"),
+                          "possible-outliers-quantitative-data.csv"),
             row.names = FALSE)
   
 }

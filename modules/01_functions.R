@@ -24,8 +24,6 @@ library("ggplot2")
 library("igraph")
 library("ggparty")
 library("patchwork")
-library("leaflet")
-library("mapview")
 library("multcompView")
 library("png")
 library("plotrix")
@@ -34,6 +32,8 @@ library("caret")
 library("janitor")
 library("lubridate")
 library("ggchicklet")
+library("sf")
+library("geodata")
 
 
 #' Add pseudo ranking

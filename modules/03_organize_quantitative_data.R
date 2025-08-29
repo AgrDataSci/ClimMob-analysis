@@ -33,7 +33,7 @@
 organize_quantitative_data = function(cmdata, 
                                       pars, 
                                       groups = NULL,
-                                      id = "id",
+                                      id = "package_id",
                                       tech_index = c("package_item_A", "package_item_B", "package_item_C")) {
   
   
@@ -43,9 +43,9 @@ organize_quantitative_data = function(cmdata,
     return(list(quantitative =  FALSE))
   }
   
-  # from json to data.frame
-  cmdata = as.data.frame(x = cmdata, 
-                         tidynames = FALSE, 
+  # # from json to data.frame
+  cmdata = as.data.frame(x = cmdatajson,
+                         tidynames = FALSE,
                          pivot.wider = TRUE)
   
   ntech = length(tech_index)
