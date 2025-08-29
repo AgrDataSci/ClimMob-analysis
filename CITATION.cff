@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this dataset or software, please cite it as below."
+title: "Workflow for automated analysis and report of decentralized experimental data with the tricot approach"
+version: "v4"
+date-released: 2025-09-01
+authors:
+  - family-names: de Sousa
+    given-names: Kauê
+    orcid: https://orcid.org/0000-0002-7571-7845
+    affiliation: "Bioversity International; University of Inland Norway"
+  - family-names: Madriz
+    given-names: Brandon
+    affiliation: "MrBot Software Solutions"
+  - family-names: Müller
+    given-names: Anna 
+    orcid: https://orcid.org/0000-0003-3120-8560
+    affiliation: "Bioversity International"
+  - family-names: van Etten
+    given-names: Jacob
+    orcid: https://orcid.org/0000-0001-7554-2558
+    affiliation: "Bioversity International"
+repository-code: https://github.com/AgrDataSci/ClimMob-analysis
+license: CC-BY-4.0
+keywords:
+  - data-driven research
+  - citizen science
+  - FAIR principles
+  - data management
+  - open science
