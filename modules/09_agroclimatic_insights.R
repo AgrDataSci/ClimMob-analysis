@@ -111,13 +111,13 @@ get_agroclimatic_data = function(cmdata,
   
   # temperature
   sel = c("maxDT", "minDT", "maxNT", "minNT")
-  
+
   rplot = temp[temp$index %in% sel, ]
-  
-  rplot$index = factor(rplot$index, 
+
+  rplot$index = factor(rplot$index,
                        levels = c("maxDT", "minDT",
                                   "maxNT", "minNT"))
-  
+
   temperature_plot = ggplot(rplot) +
     geom_line(aes(y = value, x = date, group = id)) +
     geom_smooth(aes(y = value, x = date)) +

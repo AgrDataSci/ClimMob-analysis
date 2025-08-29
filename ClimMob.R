@@ -69,7 +69,7 @@ try_data = tryCatch({
                          tidynames = FALSE, 
                          pivot.wider = TRUE)
   
-  rank_dat = organize_ranking_data(cmdata = cmdata, 
+  rank_dat = organize_ranking_data(cmdata = cmdatajson, 
                                    pars, 
                                    groups, 
                                    option_label = option,

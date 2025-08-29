@@ -44,7 +44,7 @@ organize_ranking_data = function(cmdata,
                                  sig_level = 0.1){
   
   # Get some info from the data and ClimMob parameters 
-  projname     = cmdata$project$project_name
+  projname = ClimMobTools:::.safe_extract(cmdata, c("project", "project_name"), default = NA)
   
   # get the names of reference techs 
   reference_tech = cmdata$combination$elements[reference_tech]
