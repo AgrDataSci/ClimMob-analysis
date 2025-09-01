@@ -167,6 +167,12 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   names(aov_tbl)[names(aov_tbl) == "Model"] = "Trait"
   
+  # Net winning score
+  netwinning = lapply(R, function(x){
+    preference_index(x)
+  })
+  
+  
   #...........................................................
   # Reliability ####
   # run reliability over the different check varieties
@@ -321,6 +327,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   # export results
   result = list(PL_models = mod,
                 logworth_overall = logworth_overall,
+                netwinning = netwinning,
                 worthmap = worthmap,
                 ANOVA = aov_tbl,
                 logworth_plot = logworth_plot,
@@ -341,6 +348,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
 # this is a file that is generated to be used in case of errors
 error_data_PL_model = list(PL_models = list(),
                            logworth_overall = 0L,
+                           netwinning = 0L,
                            worthmap = 0L,
                            ANOVA = data.frame(),
                            logworth_plot = list(),
