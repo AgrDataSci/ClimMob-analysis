@@ -139,8 +139,7 @@ if (any_error(org_summ)) {
 # 4. Make map ####
 org_lonlat = tryCatch({
   
-  trial_map = get_testing_sites_map(cmdatajson,
-                                    path = outputpath)
+  trial_map = get_testing_sites_map(cmdatajson)
   
 }, error = function(cond) {
   return(cond)
@@ -367,15 +366,20 @@ try(ggsave(paste0(chartdir, "worth-map.pdf"),
            dpi = 200), silent = TRUE)
 
 # plot worth map
-try(ggsave(paste0(chartdir, "reliability.pdf"),
-           plot = PL_models$reliability_plot,
-           width = 25,
-           height = 25,
-           units = "cm",
-           dpi = 200), silent = TRUE)
+for(r in seq_along(PL_models$reliability_plot)){
+  try(ggsave(paste0(chartdir, "reliability", r, ".pdf"),
+             plot = PL_models$reliability_plot[[r]],
+             width = 25,
+             height = 25,
+             units = "cm",
+             dpi = 200), silent = TRUE)
+}
 
 try(write.csv(PL_models$reliability_data, paste0(chartdir, "reliability-data.csv"),
            row.names = FALSE), silent = TRUE)
+
+try(write.csv(PL_models$netwinning, paste0(chartdir, "netwinning-data.csv"),
+              row.names = FALSE), silent = TRUE)
 
 if(PL_tree$isTREE){
   try(ggsave(paste0(chartdir, "plackettluce-tree.pdf"),
@@ -421,10 +425,6 @@ if (isTRUE(quanti_dat$quantitative)) {
                           "possible-outliers-quantitative-data.csv"),
             row.names = FALSE)
   
-}
-
-if (isTRUE(trial_map$geoTRUE)) {
-  unlink(trial_map$mapDIR, recursive = TRUE)
 }
 
 # End of analysis

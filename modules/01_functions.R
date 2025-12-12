@@ -34,6 +34,7 @@ library("lubridate")
 library("ggchicklet")
 library("sf")
 library("geodata")
+library("ggspatial")
 
 
 #' Add pseudo ranking

@@ -261,6 +261,8 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
     
     regret_tbl[2:4] = lapply(regret_tbl[2:4], function(x) round(x, 3))
     
+    regret_tbl = regret_tbl[1:4]
+    
     # .................................
     # get node summaries
     node_ids = nodeids(tree_f, terminal = TRUE)

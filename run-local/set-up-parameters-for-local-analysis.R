@@ -53,7 +53,7 @@ for (i in seq_along(modules)) {
 # ...................................
 # 2. Fetch ClimMob data ####
 # Add API key, if data will be fetched from ClimMob using ClimMobTools
-keys = "ff05a174-28d0-4a40-ab5a-35dc486133a6"
+keys = ""
 
 server = "1000farms"
 
@@ -62,8 +62,8 @@ projects = getProjectsCM(keys, server = server)
 projects
 
 # select the projects to merge 
-sel = c("eggaru23", "eggken22")
-keep = projects$project_id %in% sel
+sel = c("SS25", "NS25")
+keep = projects$project_code %in% sel
 
 projects = projects[keep, ]
 
@@ -76,7 +76,7 @@ quest = data.frame()
 for(i in seq_along(projects$project_id)) {
   print(i)
   y = getDataCM(keys, 
-                project = projects$project_id[i], 
+                project = projects$project_code[i], 
                 server = projects$server[i],
                 userowner = projects$user_owner[i],
                 as.data.frame = FALSE)
@@ -122,17 +122,17 @@ questions
 # some questions from the different project have different code but are the same 
 # we fix this by creating a single code
 questions$final_name = sapply(questions$name2, function(x){
-  x[x == "cbsdrootnec"] = "cbsdrootnecrosis"
-  x[x == "cbsd21b"] = "cbsd"
-  x[x == "cuttingsplantingmaterial"] = "plantmaterial"
-  x[x == "mosaicdis21b"] = "mosaicdis"
-  x[x == "bestwostyield"] = "rootyield"
+  # x[x == "cbsdrootnec"] = "cbsdrootnecrosis"
+  # x[x == "cbsd21b"] = "cbsd"
+  # x[x == "cuttingsplantingmaterial"] = "plantmaterial"
+  # x[x == "mosaicdis21b"] = "mosaicdis"
+  # x[x == "bestwostyield"] = "rootyield"
   x
 })
  
 questions$name2 = paste0("_", questions$name2, "_")
 questions$final_name = paste0("_", questions$final_name, "_")
-
+questions$final_name = gsub("_qst_", "", questions$final_name)
 # now rename the data frames in the list to match
 for(i in seq_along(lt)) {
   for(j in seq_along(questions$name2)){
@@ -158,7 +158,7 @@ assessments
 
 # rename cols of assessments
 assessments$final_name = sapply(assessments$code, function(x){
-  x[x == "agronomyperformance"] = "agronomicperformance"
+  #x[x == "agronomyperformance"] = "agronomicperformance"
   x
 })
 
@@ -212,7 +212,7 @@ for(i in seq_along(traitpattern)){
                      nameString2 = names(cmdata)[neg[j]],
                      nQst = 2,
                      name = newname[i],
-                     codeQst = gsub(" ", "", newname[i]),
+                     codeQst = tolower(gsub(" ", "", newname[i])),
                      questionAsked1 = questions$desc[which(grepl(index, questions$final_name))],
                      questionAsked2 = "",
                      assessmentId = strsplit(names(cmdata)[pos[j]], "_")[[1]][[1]],
@@ -233,15 +233,15 @@ traits
 # Define the reference trait
 # Select one among the vector in nameString1
 traits$nameString1
-referencetrait = "agronomicperformance_overall_pos"
+referencetrait = "summerestablishmentyear_soilcover_neg"
 traits[which(grepl(referencetrait, traits$nameString1)), "traitOrder"] = "referenceTrait"
 
 # Make nice names for data collection
 oldnames = unique(traits$assessmentName)
 oldnames
-newnames = c("Vegetative", "Agronomic")
+newnames = c("Stablishment year")
 
-assessday = c(1, 2) 
+assessday = c(1) 
 
 for (i in seq_along(oldnames)) {
   traits$assessmentName = ifelse(traits$assessmentName == oldnames[i], newnames[i], traits$assessmentName)
@@ -257,13 +257,8 @@ traits
 # Now nice names for the traits 
 traits$name = gsub("_qst_|_|tricot", "", traits$name)
 traits$name = title_case(traits$name)
-traits$name = gsub("resistance", "Resistance", traits$name)
-traits$name = gsub("tolerance", "Tolerance", traits$name)
-traits$name = gsub("colour", "Colour", traits$name)
-traits$name = gsub("feeding", "Feeding", traits$name)
-traits$name = gsub("colour", "Colour", traits$name)
-traits$name = gsub("requirement", "Requirement", traits$name)
-traits$name = gsub("population", "Population", traits$name)
+traits$name = gsub("Soilcover", "Soil cover", traits$name)
+traits$name = gsub("Weedcover", "Weed cover", traits$name)
 
 traits
 
@@ -291,40 +286,40 @@ tricotVSlocal = data.frame()
 # ...................................................
 # 6. Add parameters for continuous data ####
 # This is the vector with string patterns to be searched in cmdata
-linear = y$assessments$fields[[2]]
-
-linear = linear[grepl("_a$|_b$|_c$", linear$name), ]
-
-linear = linear[,c("name", "desc")]
-
-traitq = unique(gsub("_a|_b|_c", "", linear$name))
-
-traitq = traitq[!grepl("date", traitq)]
+# linear = y$assessments$fields[[2]]
+# 
+# linear = linear[grepl("_a$|_b$|_c$", linear$name), ]
+# 
+# linear = linear[,c("name", "desc")]
+# 
+# traitq = unique(gsub("_a|_b|_c", "", linear$name))
+# 
+# traitq = traitq[!grepl("date", traitq)]
+# 
+# quanti = data.frame()
+# 
+# for (i in seq_along(traitq)) {
+#   
+#   index = paste0(traitq[i], "_", letters[1:3])
+#   
+#   q = data.frame(nameString1 = names(cmdata)[grep(index[1], names(cmdata))],
+#              nameString2 = names(cmdata)[grep(index[2], names(cmdata))],
+#              nameString3 = names(cmdata)[grep(index[3], names(cmdata))],
+#              nQst = 3,
+#              name = traitq[i],
+#              codeQst = traitq[i],
+#              questionAsked1 = "",
+#              questionAsked2 = "",
+#              questionAsked3 = "",
+#              assessmentId = "AgronomicPerformance",
+#              assessmentName = "AgronomicPerformance",
+#              assessmentDay = "0")
+#   
+#   quanti = rbind(quanti, q)
+#   
+# }
 
 quanti = data.frame()
-
-for (i in seq_along(traitq)) {
-  
-  index = paste0(traitq[i], "_", letters[1:3])
-  
-  q = data.frame(nameString1 = names(cmdata)[grep(index[1], names(cmdata))],
-             nameString2 = names(cmdata)[grep(index[2], names(cmdata))],
-             nameString3 = names(cmdata)[grep(index[3], names(cmdata))],
-             nQst = 3,
-             name = traitq[i],
-             codeQst = traitq[i],
-             questionAsked1 = "",
-             questionAsked2 = "",
-             questionAsked3 = "",
-             assessmentId = "AgronomicPerformance",
-             assessmentName = "AgronomicPerformance",
-             assessmentDay = "0")
-  
-  quanti = rbind(quanti, q)
-  
-}
-
-quanti
 
 # ............................................
 # ............................................
@@ -332,13 +327,6 @@ quanti
 # which will be dependent of the type of data and how it was collected
 # check the item names
 sort(unique(unlist(cmdata[paste0("package_item_", LETTERS[1:3])])))
-
-table(cmdata$registration_gender1)
-table(cmdata$registration_district)
-
-# Here you can add code to edit cmdata
-
-
 
 # ............................................
 # ............................................
@@ -355,10 +343,10 @@ names(cmdata)[which(!grepl("_pos$|_neg$", names(cmdata)))]
 
 covariates = data.frame(assessmentId = "",
                          assessmentName = "Assessment",
-                         codeQst = c("registration_gender1", "registration_district"),
+                         codeQst = c("project_code", "registration_gender"),
                          id = "",
-                         nameString = c("registration_gender1", "registration_district"),
-                         name = c("Gender","District"),
+                         nameString = c("project_code", "registration_gender"),
+                         name = c("Project", "Gender"),
                          questionAsked = "")
 
 # Check if the names match with the ones in cmdata
@@ -373,16 +361,16 @@ rm(tr, traits, tricotVSlocal, covariates, i, traitpattern, keys, newname, index)
 # ................................................................
 # ................................................................
 # 9. Run the analysis ####
-tag = "Eggplant Kenya and Tanzania" # the project name
+tag = "INNOFORAGE" # the project name
 unique(cmdata$package_item_A)
-reference   = c("Black beauty (check)", "Local Check") # the reference item for the analysis
+reference   = c("Blanding 1") # the reference item for the analysis
 project_name = paste(tag)
 outputpath  = paste0(getwd(), "/run-local/output/", project_name)
 infosheets  = F # logical, if infosheets should be written TRUE FALSE
 language    = "en" # the language to write the report
 extension   = "docx" # report file format it can be "docx", "pdf", and "html"
-ranker      = "participant" # how the system will refer to participants/farmers
-option      = "variety" # how the system will refer to tested items
+ranker      = "farmer" # how the system will refer to participants/farmers
+option      = "forage mixture" # how the system will refer to tested items
 fullpath    = getwd() # this is backward path
 minN        = 5 # minimum n of complete data required in a trait evaluation before it is excluded
 minitem     = 2 # minimum n of items tested, e.g. that all items are tested at least twice
@@ -391,18 +379,25 @@ sig_level   = 0.1 # significance level for the Plackett-Luce model
 groups       = ""
 language = "en"
 
+
+cmdatajson = jsonlt[[1]]
+
+
+
+
 dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
 
-rank_dat = organize_ranking_data(cmdata, 
-                                  pars, 
-                                  project_name,
-                                  groups, 
-                                  option_label = option,
-                                  ranker_label = ranker,
-                                  reference_tech = reference,
-                                  tech_index = c("package_item_A", 
-                                                 "package_item_B",
-                                                 "package_item_C"))
+rank_dat = organize_ranking_data(cmdata = cmdata, 
+                                 pars, 
+                                 groups, 
+                                 option_label = option,
+                                 ranker_label = ranker,
+                                 reference_tech = reference,
+                                 tech_index = paste0("package_item_", LETTERS[1:3]),
+                                 minN = 5,
+                                 minitem = 1,
+                                 mincovar = 0.95,
+                                 sig_level = 0.1)
 
 # Run analysis
 # read the file with the main script to check where to begin and end when

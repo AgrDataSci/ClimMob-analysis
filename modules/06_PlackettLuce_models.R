@@ -83,67 +83,21 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   #...........................................................
   # Head to head visualization of each technology performance by trait
-  worth_map_data = data.frame()
-  
-  for(i in seq_along(reference_tech)) {
-    wmd_i = gosset:::.combine_coeffs(mod,
-                                     ref = reference_tech[i], 
-                                     log = TRUE,
-                                     vcov = FALSE)
-    
-    names(wmd_i) = trait_names
-    
-    # reshape to long format
-    wmd_i = data.frame(items = rep(dimnames(wmd_i)[[1]], 
-                                   times = ncol(wmd_i)),
-                       labels = rep(dimnames(wmd_i)[[2]], 
-                                    each = nrow(wmd_i)), 
-                       winprob = as.numeric(unlist(wmd_i)),
-                       check = reference_tech[i])
-    
-    worth_map_data = rbind(worth_map_data, wmd_i)
-    
-  }
-  
-  worth_map_data$labels = factor(worth_map_data$labels, 
-                                 levels = rev(trait_names))
-  
-  lims = max(abs(worth_map_data$winprob)) * c(-1, 1)
-  
-  worthmap = ggplot(worth_map_data, 
-                    aes(x = items, 
-                        y = labels, 
-                        fill = winprob,
-                        label = as.character(round(winprob, 2)))) + 
-    geom_tile() + 
-    scale_fill_distiller(palette = "BrBG", 
-                         limit = lims, 
-                         direction = 1, 
-                         na.value = "white", 
-                         name = "") + 
-    facet_wrap(~ check, strip.position = "bottom") +
-    theme_bw() +  
-    theme(axis.text = element_text(color = "grey20"), 
-          strip.text.x = element_text(color = "grey20"), 
-          axis.text.x = element_text(size = 10, 
-                                     angle = 45, 
-                                     vjust = 1, 
+  worthmap = 
+    worth_map(mod, labels = trait_names, labels.order = rev(trait_names)) +
+    labs(x = "", y = "") + 
+    theme(axis.text = element_text(color = "grey20"),
+          strip.text.x = element_text(color = "grey20"),
+          axis.text.x = element_text(size = 10,
+                                     angle = 45,
+                                     vjust = 1,
                                      hjust = 1,
-                                     color = "grey20"), 
-          axis.text.y = element_text(size = 10, 
-                                     angle = 0, 
-                                     vjust = 1, 
+                                     color = "grey20"),
+          axis.text.y = element_text(size = 10,
+                                     angle = 0,
+                                     vjust = 1,
                                      hjust = 1,
-                                     color = "grey20"), 
-          panel.grid = element_blank(),
-          strip.background.x = element_blank(),
-          strip.placement = "outside",
-          strip.text = element_text(size = 10, color = "grey20"),
-          legend.text = element_text(size = 10, color = "grey20"),
-          axis.title = element_text(size = 10, color = "grey20")) +
-    labs(x = "", y = "", fill = "")
-  
-  worthmap
+                                     color = "grey20"))
   
   #...........................................................
   # Analysis of variance ####
@@ -167,71 +121,73 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   
   names(aov_tbl)[names(aov_tbl) == "Model"] = "Trait"
   
+  #...........................................................
   # Net winning score
   netwinning = lapply(R, function(x){
-    preference_index(x)
+    preference_index(x)[,1:4]
   })
   
+  netwinning = do.call("rbind", netwinning)
+  
+  netwinning$trait = rep(trait_names, each = length(technologies))
+  
+  netwinning$trait[duplicated(netwinning$trait)] = ""
+  
+  names(netwinning)[1] = option
+  
+  netwinning = netwinning[c(5, 1, 2, 3, 4)]
+  
+  names(netwinning) = ClimMobTools:::.title_case(names(netwinning))
   
   #...........................................................
   # Reliability ####
   # run reliability over the different check varieties
-  items = sort(unique(unlist(cmdata[technologies_index])))
-  
   checks = reference_tech
   
   reliability_data = data.frame()
   
-  for (i in seq_along(checks)) {
-    
-    rel_i = lapply(mod[reference_trait_index], function(x){
-      
-      r = try(reliability(x, ref = checks[i]), silent = TRUE)
-      
-      if ("try-error" %in% class(r)) {
-        return()
-      }
-      
-      r$Check = checks[i]
-      
-      r
-      
+  reliability_plot = list()
+  
+  for(i in seq_along(checks)) {
+    rel = lapply(mod, function(x){
+      reliability(x, ref = checks[i])
     })
     
-    rel_i = do.call("rbind", rel_i)
+    rel = do.call("rbind", rel)
     
-    reliability_data = rbind(reliability_data, rel_i)
+    rel$trait = rep(trait_names, each = length(technologies))
     
+    rel$trait = factor(rel$trait, levels = trait_names)
+    
+    rel$improvement = round((rel$reliability / 0.5 - 1), 2)
+    
+    rel = rel[order(rel$improvement), ]
+    
+    rel$item = factor(rel$item, levels = unique(rel$item))
+    
+    rel = rel[!rel$item %in% checks[i], ]
+    
+    reliability_data = rel
+    
+    reliability_plot[[i]] =
+      ggplot(data = rel,
+             aes(x = improvement, 
+                 y = trait,
+                 fill = "white")) +
+      geom_bar(stat = "identity",
+               width = 0.7,
+               position = "dodge", 
+               show.legend = FALSE) +
+      scale_fill_manual(values = "#5aae61") +
+      facet_wrap(~ item, strip.position = "bottom") +
+      geom_vline(xintercept = 0,
+                 colour = "grey40",
+                 linewidth = 1) +
+      theme_classic() +
+      labs(x = paste("Probability of outperforming", checks[i]),
+           y = "")
   }
   
-  # remove the checks
-  reliability_data = reliability_data[!reliability_data$item %in% checks, ]
-
-  # plot the reliability
-  reliability_plot = 
-    ggplot(data = reliability_data,
-           aes(y = reliability, 
-               x = item, 
-               fill = "#b2df8a")) +
-    geom_chicklet(show.legend = FALSE) +
-    coord_flip() +
-    geom_hline(yintercept = 0.5,
-               colour = "#1f78b4",
-               linewidth = 1) +
-    scale_fill_manual(values = "#b2df8a") +
-    facet_wrap(~ Check, strip.position = "bottom") +
-    theme_classic() +
-    theme(panel.grid.major = element_blank(),
-          strip.background =element_rect(fill="white"),
-          text = element_text(color = "grey20"),
-          strip.background.x = element_blank(),
-          strip.placement = "outside",
-          strip.text = element_text(size = 12, color = "grey20"),
-          legend.text = element_text(size = 12, color = "grey20"),
-          axis.text = element_text(size = 12, color = "grey20"),
-          axis.title = element_text(size = 12, color = "grey20")) +
-    labs(y = "Probability of outperforming",
-         x = "")
 
   #.....................................................
   #.....................................................

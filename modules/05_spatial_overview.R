@@ -38,7 +38,10 @@ get_testing_sites_map = function(x, path = getwd()){
     ggplot2::ggplot() +
     ggplot2::geom_sf(data = adm, fill = "#ffffe5", color = "black", alpha = 1) +
     ggplot2::geom_sf(data = xy, color = "blue", size = 1.5, shape = 21, fill = "red", stroke = 1) +
-    ggplot2::theme_minimal() 
+    ggplot2::theme_minimal() +
+    annotation_north_arrow(location = "tl", which_north = "true",
+                           style = north_arrow_fancy_orienteering) +
+    annotation_scale(location = "br", width_hint = 0.3)
   
   result = list(geoTRUE = TRUE, 
                 map = trial_map,
