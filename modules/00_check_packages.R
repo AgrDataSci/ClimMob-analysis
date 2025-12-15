@@ -8,7 +8,7 @@ pkg <- c('caret', 'climatrends', 'ClimMobTools', 'ggparty', 'ggplot2', 'gosset',
          'gridExtra', 'gtools', 'igraph', 'janitor', 'jsonlite', 'knitr', 'sf', 
          'geodata', 'multcompView', 'nasapower', 'partykit', 'patchwork', 
          'PlackettLuce', 'plotrix', 'pls', 'png', 'psychotools', 'qvcalc',
-         'remotes', 'rmarkdown', 'lubridate', 'ggspatial')
+         'remotes', 'rmarkdown', 'lubridate', 'ggspatial', 'webshot')
 
 install.packages(pkg)
 

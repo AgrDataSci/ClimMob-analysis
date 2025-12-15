@@ -41,6 +41,8 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
                     validate.rankings = TRUE)
   })
   
+  #...........................................................
+  # Network connectivity ####
   # # Handle rankings with poor connectivity
   connection = lapply(R, function(x) connectivity(x, verbose = FALSE)$no)
   
@@ -54,7 +56,9 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
     PlackettLuce(x)
   })
   
-  # Plot log worth
+  #...........................................................
+  # Log-worth plot across all traits ####
+  
   logworth_plot = list()
   
   for(m in seq_along(mod)) {
@@ -74,7 +78,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   logworth_overall = logworth_plot[[reference_trait_index]]
   
   if ("try-error" %in% class(logworth_overall)) {
-    logworth_overall = ggplot()
+    logworth_overall = NULL
   }
   
   rmv = unlist(lapply(logworth_plot, is.null))
@@ -82,7 +86,9 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   logworth_plot = logworth_plot[!rmv]
   
   #...........................................................
-  # Head to head visualization of each technology performance by trait
+  #...........................................................
+  # Head to head visualization ####
+  # of each technology performance by trait
   worthmap = 
     worth_map(mod, labels = trait_names, labels.order = rev(trait_names)) +
     labs(x = "", y = "") + 
@@ -99,6 +105,7 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
                                      hjust = 1,
                                      color = "grey20"))
   
+  #...........................................................
   #...........................................................
   # Analysis of variance ####
   anovas = lapply(mod, function(x){
@@ -120,9 +127,10 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   rownames(aov_tbl) = 1:nrow(aov_tbl)
   
   names(aov_tbl)[names(aov_tbl) == "Model"] = "Trait"
-  
+ 
+  #........................................................... 
   #...........................................................
-  # Net winning score
+  # Net winning score ####
   netwinning = lapply(R, function(x){
     preference_index(x)[,1:4]
   })
@@ -136,6 +144,8 @@ get_PlackettLuce_models = function(cmdata, rank_dat) {
   names(netwinning)[1] = option
   
   netwinning = netwinning[c(5, 1, 2, 3, 4)]
+  
+  netwinning[3:4] = lapply(netwinning[3:4], function(x) round(x, 1))
   
   names(netwinning) = ClimMobTools:::.title_case(names(netwinning))
   

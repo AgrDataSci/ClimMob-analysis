@@ -23,13 +23,31 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Introduction  
 
-The triadic comparisons of technology options (tricot) is a research approach [@vanEtten2019tricot] to decentralize the evaluation of suitable technologies for local conditions and obtain experimental data with higher external validity. Tricot (read ‘try-cot’) engages participants to test new technologies and product concepts. The approach is supported by the ClimMob digital platform (https://climmob.net). With tricot, research centres can validate and disseminate new agricultural technologies in a participatory way, collaborating with a large number of participants under diverse conditions. Large-scale tricot experiments, involving many participants, generate robust results about the performance of different technology options (such as different crop varieties or different fertilizer types) in different environments. 
+This report presents results from the `r project_name` trial implemented using the tricot approach (triadic comparison of technology options), a participatory and data-driven method for testing agricultural technologies directly in their use environments [@deSousa2024; @vanEtten2019tricot]. Tricot is a citizen science approach that actively engages farmers and other users as co-researchers, enabling the generation of robust experimental evidence at scale while preserving the diversity of real-world farming conditions.
 
-This report presents the results from your tricot experiment entitled `r project_name`, designed and managed on ClimMob.
- 
+Instead of relying on a small number of tightly controlled researcher-managed trials, tricot distributes experimentation across many farms. Each participant evaluates only three randomly assigned options (for example, crop varieties, fertilizer types, or management practices) under their usual conditions. These small, simple trials are easy to implement, require minimal training, and can be conducted without continuous supervision. When aggregated across many participants and locations, the resulting data provide powerful insights into relative performance, farmer preferences, and context-specific suitability.
+
+A key strength of the tricot approach is its focus on external validity. By allowing farmers to test technologies using their own practices, soils, and climatic conditions, the results better reflect how technologies perform in real-life settings. Farmer-reported rankings are combined with environmental, management, and socio-economic data, allowing analyses that capture genotype-by-environment interactions, preference heterogeneity, and trade-offs that are often missed in conventional trials.
+
+Tricot is supported by a streamlined digital workflow through the ClimMob platform [@Quiros2024], which facilitates trial design, randomization, data collection, monitoring, and reporting. Statistical analysis is based on the Plackett–Luce model for ranking data [@Plackett1975; @Luce1959], enabling valid inference from incomplete and overlapping comparisons without loss of information. Together, these methodological and digital components make tricot a scalable, cost-effective, and scientifically rigorous approach for on-farm testing, product evaluation, and decision support.
+
+This report builds on these principles to synthesize results from the current trial cycle and to provide actionable insights for researchers, development practitioners, breeders, and other stakeholders.
+
 # What you should expect from this report
 
-This report provides the results from your tricot experiment, with insights of the performance of the technologies tested in the trial. This is a standard automated report that accommodates the most important outputs from a tricot trial. After reading through this report, you should be able to: (i) identify the technology that outperforms the others in your trial, and under which conditions, and (ii) support a decision on advancement of a technology to the next stage of your product development program (e.g. breeding program, market assessment). 
+This report is designed to provide a transparent and reproducible overview of the tricot trial, from experimental design to interpretation of results. It combines methodological documentation with empirical findings, ensuring that results can be both understood and reused.
+
+Specifically, the report includes:
+
+- Trial overview and context: A description of the trial objectives, tested technologies, target population, and implementation context, including geographic coverage and participant characteristics.
+
+- Experimental design and data collection: An explanation of how tricot was implemented in this study, including randomization, participation levels, data collection protocols, and quality checks. This section clarifies what farmers evaluated, how observations were recorded, and how missing or incomplete data were handled.
+
+- Analytical approach: A summary of the statistical methods used to analyze ranking data, primarily based on the Plackett–Luce framework. Where relevant, the report explains how contextual variables (environmental, management, or socio-economic) are incorporated into the analysis.
+
+- Results and interpretation: Presentation of the main findings, including relative performance of the tested options, uncertainty estimates, and patterns across environments or farmer groups. Results are interpreted with attention to both agronomic performance and farmer preference.
+
+- Actionable insights and implications: Discussion of what the results mean for technology recommendation, breeding priorities, product development, or scaling strategies. Rather than prescribing universal “best” options, the report emphasizes context-specific insights and trade-offs. 
 
 However, since this report was done in an automated process, is likely that it will not provide to you the full overview on the performance of the tested technologies as the automation may not capture all the factors that influence the performance of a technology in the target environment (under real-world conditions). If you would like to have an in-deep analysis, or to merge data from different projects or is planning a peer-review publication with your tricot data, send a proposal/request to the ClimMob Team <climmob@mrbotcr.com>. 
 
@@ -175,7 +193,6 @@ kable(overview_and_summaries$summary_table_tech,
 
 # Summary of `r options`' performance
 
-
 ```{r relation_other_chrs} 
 anovatext = ""
 
@@ -259,7 +276,9 @@ plot(PL_models$reliability_plot[[1]])
 Figure 9 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order with p-value = 0.05.
 
 ```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 9. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. Intervals are based on quasi standard errors.")}
-plot(PL_models$logworth_overall)
+if (!is.null(PL_models$logworth_overall)){
+ plot(PL_models$logworth_overall)
+}
 ```
 
 \

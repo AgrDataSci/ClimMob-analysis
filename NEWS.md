@@ -1,3 +1,13 @@
+ClimMob-analysis v2.0 (2025-12-25)
+=========================
+
+### Improvements 
+
+- Uses geodata to generate trial maps avoiding issues in importing maps from leaflet
+- Updates the introduction text
+- Introduces the table with probability of winning
+
+
 ClimMob-analysis v3.0 (2024-01-25)
 =========================
 
