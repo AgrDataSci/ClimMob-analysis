@@ -1209,27 +1209,42 @@ plot_pca = function(object, scale = 3){
   
 }
 
-# Handle ties in rankings
-# under testing!!!
-
-fill_tie = function(x, y) {
+#' Handle ties in rankings
+#' under testing!!!
+#' @param data a data frame
+#' @param cols a pair of strings with column names in data
+fill_tie = function(data, cols, seed = NULL) {
+  
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
   
   opts = c("A", "B", "C")
   
-  # case: one letter and one Tie
-  if (x %in% opts & y == "Tie") {
-    return(sample(setdiff(opts, x), 1))
+  pos_col = cols[1]
+  neg_col = cols[2]
+  
+  pos = data[[pos_col]]
+  neg = data[[neg_col]]
+  
+  for (i in seq_along(pos)) {
+    
+    if (pos[i] %in% opts && neg[i] == "Tie") {
+      neg[i] = sample(setdiff(opts, pos[i]), 1)
+    }
+    
+    if (neg[i] %in% opts && pos[i] == "Tie") {
+      pos[i] = sample(setdiff(opts, neg[i]), 1)
+    }
+    
+    if (pos[i] == "Tie" && neg[i] == "Tie") {
+      pos[i] = NA_character_
+      neg[i] = NA_character_
+    }
   }
   
-  if (y %in% opts & x == "Tie") {
-    return(sample(setdiff(opts, y), 1))
-  }
+  data[[pos_col]] = pos
+  data[[neg_col]] = neg
   
-  # both Tie (to decide later)
-  if (x == "Tie" & y == "Tie") {
-    return(NA_character_)
-  }
-  
-  return(NA_character_)
+  data
 }
-
