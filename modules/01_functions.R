@@ -1209,5 +1209,27 @@ plot_pca = function(object, scale = 3){
   
 }
 
+# Handle ties in rankings
+# under testing!!!
 
+fill_tie = function(x, y) {
+  
+  opts = c("A", "B", "C")
+  
+  # case: one letter and one Tie
+  if (x %in% opts & y == "Tie") {
+    return(sample(setdiff(opts, x), 1))
+  }
+  
+  if (y %in% opts & x == "Tie") {
+    return(sample(setdiff(opts, y), 1))
+  }
+  
+  # both Tie (to decide later)
+  if (x == "Tie" & y == "Tie") {
+    return(NA_character_)
+  }
+  
+  return(NA_character_)
+}
 
