@@ -1229,15 +1229,15 @@ fill_tie = function(data, cols, seed = NULL) {
   
   for (i in seq_along(pos)) {
     
-    if (pos[i] %in% opts && neg[i] == "Tie") {
+    if (pos[i] %in% opts && neg[i] %in% "Tie") {
       neg[i] = sample(setdiff(opts, pos[i]), 1)
     }
     
-    if (neg[i] %in% opts && pos[i] == "Tie") {
+    if (neg[i] %in% opts && pos[i] %in% "Tie") {
       pos[i] = sample(setdiff(opts, neg[i]), 1)
     }
     
-    if (pos[i] == "Tie" && neg[i] == "Tie") {
+    if (pos[i] %in% "Tie" && neg[i] %in% "Tie") {
       pos[i] = NA_character_
       neg[i] = NA_character_
     }
@@ -1248,3 +1248,4 @@ fill_tie = function(data, cols, seed = NULL) {
   
   data
 }
+
