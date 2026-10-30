@@ -13,41 +13,10 @@
 
 # ................................................................
 # ................................................................
-## Packages ####
-library("ClimMobTools")
-library("gosset")
-library("nasapower")
-library("climatrends")
-library("PlackettLuce")
-library("partykit")
-library("qvcalc")
-library("psychotools")
-library("jsonlite")
-library("knitr")
-library("rmarkdown")
-library("pls")
-library("gtools")
-library("ggplot2")
-library("igraph")
-library("ggparty")
-library("patchwork")
-library("leaflet")
-library("mapview")
-library("multcompView")
-library("png")
-library("plotrix")
-library("gridExtra")
-library("caret")
-library("janitor")
-
-# ................................................................
-# ................................................................
-# 1. Load modules ####
-modules = list.files(paste0("modules"), full.names = TRUE)
-modules = modules[-which(grepl("check_packages.R", modules))]
-for (i in seq_along(modules)) {
-  source(modules[i])
-}
+# 1. Load the code and packages ####
+# Run this script from the root of the repository
+source("load.R")
+load_climmob()
 
 # ...................................
 # ...................................
@@ -361,51 +330,35 @@ rm(tr, traits, tricotVSlocal, covariates, i, traitpattern, keys, newname, index)
 # ................................................................
 # ................................................................
 # 9. Run the analysis ####
-tag = "INNOFORAGE" # the project name
-unique(cmdata$package_item_A)
-reference   = c("Blanding 1") # the reference item for the analysis
-project_name = paste(tag)
-outputpath  = paste0(getwd(), "/run-local/output/", project_name)
-infosheets  = F # logical, if infosheets should be written TRUE FALSE
-language    = "en" # the language to write the report
-extension   = "docx" # report file format it can be "docx", "pdf", and "html"
-ranker      = "farmer" # how the system will refer to participants/farmers
-option      = "forage mixture" # how the system will refer to tested items
-fullpath    = getwd() # this is backward path
-minN        = 5 # minimum n of complete data required in a trait evaluation before it is excluded
-minitem     = 2 # minimum n of items tested, e.g. that all items are tested at least twice
-mincovar    = 0.95 # minimum proportion of covariates compared to total valid n
-sig_level   = 0.1 # significance level for the Plackett-Luce model
-groups       = ""
-language = "en"
+tag = "INNOFORAGE" # the project name, used in the report title and folder
 
+settings = climmob_settings(
+  project_name = tag,
+  output_path = file.path(getwd(), "run-local", "output", tag),
+  infosheets = FALSE, # TRUE to write the participant info sheets
+  language = "en", # language of the info sheets
+  extension = "docx", # "docx", "pdf" or "html"
+  ranker = "farmer", # how the report refers to participants
+  option = "forage mixture", # how the report refers to the tested items
+  code_path = getwd(),
+  groups = character(0), # columns to split the participants, e.g. "gender"
+  reference_names = c("Blanding 1"), # the check item(s), see unique(cmdata$package_item_A)
+  country = projects$country[1]) # ISO2 code, used to draw the map
 
-cmdatajson = jsonlt[[1]]
+# run all the analysis steps, nothing is written yet
+res = run_climmob_analysis(cmdata, pars, settings)
 
+# what worked and what failed
+print_run_summary(res$log)
 
+# every result can be inspected, for example
+# res$rank_dat$trait_names
+# res$PL_models$worthmap
+# res$PL_tree$node_summary
 
+# to debug a failed step, rerun its function directly, for example
+# debugonce(get_PlackettLuce_tree)
+# get_PlackettLuce_tree(res$cmdata, res$rank_dat)
 
-dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
-
-rank_dat = organize_ranking_data(cmdata = cmdata, 
-                                 pars, 
-                                 groups, 
-                                 option_label = option,
-                                 ranker_label = ranker,
-                                 reference_tech = reference,
-                                 tech_index = paste0("package_item_", LETTERS[1:3]),
-                                 minN = 5,
-                                 minitem = 1,
-                                 mincovar = 0.95,
-                                 sig_level = 0.1)
-
-# Run analysis
-# read the file with the main script to check where to begin and end when
-# applying source2()
-checkfile = readLines("ClimMob.R")
-b = which(grepl("2. Organise quantitative data ####", checkfile))
-e = which(grepl("# End of analysis", checkfile))
-error = NULL
-# Run the workflow to analyse the data and produce the report 
-source2("ClimMob.R", b, e)
-
+# write the reports and the extra outputs
+write_climmob_outputs(res, settings)

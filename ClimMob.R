@@ -1,432 +1,47 @@
-# # ................................................................
-# # ................................................................
-# # Main script to call for the analysis and rendering ClimMob reports
-# # ................................................................
-# # ................................................................
-# # ................................................................
-# # ................................................................
-# get the arguments from server's call
+# ................................................................
+# ClimMob analysis, entry point called by the ClimMob server
+#
+#   Rscript ClimMob.R <parameters.json> <data.json>
+#
+# 1. <parameters.json> report settings and the variables to analyse.
+#    Parameters$BackwardPath is the folder with this code and
+#    Parameters$OutputPath is where the outputs are written.
+# 2. <data.json> the trial data.
+#
+# Outputs, in OutputPath
+#   climmob_main_report.<Format>
+#   participant-report/participant_report_package_<i>.<Format>  (if InfoSheets)
+#   extra-outputs/  figures (PDF) and tables (CSV)
+#
+# All the work is done by the functions in R/, see README.md.
+# Set the environment variable CLIMMOB_DEBUG_DIR to a folder to save
+# the inputs and every failed step for debugging.
+# ................................................................
 args = commandArgs(trailingOnly = TRUE)
 
-# Arguments ####
-cmparameters = args[1] # a json file with parameters for the analysis
-cmdatajson = args[2] # a json file with the results
-
-# get parameters from ClimMob request
-pars = jsonlite::fromJSON(cmparameters)
-report_parameters = pars[["Parameters"]]
-outputpath  = report_parameters[["OutputPath"]] # the path where results will be written
-infosheets  = as.logical(report_parameters[["InfoSheets"]]) # logical, if infosheets should be written TRUE FALSE
-language    = report_parameters[["Languaje"]] # the language to write the report "en" for english and "es" for spanish
-extension   = report_parameters[["Format"]] # report file format it can be "docx", "pdf", and "html"
-ranker      = report_parameters[["ReferToParticipants"]] # how the report will refer to participants/farmers
-option      = report_parameters[["ReferToTechnologies"]] # how the report will refer to tested technologies
-fullpath    = report_parameters[["BackwardPath"]] # this is backward path
-groups      = report_parameters[["Split"]] # any group to do the analysis 
-reference   = report_parameters[["Reference"]] # the reference item for the analysis
-
-# break the groups into a vector, if more than one
-groups = as.vector(strsplit(groups, ",")[[1]])
-
-# break the reference into a vector, if more than one
-reference = as.integer(strsplit(reference, ",")[[1]])
-
-if (length(reference) > 4) {
-  reference = reference[1:4]
+if (length(args) < 2) {
+  stop("Usage: Rscript ClimMob.R <parameters.json> <data.json>")
 }
 
-# ................................................................
-# ................................................................
-# Load modules ####
-modules = list.files(paste0(fullpath, "/modules"), 
-                     full.names = TRUE, 
-                     pattern = ".R")
-modules = modules[-which(grepl("check_packages.R", modules))]
-for (i in seq_along(modules)) {
-  source(modules[i])
+# where is the code? ClimMob sends it as BackwardPath, otherwise use
+# the folder of this script
+code_path = tryCatch(jsonlite::fromJSON(args[1])[["Parameters"]][["BackwardPath"]],
+                     error = function(e) NULL)
+
+if (is.null(code_path) || !dir.exists(code_path)) {
+  this_file = sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE))
+  code_path = if (length(this_file) == 1) dirname(normalizePath(this_file)) else getwd()
 }
 
-# An object to capture error messages when running the analysis
-error = NULL
+source(file.path(code_path, "load.R"))
+load_climmob(code_path)
 
-# ................................................................
-# ................................................................
-# 1. Read data and organize the rankings #### 
-try_data = tryCatch({
-  
-  dir.create(outputpath, showWarnings = FALSE, recursive = TRUE)
-  
-  # report parameters
-  pars = jsonlite::fromJSON(cmparameters)
-  pars = decode_pars(pars)
-  
-  # the trial data 
-  cmdatajson = jsonlite::fromJSON(cmdatajson)
-  class(cmdatajson) = union("CM_list", class(cmdatajson))
-  
-  # from json to data.frame
-  cmdata = as.data.frame(x = cmdatajson, 
-                         tidynames = FALSE, 
-                         pivot.wider = TRUE)
-  
-  rank_dat = organize_ranking_data(cmdata = cmdatajson, 
-                                   pars, 
-                                   groups, 
-                                   option_label = option,
-                                   ranker_label = ranker,
-                                   reference_tech = reference,
-                                   tech_index = paste0("package_item_", LETTERS[1:3]),
-                                   minN = 5,
-                                   minitem = 2,
-                                   mincovar = 0.95,
-                                   sig_level = 0.1)
-  
-}, error = function(cond) {
-    return(cond)
-  }
-)
+debug_dir = Sys.getenv("CLIMMOB_DEBUG_DIR", unset = "")
+debug_dir = if (nzchar(debug_dir)) debug_dir else NULL
 
-if (any_error(try_data)) {
-  e = paste("Organize Ranking Data: \n", try_data$message)
-  error = c(error, e)
-  rank_dat = error_data_rank_dat
-}
-
-# ................................................................
-# ................................................................
-# 2. Organise quantitative data ####
-try_quanti_data = tryCatch({
-  
-  quanti_dat = organize_quantitative_data(cmdata, 
-                                          pars, 
-                                          groups, 
-                                          id = "REG_qst162",
-                                          tech_index = paste0("package_item_", LETTERS[1:3]))
-  
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(try_quanti_data)) {
-  e = paste("Organize Quantitative Data: \n", try_quanti_data$message)
-  error = c(error, e)
-  quanti_dat = error_data_quanti_dat
-}
-
-# .......................................................
-# .......................................................
-# 3. Prepare summary tables / charts
-org_summ = tryCatch({
-  
-  overview_and_summaries = get_overview_summaries(cmdata,
-                                                  rank_dat)
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_summ)) {
-  e = paste("Overview and Summary: \n", org_summ$message)
-  error = c(error, e)
-  overview_and_summaries = error_data_overview_and_summaries
-}
-
-# .......................................................
-# .......................................................
-# 4. Make map ####
-org_lonlat = tryCatch({
-  
-  trial_map = get_testing_sites_map(cmdatajson)
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_lonlat)) {
-  e = paste("Trial map: \n", org_lonlat$message)
-  error = c(error, e)
-  trial_map = error_data_trial_map
-
-}
-
-# .......................................................
-# .......................................................
-# 9. Agroclimatic information  ####
-org_agroclim = tryCatch({
-  
-  agroclimate = get_agroclimatic_data(cmdata,
-                                      coords = trial_map$coords,
-                                      ndays = 60)
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_agroclim)) {
-  e = paste("Agroclimatic data: \n", org_agroclim$message)
-  error = c(error, e)
-  agroclimate = error_data_agroclimate
-}
-
-# .......................................................
-# .......................................................
-# .......................................................
-# 7. Fit PlackettLuce model ####
-org_pl = tryCatch({
-  
-  PL_models = get_PlackettLuce_models(cmdata, rank_dat)
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_pl)) {
-  e = paste("Plackett-Luce model: \n", org_pl$message)
-  error = c(error, e)
-  PL_models = error_data_PL_model
-}
-
-# .......................................................
-# .......................................................
-# 7. Fit PLADMM model ####
-# TO DO! 
-
-
-# .......................................................
-# .......................................................
-# 8. Fit pltree ####
-org_pltree = tryCatch({
-  
-  PL_tree = get_PlackettLuce_tree(cmdata, rank_dat, agroclimate)
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_pltree)) {
-  e = paste("Plackett-Luce Tree: \n", org_pltree$message)
-  error = c(error, e)
-  PL_tree = error_data_PL_tree
-}
-
-
-# .......................................................
-# .......................................................
-# 10. Summaries from quantitative data  ####
-org_quantitative_summ = tryCatch({
-  
-  quantitative_traits = get_quantitative_summaries(quanti_dat)
-  
-}, error = function(cond) {
-  return(cond)
-}
-)
-
-if (any_error(org_quantitative_summ)) {
-  e = paste("Quantitative Traits: \n", org_quantitative_summ$message)
-  error = c(error, e)
-  quantitative_traits = error_data_quantitative_traits
-}
-
-# ................................................................
-# ................................................................
-# 9. Write outputs ####
-#determine format based on extensions
-output_format = ifelse(extension == "docx","word_document", 
-                        paste0(extension,"_document"))
-
-
-# arguments to use in the report text
-project_name = ClimMobTools:::.safe_extract(cmdatajson, c("project", "project_name"), default = NA)
-noptions = length(rank_dat$technologies_index)
-ntechnologies = length(rank_dat$technologies)
-option = rank_dat$option
-options = pluralize(rank_dat$option)
-participant = rank_dat$ranker
-participants = pluralize(rank_dat$ranker)
-nparticipants = nrow(cmdata)
-ntraits = length(rank_dat$trait_list)
-reference_trait = title_case(rank_dat$reference_trait)
-reference_tech = rank_dat$reference_tech
-
-# resolution of display items
-dpi = 400
-out_width = "100%"
-
-# define height of plots based on number of technologies
-worthmap_h = ntraits
-worthmap_w = ntraits + 0.5
-favplot_h = ntechnologies * 0.4
-
-if (worthmap_h < 7)  worthmap_h = 7
-if (worthmap_h > 8)  worthmap_h = 8
-if (worthmap_w < 7)  worthmap_w = worthmap_h + 0.5
-if (worthmap_w > 8)  worthmap_w = worthmap_h + 0.5
-if (favplot_h < 5) favplot_h = 5
-if (favplot_h > 8) favplot_h = 7.5
-
-# the main report
-rmarkdown::render(paste0(fullpath, "/report/mainreport.Rmd"),
-                  output_dir = outputpath,
-                  output_format = output_format,
-                  output_file = paste0("climmob_main_report", ".", extension))
-
-
-if (isTRUE(infosheets)) {
-  
-  # .......................................................
-  # .......................................................
-  # 12. Participant report  ####
-  org_participant_report = tryCatch({
-    
-    participant_report = get_participant_report(cmdata, 
-                                                rank_dat, 
-                                                fullpath, 
-                                                language = language)
-    
-  }, error = function(cond) {
-    return(cond)
-  }
-  )
-  
-  if (any_error(org_participant_report)) {
-    e = paste("Participant report: \n", org_participant_report$message)
-    error = c(error, e)
-    participant_report = error_participant_report
-  }
-  
-  participant_report_dir = paste0(outputpath, "/participant-report/")
-  
-  dir.create(participant_report_dir, recursive = TRUE, showWarnings = FALSE)
-  
-  for (i in seq_along(participant_report$partitable$id)) {
-    
-    rmarkdown::render(paste0(fullpath, "/report/participant_report_main.Rmd"),
-                      output_dir = participant_report_dir,
-                      output_format = output_format,
-                      output_file = paste0("participant_report_package_", i, 
-                                           ".", extension))
-    
-  }
-  
-}
-
-
-
-
-if (length(error) > 0) {
-  print(error)
-}
-
-
-# Now write the extra charts and tables
-chartdir = paste0(outputpath, "/extra-outputs/")
-dir.create(chartdir, recursive = TRUE, showWarnings = FALSE)
-
-# trial map
-if(isTRUE(trial_map$geoTRUE)){
-  try(ggsave(paste0(chartdir, "trial-map.pdf"),
-             plot = trial_map$map,
-             width = 18,
-             height = 18,
-             units = "cm"), silent = TRUE)
-}
-
-# log worth plot by trait
-for(m in seq_along(PL_models$logworth_plot)){
-  try(ggsave(paste0(chartdir, m, "-logworth.pdf"),
-         plot = PL_models$logworth_plot[[m]],
-         width = 21,
-         height = 15,
-         units = "cm",
-         dpi = 200), silent = TRUE)
-}
-
-# plot kendall tau plot
-try(ggsave(paste0(chartdir, "kendall-tau.pdf"),
-           plot = PL_models$kendall$kendall_plot,
-           width = 15,
-           height = 18,
-           units = "cm",
-           dpi = 200), silent = TRUE)
-
-# plot worth map
-try(ggsave(paste0(chartdir, "worth-map.pdf"),
-           plot = PL_models$worthmap,
-           width = 25,
-           height = 25,
-           units = "cm",
-           dpi = 200), silent = TRUE)
-
-# plot worth map
-for(r in seq_along(PL_models$reliability_plot)){
-  try(ggsave(paste0(chartdir, "reliability", r, ".pdf"),
-             plot = PL_models$reliability_plot[[r]],
-             width = 25,
-             height = 25,
-             units = "cm",
-             dpi = 200), silent = TRUE)
-}
-
-try(write.csv(PL_models$reliability_data, paste0(chartdir, "reliability-data.csv"),
-           row.names = FALSE), silent = TRUE)
-
-try(write.csv(PL_models$netwinning, paste0(chartdir, "netwinning-data.csv"),
-              row.names = FALSE), silent = TRUE)
-
-if(PL_tree$isTREE){
-  try(ggsave(paste0(chartdir, "plackettluce-tree.pdf"),
-             plot = PL_tree$PLtree_plot,
-             width = 18,
-             height = 25,
-             units = "cm",
-             dpi = 200), silent = TRUE)
-}
-
-# agroclimate data during the "season"
-if (isTRUE(agroclimate$agroclimate)) {
-   
-  write.csv(agroclimate$rainfall_season,
-            file = paste0(chartdir, "weekly-precipitation-indices.csv"),
-            row.names = FALSE)
-  
-  write.csv(agroclimate$temperature_season,
-            file = paste0(chartdir, "weekly-temperature-indices.csv"),
-            row.names = FALSE)
-  
-  try(ggsave(paste0(chartdir, "weekly-precipitation-indices.pdf"),
-             plot = agroclimate$rain_plot,
-             width = 20,
-             height = 20,
-             units = "cm",
-             dpi = 200), silent = TRUE)
-  
-  try(ggsave(paste0(chartdir, "weekly-temperature-indices.pdf"),
-             plot = agroclimate$temperature_plot,
-             width = 20,
-             height = 20,
-             units = "cm",
-             dpi = 200), silent = TRUE)
-  
-}
-
-# write outputs of quantitative data if any 
-if (isTRUE(quanti_dat$quantitative)) {
-  
-  write.csv(quanti_dat$outliers,
-            file = paste0(chartdir, 
-                          "possible-outliers-quantitative-data.csv"),
-            row.names = FALSE)
-  
-}
+run_climmob_from_files(params_file = args[1],
+                       data_file = args[2],
+                       code_path = code_path,
+                       debug_dir = debug_dir)
 
 # End of analysis
-
-

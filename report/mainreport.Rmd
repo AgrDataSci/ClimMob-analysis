@@ -108,7 +108,7 @@ The rate of response in each trial stage (data collection moment) is presented i
 \
 
 ```{r progress, dpi=dpi, fig.height=7, fig.width=10, fig.cap=paste0("Figure 1. Rate of response during trial stages (data collection moments).")}
-plot(overview_and_summaries$partipation_plot)
+if (is_plot(overview_and_summaries$partipation_plot)) plot(overview_and_summaries$partipation_plot)
 ```
 
 \
@@ -130,7 +130,7 @@ if (isTRUE(trial_map$geoTRUE)){
 `r paste(trial_map_statement, collapse='\n')`
 
 ```{r map, dpi=dpi, out.width = '70%', fig.cap=paste0("Figure 2. Map of trial locations. Administrative boundaries are based on the Database of Global Administrative Areas (GADM). The red–blue dots indicate the geographic distribution of trials implemented within the study.")}
-if (isTRUE(trial_map$geoTRUE)) {
+if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) {
   plot(trial_map$map)
 }
 ```
@@ -155,7 +155,7 @@ if (isTRUE(agroclimate$agroclimate)){
 `r paste(agroclimate_text1, collapse = '\n')`
 
 ```{r temperature_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Figure 3. Temperature indices from ", agroclimate$window[1], " to ", agroclimate$window[2], ". The chart presents weekly (7-days) maximum day temperature (maxDT), the minimum day temperature (minDT), the maximum night temperature (maxNT), and the minimum nigth temperature (minNT).")}
-if (isTRUE(agroclimate$agroclimate)){
+if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$temperature_plot)){
 plot(agroclimate$temperature_plot)
 }
 ```
@@ -163,7 +163,7 @@ plot(agroclimate$temperature_plot)
 \
 
 ```{r rainfall_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Figure 4. Rainfall indices from ", agroclimate$window[1], " to ", agroclimate$window[2], ". The chart presents weekly (7-days) total rainfall (Rtotal), simple daily intensity index, total precipitation divided by the number of wet days (mm/days, SDII), maximum length of consecutive dry day, rain < 1 mm (MLDS), and the maximum length of consecutive wet days, rain >= 1 mm (MLWS).")}
-if (isTRUE(agroclimate$agroclimate)){
+if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$rain_plot)){
 plot(agroclimate$rain_plot)
 }
 ```
@@ -175,7 +175,7 @@ plot(agroclimate$rain_plot)
 Figure 5 shows a graphic representation of the experimental design and indicates whether all `r options` are connected to each other in the trial network. A complete network connection means that all `r options` co-occurred at least once in an incomplete block of `r noptions` `r options`. The network is obtained using the rankings generated with '`r reference_trait`'.
 
 ```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 5. Experimental network representation of ", options, " tested in this experiment. Arrows indicate direct paths of wins and losses between each pair of ", options, ", indicating that the ", option, " co-occur in at least one experimental block. ", title_case(options), " with a no direct path are connected using a Bayesian prior.")}
-plot(overview_and_summaries$trial_connectivity)
+if (is_plot(overview_and_summaries$trial_connectivity)) plot(overview_and_summaries$trial_connectivity)
 ```
 
 \
@@ -218,7 +218,7 @@ relation_other_chrs1 <-
         PL_models$kendall$weakest_link[2], ". A table with Kendall tau and a significance test is provided in the Appendix.")
 }
 
-if (isTRUE(length(PL_models$worthmap) > 0)) {
+if (is_plot(PL_models$worthmap)) {
   relation_other_chrs2 <- paste0("The log-worth by trait of each ",
                                  option, 
                                  " tested in this experiment is presented in Figure 7.",
@@ -253,7 +253,7 @@ kable(PL_models$ANOVA,
 
 
 ```{r kendall_tau_plot, dpi = dpi, fig.height=7, fig.width=7, fig.cap=paste0("Fig. 6. Kendall correlation coefficient between '", reference_trait, "' and the other traits assessed in this trial.")}
-if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
+if (is_plot(PL_models$kendall$kendall_plot)) {
   plot(PL_models$kendall$kendall_plot)
 }
 ```
@@ -264,19 +264,19 @@ if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
 
 
 ```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 7. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (green) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (brown) represents the ", options, " with underperformance for the given trait.")}
-plot(PL_models$worthmap)
+if (is_plot(PL_models$worthmap)) plot(PL_models$worthmap)
 ```
 
 Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 8. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering the `r paste(reference_trait, collapse = ", ")` with `r paste(reference_tech, collapse = ", ")` as the check `r option`. The plot below presents reliability estimates for your first check `r option` selected for analysis. If you selected more than one check `r option` you can find the results in the folder "Extra outputs of the report" in your Downloads section on ClimMob.
 
-```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 8. Reliability of tested ", options, " versus the check. The blue vertical line set to 0 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0).")}
-plot(PL_models$reliability_plot[[1]])
+```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 8. Reliability of tested ", options, " versus the check. The vertical line set to 0 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0).")}
+if (length(PL_models$reliability_plot) > 0 && is_plot(PL_models$reliability_plot[[1]])) plot(PL_models$reliability_plot[[1]])
 ```
 
 Figure 9 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order with p-value = 0.05.
 
 ```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 9. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. Intervals are based on quasi standard errors.")}
-if (!is.null(PL_models$logworth_overall)){
+if (is_plot(PL_models$logworth_overall)){
  plot(PL_models$logworth_overall)
 }
 ```
@@ -333,7 +333,7 @@ kable(PL_tree$node_summary,
 \
 
 ```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Figure 10. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
-if (isTRUE(PL_tree$isTREE)) {
+if (isTRUE(PL_tree$isTREE) && is_plot(PL_tree$PLtree_plot)) {
 plot(PL_tree$PLtree_plot)
 }
 ```
@@ -371,7 +371,7 @@ if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
 ```{r denstity_plot, dpi=500, asis=TRUE,fig.height=8,fig.width=10}
 if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
 for(i in seq_along(quantitative_traits$density_plots)) {
-  plot(quantitative_traits$density_plots[[i]])
+  if (is_plot(quantitative_traits$density_plots[[i]])) plot(quantitative_traits$density_plots[[i]])
 }
 }
 ```
@@ -420,9 +420,9 @@ if (isFALSE(is.null(error))){
 
 `r paste(error_text1, collapse = '\n')`
 
-```{r error2}
+```{r error2, results='asis'}
 if (isFALSE(is.null(error))){
-print(error)
+cat(paste0("- ", gsub("\n", " ", error), collapse = "\n"))
 }
 ```
 
@@ -439,7 +439,7 @@ if (isTRUE(nrow(quanti_dat$outliers) > 0)){
 
 ```{r outlier}
 if (isTRUE(nrow(quanti_dat$outliers) > 0))
-kable(quanti_dat$outliers, 
+knitr::kable(quanti_dat$outliers, 
           caption = paste0("Appendix 1. Possible outliers identified in quantitative data collected in the trial. If you consider any of these as outliers, please fix it in your ClimMob project and request a new report."),
           align = "l",
           row.names = FALSE)

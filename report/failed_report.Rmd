@@ -25,8 +25,8 @@ Sorry, we had an issue in generating your report. Please contact our supporting 
 
 We tried to produce your report, but we got the following error(s): 
 
-```{r}
-print(error)
+```{r, results='asis'}
+cat(paste0("- ", gsub("\n", " ", error), collapse = "\n"))
 ```
 
 \

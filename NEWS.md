@@ -1,3 +1,46 @@
+ClimMob-analysis v4.0 (2026-10-31)
+=========================
+
+### Changes in structure
+
+* The code is reorganised in `R/` by responsibility, replacing `modules/`. `ClimMob.R` is now a short entry point and the call from the server is unchanged.
+* `run_step()` replaces the repeated `tryCatch()` blocks. Each step is logged with its status, time, warnings and the R calls that led to an error. Steps that depend on a failed step are skipped.
+* The Plackett-Luce outputs (log-worth, worth map, ANOVA, net winning, reliability, Kendall tau) are separate steps, so one failure does not remove the others from the report.
+* Trial coordinates are a separate step, so a failed map download no longer stops the agroclimatic analysis.
+* Reports are rendered in a temporary copy of `report/`, with an explicit list of objects. Two reports can render at the same time on the server.
+* If the main report fails to render, a short report with the errors is written under the same file name, so ClimMob always receives a report.
+* Optional debug folder (`CLIMMOB_DEBUG_DIR`) with the inputs, all results and a reproducible function for each failed step.
+* `run-local/` calls `run_climmob_analysis()` directly, replacing `source2()` and line numbers.
+* Unit tests in `tests/`.
+* Unused functions and old templates are removed.
+
+### Bug fixes
+
+* Plackett-Luce trees dropped every covariate when none had near zero variance (`Gdata[, -integer(0)]`), so trees could rarely be produced.
+* Writing the agroclimatic CSVs used list names that did not exist and stopped the script before the outlier table was written.
+* `force_pseudo_rank()` assigned a transposed matrix, scrambling the pseudo rankings. It now also uses a fixed seed so the same data gives the same report.
+* The cap of eight groups was never applied (`isTRUE()` on a vector).
+* Covariate type checks failed on objects with two classes, such as dates.
+* Highly correlated covariates were both removed. One of each pair is now kept, and the check runs on numeric covariates as intended.
+* Covariates with any missing descriptive field (for example `questionAsked`) were silently dropped.
+* Covariate names with special characters broke the tree formula.
+* `organize_quantitative_data()` read the global `cmdatajson` instead of its argument, and failed when no enumerator column existed.
+* The cleaned ranking data was discarded. All steps now use the cleaned data.
+* A trait whose columns could not be found stopped the whole analysis. It is now dropped with a message.
+* An empty `Reference` gave no check item and broke the reliability section. The first item is used, as documented in v1.1.
+* `reliability-data.csv` only had the last check. It now has all checks with a `check` column.
+* A failed log-worth plot for the last trait stopped the whole Plackett-Luce step (subscript out of bounds).
+* Projects without GPS no longer show a map error in the report appendix.
+* Participant reports used the English "Not replied" label in all languages, and row numbers to find their text.
+* `paste3()` added double spaces around the conjunction.
+
+### Known behaviour kept on purpose
+
+* Agroclimatic indices are computed but not yet used as covariates in the trees, as before.
+* Partial ties are removed from the rankings, as before.
+* The table of items by group is switched off, as before.
+
+
 ClimMob-analysis v2.0 (2025-12-25)
 =========================
 
