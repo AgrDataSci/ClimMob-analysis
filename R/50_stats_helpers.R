@@ -200,6 +200,6 @@ plot_logworth = function(x, ci.level = 0.95, ref = NULL,
           legend.title = element_blank(),
           strip.background.y = element_blank(),
           strip.placement = "outside") +
-    labs(y = "", x = "Log-worth")
+    labs(y = "", x = tr("lab_logworth"))
 
 }

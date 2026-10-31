@@ -23,7 +23,7 @@ load_climmob = function(code_path = ".", packages = TRUE) {
   }
 
   for (f in files) {
-    source(f, local = globalenv())
+    source(f, local = globalenv(), encoding = "UTF-8")
   }
 
   if (isTRUE(packages)) {

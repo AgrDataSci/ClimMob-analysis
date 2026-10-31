@@ -1,0 +1,1 @@
+Read AGENTS.md before working in this repository. It explains how to analyse ClimMob data with this code, how to write material for participants from the AI-ready outputs, and the rules for changing the code.

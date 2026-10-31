@@ -15,9 +15,22 @@ Rplots.pdf
 #other
 .Rproj.user
 output
-dev
+# dev/ and tests/ may hold private data locally, only these files are shared
+dev/*
+!dev/install-packages.R
+!dev/debug-a-failed-run.R
+!dev/release.R
+!dev/helper-01-parse-metadata-as-cff.R
+!dev/helper-02-parse-metadata-as-json.R
 reportcm
 run-local/local
-tests
+tests/*
+!tests/testthat.R
+!tests/testthat/
+!tests/testdata/
+tests/testdata/*
+!tests/testdata/simulated-maize/
 tempmap
 gadm
+# local outputs
+run-local/output/

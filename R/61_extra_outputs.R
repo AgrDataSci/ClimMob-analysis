@@ -91,6 +91,48 @@ write_extra_outputs = function(state, settings) {
     save_table(state$quanti_dat$outliers, f("possible-outliers-quantitative-data.csv"))
   }
 
+  # monitoring
+  mon = state$monitoring
+  save_table(mon$attrition, f("monitoring-attrition.csv"))
+  save_table(mon$answer_quality, f("monitoring-answer-quality.csv"))
+  save_table(mon$enumerators, f("monitoring-enumerators.csv"))
+  save_figure(mon$attrition_plot, f("monitoring-attrition.pdf"), 20, 14)
+
+  # evidence for variety release
+  save_table(state$release$summary, f("variety-release-summary.csv"))
+  save_table(state$release$by_trait_all_checks, f("variety-release-by-trait.csv"))
+
+  # groups
+  ga = state$group_analysis
+  if (isTRUE(ga$requested)) {
+    save_table(ga$eligibility, f("groups-eligibility.csv"))
+    save_table(ga$heterogeneity, f("groups-test-by-trait.csv"))
+    save_table(ga$balanced_ranking, f("groups-balanced-ranking.csv"))
+    save_table(ga$within, f("groups-agreement-within.csv"))
+    save_table(ga$between, f("groups-agreement-between.csv"))
+    save_figure(ga$worthmap, f("groups-worth-map.pdf"), 20, 20)
+  }
+
+  # measured traits
+  mt = state$metric
+  if (isTRUE(mt$available)) {
+    means = do.call("rbind", lapply(mt$traits, function(x) {
+      if (nrow(x$means) == 0) return(NULL)
+      cbind(trait = x$trait, moment = x$moment, method = x$method, x$means)
+    }))
+    save_table(means, f("measured-traits-means.csv"))
+    vc = do.call("rbind", lapply(mt$traits, function(x) {
+      if (nrow(x$variance) == 0) return(NULL)
+      cbind(trait = x$trait, moment = x$moment, x$variance)
+    }))
+    save_table(vc, f("measured-traits-heritability.csv"))
+    qc = do.call("rbind", lapply(mt$traits, function(x) cbind(trait = x$trait, moment = x$moment, x$qc)))
+    save_table(qc, f("measured-traits-quality.csv"))
+    for (k in seq_along(mt$traits)) {
+      save_figure(mt$traits[[k]]$plots$box, f(paste0("measured-", safe_file_name(names(mt$traits)[k]), "-boxplot.pdf")), 20, 16)
+    }
+  }
+
   invisible(list.files(dir))
 
 }

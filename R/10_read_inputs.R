@@ -74,14 +74,22 @@ parse_report_settings = function(p) {
 
   list(output_path   = get("OutputPath", file.path(getwd(), "output")),
        infosheets    = isTRUE(as.logical(get("InfoSheets", FALSE))),
-       language      = get("Languaje", get("Language", "en")),
+       language      = normalize_language(get("Languaje", get("Language", "en"))),
        extension     = extension,
        output_format = if (extension == "docx") "word_document" else paste0(extension, "_document"),
        ranker        = get("ReferToParticipants", "participant"),
        option        = get("ReferToTechnologies", "technology"),
        code_path     = get("BackwardPath", getOption("climmob.code_path", getwd())),
        groups        = split_csv(get("Split", "")),
-       reference     = reference)
+       reference     = reference,
+       # settings not sent by ClimMob yet, read here so ClimMob can add them later
+       min_n_group   = as.integer(get("MinGroupSize", 20)),
+       balance_threshold = as.numeric(get("BalanceThreshold", 0.25)),
+       use_climate   = !isFALSE(as.logical(get("ClimateCovariates", TRUE))),
+       feedback_colour = !isFALSE(as.logical(get("FeedbackColour", TRUE))),
+       feedback_recommendations = as.character(get("Recommendations", "")),
+       feedback_contact = as.character(get("Contact", "")),
+       date          = Sys.Date())
 
 }
 

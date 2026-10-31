@@ -4,7 +4,7 @@
 # run_climmob_from_files()  what ClimMob.R calls on the server
 #   read_climmob_request()  read the two JSON files
 #   run_climmob_analysis()  all the analysis, returns `state`
-#   write_climmob_outputs() main report, info sheets, extra outputs
+#   write_climmob_outputs() main report, feedback, extra outputs
 #
 # run_climmob_analysis() can be called directly in a local session
 # (see run-local/) and its result inspected step by step.
@@ -65,7 +65,8 @@ run_climmob_from_files = function(params_file, data_file,
 #' Run all the analysis steps
 #'
 #' @param cmdata the trial data as data.frame
-#' @param pars the decoded parameters, see decode_pars()
+#' @param pars the decoded parameters, see decode_pars() or
+#'  build_pars_from_cmlist() for local runs
 #' @param settings the report settings, see parse_report_settings() or
 #'  climmob_settings() for local runs
 #' @param cmdatajson optional, the CM_list sent by ClimMob, used to find
@@ -77,7 +78,9 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
                                 log = new_run_log(),
                                 tech_index = paste0("package_item_", LETTERS[1:3])) {
 
-  s = list(log = log, cmdata = cmdata, pars = pars)
+  set_language(settings$language %||% "en", settings$code_path %||% getOption("climmob.code_path", "."))
+
+  s = list(log = log, cmdata = cmdata, pars = pars, settings = settings)
 
   # 1. Data ----
   s$rank_dat = run_step(log, "rank_dat", "Organize Ranking Data", function() {
@@ -100,14 +103,22 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
   cm = s$cmdata
   rd = s$rank_dat
 
+  id_col = participant_columns(cmdata)$id
+
   s$quanti_dat = run_step(log, "quanti_dat", "Organize Quantitative Data", function() {
     organize_quantitative_data(cm, pars,
                                groups = settings$groups,
-                               id = "REG_qst162",
+                               id = if (is.na(id_col)) "REG_qst162" else id_col,
                                tech_index = tech_index)
   }, fallback = error_data_quanti_dat)
 
-  # 2. Overview, map and climate ----
+  # 2. Monitoring, works before any trait has enough answers ----
+  s$monitoring = run_step(log, "monitoring", "Trial monitoring", function() {
+    get_monitoring(cmdata, pars,
+                   group = build_groups(cmdata, settings$groups, min_per_group = 0))
+  }, fallback = error_data_monitoring)
+
+  # 3. Overview, map and climate ----
   s$overview_and_summaries = run_step(log, "overview", "Overview and Summary",
     function() get_overview_summaries(cm, rd),
     fallback = error_data_overview_and_summaries,
@@ -124,11 +135,11 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
     needs = "coords")
 
   s$agroclimate = run_step(log, "agroclimate", "Agroclimatic data",
-    function() get_agroclimatic_data(cm, coords = s$coords, ndays = 60),
+    function() get_agroclimatic_data(cm, coords = s$coords, ndays = season_length(pars)),
     fallback = error_data_agroclimate,
     needs = "coords")
 
-  # 3. Plackett-Luce models ----
+  # 4. Plackett-Luce models ----
   s$rankings = run_step(log, "rankings", "Plackett-Luce rankings",
     function() build_trait_rankings(cm, rd),
     needs = "rank_dat")
@@ -149,7 +160,7 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
     function() make_anova_table(s$models, rd),
     fallback = data.frame(), needs = "models")
 
-  netwinning = run_step(log, "netwinning", "Net winning",
+  netwinning = run_step(log, "netwinning", "Favourability",
     function() make_netwinning_table(s$rankings, rd),
     fallback = data.frame(), needs = "rankings")
 
@@ -164,25 +175,33 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
   s$PL_models = assemble_PL_models(s$models %||% list(), logworth, worthmap,
                                    anova_tbl, netwinning, reliability, kendall)
 
-  # 4. Trees ----
+  # 5. Groups of participants ----
+  s$group_analysis = run_step(log, "groups", "Analysis by group",
+    function() get_group_analysis(rd, s$rankings,
+                                  min_n = settings$min_n_group %||% 20,
+                                  balance_threshold = settings$balance_threshold %||% 0.25),
+    fallback = error_data_group_analysis, needs = c("rankings", "models"))
+
+  # 6. Trees ----
   s$PL_tree = run_step(log, "pl_tree", "Plackett-Luce Tree",
-    function() get_PlackettLuce_tree(cm, rd, s$agroclimate),
+    function() get_PlackettLuce_tree(cm, rd, s$agroclimate,
+                                     use_climate = settings$use_climate %||% TRUE),
     fallback = error_data_PL_tree, needs = "rank_dat")
 
-  # 5. Quantitative traits ----
-  s$quantitative_traits = run_step(log, "quantitative", "Quantitative Traits",
-    function() get_quantitative_summaries(s$quanti_dat),
-    fallback = error_data_quantitative_traits, needs = "quanti_dat")
+  # 7. Measured traits ----
+  s$metric = run_step(log, "metric", "Measured traits",
+    function() get_metric_analysis(s$quanti_dat, check = rd$reference_tech[1]),
+    fallback = error_data_metric, needs = "quanti_dat")
 
-  # 6. Participant reports ----
-  if (isTRUE(settings$infosheets)) {
-    s$participant_report = run_step(log, "participant_report", "Participant report",
-      function() get_participant_report(cm, rd,
-                                        text_file = file.path(settings$code_path, "report",
-                                                              "participant_report_multilanguage_text.csv"),
-                                        language = settings$language),
-      fallback = error_participant_report, needs = "rank_dat")
-  }
+  # 8. Evidence for variety release ----
+  s$release = run_step(log, "release", "Variety release summary",
+    function() get_release_summary(cm, rd, s$models, s$rankings, s$metric),
+    fallback = error_data_release, needs = "models")
+
+  # 9. Feedback to participants ----
+  s$feedback = run_step(log, "feedback", "Participant feedback data",
+    function() get_feedback_data(cm, rd, s$models),
+    fallback = error_data_feedback, needs = "models")
 
   s
 
@@ -193,13 +212,25 @@ write_climmob_outputs = function(state, settings) {
 
   dir.create(settings$output_path, showWarnings = FALSE, recursive = TRUE)
 
-  render_main_report(state, settings)
+  set_language(settings$language %||% "en", settings$code_path)
+
+  log = state$log %||% new_run_log()
+
+  run_step(log, "main_report", "Main report",
+           function() render_main_report(state, settings), report_error = FALSE)
 
   if (isTRUE(settings$infosheets)) {
-    render_participant_reports(state, settings)
+    run_step(log, "participant_reports", "Participant reports",
+             function() render_participant_reports(state, settings), report_error = FALSE)
   }
 
-  write_extra_outputs(state, settings)
+  run_step(log, "extra_outputs", "Extra outputs",
+           function() write_extra_outputs(state, settings), report_error = FALSE)
+
+  if (nrow(state$feedback$participants %||% data.frame()) > 0) {
+    run_step(log, "ai_ready", "AI-ready export",
+             function() write_ai_ready(state$feedback, state, settings), report_error = FALSE)
+  }
 
   invisible(settings$output_path)
 

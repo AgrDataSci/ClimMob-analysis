@@ -92,21 +92,24 @@ make_anova_table = function(mod, rank_dat) {
 
 }
 
-#' Net winning score of every item in every trait
+#' Favourability of every item in every trait (issue #117)
+#'
+#' From gosset::preference_index(), the probability (in %) that an item is
+#' ranked first (top) or last (bottom) in the sets where it was tested,
+#' and their difference, the net winning or favourability score.
 make_netwinning_table = function(R, rank_dat) {
 
   nw = lapply(seq_along(R), function(i) {
-    x = preference_index(R[[i]])[, 1:4]
+    x = preference_index(R[[i]])
+    x = x[, c("item", "n", "top", "bottom", "net_winning")]
     x$trait = rank_dat$trait_names[i]
     x
   })
 
   nw = do.call("rbind", nw)
-  nw$trait[duplicated(nw$trait)] = ""
-  names(nw)[1] = rank_dat$option
-  nw = nw[c(5, 1, 2, 3, 4)]
-  nw[3:4] = lapply(nw[3:4], function(x) round(x, 1))
-  names(nw) = title_case(names(nw))
+  nw = nw[c("trait", "item", "n", "top", "bottom", "net_winning")]
+  nw[4:6] = lapply(nw[4:6], function(x) round(x, 1))
+  rownames(nw) = NULL
 
   nw
 
@@ -146,7 +149,7 @@ make_reliability = function(mod, rank_dat) {
       facet_wrap(~ item, strip.position = "bottom") +
       geom_vline(xintercept = 0, colour = "grey40", linewidth = 1) +
       theme_classic() +
-      labs(x = paste("Probability of outperforming", check), y = "")
+      labs(x = tr("lab_prob_outperform", check = check), y = "")
 
   }
 
@@ -207,7 +210,7 @@ make_kendall = function(cmdata, rank_dat) {
           axis.text.y = element_text(size = 12, color = "grey20"),
           axis.title = element_text(size = 12, color = "grey20"),
           axis.text.x = element_text(size = 12, vjust = 1, hjust = 1, color = "grey20")) +
-    labs(x = "Trait", y = "Kendall tau")
+    labs(x = tr("col_trait"), y = tr("col_kendall"))
 
   names(kendall) = c("Trait", "Kendall tau", "Z value", "Pr(>|z|)")
   row.names(kendall) = seq_len(nrow(kendall))

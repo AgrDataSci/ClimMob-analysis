@@ -1,60 +1,21 @@
 ---
 output:
-  pdf_document: default
   word_document:
     reference_docx: participant_report.docx
-  html_document:
-    df_print: paged
+  pdf_document: default
+  html_document: default
 ---
+
 ```{r setup_opts, include=FALSE}
-knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, error = FALSE, message = FALSE, warning = FALSE)
 ```
 
-```{r}
-txt = participant_report$reporttext
-partitable = participant_report$partitable
-id_i = partitable$id[i]
-name = paste0("**", partitable$name[i], "**")
-thanks = gsub("r name", name, txt[["thanks"]], fixed = TRUE)
-item_cols = grep("^item_", names(partitable), value = TRUE)
-your_items = sort(as.vector(unlist(partitable[i, item_cols])))
-your_ranking = as.vector(unlist(partitable[i, grep("^Position", names(partitable))]))
-yourpackage = paste(paste(your_items, paste0("(Option ", LETTERS[seq_along(your_items)], ")")), collapse = ", ")
-firstparagraph = gsub("r yourpackage", yourpackage, txt[["firstparagraph"]], fixed = TRUE)
-
-# the podium with the ranking of this participant
-podium_i = participant_report$podium +
-  annotate("text", 2, 2, label = your_ranking[1]) +
-  annotate("text", 1, 1, label = your_ranking[2]) +
-  annotate("text", 3, 0.5, label = your_ranking[3])
-
-has_other_traits = length(rank_dat$trait_list) > 1 &&
-  i <= length(participant_report$other_traits_table) &&
-  is_plot(participant_report$other_traits_table[[i]])
-```
-
-# `r txt[["title"]]`
-
-`r thanks`
-
-`r firstparagraph`
-
-```{r, fig.width=4, fig.height=1, dpi=200}
-podium_i
-```
-
-`r txt[["overallreply"]]`
-
-```{r, fig.width=4, fig.height=2, dpi=200}
-participant_report$poverp
+```{r sheet, out.width="100%"}
+knitr::include_graphics(sheet)
 ```
 
 \pagebreak
 
-`r if (has_other_traits) txt[["othertraits"]] else ""`
-
-```{r, fig.width=8, fig.height=5, dpi=200}
-if (has_other_traits) {
-  plot(participant_report$other_traits_table[[i]])
-}
+```{r certificate, out.width="100%"}
+knitr::include_graphics(certificate)
 ```

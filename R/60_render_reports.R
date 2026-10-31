@@ -38,45 +38,39 @@ main_report_env = function(state, settings) {
   nt = length(rank_dat$technologies)
   ntraits = length(rank_dat$trait_list)
 
-  # sizes of the worth map and the favourability plot
   worthmap_h = min(max(ntraits, 7), 8)
-  favplot_h = min(max(nt * 0.4, 5), 7.5)
 
-  env = list2env(list(
+  option = if (nzchar(rank_dat$option %||% "")) rank_dat$option else settings$option
+  participant = if (nzchar(rank_dat$ranker %||% "")) rank_dat$ranker else settings$ranker
+
+  list2env(list(
     project_name = settings$project_name %||% "",
     noptions = length(rank_dat$technologies_index),
     ntechnologies = nt,
-    option = rank_dat$option,
-    options = pluralize(rank_dat$option),
-    participant = rank_dat$ranker,
-    participants = pluralize(rank_dat$ranker),
+    option = option,
+    options = plural_label(option),
+    participant = participant,
+    participants = plural_label(participant),
     nparticipants = nrow(state$cmdata),
     ntraits = ntraits,
     reference_trait = title_case(rank_dat$reference_trait),
     reference_tech = rank_dat$reference_tech,
     rank_dat = rank_dat,
-    overview_and_summaries = state$overview_and_summaries,
-    trial_map = state$trial_map,
-    agroclimate = state$agroclimate,
+    monitoring = state$monitoring %||% error_data_monitoring,
+    overview_and_summaries = state$overview_and_summaries %||% error_data_overview_and_summaries,
+    trial_map = state$trial_map %||% error_data_trial_map,
+    agroclimate = state$agroclimate %||% error_data_agroclimate,
     PL_models = state$PL_models,
-    PL_tree = state$PL_tree,
-    quanti_dat = state$quanti_dat,
-    quantitative_traits = state$quantitative_traits,
+    PL_tree = state$PL_tree %||% error_data_PL_tree,
+    group_analysis = state$group_analysis %||% error_data_group_analysis,
+    quanti_dat = state$quanti_dat %||% error_data_quanti_dat,
+    metric = state$metric %||% error_data_metric,
+    release = state$release %||% error_data_release,
     error = if (length(state$log$errors) > 0) state$log$errors else NULL,
     dpi = 400,
-    out_width = "100%",
     worthmap_h = worthmap_h,
-    worthmap_w = worthmap_h + 0.5,
-    favplot_h = favplot_h),
+    worthmap_w = worthmap_h + 0.5),
     parent = globalenv())
-
-  # the option labels come from the request when the data failed
-  if (!nzchar(env$option)) env$option = settings$option
-  if (!nzchar(env$participant)) env$participant = settings$ranker
-  env$options = pluralize(env$option)
-  env$participants = pluralize(env$participant)
-
-  env
 
 }
 
@@ -142,18 +136,23 @@ render_main_report = function(state, settings) {
 
 }
 
-#' Render one info sheet per participant
+#' Feedback for participants (InfoSheets)
 #'
-#' Files are <output_path>/participant-report/participant_report_package_<i>.<extension>
+#' Writes the feedback sheets and certificates as PDF and PNG (see
+#' write_feedback_files()) and one Word file per participant with both
+#' pages, named participant-report/participant_report_package_<i>.<extension>
+#' as before.
 render_participant_reports = function(state, settings) {
 
-  participant_report = state$participant_report
+  feedback = state$feedback
 
-  n = nrow(participant_report$partitable)
+  n = nrow(feedback$participants %||% data.frame())
 
-  if (is.null(n) || n == 0) {
+  if (n == 0) {
     return(invisible(0))
   }
+
+  images = write_feedback_files(feedback, settings)
 
   render_dir = prepare_render_dir(settings$code_path)
   on.exit(unlink(render_dir, recursive = TRUE), add = TRUE)
@@ -164,9 +163,8 @@ render_participant_reports = function(state, settings) {
 
   for (i in seq_len(n)) {
 
-    env = list2env(list(i = i,
-                        participant_report = participant_report,
-                        rank_dat = state$rank_dat),
+    env = list2env(list(sheet = normalizePath(images$sheet[i]),
+                        certificate = normalizePath(images$certificate[i])),
                    parent = globalenv())
 
     ok = render_rmd(file.path(render_dir, "participant_report_main.Rmd"),

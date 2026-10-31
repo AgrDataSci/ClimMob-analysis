@@ -71,7 +71,7 @@ error_data_trial_map = list(geoTRUE = FALSE,
 #'
 #' @param cmdata the trial data as data.frame
 #' @param coords output of get_trial_coordinates()
-#' @param ndays number of days from the planting date
+#' @param ndays number of days from the planting date, see season_length()
 get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
 
   if (is.null(coords) || nrow(coords) == 0) {
@@ -122,15 +122,18 @@ get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
       climate_theme
   }
 
-  rain_plot = index_plot(rain, c("Rtotal", "SDII"), "Index (mm)", scales = "free_y") /
-    index_plot(rain, c("MLDS", "MLWS"), "Index (days)", xlab = "Date", scales = "free_y")
+  rain_plot = index_plot(rain, c("Rtotal", "SDII"), tr("lab_index_mm"), scales = "free_y") /
+    index_plot(rain, c("MLDS", "MLWS"), tr("lab_index_days"), xlab = tr("lab_date"), scales = "free_y")
 
   temperature_plot = index_plot(temp, c("maxDT", "minDT", "maxNT", "minNT"),
-                                "Index (°C)", xlab = "Date", ncol = 2)
+                                tr("lab_index_c"), xlab = tr("lab_date"), ncol = 2)
 
-  # indices for the whole period, available for the trees
-  rain1 = rainfall(coords[ok, ], day.one = dates[ok], span = ndays)
-  temp1 = temperature(coords[ok, ], day.one = dates[ok], span = ndays)
+  # indices for the whole window, one row per participant, used as
+  # covariates in the Plackett-Luce trees (issue #105)
+  rain1 = as.data.frame(rainfall(coords[ok, ], day.one = dates[ok], span = ndays))
+  temp1 = as.data.frame(temperature(coords[ok, ], day.one = dates[ok], span = ndays))
+
+  covariates = climate_covariates(rain1, temp1, ok)
 
   list(agroclimate = TRUE,
        rain_plot = rain_plot,
@@ -142,9 +145,59 @@ get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
        dates = dates,
        window = c(min(dates, na.rm = TRUE), max(dates, na.rm = TRUE) + ndays),
        noNAs = ok,
+       ndays = ndays,
+       covariates = covariates,
        date_used = date_used)
 
 }
 
 #' Placeholder used when the agroclimatic data could not be produced
 error_data_agroclimate = list(agroclimate = FALSE)
+
+#' Length of the climate window, from the design of the project
+#'
+#' The window starts at planting and ends at the last data collection
+#' moment with a ranking trait, as set by the project designer in
+#' ClimMob. It is kept between min_days and max_days. Without this
+#' information the default of 60 days is used (issue #105).
+#'
+#' @examples
+#' season_length(list(traits = data.frame(assessmentDay = c(30, 85))))
+season_length = function(pars, default = 60, min_days = 45, max_days = 180) {
+
+  days = suppressWarnings(as.numeric(pars$traits$assessmentDay))
+  days = days[!is.na(days) & days > 0]
+
+  if (length(days) == 0) {
+    return(default)
+  }
+
+  as.integer(min(max(max(days), min_days), max_days))
+
+}
+
+#' Climate indices used as covariates in the trees
+#'
+#' A small set of interpretable indices is kept to limit the number
+#' of covariates tested in the forward selection.
+#'
+#' @param rain,temp indices from climatrends, one row per participant in ok
+#' @param ok logical, the participants with coordinates and dates
+#' @return a data.frame with one row per participant (NA when not available)
+climate_covariates = function(rain, temp, ok,
+                              keep = c("Rtotal", "MLDS", "MLWS", "Rx5day",
+                                       "maxDT", "minNT", "DTR", "SU")) {
+
+  x = cbind(rain, temp)
+  x = x[, intersect(keep, names(x)), drop = FALSE]
+
+  out = as.data.frame(matrix(NA_real_, nrow = length(ok), ncol = ncol(x),
+                             dimnames = list(NULL, names(x))))
+
+  out[ok, ] = x
+
+  names(out) = paste0("climate_", names(out))
+
+  out
+
+}

@@ -26,24 +26,7 @@ clean_tricot_answers = function(x) {
 
   x = as.data.frame(lapply(x, as.character), stringsAsFactors = FALSE)
 
-  x[] = lapply(x, function(v) {
-    v[v %in% "Not observed"] = NA
-    v
-  })
-
-  complete = stats::complete.cases(x)
-
-  all_tied = complete & apply(x, 1, function(r) all(r == "Tie"))
-
-  same = complete & x[[1]] == x[[2]]
-
-  not_abc = !apply(x, 1, function(r) all(r %in% LETTERS[1:3]))
-
-  bad = all_tied | same | not_abc
-
-  bad[is.na(bad)] = TRUE
-
-  x[bad, ] = NA
+  x[answer_status(x) != "valid", ] = NA
 
   x
 
@@ -97,13 +80,20 @@ organize_ranking_data = function(cmdata,
     reference_tech = items[1]
   }
 
+  # all groups are kept here, get_group_analysis() decides which ones
+  # have enough data to be analysed
   group = build_groups(cmdata, groups, na_label = "Not specified",
-                       max_groups = 8, min_per_group = 5)
+                       max_groups = 8, min_per_group = 0)
 
   # the same trait can be assessed in different data collection moments
   trait = pars$traits
   trait$codeQst = rename_duplicates(trait$codeQst)
-  trait$name = rename_duplicates(trait$name, sep = " ")
+
+  # a name is numbered only when it repeats within the same data
+  # collection moment, otherwise the moment already tells them apart
+  dup_key = paste(trait$name, trait$assessmentName)
+  trait$name[duplicated(dup_key) | duplicated(dup_key, fromLast = TRUE)] =
+    rename_duplicates(trait$name[duplicated(dup_key) | duplicated(dup_key, fromLast = TRUE)], sep = " ")
 
   reference_trait = which(trait$traitOrder == "referenceTrait")[1]
 
@@ -125,7 +115,7 @@ organize_ranking_data = function(cmdata,
     if (any(is.na(trait_i))) {
       message("Trait '", trait$name[i], "' dropped, columns not found: ",
               paste(patterns[is.na(trait_i)], collapse = ", "))
-      trait_dropped = c(trait_dropped, trait$name[i])
+      trait_dropped = c(trait_dropped, paste0(trait$name[i], " [", trait$assessmentName[i], "]"))
       next
     }
 
@@ -138,7 +128,7 @@ organize_ranking_data = function(cmdata,
     enough_items = all(table(unlist(cmdata[keep, itemnames])) >= minitem)
 
     if (!isTRUE(enough_n && enough_items)) {
-      trait_dropped = c(trait_dropped, trait$name[i])
+      trait_dropped = c(trait_dropped, paste0(trait$name[i], " [", trait$assessmentName[i], "]"))
       next
     }
 
@@ -169,7 +159,7 @@ organize_ranking_data = function(cmdata,
   }
 
   if (length(trait_list) == 0) {
-    stop("None of the ", nrow(trait), " traits had enough valid answers ",
+    stop("None of the ", nrow(trait), " traits has enough valid answers yet ",
          "(more than ", minN, " complete answers and each ", option_label,
          " tested at least ", minitem, " times)")
   }

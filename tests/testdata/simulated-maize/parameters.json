@@ -1,0 +1,724 @@
+{
+ "Characteristics": [
+  {
+   "name": "Germination",
+   "codeQst": "germination",
+   "id": 1551,
+   "vars": [
+    {
+     "name": "ASSaaaa00000001_char_germination_pos"
+    },
+    {
+     "name": "ASSaaaa00000001_char_germination_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "aaaa00000001",
+    "ass_desc": "Vegetative",
+    "ass_days": 30,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option germinated more plants?",
+    "Which option germinated less plants?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_aaaa00000001_1551_add"
+  },
+  {
+   "name": "Diseases resistance",
+   "codeQst": "diseasesresistance",
+   "id": 1553,
+   "vars": [
+    {
+     "name": "ASSaaaa00000001_char_diseasesresistance_pos"
+    },
+    {
+     "name": "ASSaaaa00000001_char_diseasesresistance_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "aaaa00000001",
+    "ass_desc": "Vegetative",
+    "ass_days": 30,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is more resistant to diseases?",
+    "Which option is more susceptible to diseases?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_aaaa00000001_1553_add"
+  },
+  {
+   "name": "Drought tolerance",
+   "codeQst": "droughttolerance",
+   "id": 1555,
+   "vars": [
+    {
+     "name": "ASSaaaa00000001_char_droughttolerance_pos"
+    },
+    {
+     "name": "ASSaaaa00000001_char_droughttolerance_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "aaaa00000001",
+    "ass_desc": "Vegetative",
+    "ass_days": 30,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is more tolerant to drought?",
+    "Which option is more susceptible to drought?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_aaaa00000001_1555_add"
+  },
+  {
+   "name": "Flood tolerance",
+   "codeQst": "floodtolerance",
+   "id": 1588,
+   "vars": [
+    {
+     "name": "ASSaaaa00000001_char_floodtolerance_pos"
+    },
+    {
+     "name": "ASSaaaa00000001_char_floodtolerance_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "aaaa00000001",
+    "ass_desc": "Vegetative",
+    "ass_days": 30,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is more tolerant to flooding?",
+    "Which option is more susceptible to flooding?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_aaaa00000001_1588_add"
+  },
+  {
+   "name": "Fall armyworm resistance",
+   "codeQst": "fallarmyworm",
+   "id": 1786,
+   "vars": [
+    {
+     "name": "ASSaaaa00000001_char_fallarmyworm_pos"
+    },
+    {
+     "name": "ASSaaaa00000001_char_fallarmyworm_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "aaaa00000001",
+    "ass_desc": "Vegetative",
+    "ass_days": 30,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is more resistant to fall armyworm?",
+    "Which option is more susceptible to fall armyworm?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_aaaa00000001_1786_add"
+  },
+  {
+   "name": "Diseases resistance",
+   "codeQst": "diseasesresistance",
+   "id": 1553,
+   "vars": [
+    {
+     "name": "ASSbbbb00000002_char_diseasesresistance_pos"
+    },
+    {
+     "name": "ASSbbbb00000002_char_diseasesresistance_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "bbbb00000002",
+    "ass_desc": "Reproductive",
+    "ass_days": 70,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is more resistant to diseases?",
+    "Which option is more susceptible to diseases?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_bbbb00000002_1553_add"
+  },
+  {
+   "name": "Drought tolerance",
+   "codeQst": "droughttolerance",
+   "id": 1555,
+   "vars": [
+    {
+     "name": "ASSbbbb00000002_char_droughttolerance_pos"
+    },
+    {
+     "name": "ASSbbbb00000002_char_droughttolerance_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "bbbb00000002",
+    "ass_desc": "Reproductive",
+    "ass_days": 70,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is more tolerant to drought?",
+    "Which option is more susceptible to drought?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_bbbb00000002_1555_add"
+  },
+  {
+   "name": "Flood tolerance",
+   "codeQst": "floodtolerance",
+   "id": 1588,
+   "vars": [
+    {
+     "name": "ASSbbbb00000002_char_floodtolerance_pos"
+    },
+    {
+     "name": "ASSbbbb00000002_char_floodtolerance_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "bbbb00000002",
+    "ass_desc": "Reproductive",
+    "ass_days": 70,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is more tolerant to flooding?",
+    "Which option is more susceptible to flooding?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_bbbb00000002_1588_add"
+  },
+  {
+   "name": "Fall armyworm resistance",
+   "codeQst": "fallarmyworm",
+   "id": 1786,
+   "vars": [
+    {
+     "name": "ASSbbbb00000002_char_fallarmyworm_pos"
+    },
+    {
+     "name": "ASSbbbb00000002_char_fallarmyworm_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "bbbb00000002",
+    "ass_desc": "Reproductive",
+    "ass_days": 70,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is more resistant to fall armyworm?",
+    "Which option is more susceptible to fall armyworm?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_bbbb00000002_1786_add"
+  },
+  {
+   "name": "Maturity",
+   "codeQst": "maturity",
+   "id": 1557,
+   "vars": [
+    {
+     "name": "ASScccc00000003_char_maturity_pos"
+    },
+    {
+     "name": "ASScccc00000003_char_maturity_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option has the earlier maturity?",
+    "Which option has the later maturity?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_cccc00000003_1557_add"
+  },
+  {
+   "name": "Yield",
+   "codeQst": "yield",
+   "id": 1558,
+   "vars": [
+    {
+     "name": "ASScccc00000003_char_yield_pos"
+    },
+    {
+     "name": "ASScccc00000003_char_yield_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option has the higher grain yield?",
+    "Which option has the lower grain yield?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_cccc00000003_1558_add"
+  },
+  {
+   "name": "Grain size",
+   "codeQst": "grainsize",
+   "id": 1559,
+   "vars": [
+    {
+     "name": "ASScccc00000003_char_grainsize_pos"
+    },
+    {
+     "name": "ASScccc00000003_char_grainsize_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option has the best grain/seed size for the target market?",
+    "Which option has the worst grain/seed size for the target market?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_cccc00000003_1559_add"
+  },
+  {
+   "name": "Grain colour",
+   "codeQst": "graincolour",
+   "id": 1560,
+   "vars": [
+    {
+     "name": "ASScccc00000003_char_graincolour_pos"
+    },
+    {
+     "name": "ASScccc00000003_char_graincolour_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option has the best grain/seed colour for the target market?",
+    "Which option has the worst grain/seed colour for the target market?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_cccc00000003_1560_add"
+  },
+  {
+   "name": "Taste",
+   "codeQst": "taste",
+   "id": 1562,
+   "vars": [
+    {
+     "name": "ASScccc00000003_char_taste_pos"
+    },
+    {
+     "name": "ASScccc00000003_char_taste_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option has the best taste?",
+    "Which option has the worst taste?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_cccc00000003_1562_add"
+  },
+  {
+   "name": "Marketability",
+   "codeQst": "marketability",
+   "id": 1561,
+   "vars": [
+    {
+     "name": "ASScccc00000003_char_marketability_pos"
+    },
+    {
+     "name": "ASScccc00000003_char_marketability_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Which option is easier to sell?",
+    "Which option is more difficult to sell?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_cccc00000003_1561_add"
+  },
+  {
+   "name": "Overall preference",
+   "codeQst": "overallchar",
+   "id": 204,
+   "vars": [
+    {
+     "name": "ASScccc00000003_char_overallchar_pos"
+    },
+    {
+     "name": "ASScccc00000003_char_overallchar_neg"
+    }
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "Overall, which option was the best?",
+    "Overall, which option was the worst?"
+   ],
+   "type": "characteristic",
+   "codeForAnalysis": "characteristic_ASS_cccc00000003_204_add"
+  }
+ ],
+ "Performance": [],
+ "Explanatory": [
+  {
+   "name": "Age",
+   "codeQst": "age",
+   "questionAsked": "Please indicate your age",
+   "id": 1548,
+   "dtype": 3,
+   "vars": "REG_age",
+   "code": null,
+   "type": "explanatory",
+   "codeForAnalysis": "explanatory_REG__1548_add"
+  },
+  {
+   "name": "Education",
+   "codeQst": "education",
+   "questionAsked": "Please select your highest degree obtained",
+   "id": 1549,
+   "dtype": 5,
+   "vars": "REG_education",
+   "code": null,
+   "type": "explanatory",
+   "codeForAnalysis": "explanatory_REG__1549_add"
+  },
+  {
+   "name": "Civil status",
+   "codeQst": "civilstatus",
+   "questionAsked": "Please indicate your civil status",
+   "id": 1550,
+   "dtype": 5,
+   "vars": "REG_civilstatus",
+   "code": null,
+   "type": "explanatory",
+   "codeForAnalysis": "explanatory_REG__1550_add"
+  },
+  {
+   "name": "Gender",
+   "codeQst": "gender1",
+   "questionAsked": "Please select your gender",
+   "id": 1586,
+   "dtype": 5,
+   "vars": "REG_gender1",
+   "code": null,
+   "type": "explanatory",
+   "codeForAnalysis": "explanatory_REG__1586_add"
+  },
+  {
+   "name": "Experience with the crop",
+   "codeQst": "experiencecrop",
+   "questionAsked": "Please indicate how many years you have growing the crop?",
+   "id": 1581,
+   "dtype": 3,
+   "vars": "REG_experiencecrop",
+   "code": null,
+   "type": "explanatory",
+   "codeForAnalysis": "explanatory_REG__1581_add"
+  },
+  {
+   "name": "Experience with tricot",
+   "codeQst": "tricotexperience",
+   "questionAsked": "Have you contributed to a tricot trial before? If yes, how many times? Zero if first time.",
+   "id": 1779,
+   "dtype": 3,
+   "vars": "REG_tricotexperience",
+   "code": null,
+   "type": "explanatory",
+   "codeForAnalysis": "explanatory_REG__1779_add"
+  },
+  {
+   "name": "On time",
+   "codeQst": "ontime",
+   "questionAsked": "Was your trial package delivered on time?",
+   "id": 1736,
+   "dtype": 5,
+   "vars": "ASSaaaa00000001_ontime",
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "aaaa00000001",
+    "ass_desc": "Vegetative",
+    "ass_days": 30,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "type": "explanatory",
+   "codeForAnalysis": "explanatory_ASS_aaaa00000001_1736_add"
+  }
+ ],
+ "Quantitative": [],
+ "linearRegression": [
+  {
+   "name": "Plant population",
+   "codeQst": "plantpopulation",
+   "id": 1762,
+   "dtype": 3,
+   "vars": [
+    "ASSaaaa00000001_plantpopulation_a",
+    "ASSaaaa00000001_plantpopulation_b",
+    "ASSaaaa00000001_plantpopulation_c"
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "aaaa00000001",
+    "ass_desc": "Vegetative",
+    "ass_days": 30,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "What is the number of plants in  - Option A",
+    "What is the number of plants in  - Option B",
+    "What is the number of plants in  - Option C"
+   ],
+   "type": "linearregression",
+   "class": "integer",
+   "codeForAnalysis": "linearregression_ASS_aaaa00000001_1762_add"
+  },
+  {
+   "name": "Disease severity",
+   "codeQst": "diseaseseverit",
+   "id": 1592,
+   "dtype": 3,
+   "vars": [
+    "ASSaaaa00000001_diseaseseverit_a",
+    "ASSaaaa00000001_diseaseseverit_b",
+    "ASSaaaa00000001_diseaseseverit_c"
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "aaaa00000001",
+    "ass_desc": "Vegetative",
+    "ass_days": 30,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "How was the percentage (%) of severity of the disease damage in  - Option A",
+    "How was the percentage (%) of severity of the disease damage in  - Option B",
+    "How was the percentage (%) of severity of the disease damage in  - Option C"
+   ],
+   "type": "linearregression",
+   "class": "integer",
+   "codeForAnalysis": "linearregression_ASS_aaaa00000001_1592_add"
+  },
+  {
+   "name": "Plant population",
+   "codeQst": "plantpopulation",
+   "id": 1762,
+   "dtype": 3,
+   "vars": [
+    "ASSbbbb00000002_plantpopulation_a",
+    "ASSbbbb00000002_plantpopulation_b",
+    "ASSbbbb00000002_plantpopulation_c"
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "bbbb00000002",
+    "ass_desc": "Reproductive",
+    "ass_days": 70,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "What is the number of plants in  - Option A",
+    "What is the number of plants in  - Option B",
+    "What is the number of plants in  - Option C"
+   ],
+   "type": "linearregression",
+   "class": "integer",
+   "codeForAnalysis": "linearregression_ASS_bbbb00000002_1762_add"
+  },
+  {
+   "name": "Disease severity",
+   "codeQst": "diseaseseverit",
+   "id": 1592,
+   "dtype": 3,
+   "vars": [
+    "ASSbbbb00000002_diseaseseverit_a",
+    "ASSbbbb00000002_diseaseseverit_b",
+    "ASSbbbb00000002_diseaseseverit_c"
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "bbbb00000002",
+    "ass_desc": "Reproductive",
+    "ass_days": 70,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "How was the percentage (%) of severity of the disease damage in  - Option A",
+    "How was the percentage (%) of severity of the disease damage in  - Option B",
+    "How was the percentage (%) of severity of the disease damage in  - Option C"
+   ],
+   "type": "linearregression",
+   "class": "integer",
+   "codeForAnalysis": "linearregression_ASS_bbbb00000002_1592_add"
+  },
+  {
+   "name": "Number of cobs",
+   "codeQst": "numberofcobs",
+   "id": 1792,
+   "dtype": 3,
+   "vars": [
+    "ASScccc00000003_numberofcobs_a",
+    "ASScccc00000003_numberofcobs_b",
+    "ASScccc00000003_numberofcobs_c"
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "What is the number of cobs in  - Option A",
+    "What is the number of cobs in  - Option B",
+    "What is the number of cobs in  - Option C"
+   ],
+   "type": "linearregression",
+   "class": "integer",
+   "codeForAnalysis": "linearregression_ASS_cccc00000003_1792_add"
+  },
+  {
+   "name": "Yield (quantitative)",
+   "codeQst": "yieldperse",
+   "id": 1589,
+   "dtype": 2,
+   "vars": [
+    "ASScccc00000003_yieldperse_a",
+    "ASScccc00000003_yieldperse_b",
+    "ASScccc00000003_yieldperse_c"
+   ],
+   "code": {
+    "project_id": "sim000000001",
+    "ass_cod": "cccc00000003",
+    "ass_desc": "Agronomic performance",
+    "ass_days": 85,
+    "ass_status": 2,
+    "ass_final": 0,
+    "enketo_url": ""
+   },
+   "questionAsked": [
+    "The yield of  - Option A",
+    "The yield of  - Option B",
+    "The yield of  - Option C"
+   ],
+   "type": "linearregression",
+   "class": "decimal",
+   "codeForAnalysis": "linearregression_ASS_cccc00000003_1589_add"
+  }
+ ],
+ "Parameters": {
+  "Data": "data.json",
+  "Info": "info.json",
+  "OutputPath": "output",
+  "InfoSheets": "FALSE",
+  "Languaje": "en",
+  "Format": "docx",
+  "ReferToParticipants": "participant",
+  "ReferToTechnologies": "item",
+  "BackwardPath": ".",
+  "Split": "",
+  "Reference": "4,5,"
+ }
+}

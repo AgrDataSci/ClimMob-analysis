@@ -27,6 +27,10 @@ climmob_packages = c("ClimMobTools",
                      "climatrends",
                      "nasapower")
 
+# Used when installed, the workflow still runs without them
+#   lme4  mixed models for the measured traits (falls back to lm)
+climmob_suggested = c("lme4")
+
 #' Attach the packages, failing early with a clear message if any is missing
 load_climmob_packages = function(pkgs = climmob_packages) {
 

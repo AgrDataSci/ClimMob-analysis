@@ -34,7 +34,11 @@ organize_quantitative_data = function(cmdata,
   ids = if (id %in% names(cmdata)) as.vector(cmdata[[id]]) else seq_len(nrow(cmdata))
 
   quanti_traits$codeQst = rename_duplicates(quanti_traits$codeQst)
-  quanti_traits$name = title_case(rename_duplicates(quanti_traits$name, sep = " "))
+
+  # a name is numbered only when it repeats within the same data collection moment
+  key = paste(quanti_traits$name, quanti_traits$assessmentName)
+  dup = duplicated(key) | duplicated(key, fromLast = TRUE)
+  quanti_traits$name[dup] = rename_duplicates(quanti_traits$name[dup], sep = " ")
 
   quanti_dat = list()
 

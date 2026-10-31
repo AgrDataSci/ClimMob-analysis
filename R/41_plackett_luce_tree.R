@@ -31,8 +31,13 @@ error_data_PL_tree = empty_PL_tree("error")
 #' @param rows logical, the rows used in the tree
 #' @return a data.frame with one column per covariate kept, named
 #'  after the covariate label
-prepare_tree_covariates = function(cmdata, covar, rows,
+prepare_tree_covariates = function(cmdata, covar, rows, extra = NULL,
                                    max_levels = 10, max_cor = 0.7) {
+
+  if (!is.data.frame(covar) || nrow(covar) == 0) {
+    covar = data.frame(codeQst = character(), name = character(),
+                       nameString = character(), stringsAsFactors = FALSE)
+  }
 
   covar$codeQst = rename_duplicates(covar$codeQst)
   covar$name = rename_duplicates(covar$name, sep = " ")
@@ -45,10 +50,6 @@ prepare_tree_covariates = function(cmdata, covar, rows,
   }
 
   covar = covar[!is.na(covar$column) & !duplicated(covar$column), ]
-
-  if (nrow(covar) == 0) {
-    return(data.frame()[rows, , drop = FALSE])
-  }
 
   X = lapply(cmdata[covar$column], function(x) {
 
@@ -68,7 +69,21 @@ prepare_tree_covariates = function(cmdata, covar, rows,
   })
 
   X = as.data.frame(X, stringsAsFactors = TRUE)
-  names(X) = make.names(gsub(" ", "", title_case(covar$name)), unique = TRUE)
+  if (ncol(X) > 0) {
+    names(X) = make.names(gsub(" ", "", title_case(covar$name)), unique = TRUE)
+  } else {
+    X = data.frame(row.names = seq_len(nrow(cmdata)))
+  }
+
+  # extra covariates, such as climate indices, one row per participant
+  if (is.data.frame(extra) && ncol(extra) > 0 && nrow(extra) == nrow(cmdata)) {
+    extra = extra[, colSums(!is.na(extra)) > 0, drop = FALSE]
+    extra[] = lapply(extra, function(x) {
+      x[is.na(x)] = stats::median(x, na.rm = TRUE)
+      round(x, 2)
+    })
+    X = cbind(X, extra)
+  }
 
   # too many classes
   too_many = vapply(X, function(x) is.factor(x) && nlevels(x) > max_levels, logical(1))
@@ -167,10 +182,16 @@ forward_selection = function(data, ...) {
 #'
 #' @param cmdata the (cleaned) trial data
 #' @param rank_dat output of organize_ranking_data()
-#' @param agroclimate output of get_agroclimatic_data(), not used yet
-get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
+#' @param agroclimate output of get_agroclimatic_data()
+#' @param use_climate logical, add the climate indices as covariates
+get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL, use_climate = TRUE) {
 
-  if (!isTRUE(rank_dat$covarTRUE)) {
+  climate = NULL
+  if (isTRUE(use_climate) && isTRUE(agroclimate$agroclimate)) {
+    climate = agroclimate$covariates
+  }
+
+  if (!isTRUE(rank_dat$covarTRUE) && is.null(climate)) {
     return(empty_PL_tree("no covariates in the request"))
   }
 
@@ -183,7 +204,7 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL) {
   node_size = ceiling(sum(rows) * 0.25)
   tree_alpha = 0.25
 
-  X = prepare_tree_covariates(cmdata, rank_dat$covar, rows)
+  X = prepare_tree_covariates(cmdata, rank_dat$covar, rows, extra = climate)
 
   if (ncol(X) == 0) {
     return(empty_PL_tree("no covariates left after the checks"))
