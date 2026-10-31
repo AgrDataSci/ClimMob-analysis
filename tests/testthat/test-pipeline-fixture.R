@@ -7,8 +7,8 @@ test_that("the full analysis runs on the simulated project", {
   pkgs = c(climmob_packages)
   ok = vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)
   if (!all(ok)) {
-    # in continuous integration a missing package is an error, not a skip
-    if (identical(Sys.getenv("CI"), "true")) {
+    # in the full CI job a missing package is an error, not a skip
+    if (identical(Sys.getenv("CLIMMOB_FULL_TESTS"), "true")) {
       stop("Packages missing in CI: ", paste(pkgs[!ok], collapse = ", "))
     }
     skip("analysis packages not installed")

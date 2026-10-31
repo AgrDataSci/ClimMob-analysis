@@ -21,7 +21,12 @@ jobs:
       - name: Install testthat
         run: Rscript -e 'install.packages("testthat")'
       - name: Unit tests
-        run: Rscript tests/testthat.R
+        run: |
+          set -o pipefail
+          Rscript tests/testthat.R 2>&1 | tee /tmp/tests.log || {
+            echo "::error title=Unit tests::$(tail -60 /tmp/tests.log | sed -e 's/%/%25/g' | sed -e ':a;N;$!ba;s/\n/%0A/g')"
+            exit 1
+          }
 
   full:
     runs-on: ubuntu-latest
@@ -39,6 +44,8 @@ jobs:
           Rscript dev/install-packages.R
           Rscript -e 'source("R/00_packages.R"); m = climmob_packages[!vapply(climmob_packages, requireNamespace, logical(1), quietly = TRUE)]; if (length(m)) { cat("::error title=Missing packages::", paste(m, collapse = ", "), "\n", sep = ""); quit(status = 1) }'
       - name: Run all tests, including the full workflow
+        env:
+          CLIMMOB_FULL_TESTS: "true"
         run: |
           set -o pipefail
           Rscript tests/testthat.R 2>&1 | tee /tmp/tests.log || {
