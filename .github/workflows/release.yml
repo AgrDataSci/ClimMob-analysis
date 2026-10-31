@@ -1,0 +1,35 @@
+# Publishes a GitHub release when a version tag is pushed (for example v4.0.0).
+# The notes are the section of NEWS.md for that version. Zenodo archives
+# every GitHub release and gives it a DOI.
+# Prepare the release with dev/release.R first.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Notes from NEWS.md
+        run: |
+          python3 - <<'PY'
+          import os, re
+          tag = os.environ["GITHUB_REF_NAME"]
+          news = open("NEWS.md", encoding="utf-8").read()
+          parts = re.split(r"\n(?=ClimMob-analysis v)", "\n" + news)
+          section = next((p for p in parts if p.strip().startswith(f"ClimMob-analysis {tag} ")), None)
+          if section is None:
+              raise SystemExit(f"No section for {tag} in NEWS.md")
+          body = "\n".join(section.strip().splitlines()[2:]).strip()
+          open("release-notes.md", "w", encoding="utf-8").write(body + "\n")
+          PY
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --title "ClimMob-analysis $GITHUB_REF_NAME" --notes-file release-notes.md

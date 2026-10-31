@@ -1,3 +1,62 @@
+ClimMob-analysis v4.0.0 (2026-10-31)
+=========================
+
+### New
+
+* Reports in English, Spanish, French, Portuguese, Swahili and Norwegian, following the `Languaje` field of the request (issue #62). All text is in `report/i18n/*.csv` so translators work in one file, and chart labels, table headings and dates follow the language. Swahili and Norwegian need review by native speakers.
+* Trial monitoring section, available before any trait has enough answers: participation and attrition at every data collection moment, by group when requested (issue #79), answers by type for every trait, including dropped traits, and forms by data collector. A report requested early in the season shows the progress of the trial instead of an error.
+* Summary at the start of the report and a section with the evidence for variety release: every item against the check, with the probability of beating it, the favourability score (issue #117), the traits where it is better or worse, and the yield relative to the check when measured.
+* Analysis by group (`Split`) with balance checks (issue #55). Groups with fewer than 20 valid answers, or without a label, are not compared and the report says why and what the overall results then reflect. When groups are unbalanced a balanced ranking gives every group the same weight. Differences between groups are tested trait by trait, and agreement within and between groups is reported.
+* Analysis of measured traits proposed by Hugo Dorado (issue #107). Zeros as missing plots, outliers by the IQR rule, means adjusted for the farm with a linear mixed model (lme4, or farm as fixed effect when it fails), comparison with the check and broad-sense heritability by the ad hoc method of Holland et al. (2003).
+* The climate window follows the data collection moments of the project instead of a fixed 60 days, and the climate indices are tested as covariates in the Plackett-Luce trees (issue #105).
+* New feedback for participants based on Schumann et al. (2024) and Müller et al. (2025). A one-page feedback sheet with the own ranking next to the ranking of everyone for the same three options, best and worst by trait, a note on release and optional recommendations and contact. A separate certificate of participation. A one-page community result for meetings and for participants who did not answer. PDF for printing, PNG for phones, and the Word file per participant as before.
+* AI-ready tables of the results and a guide for writing feedback with an AI assistant, in `extra-outputs/ai-ready/`.
+* Local analysis without a ClimMob request. `build_pars_from_cmlist()` builds the parameters from the project, and `suggest_harmonization()`, `combine_projects()` and `pars_from_harmonization()` combine projects built from different templates. See `run-local/` and `docs/combine-projects.md`.
+* `AGENTS.md`, `CLAUDE.md` and `llms.txt` for AI agents, and `docs/outputs.md` describing every output.
+* Continuous integration that runs the whole workflow on a simulated project (issue #35), and `dev/release.R` with a release workflow.
+* `ggchicklet` is no longer needed. It was not on CRAN and only drew rounded bars in the Kendall chart, which now uses standard bars.
+
+### Structure
+
+* The code is reorganised in `R/` by responsibility, replacing `modules/`. `ClimMob.R` is now a short entry point and the call from the server is unchanged.
+* `run_step()` replaces the repeated `tryCatch()` blocks. Each step is logged with its status, time, warnings and the R calls that led to an error. Steps that depend on a failed step are skipped.
+* The Plackett-Luce outputs (log-worth, worth map, ANOVA, net winning, reliability, Kendall tau) are separate steps, so one failure does not remove the others from the report.
+* Trial coordinates are a separate step, so a failed map download no longer stops the agroclimatic analysis.
+* Reports are rendered in a temporary copy of `report/`, with an explicit list of objects. Two reports can render at the same time on the server.
+* If the main report fails to render, a short report with the errors is written under the same file name, so ClimMob always receives a report.
+* Optional debug folder (`CLIMMOB_DEBUG_DIR`) with the inputs, all results and a reproducible function for each failed step.
+* `run-local/` calls `run_climmob_analysis()` directly, replacing `source2()` and line numbers.
+* Unit tests in `tests/`.
+* Unused functions and old templates are removed.
+
+### Bug fixes
+
+* Plackett-Luce trees dropped every covariate when none had near zero variance (`Gdata[, -integer(0)]`), so trees could rarely be produced.
+* Writing the agroclimatic CSVs used list names that did not exist and stopped the script before the outlier table was written.
+* `force_pseudo_rank()` assigned a transposed matrix, scrambling the pseudo rankings. It now also uses a fixed seed so the same data gives the same report.
+* The cap of eight groups was never applied (`isTRUE()` on a vector).
+* Covariate type checks failed on objects with two classes, such as dates.
+* Highly correlated covariates were both removed. One of each pair is now kept, and the check runs on numeric covariates as intended.
+* Covariates with any missing descriptive field (for example `questionAsked`) were silently dropped.
+* Covariate names with special characters broke the tree formula.
+* `organize_quantitative_data()` read the global `cmdatajson` instead of its argument, and failed when no enumerator column existed.
+* The cleaned ranking data was discarded. All steps now use the cleaned data.
+* A trait whose columns could not be found stopped the whole analysis. It is now dropped with a message.
+* An empty `Reference` gave no check item and broke the reliability section. The first item is used, as documented in v1.1.
+* `reliability-data.csv` only had the last check. It now has all checks with a `check` column.
+* A failed log-worth plot for the last trait stopped the whole Plackett-Luce step (subscript out of bounds).
+* Projects without GPS no longer show a map error in the report appendix.
+* Participant reports used the English "Not replied" label in all languages, and row numbers to find their text.
+* `paste3()` added double spaces around the conjunction.
+* The favourability table (`netwinning-data.csv`) left out the net winning score itself.
+* Trait names were numbered ("Yield 2") even when the data collection moment already told them apart.
+
+### Known behaviour kept on purpose
+
+* Partial ties are removed from the rankings, as before.
+* The table of items by group is switched off, as before.
+
+
 ClimMob-analysis v2.0 (2025-12-25)
 =========================
 

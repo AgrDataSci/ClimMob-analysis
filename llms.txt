@@ -1,0 +1,20 @@
+# ClimMob-analysis
+
+> R workflow that analyses tricot trials (decentralised on-farm testing with farmer rankings) and writes the reports of the ClimMob platform. It also analyses one or several ClimMob projects on a local computer and exports tables ready for AI assistants.
+
+Read AGENTS.md before working with this repository.
+
+## Core files
+
+- [AGENTS.md](https://raw.githubusercontent.com/AgrDataSci/ClimMob-analysis/master/AGENTS.md): instructions for AI agents
+- [README.md](https://raw.githubusercontent.com/AgrDataSci/ClimMob-analysis/master/README.md): layout of the code, debugging, running locally
+- [docs/outputs.md](https://raw.githubusercontent.com/AgrDataSci/ClimMob-analysis/master/docs/outputs.md): every output file and column
+- [docs/combine-projects.md](https://raw.githubusercontent.com/AgrDataSci/ClimMob-analysis/master/docs/combine-projects.md): combining projects built from different templates
+- [report/ai/README.md](https://raw.githubusercontent.com/AgrDataSci/ClimMob-analysis/master/report/ai/README.md): rules for writing feedback for participants
+
+## Optional
+
+- [run-local/analyse-one-project.R](https://raw.githubusercontent.com/AgrDataSci/ClimMob-analysis/master/run-local/analyse-one-project.R)
+- [run-local/combine-projects.R](https://raw.githubusercontent.com/AgrDataSci/ClimMob-analysis/master/run-local/combine-projects.R)
+- [NEWS.md](https://raw.githubusercontent.com/AgrDataSci/ClimMob-analysis/master/NEWS.md)
+- [tricot knowledge base](https://github.com/AgrDataSci/tricot-knowledge-base): evidence and methods on tricot

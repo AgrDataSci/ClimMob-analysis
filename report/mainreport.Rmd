@@ -1,7 +1,9 @@
 ---
 title: "`r project_name`"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: 
+date: "`r format_date()`"
+toc-title: "`r tr('toc_title')`"
+lang: "`r current_language()`"
+output:
   word_document:
     reference_docx: word_style_template.docx
     toc: true
@@ -14,433 +16,421 @@ csl: citation_style.csl
 ---
 
 ```{r setup_opts, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE,
-                      error = FALSE,
-                      message=FALSE,
-                      warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, error = FALSE, message = FALSE, warning = FALSE)
+options(knitr.kable.NA = "")
+cap = new_caption_counter()
+has_rankings = length(rank_dat$trait_list) > 0
+reference_check = rank_dat$reference_tech[1]
+lab = list(option = option, options = options, participant = participant,
+           participants = participants, reference_trait = reference_trait)
 ```
 
-
-# Introduction  
-
-This report presents results from the `r project_name` trial implemented using the tricot approach (triadic comparison of technology options), a participatory and data-driven method for testing agricultural technologies directly in their use environments [@deSousa2024; @vanEtten2019tricot]. Tricot is a citizen science approach that actively engages farmers and other users as co-researchers, enabling the generation of robust experimental evidence at scale while preserving the diversity of real-world farming conditions.
-
-Instead of relying on a small number of tightly controlled researcher-managed trials, tricot distributes experimentation across many farms. Each participant evaluates only three randomly assigned options (for example, crop varieties, fertilizer types, or management practices) under their usual conditions. These small, simple trials are easy to implement, require minimal training, and can be conducted without continuous supervision. When aggregated across many participants and locations, the resulting data provide powerful insights into relative performance, farmer preferences, and context-specific suitability.
-
-A key strength of the tricot approach is its focus on external validity. By allowing farmers to test technologies using their own practices, soils, and climatic conditions, the results better reflect how technologies perform in real-life settings. Farmer-reported rankings are combined with environmental, management, and socio-economic data, allowing analyses that capture genotype-by-environment interactions, preference heterogeneity, and trade-offs that are often missed in conventional trials.
-
-Tricot is supported by a streamlined digital workflow through the ClimMob platform [@Quiros2024], which facilitates trial design, randomization, data collection, monitoring, and reporting. Statistical analysis is based on the Plackett–Luce model for ranking data [@Plackett1975; @Luce1959], enabling valid inference from incomplete and overlapping comparisons without loss of information. Together, these methodological and digital components make tricot a scalable, cost-effective, and scientifically rigorous approach for on-farm testing, product evaluation, and decision support.
-
-This report builds on these principles to synthesize results from the current trial cycle and to provide actionable insights for researchers, development practitioners, breeders, and other stakeholders.
-
-# What you should expect from this report
-
-This report is designed to provide a transparent and reproducible overview of the tricot trial, from experimental design to interpretation of results. It combines methodological documentation with empirical findings, ensuring that results can be both understood and reused.
-
-Specifically, the report includes:
-
-- Trial overview and context: A description of the trial objectives, tested technologies, target population, and implementation context, including geographic coverage and participant characteristics.
-
-- Experimental design and data collection: An explanation of how tricot was implemented in this study, including randomization, participation levels, data collection protocols, and quality checks. This section clarifies what farmers evaluated, how observations were recorded, and how missing or incomplete data were handled.
-
-- Analytical approach: A summary of the statistical methods used to analyze ranking data, primarily based on the Plackett–Luce framework. Where relevant, the report explains how contextual variables (environmental, management, or socio-economic) are incorporated into the analysis.
-
-- Results and interpretation: Presentation of the main findings, including relative performance of the tested options, uncertainty estimates, and patterns across environments or farmer groups. Results are interpreted with attention to both agronomic performance and farmer preference.
-
-- Actionable insights and implications: Discussion of what the results mean for technology recommendation, breeding priorities, product development, or scaling strategies. Rather than prescribing universal “best” options, the report emphasizes context-specific insights and trade-offs. 
-
-However, since this report was done in an automated process, is likely that it will not provide to you the full overview on the performance of the tested technologies as the automation may not capture all the factors that influence the performance of a technology in the target environment (under real-world conditions). If you would like to have an in-deep analysis, or to merge data from different projects or is planning a peer-review publication with your tricot data, send a proposal/request to the ClimMob Team <climmob@mrbotcr.com>. 
-
-# Methods
-
-ClimMob applies the Plackett-Luce (PL) model, independently proposed by Luce (1959) [@Luce1959] and Plackett (1975) [@Plackett1975] to analyze ranking data. It is implemented in R by the package 'PlackettLuce' [@Turner2020]. The Plackett-Luce model estimates the relative importance (probability of outperforming) of different technologies following the Luce’s Choice Axiom [@Luce1959], which states that the probability that one item (e.g. variety) outperforms another is independent from the presence or absence of any other items in the set.
-
-Equation [1]
-
-$$P (i \succ j) = \frac{p_i}{p_i + p_j}$$
-
-where $p_i$ is a positive real-valued score assigned to individual $i$. The comparison $i \succ j$ can be read as "$i$ is preferred over $j$".
-
-The PL model determines the values of positive-valued parameters $\alpha_i$ (*worth*) associated with each item $i$. These parameters $\alpha$ are related to the probability ($P$) that item $i$ outperforms all other $n$ items in the set. We report *log-worth* values that are centred to 0 using the item(s) `r paste(reference_tech, collapse = ", ")` as the control treatment (check). 
-
-Your tricot trial used rankings of three technologies $(i \succ j \succ k)$, which have the following probability of occurring according to the PL model:
-
-Equation [2]
-
-$$P(i \succ j \succ k) = P(i \succ {j,k}) \cdot P(j \succ k)$$
-
-Covariates, if any, are linked to the rankings using the Model-Based Recursive Partitioning approach [@Zeileis2008] which builds the Plackett-Luce trees. This approach identifies sub-groups in the data for which the technology performance is significantly different. This analysis required that all rankings and covariates are completely available for the entire data set. To obtain agroclimatic covariates, if coordinates and dates were available in your project, we used NASA POWER, a free publicly available dataset with coverage across the research site. We derived rainfall and temperature indices using R package 'climatrends' [@climatrends] and 'nasapower' [@nasapower]. Please check the documentation of the climatrends package for a full description of agroclimatic covariates (https://agrdatasci.github.io/climatrends/).
-
-To select the covariate(s) that best represent the data set, a stepwise regression based on the forward selection approach was used. The procedure begins by fitting each covariate individually and adding new covariates one by one when it makes a single best improvement to the model based on the Akaike Information Criterion (AIC) [@Sakamoto1986]. The AIC estimates the relative amount of information lost by a given model, the less information a model loses, the higher the quality of that model. In the Plackett-Luce trees, the AIC is obtained by adding the maximized log likelihood ($L$) to the degrees of freedom ($\nu$). 
-
-Equation [3]
-$$AIC = -2L +  2\nu$$
-
-Based on this approach, the following model was applied to the data: 
-
-> `r PL_tree$tree_formula`
-
-It could happen that not all covariates displayed above appear in the PL tree as the tree is limited to a certain number of nodes (groups). The covariates that are displayed are the most important for the data set.
-
-This report uses the trait '`r reference_trait`' as the reference trait for the analysis. A summary of the p-values testing the hypothesis that there were differences in performance for each trait, and the list of options, which showed significance superior or weak performance are presented here.
-
-The correlation between the '`r reference_trait`' and the other traits is estimated using the Kendall tau coefficient [@Kendall1938]. The coefficient is an equivalent of a Pearson correlation designed for ranking data, ranging from -1 to 1, where 1 means a total correlation and -1 a total negative correlation. This approach can be used, for example, to assess the drivers of participants choices or to prioritize traits to be tested in a next stage of tricot trials.
-
-This report is generated in R [@RCoreTeam] using the R packages 'knitr' [@knitr] and 'rmarkdown' [@rmarkdown]. Organizing the data relies on packages 'ClimMobTools' [@climmobtools], 'gosset' [@gosset], 'gtools' [@gtools], 'jsonlite' [@jsonlite], 'partykit' [@partykit], 'psychotools' [@psychotools] and 'qvcalc' [@qvcalc]. Summaries and data visualization are supported by packages 'igraph' [@igraph], 'ggparty' [@ggparty], 'ggplot2' [@ggplot2], 'ggrepel' [@ggrepel], 'gridExtra' [@gridExtra] 'leaflet' [@leaflet], 'multcompView' [@multcompView], 'patchwork' [@patchwork], 'png' [@png], 'plotrix' [@plotrix] and 'pls' [@pls]. The decentralized experimental approach behind ClimMob is introduced by van Etten et al. (2019) [@vanEtten2019tricot]. To cite ClimMob itself, mention van Etten et al. (2020) [@climmob]. The workflow used to produce this report is documented by de Sousa et al. (2022) [@climmobanalysis].
-
-
-\pagebreak
-
-# Trial overview
-
-Overall, there were `r nparticipants` `r participants` contributing to this trial. Each `r participant` assessed `r noptions` different `r options` and provided rankings for `r ntraits` trait(s). 
-
-```{r traits}
-kable(overview_and_summaries$summary_table_trait, 
-      caption = paste0("Table 1. Summary of traits and number of observations (answers) per trait used in this report."), row.names = FALSE, align = "l")
-
-```
-
-\
-
-The rate of response in each trial stage (data collection moment) is presented in Figure 1 This gives an overview of the level of participation during the trial and any attrition (when participants leave the experiment). 
-
-\
-
-```{r progress, dpi=dpi, fig.height=7, fig.width=10, fig.cap=paste0("Figure 1. Rate of response during trial stages (data collection moments).")}
-plot(overview_and_summaries$partipation_plot)
-```
-
-\
-
-```{r trial_map_statement}
-trial_map_heading <- ""
-trial_map_statement <- ""
-if (isTRUE(trial_map$geoTRUE)){
-  
-  trial_map_heading <- "# Distribution of trial plots"
-  
-  trial_map_statement <- paste0("The map below (Fig. 2) shows the distribution ",
-                               "of the plots in this trial.")
-}
-```
-
-`r paste(trial_map_heading, collapse = '\n')`
-
-`r paste(trial_map_statement, collapse='\n')`
-
-```{r map, dpi=dpi, out.width = '70%', fig.cap=paste0("Figure 2. Map of trial locations. Administrative boundaries are based on the Database of Global Administrative Areas (GADM). The red–blue dots indicate the geographic distribution of trials implemented within the study.")}
-if (isTRUE(trial_map$geoTRUE)) {
-  plot(trial_map$map)
-}
-```
-
-```{r agroclimate}
-agroclimate_heading <- ""
-agroclimate_text1 <- ""
-if (isTRUE(agroclimate$agroclimate)){
-  agroclimate_heading <- "# The climate during the trial's growing season"
-  agroclimate_text1 <- paste0("Temperature and rainfall indices are presented in Fig. 3 and Fig. 4 ",
-                              "obtained using the GPS data presented in the map (Fig. 2). The timespan ",
-                              "used to capture the climate data was from ",
-                              agroclimate$window[1], " to ", agroclimate$window[2], ". The charts ",
-                              "present the weekly agroclimatic indices (7-days). Data was obtained ",
-                              " using the R package nasapower [@nasapower], indices were computed using the ",
-                              "R package climatrends [@climatrends].")
-}
-```
-
-`r paste(agroclimate_heading, collapse = '\n')`
-
-`r paste(agroclimate_text1, collapse = '\n')`
-
-```{r temperature_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Figure 3. Temperature indices from ", agroclimate$window[1], " to ", agroclimate$window[2], ". The chart presents weekly (7-days) maximum day temperature (maxDT), the minimum day temperature (minDT), the maximum night temperature (maxNT), and the minimum nigth temperature (minNT).")}
-if (isTRUE(agroclimate$agroclimate)){
-plot(agroclimate$temperature_plot)
-}
-```
-
-\
-
-```{r rainfall_indices, dpi=dpi, fig.height=10, fig.width=10, fig.cap=paste0("Figure 4. Rainfall indices from ", agroclimate$window[1], " to ", agroclimate$window[2], ". The chart presents weekly (7-days) total rainfall (Rtotal), simple daily intensity index, total precipitation divided by the number of wet days (mm/days, SDII), maximum length of consecutive dry day, rain < 1 mm (MLDS), and the maximum length of consecutive wet days, rain >= 1 mm (MLWS).")}
-if (isTRUE(agroclimate$agroclimate)){
-plot(agroclimate$rain_plot)
-}
-```
-
-\
-
-# Trial design and allocation of incomplete blocks
-
-Figure 5 shows a graphic representation of the experimental design and indicates whether all `r options` are connected to each other in the trial network. A complete network connection means that all `r options` co-occurred at least once in an incomplete block of `r noptions` `r options`. The network is obtained using the rankings generated with '`r reference_trait`'.
-
-```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=paste0("Figure 5. Experimental network representation of ", options, " tested in this experiment. Arrows indicate direct paths of wins and losses between each pair of ", options, ", indicating that the ", option, " co-occur in at least one experimental block. ", title_case(options), " with a no direct path are connected using a Bayesian prior.")}
-plot(overview_and_summaries$trial_connectivity)
-```
-
-\
-
-Table 2 shows the `r ntechnologies` `r options` assessed in this trial, with the frequency and percentage of `r participants` who assessed each `r option`. If the `r options` have large names (> 12 characters) an abbreviation is applied across the figures in this report.
-
-```{r itemtable}
-kable(overview_and_summaries$summary_table_tech, 
-          caption = paste0("Table 2. Frequency of ", options," assessed in this trial."),
-          align = "l",
-          row.names = FALSE)
-```
-
-\
-
-# Summary of `r options`' performance
-
-```{r relation_other_chrs} 
-anovatext = ""
-
-if (isTRUE(nrow(PL_models$ANOVA) > 0)) {
-  anovatext = paste0("Results from an analysis of variance (ANOVA) testing the hypothesis that at least one ", option, " has a superior performance when compared to the others in the set is provided in Table 3. Traits with p-value < 0.05 indicate that there is no random effect in the performance of ", option, " and that at least one has a higher performance.") 
-}
-
-
-relation_other_chrs1 <- ""
-relation_other_chrs2 <- ""
-if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
-relation_other_chrs1 <- 
-  paste0("Figure 6 shows the Kendall tau coefficient. ",
-         "The trait that had the strongest ", 
-        "correlation with '", reference_trait, "' was '", 
-        PL_models$kendall$strongest_link[1], 
-        "' with a Kendall tau of ",
-        PL_models$kendall$strongest_link[2],
-        ". The trait that had the weakest correlation with '", 
-        reference_trait,
-        "' was '", PL_models$kendall$weakest_link[1], 
-        "' with a Kendall tau of ", 
-        PL_models$kendall$weakest_link[2], ". A table with Kendall tau and a significance test is provided in the Appendix.")
-}
-
-if (isTRUE(length(PL_models$worthmap) > 0)) {
-  relation_other_chrs2 <- paste0("The log-worth by trait of each ",
-                                 option, 
-                                 " tested in this experiment is presented in Figure 7.",
-                                 " The chart shows for each trait the probability that each ",
-                                 option, 
-                                 " has in outperforming the check(s) ",
-                                 paste(reference_tech, collapse = ", "), ".",
-                                 " The worth parameters are adjusted to the log scale",
-                                 " where log-worth > 0 (blue) represents the ", options, 
-                                 " with superior performance for the given trait, ",
-                                 " and worth < 0 (red) represents the ", options, 
-                                 " with the underperformance for the given trait.")
-    
-}
-
-```
-
-`r paste(anovatext, collapse='\n')`
-
-```{r ANOVA}
-if (isTRUE(nrow(PL_models$ANOVA) > 0)) {
-kable(PL_models$ANOVA, 
-          caption = paste0("Table 3. Analysis of variance (ANOVA) for the performance of ", options, " by trait. A p-value < 0.05 indicates that, at least, one ", option, " has superior performance."),
-          align = "l",
-          row.names = FALSE)
-}
-```
-
-\
-
-`r paste(relation_other_chrs1, collapse='\n')`
-
-
-```{r kendall_tau_plot, dpi = dpi, fig.height=7, fig.width=7, fig.cap=paste0("Fig. 6. Kendall correlation coefficient between '", reference_trait, "' and the other traits assessed in this trial.")}
-if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
-  plot(PL_models$kendall$kendall_plot)
-}
-```
-
-\
-
-`r paste(relation_other_chrs2, collapse='\n')`
-
-
-```{r worthmap, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 7. ", title_case(option), " performance by trait. The chart displays log-worth where worth > 0 (green) represents the ", options, " with superior performance for the given trait, whereas worth < 0 (brown) represents the ", options, " with underperformance for the given trait.")}
-plot(PL_models$worthmap)
-```
-
-Reliability (probability of outperforming a check) estimates based on worth estimates from PL model are presented in Fig. 8. Reliability measures the precision of estimated worth and the potential response to selection compared to a check. It is a breeding metric proposed by Eskridge and Mumm (1992) [-@Eskridge1992]. The reliability estimates were calculated considering the `r paste(reference_trait, collapse = ", ")` with `r paste(reference_tech, collapse = ", ")` as the check `r option`. The plot below presents reliability estimates for your first check `r option` selected for analysis. If you selected more than one check `r option` you can find the results in the folder "Extra outputs of the report" in your Downloads section on ClimMob.
-
-```{r reliability, dpi=dpi,fig.height=worthmap_h, fig.width=worthmap_h, fig.cap= paste0("Figure 8. Reliability of tested ", options, " versus the check. The blue vertical line set to 0 indicates a threshold from where a given ", option, " presents a potential probability in outperforming the check (reliability > 0).")}
-plot(PL_models$reliability_plot[[1]])
-```
-
-Figure 9 shows the estimated log-worth for the reference trait '`r reference_trait`'. The purpose is to be able to distinguish the `r option` with the superior performance. Mean separation analysis was also conducted to indicate which `r option` is significantly different (or similar) to the others. When `r options` have at least one letter in common, there is not enough evidence from the trial to be confident about their relative order with p-value = 0.05.
-
-```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=paste0("Figure 9. Plackett-Luce Model estimates (log-worth) of tested ", options, " for the reference trait '", reference_trait, "' assessed in this trial. Intervals are based on quasi standard errors.")}
-if (!is.null(PL_models$logworth_overall)){
- plot(PL_models$logworth_overall)
-}
-```
-
-\
-
-# Effect of covariates on `r options`' performance 
-
-```{r tree_test}
-tree_test1 <- ""
-tree_test2 <- ""
-tree_test3 <- ""
-if (isFALSE(PL_tree$isTREE)) {
-  tree_test1 <- 
-    paste0("No differences based on the covariates provided were found. This could mean many things, the most common reasons are that there is no difference between groups, or that very few data was provided, or that a different set of covariates and model parameters should be used. Please contact the ClimMob team for further assistance.")
-}
-
-if (isTRUE(PL_tree$isTREE)) {
-  tree_test1 <- 
-    paste0("Table 4 presents the node groups that were obtained from the Plackett-Luce trees using the set of covariates retained by the forward selection.")
-  
-  if (isTRUE(agroclimate$agroclimate)) {
-   tree_test1 <- paste0(tree_test1, 
-           "")
+```{r summary, results='asis'}
+heading(tr("h_summary"))
+
+mon = monitoring
+para(tr("sum_participants", n_registered = mon$registered, participants = participants,
+        n_ref = if (has_rankings) sum(rank_dat$trait_list[[rank_dat$reference_trait_index]]$keep) else 0,
+        reference_trait = reference_trait))
+
+if (!has_rankings) {
+  para(tr("sum_no_rankings"))
+} else {
+  para(tr("sum_items", n_items = ntechnologies, options = options,
+          participant = participant, n_per = noptions))
+
+  res = release$summary
+  if (is.data.frame(res) && nrow(res) > 0) {
+    top = head(res$item[order(-res$prob_beats_check)], 3)
+    para(tr("sum_best", options = options, reference_trait = reference_trait,
+            best = join_words(top)))
+    better = res$item[!res$item_is_check & !is.na(res$p_value) & res$p_value < 0.05 &
+                        res$prob_beats_check > 0.5]
+    if (length(better) > 0) {
+      para(tr("sum_check", n = length(better), options = options, check = reference_check,
+              items = join_words(better)))
+    } else {
+      para(tr("sum_check_none", option = option, check = reference_check))
+    }
   }
-  
-  tree_test2 <- 
-    paste0("Figure 10 shows the Plackett-Luce tree obtained with the selected model.")
-  
-  tree_test3 <- 
-    paste0("Table 5 present the worth and regret estimates [@Loomes1982; @Bleichrodt2015] across the tree nodes. Regret is an important heuristic in the behavioural sciences. Minimizing the loss under the worst possible outcome (worst regret) is a criterion that takes a conservative approach to risk analysis in diversification strategies. This provides a decision-making approach to select ", options, " with the superior performance across all scenarios (nodes) in the tree.")
-}
 
+  if (length(rank_dat$trait_dropped) > 0) {
+    para(tr("sum_dropped", n = length(rank_dat$trait_dropped),
+            traits = join_words(rank_dat$trait_dropped)))
+  }
+
+  if (isTRUE(group_analysis$requested)) {
+    para(tr("sum_groups", section = tr("h_groups")))
+  }
+}
 ```
 
-`r paste(tree_test1, collapse='\n')`
+```{r intro, results='asis'}
+heading(tr("h_intro"))
+para(tr("intro_p1", project = project_name),
+     tr("intro_p2"), tr("intro_p3"), tr("intro_p4"), tr("intro_p5"))
 
-\
-
-```{r tree_node_table}
-if(isTRUE(PL_tree$isTREE)){
-kable(PL_tree$node_summary, 
-        caption = paste0("Table 4. Summary of node groups identified",
-                         " by the model-based recursive partitioning tree applied to the Plackett-Luce rankings."),
-        row.names = FALSE)
-}
-
+heading(tr("h_expect"))
+para(tr("expect_p1"))
+cat(paste0("- ", c(tr("expect_li1"), tr("expect_li2"), tr("expect_li3"),
+                   tr("expect_li4"), tr("expect_li5")), "\n"), sep = "")
+cat("\n")
+para(tr("expect_p2"))
 ```
 
-\
+\pagebreak
 
-`r paste(tree_test2, collapse='\n')`
+```{r monitoring, results='asis'}
+heading(tr("h_monitoring"))
+para(tr("mon_intro", participants = participants))
 
-\
+att = monitoring$attrition
+if (is.data.frame(att) && nrow(att) > 0) {
+  all = att[att$group == "all", ]
+  last = all[nrow(all), ]
+  para(tr("mon_attrition_text", n_reg = monitoring$registered, participants = participants,
+          n_last = last$n, pct_last = last$percent_of_registered, last = last$moment,
+          k = cap$next_tab(), f = cap$next_fig()))
+  tb = att[, c("group", "moment", "day", "n", "percent_of_registered", "lost_since_previous")]
+  tb$group[tb$group == "all"] = tr("whole_group")
+  if (length(unique(tb$group)) == 1) tb$group = NULL
+  keys = c(if (!is.null(tb$group)) "col_group", "col_moment", "col_day", "col_n",
+           "col_percent_registered", "col_lost")
+  print(kable_tr(tb, keys, cap$tab(tr("tab_attrition", participants = participants))))
+}
+```
 
-```{r pltree, dpi=500, asis=TRUE,fig.height=8,fig.width=10, fig.cap = paste0("Figure 10. Plackett-Luce tree of tested ", options, ". The horizontal axis of each panel is the log-worth. Error bars show quasi-SEs.")}
-if (isTRUE(PL_tree$isTREE)) {
-plot(PL_tree$PLtree_plot)
+```{r attrition_plot, dpi=dpi, fig.height=5, fig.width=8, fig.cap=if (is_plot(monitoring$attrition_plot)) cap$fig(tr("fig_attrition", participants = participants)) else NULL}
+if (is_plot(monitoring$attrition_plot)) plot(monitoring$attrition_plot)
+```
+
+```{r quality, results='asis'}
+q = monitoring$answer_quality
+if (is.data.frame(q) && nrow(q) > 0) {
+  para(tr("mon_quality_text", k = cap$next_tab(), option = option))
+  print(kable_tr(q, c("col_trait", "col_moment", "col_valid", "col_not_answered",
+                      "col_not_observed", "col_tie", "col_same_best_worst", "col_invalid"),
+                 cap$tab(tr("tab_quality"))))
+}
+if (length(rank_dat$trait_dropped) > 0) {
+  para(tr("mon_dropped", traits = join_words(rank_dat$trait_dropped)))
+}
+en = monitoring$enumerators
+if (is.data.frame(en) && nrow(en) > 0) {
+  para(tr("mon_enumerators_text", k = cap$next_tab()))
+  print(kable_tr(en, c("col_moment", "col_enumerator", "col_submissions"),
+                 cap$tab(tr("tab_enumerators"))))
+}
+if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) {
+  heading(tr("h_map"), 2)
+  para(tr("map_text", f = cap$next_fig()))
+}
+```
+
+```{r map, dpi=dpi, out.width='70%', fig.cap=if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) cap$fig(tr("fig_map")) else NULL}
+if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) plot(trial_map$map)
+```
+
+```{r climate_text, results='asis'}
+if (isTRUE(agroclimate$agroclimate)) {
+  heading(tr("h_climate"), 2)
+  para(tr("climate_text", start = agroclimate$window[1], end = agroclimate$window[2],
+          ndays = agroclimate$ndays, date_used = tr(paste0("date_used_", gsub(" ", "_", agroclimate$date_used))),
+          f1 = cap$next_fig(), f2 = cap$next_fig() + 1))
+}
+```
+
+```{r temperature_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (isTRUE(agroclimate$agroclimate)) cap$fig(tr("fig_temperature", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
+if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$temperature_plot)) plot(agroclimate$temperature_plot)
+```
+
+```{r rainfall_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (isTRUE(agroclimate$agroclimate)) cap$fig(tr("fig_rainfall", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
+if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$rain_plot)) plot(agroclimate$rain_plot)
+```
+
+\pagebreak
+
+```{r methods, results='asis'}
+if (has_rankings) {
+  heading(tr("h_methods"))
+  para(tr("methods_p1"))
+  cat("$$P (i \\succ j) = \\frac{p_i}{p_i + p_j}$$\n\n")
+  para(tr("methods_p2", checks = join_words(reference_tech)))
+  cat("$$P(i \\succ j \\succ k) = P(i \\succ \\{j,k\\}) \\cdot P(j \\succ k)$$\n\n")
+  para(tr("methods_p3"))
+  cat("$$AIC = -2L + 2\\nu$$\n\n")
+  para(tr("methods_p4"))
+  cat("> ", PL_tree$tree_formula, "\n\n", sep = "")
+  para(tr("methods_p5", reference_trait = reference_trait), tr("methods_p6", reference_trait = reference_trait),
+       tr("methods_p7"))
+}
+```
+
+```{r design, results='asis'}
+if (has_rankings) {
+  heading(tr("h_design"))
+  para(tr("design_text", n = nparticipants, participants = participants, noptions = noptions,
+          options = options, ntraits = ntraits, k = cap$next_tab()))
+  if (nrow(overview_and_summaries$summary_table_trait) > 0) {
+    print(kable_tr(overview_and_summaries$summary_table_trait,
+                   c("col_trait", "col_moment", "col_question", "col_valid_answers"),
+                   cap$tab(tr("tab_traits"))))
+  }
+  para(tr("network_text", options = options, noptions = noptions, reference_trait = reference_trait,
+          f = cap$next_fig()))
+}
+```
+
+```{r trial_network, dpi=dpi, fig.height=7, fig.width=7, fig.cap=if (has_rankings) cap$fig(tr("fig_network", options = options, option = option)) else NULL}
+if (has_rankings && is_plot(overview_and_summaries$trial_connectivity)) plot(overview_and_summaries$trial_connectivity)
+```
+
+```{r itemtable, results='asis'}
+it = overview_and_summaries$summary_table_tech
+if (has_rankings && nrow(it) > 0) {
+  para(tr("items_text", k = cap$next_tab(), n = ntechnologies, options = options,
+          participants = participants, option = option))
+  print(kable_tr(it, c(NA, "col_abbreviation", "col_freq", "col_rel_freq"),
+                 cap$tab(tr("tab_items", options = options))))
 }
 ```
 
 \pagebreak
 
-`r paste(tree_test3, collapse='\n')`
-
-\
-
-```{r regret_table}
-if(isTRUE(PL_tree$isTREE)){
-kable(PL_tree$regret_table, 
-        caption = paste0("Table 5. Expected probability of winning (worth) and worst regret estimates. The results show how different criteria of ", option, " selection can lead to different recommendations (high worth and low regret values mean a good option). Using the worth as a criterion maximizes the average performance but ignores risk. Minimizing worst regret (the loss under the worst possible outcome) is a criterion that takes a conservative approach to risk."),
-        row.names = FALSE)
-}
-
-```
-
-```{r quantitative_test}
-quanti_caption <- ""
-quanti_test1 <- ""
-if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
-  quanti_caption <- "# Summary of quantitative traits"
-  quanti_test1 <- 
-    paste0("This section presents the quantitative traits collected in the trial. Since each trait has its own data distribution and requires individual data cleaning process, we cannot present models for each of the traits. Here we present boxplots to help visualizing the data distribution and possible outliers (which are fully described in the Appendix). To read more about boxplots please visit this blog < https://www.data-to-viz.com/caveat/boxplot.html >. If you identify outliers, you can adjust the values on your ClimMob project and request a new report. The following presents the boxplots for the traits measured in this trial.")
-}
-
-```
-
-`r paste(quanti_caption, collapse='\n')`
-
-`r paste(quanti_test1, collapse='\n')`
-
-```{r denstity_plot, dpi=500, asis=TRUE,fig.height=8,fig.width=10}
-if (isTRUE(length(quantitative_traits$density_plots) > 0)) {
-for(i in seq_along(quantitative_traits$density_plots)) {
-  plot(quantitative_traits$density_plots[[i]])
-}
+```{r performance, results='asis'}
+if (has_rankings) {
+  heading(tr("h_performance", options = options))
+  if (nrow(PL_models$ANOVA) > 0) {
+    para(tr("anova_text", k = cap$next_tab(), option = option))
+    av = PL_models$ANOVA
+    av[["Pr(>Chisq)"]] = format_p(av[["Pr(>Chisq)"]])
+    print(kable_tr(av, c("col_trait", NA, "col_df", "col_statistic", "col_p", NA),
+                   cap$tab(tr("tab_anova", options = options, option = option))))
+  }
+  nw = PL_models$netwinning
+  if (is.data.frame(nw) && nrow(nw) > 0) {
+    para(tr("favourability_text", k = cap$next_tab(), option = option, options = options))
+    nw$trait[duplicated(nw$trait)] = ""
+    print(kable_tr(nw, c("col_trait", "col_option", "col_n", "col_top", "col_bottom", "col_favourability"),
+                   cap$tab(tr("tab_favourability", options = options)), digits = 1))
+  }
+  if (nrow(PL_models$kendall$kendall) > 0) {
+    para(tr("kendall_text", f = cap$next_fig(), reference_trait = reference_trait,
+            strong = PL_models$kendall$strongest_link[1], strong_tau = PL_models$kendall$strongest_link[2],
+            weak = PL_models$kendall$weakest_link[1], weak_tau = PL_models$kendall$weakest_link[2]))
+  }
 }
 ```
 
+```{r kendall_tau_plot, dpi=dpi, fig.height=7, fig.width=7, fig.cap=if (has_rankings && is_plot(PL_models$kendall$kendall_plot)) cap$fig(tr("fig_kendall", reference_trait = reference_trait)) else NULL}
+if (has_rankings && is_plot(PL_models$kendall$kendall_plot)) plot(PL_models$kendall$kendall_plot)
+```
+
+```{r worthmap_text, results='asis'}
+if (has_rankings && is_plot(PL_models$worthmap)) {
+  para(tr("worthmap_text", f = cap$next_fig(), option = option, options = options,
+          checks = join_words(reference_tech)))
+}
+```
+
+```{r worthmap, dpi=dpi, fig.height=worthmap_h, fig.width=worthmap_w, fig.cap=if (has_rankings && is_plot(PL_models$worthmap)) cap$fig(tr("fig_worthmap", option = title_case(option), options = options)) else NULL}
+if (has_rankings && is_plot(PL_models$worthmap)) plot(PL_models$worthmap)
+```
+
+```{r reliability_text, results='asis'}
+has_rel = has_rankings && length(PL_models$reliability_plot) > 0 && is_plot(PL_models$reliability_plot[[1]])
+if (has_rel) {
+  para(tr("reliability_text", f = cap$next_fig(), check = reference_check, option = option,
+          options = options))
+}
+```
+
+```{r reliability, dpi=dpi, fig.height=worthmap_h, fig.width=worthmap_w, fig.cap=if (has_rel) cap$fig(tr("fig_reliability", options = options, option = option, check = reference_check)) else NULL}
+if (has_rel) plot(PL_models$reliability_plot[[1]])
+```
+
+```{r logworth_text, results='asis'}
+if (has_rankings && is_plot(PL_models$logworth_overall)) {
+  para(tr("logworth_text", f = cap$next_fig(), reference_trait = reference_trait,
+          option = option, options = options))
+}
+```
+
+```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=if (has_rankings && is_plot(PL_models$logworth_overall)) cap$fig(tr("fig_logworth", options = options, reference_trait = reference_trait)) else NULL}
+if (has_rankings && is_plot(PL_models$logworth_overall)) plot(PL_models$logworth_overall)
+```
+
+```{r groups, results='asis'}
+ga = group_analysis
+if (isTRUE(ga$requested) && has_rankings) {
+  heading(tr("h_groups"))
+  para(tr("grp_intro", min_n = ga$min_n, reference_trait = reference_trait, k = cap$next_tab()))
+  el = ga$eligibility
+  el$share = ifelse(is.na(el$share), "", paste0(round(100 * el$share), "%"))
+  el$status = vapply(el$reason, function(r) tr(paste0("grp_status_", r)), character(1))
+  print(kable_tr(el[, c("group", "n_valid", "share", "status")],
+                 c("col_group", "col_valid_answers", "col_share", "col_status"),
+                 cap$tab(tr("tab_groups"))))
+
+  small = ga$eligibility[ga$eligibility$reason == "too_few", ]
+  for (i in seq_len(nrow(small))) {
+    para(tr("grp_minority", n = small$n_valid[i], participants = participants, group = small$group[i],
+            share = round(100 * small$share[i]), min_n = ga$min_n))
+  }
+
+  if (!isTRUE(ga$available)) {
+    big = ga$eligibility[ga$eligibility$reason != "no_label", ][1, ]
+    para(tr("grp_not_available", largest = big$group, share = round(100 * big$share),
+            participants = participants))
+  } else {
+    if (isTRUE(ga$unbalanced)) {
+      para(tr("grp_unbalanced", group = ga$smallest$group, share = round(100 * ga$smallest$share),
+              k = cap$next_tab()))
+    } else {
+      para(tr("grp_balanced_text", k = cap$next_tab()))
+    }
+    print(kable_tr(ga$balanced_ranking, c("col_option", "col_worth_pooled", "col_worth_balanced",
+                                          "col_rank_pooled", "col_rank_balanced"),
+                   cap$tab(tr("tab_balanced", reference_trait = reference_trait)), digits = 1))
+
+    het = ga$heterogeneity
+    het$p_value = format_p(het$p_value)
+    het$note = ifelse(nzchar(het$note), vapply(het$note, function(z) tr(paste0("grp_note_", z)), ""), "")
+    para(tr("grp_test_text", k = cap$next_tab(), options = options))
+    print(kable_tr(het, c("col_trait", "col_statistic", "col_df", "col_p", "col_note"),
+                   cap$tab(tr("tab_group_test"))))
+
+    para(tr("grp_agreement_text", k = cap$next_tab(), participant = participant))
+    print(kable_tr(ga$within, c("col_group", "col_n", "col_agreement"),
+                   cap$tab(tr("tab_group_agreement"))))
+    if (is.data.frame(ga$between)) {
+      print(kable_tr(ga$between, c("col_group", "col_group", "col_kendall"),
+                     cap$tab(tr("tab_group_between"))))
+    }
+    if (is_plot(ga$worthmap)) para(tr("grp_worthmap_text", f = cap$next_fig(), reference_trait = reference_trait))
+  }
+}
+```
+
+```{r group_worthmap, dpi=dpi, fig.height=6, fig.width=6, fig.cap=if (isTRUE(group_analysis$available) && is_plot(group_analysis$worthmap)) cap$fig(tr("fig_group_worthmap", reference_trait = reference_trait)) else NULL}
+if (isTRUE(group_analysis$available) && is_plot(group_analysis$worthmap)) plot(group_analysis$worthmap)
+```
 
 \pagebreak
 
-# References
+```{r tree_text, results='asis'}
+if (has_rankings) {
+  heading(tr("h_covariates", options = options))
+  if (!isTRUE(PL_tree$isTREE)) {
+    para(tr("tree_none"))
+  } else {
+    para(tr("tree_nodes_text", k = cap$next_tab()))
+    print(kable_tr(PL_tree$node_summary, c("col_node", "col_n", "col_superior", "col_under", "col_split"),
+                   cap$tab(tr("tab_nodes"))))
+    para(tr("tree_plot_text", f = cap$next_fig()))
+  }
+}
+```
+
+```{r pltree, dpi=dpi, fig.height=8, fig.width=10, fig.cap=if (has_rankings && isTRUE(PL_tree$isTREE)) cap$fig(tr("fig_tree", options = options)) else NULL}
+if (has_rankings && isTRUE(PL_tree$isTREE) && is_plot(PL_tree$PLtree_plot)) plot(PL_tree$PLtree_plot)
+```
+
+```{r regret, results='asis'}
+if (has_rankings && isTRUE(PL_tree$isTREE)) {
+  para(tr("regret_text", k = cap$next_tab(), options = options))
+  print(kable_tr(PL_tree$regret_table, c("col_option", "col_worth", "col_worst_regret", "col_regret"),
+                 cap$tab(tr("tab_regret", option = option))))
+}
+```
+
+```{r metric, results='asis', dpi=dpi, fig.width=8, fig.height=6}
+mt = metric
+if (isTRUE(mt$available)) {
+  heading(tr("h_metric"))
+  para(tr("metric_intro", option = option, participant = participant))
+  for (nm in names(mt$traits)) {
+    x = mt$traits[[nm]]
+    heading(nm, 2)
+    q = x$qc
+    para(tr("metric_qc", plots = q$plots, farms = q$farms, missing = q$missing_plots,
+            zeros = q$zeros, outliers = q$outliers))
+    if (identical(x$note, "not_enough_data")) {
+      para(tr("metric_not_enough"))
+      next
+    }
+    if (x$method == "lm") para(tr("metric_method_lm"))
+    m = x$means
+    cols = intersect(c("genotype", "n", "mean", "lower", "upper", "percent_of_check", "p_vs_check", "group"), names(m))
+    m = m[, cols]
+    if ("p_vs_check" %in% cols) m$p_vs_check = format_p(m$p_vs_check)
+    keys = c(genotype = "col_option", n = "col_n", mean = "col_mean", lower = "col_lower",
+             upper = "col_upper", percent_of_check = "col_percent_check", p_vs_check = "col_p_check",
+             group = "col_letters")[cols]
+    print(kable_tr(m, unname(keys), cap$tab(tr("tab_metric_means", option = option,
+                                                check = mt$check, options = title_case(options))), digits = 2))
+    v = x$variance
+    if (is.data.frame(v) && nrow(v) > 0) {
+      h2 = v$estimate[v$parameter == "heritability"]
+      para(tr("metric_h2", h2 = round(h2, 2), options = options))
+    }
+    if (length(x$dropped) > 0) para(tr("metric_dropped", items = join_words(x$dropped)))
+    if (is_plot(x$plots$box)) {
+      cat("\n\n")
+      print(x$plots$box)
+      cat("\n\n", cap$fig(tr("fig_metric_box", trait = nm)), "\n\n")
+    }
+  }
+}
+```
+
+```{r release, results='asis'}
+rel = release
+if (has_rankings && is.data.frame(rel$summary) && nrow(rel$summary) > 0) {
+  heading(tr("h_release"))
+  para(tr("release_text", option = option, options = options, check = rel$check,
+          reference_trait = reference_trait, k = cap$next_tab()))
+  r = rel$summary
+  r$prob_beats_check = ifelse(r$item_is_check, "", paste0(round(100 * r$prob_beats_check), "%"))
+  r$p_value = format_p(r$p_value)
+  r$item_is_check = NULL
+  keys = c(item = "col_option", n_tested = "col_n_tested", prob_beats_check = "col_prob_check",
+           p_value = "col_p", favourability = "col_favourability",
+           better_than_check = "col_better", worse_than_check = "col_worse",
+           yield_mean = "col_yield_mean", yield_percent_of_check = "col_yield_percent")[names(r)]
+  print(kable_tr(r, unname(keys), cap$tab(tr("tab_release", check = rel$check)), digits = 1))
+  para(tr("release_files"))
+}
+```
+
+\pagebreak
+
+```{r refs_heading, results='asis'}
+heading(tr("h_references"))
+```
 
 ::: {#refs}
 :::
 
-# Appendix
+```{r appendix, results='asis'}
+heading(tr("h_appendix"))
 
-```{r kendall_caption}
-kendall_caption <- ""
-if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
-  kendall_caption <- "## Kendall correlation table"
+if (has_rankings && nrow(PL_models$kendall$kendall) > 0) {
+  heading(tr("h_kendall_table"), 2)
+  print(kable_tr(PL_models$kendall$kendall, c("col_trait", "col_kendall", "col_z", NA),
+                 cap$tab(tr("tab_kendall", reference_trait = reference_trait))))
 }
-```
 
-```{r kendall_tau_table}
-if (isTRUE(nrow(PL_models$kendall$kendall) > 0)) {
-  kable(PL_models$kendall$kendall,
-        caption = paste0("Table Appendix 1. Kendall correlation between '", reference_trait, "' and the other traits assessed in this trial. A p-value < 0.05 indicates significant correlation between traits."),
-          align = "l",
-          row.names = FALSE)
+if (isTRUE(quanti_dat$quantitative) && is.data.frame(quanti_dat$outliers) && nrow(quanti_dat$outliers) > 0) {
+  heading(tr("h_outliers"), 2)
+  o = quanti_dat$outliers[, intersect(c("id", "technology", "trait", "data_collection", "value", "enumerator"),
+                                      names(quanti_dat$outliers))]
+  print(kable_tr(o, NULL, cap$tab(tr("tab_outliers"))))
 }
-```
 
-
-```{r error}
-error_caption <- ""
-error_text1 <- ""
-if (isFALSE(is.null(error))){
-  error_caption <- "## Errors producing the report"
-  error_text1 <- paste("During the execution of the requested analysis",
-             "we found the following error(s).",
-             "Please report the error(s) to", 
-             "Kauê de Sousa <k.desousa(at)cgiar.org> and",
-             "to Brandon Madriz <bmadriz(at)mrbotcr.com>.")
+if (!is.null(error)) {
+  heading(tr("h_errors"), 2)
+  para(tr("errors_text"))
+  cat(paste0("- ", gsub("\n", " ", error), collapse = "\n"), "\n")
 }
-```
-
-`r paste(error_caption, collapse = '\n')`
-
-`r paste(error_text1, collapse = '\n')`
-
-```{r error2}
-if (isFALSE(is.null(error))){
-print(error)
-}
-```
-
-\pagebreak
-
-```{r outlier_text}
-outlier_caption <- ""
-if (isTRUE(nrow(quanti_dat$outliers) > 0)){
-  outlier_caption <- "## Outliers identified in quantitative traits"
-}
-```
-
-`r paste(outlier_caption, collapse = '\n')`
-
-```{r outlier}
-if (isTRUE(nrow(quanti_dat$outliers) > 0))
-kable(quanti_dat$outliers, 
-          caption = paste0("Appendix 1. Possible outliers identified in quantitative data collected in the trial. If you consider any of these as outliers, please fix it in your ClimMob project and request a new report."),
-          align = "l",
-          row.names = FALSE)
 ```
