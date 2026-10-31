@@ -4,6 +4,9 @@
 #         simulated project in tests/testdata, in English, French and Swahili
 name: Tests
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [master, main, devel]
@@ -69,6 +72,41 @@ jobs:
           echo "::notice title=Run summary::$(grep -E '^\[(ok|FAILED|skipped)' /tmp/cm.log | sed -e ':a;N;$!ba;s/\n/%0A/g')"
           test -f /tmp/cm-out/climmob_main_report.docx
           ls -R /tmp/cm-out | head -100
+      - name: Run the same project in English and Norwegian
+        if: success()
+        run: |
+          for L in en no; do
+            python3 - "$L" <<'PY'
+          import json, sys
+          lang = sys.argv[1]
+          p = json.load(open("tests/testdata/simulated-maize/parameters.json"))
+          p["Parameters"].update(OutputPath=f"/tmp/cm-out-{lang}", BackwardPath=".", Split="gender1", InfoSheets="TRUE", Languaje=lang)
+          json.dump(p, open(f"/tmp/cm-parameters-{lang}.json", "w"))
+          PY
+            Rscript ClimMob.R /tmp/cm-parameters-$L.json tests/testdata/simulated-maize/data.json > /tmp/cm-$L.log 2>&1 || true
+          done
+      - name: Publish a sample of the outputs to the branch ci-report-output
+        if: always() && github.event_name == 'pull_request'
+        run: |
+          mkdir -p /tmp/pub
+          for d in /tmp/cm-out /tmp/cm-out-en /tmp/cm-out-no; do
+            [ -d "$d" ] || continue
+            n=$(basename $d)
+            mkdir -p /tmp/pub/$n/participant-report/png
+            cp $d/climmob_main_report.* /tmp/pub/$n/ 2>/dev/null || true
+            cp -r $d/extra-outputs /tmp/pub/$n/ 2>/dev/null || true
+            cp $d/participant-report/*.pdf $d/participant-report/*.png /tmp/pub/$n/participant-report/ 2>/dev/null || true
+            cp $d/participant-report/participant_report_package_1.* $d/participant-report/participant_report_package_2.* /tmp/pub/$n/participant-report/ 2>/dev/null || true
+            ls $d/participant-report/png/ 2>/dev/null | head -4 | while read f; do cp $d/participant-report/png/$f /tmp/pub/$n/participant-report/png/; done
+          done
+          cp /tmp/cm*.log /tmp/tests.log /tmp/pub/ 2>/dev/null || true
+          cd /tmp/pub
+          git init -q -b ci-report-output
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Outputs of ${GITHUB_SHA} on the simulated project"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-report-output
       - name: Keep the outputs for review
         if: always()
         uses: actions/upload-artifact@v4
