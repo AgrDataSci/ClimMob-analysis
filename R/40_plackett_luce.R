@@ -201,7 +201,7 @@ make_kendall = function(cmdata, rank_dat) {
   kendall$trait = factor(kendall$trait, levels = rev(kendall$trait))
 
   kendall_plot = ggplot(data = kendall, aes(y = kendallTau, x = trait, fill = trait)) +
-    geom_chicklet(show.legend = FALSE) +
+    geom_col(show.legend = FALSE, width = 0.7) +
     coord_flip() +
     scale_fill_manual(values = col_pallet(nrow(kendall))) +
     theme_classic() +

@@ -8,15 +8,8 @@ pkgs = c(climmob_packages, climmob_suggested)
 
 missing = pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
 
-# ggchicklet is not on CRAN
-cran = setdiff(missing, "ggchicklet")
-
-if (length(cran) > 0) {
-  install.packages(cran)
-}
-
-if ("ggchicklet" %in% missing) {
-  install.packages("ggchicklet", repos = "https://cinc.rud.is")
+if (length(missing) > 0) {
+  install.packages(missing)
 }
 
 # used only by the tests

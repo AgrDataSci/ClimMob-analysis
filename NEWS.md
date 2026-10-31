@@ -14,6 +14,7 @@ ClimMob-analysis v4.0.0 (2026-10-31)
 * Local analysis without a ClimMob request. `build_pars_from_cmlist()` builds the parameters from the project, and `suggest_harmonization()`, `combine_projects()` and `pars_from_harmonization()` combine projects built from different templates. See `run-local/` and `docs/combine-projects.md`.
 * `AGENTS.md`, `CLAUDE.md` and `llms.txt` for AI agents, and `docs/outputs.md` describing every output.
 * Continuous integration that runs the whole workflow on a simulated project (issue #35), and `dev/release.R` with a release workflow.
+* `ggchicklet` is no longer needed. It was not on CRAN and only drew rounded bars in the Kendall chart, which now uses standard bars.
 
 ### Structure
 

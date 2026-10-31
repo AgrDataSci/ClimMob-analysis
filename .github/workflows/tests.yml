@@ -35,9 +35,16 @@ jobs:
       - name: System libraries for sf
         run: sudo apt-get update && sudo apt-get install -y libgdal-dev libgeos-dev libproj-dev libudunits2-dev
       - name: Install packages
-        run: Rscript dev/install-packages.R
+        run: |
+          Rscript dev/install-packages.R
+          Rscript -e 'source("R/00_packages.R"); m = climmob_packages[!vapply(climmob_packages, requireNamespace, logical(1), quietly = TRUE)]; if (length(m)) { cat("::error title=Missing packages::", paste(m, collapse = ", "), "\n", sep = ""); quit(status = 1) }'
       - name: Run all tests, including the full workflow
-        run: Rscript tests/testthat.R
+        run: |
+          set -o pipefail
+          Rscript tests/testthat.R 2>&1 | tee /tmp/tests.log || {
+            echo "::error title=Tests::$(tail -60 /tmp/tests.log | sed -e 's/%/%25/g' | sed -e ':a;N;$!ba;s/\n/%0A/g')"
+            exit 1
+          }
       - name: Run ClimMob.R as the server does
         run: |
           mkdir -p /tmp/cm-out
@@ -47,7 +54,12 @@ jobs:
           p["Parameters"].update(OutputPath="/tmp/cm-out", BackwardPath=".", Split="gender1", InfoSheets="TRUE", Languaje="es")
           json.dump(p, open("/tmp/cm-parameters.json", "w"))
           PY
-          CLIMMOB_DEBUG_DIR=/tmp/cm-debug Rscript ClimMob.R /tmp/cm-parameters.json tests/testdata/simulated-maize/data.json
+          set -o pipefail
+          CLIMMOB_DEBUG_DIR=/tmp/cm-debug Rscript ClimMob.R /tmp/cm-parameters.json tests/testdata/simulated-maize/data.json 2>&1 | tee /tmp/cm.log || {
+            echo "::error title=ClimMob.R::$(tail -60 /tmp/cm.log | sed -e 's/%/%25/g' | sed -e ':a;N;$!ba;s/\n/%0A/g')"
+            exit 1
+          }
+          echo "::notice title=Run summary::$(grep -E '^\[(ok|FAILED|skipped)' /tmp/cm.log | sed -e ':a;N;$!ba;s/\n/%0A/g')"
           test -f /tmp/cm-out/climmob_main_report.docx
           ls -R /tmp/cm-out | head -100
       - name: Keep the outputs for review
