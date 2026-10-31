@@ -1,3 +1,11 @@
+# Path to a file from the root of the repository, whatever the working
+# directory (testthat runs the tests from tests/testthat)
+root_path = function(...) {
+  root = getOption("climmob.code_path")
+  if (is.null(root)) root = normalizePath(file.path("..", ".."))
+  file.path(root, ...)
+}
+
 # Synthetic tricot data shared by the tests
 
 make_tricot_data = function(n = 30, seed = 1) {

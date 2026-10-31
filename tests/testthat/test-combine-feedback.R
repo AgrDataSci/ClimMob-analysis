@@ -60,7 +60,7 @@ test_that("projects with different templates are combined", {
 })
 
 test_that("feedback data holds the own and the community ranking", {
-  set_language("en", ".")
+  set_language("en", root_path())
   d = make_tricot_data(n = 30)
   rd = organize_ranking_data(d, make_pars())
   fake = function(w) structure(list(w = w), class = "fakepl")

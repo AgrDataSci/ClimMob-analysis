@@ -7,7 +7,7 @@ test_that("answer_status classifies every kind of answer", {
 })
 
 test_that("attrition is counted from the submission dates", {
-  set_language("en", ".")
+  set_language("en", root_path())
   d = data.frame(REG__submitted_date = c("2022-01-01", "2022-01-01", "2022-01-02", NA),
                  ASSaaaaaaaaaaaa__submitted_date = c("2022-02-01", NA, "2022-02-01", NA))
   pars = list(traits = data.frame(assessmentId = "aaaaaaaaaaaa", assessmentName = "Harvest",

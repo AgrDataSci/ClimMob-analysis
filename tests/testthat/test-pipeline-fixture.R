@@ -11,7 +11,7 @@ test_that("the full analysis runs on the simulated project", {
 
   load_climmob_packages()
 
-  fx = "tests/testdata/simulated-maize"
+  fx = root_path("tests", "testdata", "simulated-maize")
   out = file.path(tempdir(), "climmob-fixture")
   unlink(out, recursive = TRUE)
 
@@ -19,7 +19,7 @@ test_that("the full analysis runs on the simulated project", {
 
   settings = req$settings
   settings$output_path = out
-  settings$code_path = normalizePath(".")
+  settings$code_path = root_path()
   settings$groups = "gender1"
   settings$infosheets = TRUE
   settings$use_climate = FALSE   # no network calls in tests

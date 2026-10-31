@@ -8,6 +8,6 @@
 library("testthat")
 
 source("load.R")
-load_climmob(packages = FALSE)
+load_climmob(".", packages = FALSE)
 
 test_dir("tests/testthat", reporter = "summary")
