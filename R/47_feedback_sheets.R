@@ -294,20 +294,23 @@ draw_feedback_sheet = function(p, answers, feedback, settings = list()) {
     ggplot2::annotate("text", x = 79.5, y = 57, label = tr("fb_worst"), hjust = 0, size = 3, fontface = "bold")
 
   a = answers[order(!answers$is_reference_trait), ]
-  step = 4.1
-  max_rows = floor((53 - footer_top - 1) / step) + 1
+  # rows shrink to fit every trait, down to a readable minimum
+  step = min(4.1, (53 - footer_top - 2) / max(nrow(a) - 1, 1))
+  step = max(step, 2.6)
+  max_rows = floor((53 - footer_top - 2) / step) + 1
   a = utils::head(a, max_rows)
+  txt_size = if (step < 3.5) 2.6 else 3
 
   for (k in seq_len(nrow(a))) {
     y = 53 - (k - 1) * step
     g = g + ggplot2::annotate("text", x = 6, y = y, label = short_text(a$trait[k], 45, 1),
-                              hjust = 0, size = 3)
+                              hjust = 0, size = txt_size)
     if (isTRUE(a$answered[k])) {
       g = g +
-        ggplot2::annotate("point", x = 55, y = y, shape = 24, size = 2.3, fill = pal$accent) +
-        ggplot2::annotate("text", x = 57.5, y = y, label = opt(a$best_option[k]), hjust = 0, size = 3) +
-        ggplot2::annotate("point", x = 77, y = y, shape = 25, size = 2.3, fill = "white") +
-        ggplot2::annotate("text", x = 79.5, y = y, label = opt(a$worst_option[k]), hjust = 0, size = 3)
+        ggplot2::annotate("point", x = 55, y = y, shape = 24, size = if (step < 3.5) 1.9 else 2.3, fill = pal$accent) +
+        ggplot2::annotate("text", x = 57.5, y = y, label = opt(a$best_option[k]), hjust = 0, size = txt_size) +
+        ggplot2::annotate("point", x = 77, y = y, shape = 25, size = if (step < 3.5) 1.9 else 2.3, fill = "white") +
+        ggplot2::annotate("text", x = 79.5, y = y, label = opt(a$worst_option[k]), hjust = 0, size = txt_size)
     } else {
       g = g + ggplot2::annotate("text", x = 70, y = y, label = "-", size = 3, colour = "grey50")
     }

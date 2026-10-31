@@ -17,6 +17,7 @@ csl: citation_style.csl
 
 ```{r setup_opts, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, error = FALSE, message = FALSE, warning = FALSE)
+options(knitr.kable.NA = "")
 cap = new_caption_counter()
 has_rankings = length(rank_dat$trait_list) > 0
 reference_check = rank_dat$reference_tech[1]
@@ -198,10 +199,12 @@ if (has_rankings && nrow(it) > 0) {
 
 ```{r performance, results='asis'}
 if (has_rankings) {
-  heading(tr("h_performance", options = title_case(options)))
+  heading(tr("h_performance", options = options))
   if (nrow(PL_models$ANOVA) > 0) {
     para(tr("anova_text", k = cap$next_tab(), option = option))
-    print(kable_tr(PL_models$ANOVA, c("col_trait", NA, "col_df", "col_statistic", NA, NA),
+    av = PL_models$ANOVA
+    av[["Pr(>Chisq)"]] = format_p(av[["Pr(>Chisq)"]])
+    print(kable_tr(av, c("col_trait", NA, "col_df", "col_statistic", "col_p", NA),
                    cap$tab(tr("tab_anova", options = options, option = option))))
   }
   nw = PL_models$netwinning

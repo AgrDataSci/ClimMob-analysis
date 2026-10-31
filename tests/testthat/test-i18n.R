@@ -34,6 +34,10 @@ test_that("tr() fills placeholders and falls back to English", {
   set_language("no", root_path())
   expect_equal(tr("fb_points", n = 40), "40 poeng")
   expect_equal(tr("no_such_key"), "[no_such_key]")
+  # a placeholder named k must not be taken as the key
+  expect_equal(tr("map_text", f = 2, k = 1), tr("map_text", f = 2))
+  expect_false(startsWith(tr("design_text", n = 1, participants = "x", noptions = 3,
+                             options = "y", ntraits = 2, k = 4), "["))
   set_language("xx", root_path())
   expect_equal(current_language(), "en")
   expect_equal(tr("fb_points", n = 3), "3 points")

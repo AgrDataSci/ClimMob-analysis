@@ -163,8 +163,11 @@ render_participant_reports = function(state, settings) {
 
   for (i in seq_len(n)) {
 
-    env = list2env(list(sheet = normalizePath(images$sheet[i]),
-                        certificate = normalizePath(images$certificate[i])),
+    # pandoc looks for images from the render folder, so copy them there
+    file.copy(images$sheet[i], file.path(render_dir, "sheet.png"), overwrite = TRUE)
+    file.copy(images$certificate[i], file.path(render_dir, "certificate.png"), overwrite = TRUE)
+
+    env = list2env(list(sheet = "sheet.png", certificate = "certificate.png"),
                    parent = globalenv())
 
     ok = render_rmd(file.path(render_dir, "participant_report_main.Rmd"),

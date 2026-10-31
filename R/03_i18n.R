@@ -92,12 +92,16 @@ current_language = function() {
 
 #' Translate a key and fill in its placeholders
 #'
-#' @param key the key in the translation files
+#' @param .key the key in the translation files
 #' @param ... values for the placeholders, as name = value
 #' @param .lang language code, the current language by default
 #' @examples
 #' tr("sum_items", n_items = 8, options = "varieties", participant = "farmer", n_per = 3)
-tr = function(key, ..., .lang = current_language()) {
+tr = function(.key, ..., .lang = current_language()) {
+
+  # .key starts with a dot so that placeholders such as k = 1 cannot
+  # partially match it (R matches argument names before ... partially)
+  key = .key
 
   tables = i18n$tables
 
