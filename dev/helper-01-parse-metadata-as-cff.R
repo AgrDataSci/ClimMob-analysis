@@ -17,6 +17,7 @@ cff = c("cff-version: 1.2.0",
         'message: "If you use this dataset or software, please cite it as below."',
         paste0("title: \"", meta_list$title, "\""),
         paste0("version: \"", meta_list$version, "\""),
+        if (!is.null(meta_list$doi)) paste0("doi: ", meta_list$doi),
         paste0("date-released: ", meta_list$publication_date),
         "authors:")
 

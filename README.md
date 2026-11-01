@@ -1,7 +1,7 @@
 
 <!-- badges: start -->
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3984711.svg)](https://doi.org/10.5281/zenodo.3976631) [![ProjStatus](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![Lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AgrDataSci/ClimMob-analysis/blob/master/LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3976631.svg)](https://doi.org/10.5281/zenodo.3976631) [![Tests](https://github.com/AgrDataSci/ClimMob-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/AgrDataSci/ClimMob-analysis/actions/workflows/tests.yml) [![ProjStatus](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![Lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AgrDataSci/ClimMob-analysis/blob/master/LICENSE)
 
 <!-- badges: end -->
 
@@ -111,6 +111,7 @@ The tests run on every push (`.github/workflows/tests.yml`), including the whole
 
 ## Meta
 
+-   Cite with the permanent DOI [10.5281/zenodo.3976631](https://doi.org/10.5281/zenodo.3976631), which always resolves to the latest release
 -   Please [click here to report issues or bugs](https://github.com/agrdatasci/ClimMob-analysis/issues)
 -   License: [MIT](https://github.com/AgrDataSci/ClimMob-analysis/blob/master/LICENSE). Code, report templates and documentation are all under MIT
 -   The [Tricot user guide](https://hdl.handle.net/10568/109942) presents the experimental approach used by the ClimMob platform
