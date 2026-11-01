@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this dataset or software, please cite it as below."
+message: "If you use this software, please cite it as below."
 title: "Workflow for automated analysis and report of decentralized experiments with the tricot approach"
 version: "v2.0"
 date-released: 2025-12-15
@@ -24,7 +24,7 @@ authors:
     orcid: https://orcid.org/0000-0001-7554-2558
     affiliation: Bioversity International
 repository-code: https://github.com/AgrDataSci/climmob-analysis
-license: CC-BY-4.0
+license: MIT
 keywords:
   - agriculture
   - digital innovation
