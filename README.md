@@ -1,7 +1,7 @@
 
 <!-- badges: start -->
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3984711.svg)](https://doi.org/10.5281/zenodo.3976631) [![ProjStatus](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![Lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![License](https://img.shields.io/badge/license%20-%20CC%20BY%20SA%204.0%20-%20%233182bd)](https://creativecommons.org/licenses/by-sa/4.0/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3984711.svg)](https://doi.org/10.5281/zenodo.3976631) [![ProjStatus](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![Lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AgrDataSci/ClimMob-analysis/blob/master/LICENSE)
 
 <!-- badges: end -->
 
@@ -112,6 +112,6 @@ The tests run on every push (`.github/workflows/tests.yml`), including the whole
 ## Meta
 
 -   Please [click here to report issues or bugs](https://github.com/agrdatasci/ClimMob-analysis/issues)
--   License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+-   License: [MIT](https://github.com/AgrDataSci/ClimMob-analysis/blob/master/LICENSE). Code, report templates and documentation are all under MIT
 -   The [Tricot user guide](https://hdl.handle.net/10568/109942) presents the experimental approach used by the ClimMob platform
 -   The [ClimMob](https://climmob.net/) platform is a free online software for experimental trials with the tricot citizen-science approach

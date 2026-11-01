@@ -57,16 +57,16 @@ datacite = list(
   publisher = get_meta("publisher"),
   publicationYear = substr(get_meta("publication_date"), 1, 4),
   resourceType = list(
-    resourceTypeGeneral = "Dataset",
+    resourceTypeGeneral = "Software",
     resourceType = tools::toTitleCase(get_meta("resource_type"))
   ),
   descriptions = list(list(description = get_meta("description"), descriptionType = "Abstract")),
   version = get_meta("version"),
   language = get_meta("language"),
   rightsList = list(list(
-    rights = "Creative Commons Attribution 4.0 International",
-    rightsUri = "https://creativecommons.org/licenses/by-sa/4.0/",
-    rightsIdentifier = "cc-by-sa-4.0",
+    rights = "MIT License",
+    rightsUri = "https://opensource.org/licenses/MIT",
+    rightsIdentifier = "mit",
     rightsIdentifierScheme = "SPDX"
   )),
   subjects = lapply(strsplit(get_meta("subjects"), ";\\s*")[[1]], function(s) list(subject = s)),
