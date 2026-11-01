@@ -176,7 +176,7 @@ kendall_boot_interval = function(r1, r2, nboot = 200, level = 0.95, seed = 1L) {
 
   taus = with_seed(seed, vapply(seq_len(nboot), function(b) {
     i = sample.int(n, n, replace = TRUE)
-    tryCatch(kendallTau(r1[i], r2[i], na.omit = FALSE)$kendallTau[1],
+    tryCatch(kendallTau(r1[i, ], r2[i, ], na.omit = FALSE)$kendallTau[1],
              error = function(e) NA_real_)
   }, numeric(1)))
 
