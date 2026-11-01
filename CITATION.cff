@@ -15,12 +15,16 @@ authors:
   - family-names: Madriz
     given-names: Brandon
     affiliation: Mr Bot Software Solutions
+  - family-names: Dorado-Betancourt
+    given-names: Hugo
+    affiliation: Wageningen University & Research
+    orcid: https://orcid.org/0000-0002-0103-7505
   - family-names: van Etten
     given-names: Jacob
     orcid: https://orcid.org/0000-0001-7554-2558
     affiliation: Bioversity International
 repository-code: https://github.com/AgrDataSci/climmob-analysis
-license: CC-BY-SA-4.0
+license: CC-BY-4.0
 keywords:
   - agriculture
   - digital innovation
