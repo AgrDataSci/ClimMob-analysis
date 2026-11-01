@@ -13,6 +13,9 @@ This repository holds the R workflow that analyses tricot trials and writes the 
 - The user needs R 4.1 or newer and the packages in `R/00_packages.R` (`Rscript dev/install-packages.R`). They also need their ClimMob API key. Ask them to store it in the environment variable `CLIMMOB_KEY` and never write it in a script or a message.
 - Run `run_climmob_analysis()` first and show `print_run_summary(res$log)`. Explain any failed step in plain words before writing outputs.
 - Every output is described in `docs/outputs.md`. Use it to explain results. Do not invent columns or results.
+- Check the reference trait before trusting a report. `pick_reference_trait()` takes the last trait whose code contains "overall". When the same question is asked at several moments, that can be a moment with no answers yet (a fifth cut, a late harvest), and the report then falls back to the last trait with enough answers, which may be an unrelated trait. Set `traitOrder` to `"referenceTrait"` for the overall question with the most valid answers, as in `run-local/analyse-one-project.R`, and tell the user which one you chose.
+- When combining projects whose item lists differ (for example items tested in only one region), a trait is dropped unless every item has at least two valid answers in it (`minitem`). Items tested by few participants in one project can remove a trait from the combined report that works in each project alone. Compare the traits kept in each project with those kept in the combined run, tell the user what was lost, and offer one report per project next to the combined one.
+- With few answers per group, differences between groups seen in worth plots are often not significant. Report the test in `groups-test-by-trait.csv` before saying that groups differ.
 
 ## 2. Material for participants and partners
 
@@ -21,6 +24,7 @@ The folder `extra-outputs/ai-ready/` of each report holds plain tables and a `RE
 - thank participants first and keep one page per person;
 - use the option letters (A, B, C) with the item names;
 - report only what is in the tables, and say that the tested items may not be released;
+- give participants who answered all, some or none of the moments a different message, with one QR code and one file per person (rules 11 to 16 of that README);
 - treat names and locations as personal data.
 
 ## 3. Changing the code
