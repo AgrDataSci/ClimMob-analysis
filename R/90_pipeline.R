@@ -134,6 +134,11 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
     fallback = error_data_trial_map,
     needs = "coords")
 
+  s$participation_map = run_step(log, "participation_map", "Participation map",
+    function() get_participation_map(s$coords, s$monitoring$responses, adm = s$trial_map$adm),
+    fallback = error_data_participation_map,
+    needs = c("coords", "monitoring"))
+
   s$agroclimate = run_step(log, "agroclimate", "Agroclimatic data",
     function() get_agroclimatic_data(cm, coords = s$coords, ndays = season_length(pars)),
     fallback = error_data_agroclimate,
@@ -169,11 +174,18 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
     fallback = error_data_reliability, needs = "models")
 
   kendall = run_step(log, "kendall", "Kendall tau",
-    function() make_kendall(cm, rd),
+    function() make_kendall(cm, rd, nboot = settings$kendall_nboot %||% 200),
     fallback = error_data_kendall, needs = "rank_dat")
 
   s$PL_models = assemble_PL_models(s$models %||% list(), logworth, worthmap,
                                    anova_tbl, netwinning, reliability, kendall)
+
+  s$data_value = run_step(log, "data_value", "Value of more answers",
+    function() get_data_value(s$models[[rd$reference_trait_index]],
+                              n_now = sum(rd$trait_list[[rd$reference_trait_index]]$keep),
+                              n_registered = s$monitoring$registered,
+                              nsim = settings$data_value_nsim %||% 50),
+    fallback = error_data_data_value, needs = "models")
 
   # 5. Groups of participants ----
   s$group_analysis = run_step(log, "groups", "Analysis by group",
