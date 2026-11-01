@@ -1,0 +1,65 @@
+Registered S3 method overwritten by 'gosset':
+  method      from        
+  plot.pltree PlackettLuce
+[ok]      read_request (0.3s)
+[ok]      rank_dat (0.2s)
+[ok]      quanti_dat (0.1s)
+[ok]      monitoring (0.2s)
+[ok]      overview (0.1s)
+seed 638691 was used in the sampling 
+
+[ok]      coords (0.4s)
+trying URL 'https://geodata.ucdavis.edu/gadm/gadm4.1/pck/gadm41_KEN_1_pk.rds'
+Content type 'unknown' length 3143577 bytes (3.0 MB)
+==================================================
+downloaded 3.0 MB
+
+Cached as: /tmp/RtmpAV63DA/gadm/gadm41_KEN_1_pk.rds
+[ok]      trial_map (2s)
+[ok]      participation_map (0.1s)
+Getting climate data from NASA POWER 
+
+Getting climate data from NASA POWER 
+
+Getting climate data from NASA POWER 
+
+Getting climate data from NASA POWER 
+
+Getting climate data from NASA POWER 
+
+Getting climate data from NASA POWER 
+
+[ok]      agroclimate (7.2s)
+[ok]      rankings (0.3s)
+[ok]      models (0.2s)
+[ok]      logworth (1.2s)
+[ok]      worthmap (0.1s)
+[ok]      anova (0.1s)
+[ok]      netwinning (1.4s)
+[ok]      reliability (0.3s)
+[ok]      kendall (91.2s)
+[ok]      data_value (4.9s)
+[ok]      groups (0.1s)
+Covariates with near zero variance dropped: CivilStatus, climate_DTR, climate_SU
+Correlated covariates dropped: climate_Rx5day, climate_maxDT, climate_minNT
+Selecting the best covariates for the Plackett-Luce tree
+[ok]      pl_tree (8.9s)
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+[ok]      metric (1.2s)
+[ok]      release (0.4s)
+[ok]      feedback (0.2s)
+[ok]      main_report (20.1s)
+[ok]      participant_reports (406.7s)
+`height` was translated to `width`.
+`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+[ok]      extra_outputs (10.1s)
+[ok]      ai_ready (0s)
+
+---- ClimMob analysis summary ----
+27 steps ok, 0 failed, 0 skipped

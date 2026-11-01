@@ -1,0 +1,25 @@
+"trait","moment","parameter","estimate"
+"Plant population","Vegetative","genetic_variance",0.314
+"Plant population","Vegetative","farm_variance",4.942
+"Plant population","Vegetative","residual_variance",33.113
+"Plant population","Vegetative","heritability",0.278
+"Disease severity","Vegetative","genetic_variance",19.704
+"Disease severity","Vegetative","farm_variance",0
+"Disease severity","Vegetative","residual_variance",93.146
+"Disease severity","Vegetative","heritability",0.893
+"Plant population","Reproductive","genetic_variance",0
+"Plant population","Reproductive","farm_variance",0.704
+"Plant population","Reproductive","residual_variance",37.066
+"Plant population","Reproductive","heritability",0
+"Disease severity","Reproductive","genetic_variance",27.045
+"Disease severity","Reproductive","farm_variance",0
+"Disease severity","Reproductive","residual_variance",94.937
+"Disease severity","Reproductive","heritability",0.916
+"Number of cobs","Agronomic performance","genetic_variance",16.176
+"Number of cobs","Agronomic performance","farm_variance",2.059
+"Number of cobs","Agronomic performance","residual_variance",62.91
+"Number of cobs","Agronomic performance","heritability",0.884
+"Yield (quantitative)","Agronomic performance","genetic_variance",2.478
+"Yield (quantitative)","Agronomic performance","farm_variance",7.608
+"Yield (quantitative)","Agronomic performance","residual_variance",2.285
+"Yield (quantitative)","Agronomic performance","heritability",0.965

@@ -1,0 +1,1695 @@
+"participant_id","trait","is_reference_trait","answered","best_option","best_item","worst_option","worst_item"
+"1","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 02"
+"2","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"3","Germination [Vegetative]",FALSE,FALSE,,,,
+"4","Germination [Vegetative]",FALSE,FALSE,,,,
+"5","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"6","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 01"
+"7","Germination [Vegetative]",FALSE,FALSE,,,,
+"8","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 06"
+"9","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 04"
+"10","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"11","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 06"
+"12","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 07","B","Hybrid 05"
+"13","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 04"
+"14","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 07"
+"15","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"16","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"17","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 07","B","Hybrid 01"
+"18","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"19","Germination [Vegetative]",FALSE,FALSE,,,,
+"20","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 05"
+"21","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 05"
+"22","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"23","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 05"
+"24","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 01"
+"25","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 02"
+"26","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 04"
+"27","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"28","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 04"
+"29","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 05"
+"30","Germination [Vegetative]",FALSE,FALSE,,,,
+"31","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 07"
+"32","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"33","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 07"
+"34","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 03"
+"35","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 05"
+"36","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 03"
+"37","Germination [Vegetative]",FALSE,FALSE,,,,
+"38","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 04"
+"39","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 07"
+"40","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"41","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"42","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"43","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 05"
+"44","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 07"
+"45","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 06"
+"46","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"47","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"48","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 04"
+"49","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 01"
+"50","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"51","Germination [Vegetative]",FALSE,FALSE,,,,
+"52","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 04","B","Hybrid 01"
+"53","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"54","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"55","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 02"
+"56","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"57","Germination [Vegetative]",FALSE,FALSE,,,,
+"58","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 05"
+"59","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 08"
+"60","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 04"
+"61","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 02"
+"62","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 04"
+"63","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 08"
+"64","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"65","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 01"
+"66","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"67","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 07"
+"68","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 05"
+"69","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 06"
+"70","Germination [Vegetative]",FALSE,FALSE,,,,
+"71","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"72","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 02"
+"73","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"74","Germination [Vegetative]",FALSE,FALSE,,,,
+"75","Germination [Vegetative]",FALSE,FALSE,,,,
+"76","Germination [Vegetative]",FALSE,FALSE,,,,
+"77","Germination [Vegetative]",FALSE,FALSE,,,,
+"78","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 01"
+"79","Germination [Vegetative]",FALSE,FALSE,,,,
+"80","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 04"
+"81","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 02"
+"82","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"83","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 03"
+"84","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 04"
+"85","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 05"
+"86","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 03"
+"87","Germination [Vegetative]",FALSE,FALSE,,,,
+"88","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 07","B","Hybrid 04"
+"89","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 03"
+"90","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"91","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"92","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 07"
+"93","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"94","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 04"
+"95","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"96","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 03"
+"97","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"98","Germination [Vegetative]",FALSE,FALSE,,,,
+"99","Germination [Vegetative]",FALSE,FALSE,,,,
+"100","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 03"
+"101","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 05"
+"102","Germination [Vegetative]",FALSE,FALSE,,,,
+"103","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 04"
+"104","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 02"
+"105","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 06"
+"106","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 05"
+"107","Germination [Vegetative]",FALSE,FALSE,,,,
+"108","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 03"
+"109","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 01"
+"110","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"111","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"112","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 01"
+"113","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 07","B","Hybrid 01"
+"114","Germination [Vegetative]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"115","Germination [Vegetative]",FALSE,FALSE,,,,
+"116","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 08"
+"117","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 07"
+"118","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"119","Germination [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 05"
+"120","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 08"
+"121","Germination [Vegetative]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 07"
+"1","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"2","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"3","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"4","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"5","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"6","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"7","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"8","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"9","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 04"
+"10","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 06"
+"11","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 02"
+"12","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"13","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 05"
+"14","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"15","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"16","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 06"
+"17","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"18","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"19","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"20","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"21","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"22","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"23","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"24","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"25","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"26","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 07"
+"27","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 02"
+"28","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 04"
+"29","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"30","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 05"
+"31","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 07"
+"32","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"33","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 07"
+"34","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"35","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"36","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 08"
+"37","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 06"
+"38","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"39","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 07"
+"40","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"41","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"42","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"43","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 05"
+"44","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"45","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"46","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"47","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"48","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 04"
+"49","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 07"
+"50","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"51","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"52","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"53","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"54","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"55","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 01"
+"56","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"57","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"58","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 03"
+"59","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"60","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 04"
+"61","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"62","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"63","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 07"
+"64","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"65","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"66","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"67","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 07"
+"68","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"69","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"70","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"71","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"72","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"73","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 04","B","Hybrid 08"
+"74","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 05"
+"75","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"76","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 04"
+"77","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"78","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"79","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"80","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"81","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 02"
+"82","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"83","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 03"
+"84","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"85","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 07"
+"86","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"87","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"88","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 04"
+"89","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"90","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"91","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"92","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 01"
+"93","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 04"
+"94","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"95","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"96","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"97","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"98","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"99","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"100","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 04"
+"101","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 05"
+"102","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"103","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"104","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 06"
+"105","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 06"
+"106","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 05"
+"107","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"108","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"109","Diseases resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 01"
+"110","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"111","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"112","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 01"
+"113","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 05"
+"114","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"115","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"116","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"117","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 07"
+"118","Diseases resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 07"
+"119","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"120","Diseases resistance [Vegetative]",FALSE,FALSE,,,,
+"121","Diseases resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"1","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 03"
+"2","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 05"
+"3","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"4","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"5","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 02"
+"6","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 01"
+"7","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 01"
+"8","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 08"
+"9","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"10","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"11","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"12","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"13","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"14","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 07"
+"15","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 05"
+"16","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"17","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 04"
+"18","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"19","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 05"
+"20","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"21","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"22","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"23","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"24","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 07"
+"25","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 06"
+"26","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"27","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"28","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"29","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 04"
+"30","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"31","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 08"
+"32","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"33","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"34","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 05"
+"35","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"36","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"37","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 04"
+"38","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"39","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"40","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 01"
+"41","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"42","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"43","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"44","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 07"
+"45","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 06"
+"46","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"47","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 02"
+"48","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"49","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 08"
+"50","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"51","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"52","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 01"
+"53","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"54","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"55","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"56","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"57","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"58","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 02"
+"59","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"60","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"61","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"62","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"63","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"64","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 04"
+"65","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"66","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"67","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 07"
+"68","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"69","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"70","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"71","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"72","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"73","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"74","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 05"
+"75","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"76","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 04"
+"77","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"78","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 03"
+"79","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"80","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 04"
+"81","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 06"
+"82","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"83","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 06"
+"84","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"85","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 05"
+"86","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"87","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"88","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"89","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"90","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"91","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"92","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 01"
+"93","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"94","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"95","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"96","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 03"
+"97","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"98","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"99","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"100","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 05"
+"101","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"102","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"103","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"104","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"105","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 06"
+"106","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"107","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"108","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"109","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 05"
+"110","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 01"
+"111","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 07"
+"112","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 02"
+"113","Drought tolerance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"114","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"115","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"116","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"117","Drought tolerance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 07"
+"118","Drought tolerance [Vegetative]",FALSE,TRUE,"B","Hybrid 07","A","Hybrid 06"
+"119","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"120","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"121","Drought tolerance [Vegetative]",FALSE,FALSE,,,,
+"1","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"2","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"3","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"4","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"5","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","A","Hybrid 08"
+"6","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 02"
+"7","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"8","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 08"
+"9","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 04"
+"10","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"11","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"12","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"13","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 05"
+"14","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"15","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 06"
+"16","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"17","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"18","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 08"
+"19","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 08"
+"20","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 05"
+"21","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 07"
+"22","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"23","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 02"
+"24","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 01"
+"25","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"26","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"27","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"28","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 06"
+"29","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 04"
+"30","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"31","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"32","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 03"
+"33","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"34","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 03"
+"35","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"36","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 08"
+"37","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 05"
+"38","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 04"
+"39","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"40","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"41","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"42","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"43","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 02"
+"44","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 07"
+"45","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 06"
+"46","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 05"
+"47","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"48","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 07"
+"49","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 01"
+"50","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"51","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"52","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 04"
+"53","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"54","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"55","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 01"
+"56","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 08"
+"57","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"58","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 05"
+"59","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 05"
+"60","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 04"
+"61","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 05"
+"62","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 04"
+"63","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 07"
+"64","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 04"
+"65","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 02"
+"66","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 03"
+"67","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 06"
+"68","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 04"
+"69","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 08"
+"70","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"71","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"72","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"73","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 04","B","Hybrid 08"
+"74","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"75","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"76","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"77","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"78","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"79","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"80","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"81","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","A","Hybrid 01"
+"82","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 04","B","Hybrid 07"
+"83","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"84","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 04"
+"85","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 07"
+"86","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"87","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 08"
+"88","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 07"
+"89","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 07"
+"90","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 03"
+"91","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"92","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"93","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"94","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"95","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"96","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 01"
+"97","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"98","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"99","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"100","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 03"
+"101","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 08"
+"102","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"103","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 08"
+"104","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 02"
+"105","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"106","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 02"
+"107","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"108","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"109","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 01"
+"110","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"111","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"112","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 02"
+"113","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 05"
+"114","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 03"
+"115","Fall armyworm resistance [Vegetative]",FALSE,FALSE,,,,
+"116","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 08"
+"117","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 07"
+"118","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"B","Hybrid 07","A","Hybrid 06"
+"119","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 04"
+"120","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 08"
+"121","Fall armyworm resistance [Vegetative]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 01"
+"1","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"2","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 02"
+"3","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 05"
+"4","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"5","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"6","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 01"
+"7","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 02"
+"8","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"9","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"10","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"11","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"12","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"13","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"14","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"15","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"16","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"17","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 01"
+"18","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"19","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 07"
+"20","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"21","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"22","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"23","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"24","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"25","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"26","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"27","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"28","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 04"
+"29","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 04"
+"30","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"31","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"32","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 02"
+"33","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"34","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"35","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"36","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"37","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"38","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"39","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"40","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"41","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 06"
+"42","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"43","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"44","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 07","B","Hybrid 08"
+"45","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 08"
+"46","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 03"
+"47","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 02"
+"48","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"49","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"50","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 08"
+"51","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 08"
+"52","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 05"
+"53","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 01"
+"54","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 05"
+"55","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"56","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"57","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"58","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 05"
+"59","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"60","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"61","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"62","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"63","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 08"
+"64","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"65","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 01"
+"66","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"67","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 01"
+"68","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"69","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"70","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 01"
+"71","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 04"
+"72","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"73","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"74","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 04"
+"75","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"76","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"77","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"78","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"79","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 06"
+"80","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"81","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"82","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 05"
+"83","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"84","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"85","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"86","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"87","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 08"
+"88","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 04"
+"89","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"90","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"91","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 01"
+"92","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"93","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"94","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"95","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"96","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 03"
+"97","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"98","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"99","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"100","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"101","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 05"
+"102","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 08"
+"103","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 02"
+"104","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"105","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"106","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 05"
+"107","Diseases resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 05"
+"108","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 05"
+"109","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"110","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"111","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 07"
+"112","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 01"
+"113","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"114","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"115","Diseases resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 03"
+"116","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"117","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"118","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"119","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 05"
+"120","Diseases resistance [Reproductive]",FALSE,FALSE,,,,
+"121","Diseases resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 07"
+"1","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 05"
+"2","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"3","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"4","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"5","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"6","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 02"
+"7","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"8","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 06"
+"9","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"10","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"11","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"12","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"13","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"14","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"15","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 05"
+"16","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 06"
+"17","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 07","B","Hybrid 01"
+"18","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"19","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 07"
+"20","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"21","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"22","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"23","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 01"
+"24","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"25","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"26","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 07"
+"27","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"28","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"29","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"30","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"31","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"32","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"33","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"34","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"35","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"36","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 03"
+"37","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"38","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"39","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"40","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"41","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"42","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"43","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"44","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"45","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"46","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"47","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 06"
+"48","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 02","A","Hybrid 07"
+"49","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"50","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"51","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"52","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 05"
+"53","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 05"
+"54","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 05"
+"55","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"56","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"57","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"58","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 02"
+"59","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"60","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"61","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"62","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"63","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 07"
+"64","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"65","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 02"
+"66","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"67","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"68","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"69","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"70","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 08"
+"71","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 05"
+"72","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 05"
+"73","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"74","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"75","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"76","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"77","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"78","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"79","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 06"
+"80","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 04"
+"81","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"82","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 05"
+"83","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"84","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"85","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"86","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"87","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 02"
+"88","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"89","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"90","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"91","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 08"
+"92","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"93","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"94","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"95","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"96","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"97","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 03"
+"98","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"99","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 07"
+"100","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"101","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"102","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"103","Drought tolerance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 04"
+"104","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 02"
+"105","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"106","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"107","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"108","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 05"
+"109","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 05"
+"110","Drought tolerance [Reproductive]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 04"
+"111","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"112","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 01"
+"113","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"114","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"115","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"116","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"117","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 07"
+"118","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"119","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"120","Drought tolerance [Reproductive]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 08"
+"121","Drought tolerance [Reproductive]",FALSE,FALSE,,,,
+"1","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 05"
+"2","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 08"
+"3","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"4","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 05"
+"5","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"6","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 01"
+"7","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 01"
+"8","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 06"
+"9","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 03"
+"10","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"11","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"12","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"13","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"14","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"15","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 01"
+"16","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 03"
+"17","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 07"
+"18","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"19","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 07"
+"20","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"21","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"22","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"23","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"24","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 03"
+"25","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 05"
+"26","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"27","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 02","A","Hybrid 08"
+"28","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"29","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 04"
+"30","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"31","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"32","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"33","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"34","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 03"
+"35","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"36","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 02"
+"37","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"38","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"39","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 06"
+"40","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"41","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"42","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"43","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 05"
+"44","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 07"
+"45","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 06"
+"46","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 03"
+"47","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 08"
+"48","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"49","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 07"
+"50","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"51","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 08"
+"52","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"53","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 05"
+"54","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"55","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 01"
+"56","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"57","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"58","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 03"
+"59","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 08"
+"60","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 04"
+"61","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 02"
+"62","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"63","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 07"
+"64","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"65","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 04"
+"66","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"67","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 01"
+"68","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"69","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 03"
+"70","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"71","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"72","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"73","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"74","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 05"
+"75","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 04"
+"76","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"77","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 06"
+"78","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 03"
+"79","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 04"
+"80","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"81","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"82","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"83","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 06"
+"84","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"85","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"86","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 04"
+"87","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 08"
+"88","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 05"
+"89","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"90","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"91","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 01"
+"92","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"93","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"94","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 06"
+"95","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"96","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 03"
+"97","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"98","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"99","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 07","B","Hybrid 08"
+"100","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 04"
+"101","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 05"
+"102","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"103","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 04"
+"104","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 02"
+"105","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"106","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 02"
+"107","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 01"
+"108","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 02"
+"109","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 01"
+"110","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"111","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"112","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"113","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"114","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 03"
+"115","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"116","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 04","B","Hybrid 05"
+"117","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 07"
+"118","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"119","Fall armyworm resistance [Reproductive]",FALSE,FALSE,,,,
+"120","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 08"
+"121","Fall armyworm resistance [Reproductive]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"1","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"2","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 02"
+"3","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"4","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"5","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"6","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 01"
+"7","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"8","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 08"
+"9","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 03"
+"10","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"11","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 02"
+"12","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 07"
+"13","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"14","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"15","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"16","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 03"
+"17","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"18","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 01"
+"19","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 05"
+"20","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"21","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 07"
+"22","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"23","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"24","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 01"
+"25","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"26","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 07"
+"27","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","A","Hybrid 08"
+"28","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"29","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"30","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 05"
+"31","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"32","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"33","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 07"
+"34","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 05"
+"35","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 05"
+"36","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"37","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"38","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 08"
+"39","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 07","B","Hybrid 05"
+"40","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 01"
+"41","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 01"
+"42","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"43","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 04"
+"44","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 07"
+"45","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"46","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"47","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"48","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 04"
+"49","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"50","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"51","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"52","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 01"
+"53","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 05"
+"54","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 06"
+"55","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"56","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"57","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 06"
+"58","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 05"
+"59","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"60","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"61","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"62","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"63","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"64","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 08"
+"65","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 02"
+"66","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"67","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 01"
+"68","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 01"
+"69","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 08"
+"70","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 01"
+"71","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 05"
+"72","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"73","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"74","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 06"
+"75","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 07"
+"76","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 04"
+"77","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"78","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 01"
+"79","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 06"
+"80","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"81","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"82","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"83","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"84","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 04"
+"85","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"86","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"87","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"88","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 05"
+"89","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"90","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 08"
+"91","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 01"
+"92","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"93","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","A","Hybrid 04"
+"94","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"95","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"96","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"97","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"98","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 04"
+"99","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 07"
+"100","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"101","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 08"
+"102","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 03"
+"103","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 02"
+"104","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"105","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"106","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 05"
+"107","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"108","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"109","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 03"
+"110","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 04"
+"111","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 07"
+"112","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 08"
+"113","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"114","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 03"
+"115","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"116","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 04"
+"117","Maturity [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 07"
+"118","Maturity [Agronomic Performance]",FALSE,FALSE,,,,
+"119","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 04"
+"120","Maturity [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 08"
+"121","Maturity [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"1","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"2","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 05"
+"3","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"4","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"5","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"6","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 02"
+"7","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"8","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 08"
+"9","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 03"
+"10","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"11","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 03"
+"12","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 05"
+"13","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"14","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"15","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 05"
+"16","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"17","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"18","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"19","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 07"
+"20","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 08"
+"21","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 07"
+"22","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"23","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"24","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"25","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"26","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 07"
+"27","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","A","Hybrid 08"
+"28","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"29","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"30","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 05"
+"31","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"32","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"33","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"34","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 06"
+"35","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"36","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"37","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"38","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"39","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 07"
+"40","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"41","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"42","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 08"
+"43","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 05"
+"44","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 07"
+"45","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"46","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"47","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"48","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 04"
+"49","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"50","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"51","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"52","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"53","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 07","A","Hybrid 01"
+"54","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","B","Hybrid 06"
+"55","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"56","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 08"
+"57","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"58","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 05"
+"59","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 08"
+"60","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"61","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"62","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"63","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"64","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 01"
+"65","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 01"
+"66","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"67","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"68","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 04"
+"69","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 08"
+"70","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 01"
+"71","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 05"
+"72","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 02"
+"73","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"74","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 05"
+"75","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"76","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 05"
+"77","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"78","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 01"
+"79","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 01"
+"80","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 06"
+"81","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"82","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"83","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"84","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 08"
+"85","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"86","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"87","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"88","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 07"
+"89","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"90","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"91","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"92","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"93","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","B","Hybrid 02"
+"94","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"95","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 04"
+"96","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 08"
+"97","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"98","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"99","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 07"
+"100","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 04"
+"101","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 06"
+"102","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 03"
+"103","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 02"
+"104","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"105","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"106","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 02"
+"107","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"108","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"109","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 01"
+"110","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"111","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"112","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 01"
+"113","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"114","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 03"
+"115","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"116","Yield [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","B","Hybrid 05"
+"117","Yield [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 07"
+"118","Yield [Agronomic Performance]",FALSE,FALSE,,,,
+"119","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"120","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"121","Yield [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"1","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"2","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 02"
+"3","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"4","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"5","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 01"
+"6","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 02"
+"7","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 01"
+"8","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 08"
+"9","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 08"
+"10","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"11","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 03"
+"12","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 07"
+"13","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"14","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"15","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 06"
+"16","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"17","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"18","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"19","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 07"
+"20","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 05"
+"21","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 07"
+"22","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"23","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"24","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 07","C","Hybrid 01"
+"25","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"26","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 04"
+"27","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"28","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"29","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"30","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 05"
+"31","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"32","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","A","Hybrid 07"
+"33","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"34","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 03"
+"35","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"36","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"37","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"38","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"39","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 07"
+"40","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 03"
+"41","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 06"
+"42","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 08"
+"43","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 04"
+"44","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 07"
+"45","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"46","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"47","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"48","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 02"
+"49","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"50","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"51","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"52","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 05"
+"53","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"54","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 07"
+"55","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"56","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"57","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"58","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 05"
+"59","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"60","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"61","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 05"
+"62","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"63","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"64","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"65","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 01"
+"66","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 03"
+"67","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"68","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 04"
+"69","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"70","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 01"
+"71","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 05"
+"72","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 02"
+"73","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"74","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 05"
+"75","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 04"
+"76","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 05"
+"77","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"78","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 01"
+"79","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 04"
+"80","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"81","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"82","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"83","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"84","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 04"
+"85","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"86","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"87","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"88","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","A","Hybrid 05"
+"89","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"90","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"91","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"92","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"93","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"94","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"95","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 06"
+"96","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 08"
+"97","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"98","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"99","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 07"
+"100","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 05"
+"101","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 08"
+"102","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 01"
+"103","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 04"
+"104","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"105","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"106","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 02"
+"107","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"108","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"109","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 05"
+"110","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"111","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"112","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 02"
+"113","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"114","Grain size [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 06"
+"115","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"116","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"117","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 07"
+"118","Grain size [Agronomic Performance]",FALSE,FALSE,,,,
+"119","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 04"
+"120","Grain size [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 08"
+"121","Grain size [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 07"
+"1","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"2","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 05"
+"3","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"4","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"5","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"6","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 03"
+"7","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 02"
+"8","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 06"
+"9","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 04"
+"10","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"11","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","A","Hybrid 02"
+"12","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"13","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"14","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"15","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 06"
+"16","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"17","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"18","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"19","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 07"
+"20","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"21","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 07"
+"22","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 07"
+"23","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"24","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 01"
+"25","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"26","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 07"
+"27","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 08"
+"28","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"29","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"30","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 05"
+"31","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"32","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"33","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","B","Hybrid 01"
+"34","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 06"
+"35","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"36","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"37","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"38","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 08"
+"39","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 05"
+"40","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"41","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"42","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"43","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 04"
+"44","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 06"
+"45","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"46","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"47","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"48","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","B","Hybrid 02"
+"49","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"50","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"51","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"52","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 05"
+"53","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 05"
+"54","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"55","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"56","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 05"
+"57","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"58","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 02"
+"59","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"60","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"61","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"62","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"63","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"64","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"65","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 04"
+"66","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"67","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 01"
+"68","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 04"
+"69","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 03"
+"70","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 08"
+"71","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"72","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 02"
+"73","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"74","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 04"
+"75","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 07"
+"76","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 02"
+"77","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"78","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 03"
+"79","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 04"
+"80","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"81","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"82","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 05"
+"83","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"84","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 04"
+"85","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"86","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 04"
+"87","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"88","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","B","Hybrid 04"
+"89","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"90","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"91","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"92","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"93","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"94","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"95","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 04"
+"96","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 08"
+"97","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"98","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"99","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 05"
+"100","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 04"
+"101","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 05"
+"102","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 03"
+"103","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 04"
+"104","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"105","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"106","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 03"
+"107","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"108","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"109","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 05"
+"110","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 01"
+"111","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 07"
+"112","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 08"
+"113","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"114","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 03"
+"115","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"116","Grain colour [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 08"
+"117","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"118","Grain colour [Agronomic Performance]",FALSE,FALSE,,,,
+"119","Grain colour [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 04"
+"120","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"121","Grain colour [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"1","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"2","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"3","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"4","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"5","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 02"
+"6","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 03"
+"7","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 04"
+"8","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 06"
+"9","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"10","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"11","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 02"
+"12","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 07"
+"13","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"14","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"15","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"16","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"17","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"18","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 07"
+"19","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 07"
+"20","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 05"
+"21","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 04","A","Hybrid 05"
+"22","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"23","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"24","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"25","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"26","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","B","Hybrid 04"
+"27","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 02"
+"28","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"29","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"30","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","A","Hybrid 05"
+"31","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"32","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"33","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"34","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"35","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 08"
+"36","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"37","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"38","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","C","Hybrid 04"
+"39","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 06"
+"40","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 01"
+"41","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 01"
+"42","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"43","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 02"
+"44","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 07"
+"45","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"46","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"47","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"48","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 04"
+"49","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"50","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"51","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"52","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 05"
+"53","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"54","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"55","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"56","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 05"
+"57","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"58","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"59","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"60","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"61","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 02","C","Hybrid 05"
+"62","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"63","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"64","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 04"
+"65","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 01"
+"66","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"67","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 07","A","Hybrid 06"
+"68","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 04"
+"69","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 08"
+"70","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 01"
+"71","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"72","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 02"
+"73","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"74","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 06"
+"75","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 04"
+"76","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 04"
+"77","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"78","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 01"
+"79","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 04"
+"80","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 06"
+"81","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"82","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","B","Hybrid 07"
+"83","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"84","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 04"
+"85","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"86","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 03"
+"87","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"88","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","B","Hybrid 04"
+"89","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"90","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 08"
+"91","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 08"
+"92","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"93","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"94","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"95","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 04"
+"96","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"97","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 08"
+"98","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"99","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","C","Hybrid 07"
+"100","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 05"
+"101","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 06"
+"102","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 08"
+"103","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 04"
+"104","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"105","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"106","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 02"
+"107","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"108","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"109","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","A","Hybrid 05"
+"110","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"111","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","C","Hybrid 08"
+"112","Taste [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 08"
+"113","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"114","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"115","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"116","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 04"
+"117","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","A","Hybrid 07"
+"118","Taste [Agronomic Performance]",FALSE,FALSE,,,,
+"119","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 05"
+"120","Taste [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 01"
+"121","Taste [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 01","A","Hybrid 07"
+"1","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"2","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"3","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"4","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"5","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 02"
+"6","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 01"
+"7","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"8","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 03"
+"9","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 04"
+"10","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 03"
+"11","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 03"
+"12","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 07"
+"13","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"14","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"15","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"16","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 03"
+"17","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"18","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"19","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 05"
+"20","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 05"
+"21","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 07"
+"22","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"23","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"24","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 07"
+"25","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"26","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 07"
+"27","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 01"
+"28","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"29","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"30","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 05"
+"31","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"32","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","A","Hybrid 07"
+"33","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 01"
+"34","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"35","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"36","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"37","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"38","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"39","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 06"
+"40","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 07"
+"41","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 01"
+"42","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","C","Hybrid 07"
+"43","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 02"
+"44","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"45","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"46","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"47","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"48","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 07","C","Hybrid 04"
+"49","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"50","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"51","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"52","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 04"
+"53","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 01"
+"54","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 07"
+"55","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"56","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"57","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"58","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 02","A","Hybrid 03"
+"59","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 05","A","Hybrid 08"
+"60","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"61","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 02"
+"62","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"63","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"64","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"65","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 04","C","Hybrid 01"
+"66","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","C","Hybrid 03"
+"67","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 07"
+"68","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"69","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 06"
+"70","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 03"
+"71","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"72","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 02"
+"73","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"74","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"75","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 07","A","Hybrid 04"
+"76","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 04"
+"77","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"78","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"79","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 01","B","Hybrid 04"
+"80","Marketability [Agronomic Performance]",FALSE,TRUE,"B","Hybrid 08","A","Hybrid 04"
+"81","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"82","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 05"
+"83","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"84","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 04"
+"85","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"86","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"87","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"88","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","C","Hybrid 07"
+"89","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"90","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","A","Hybrid 03"
+"91","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"92","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"93","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 04","C","Hybrid 01"
+"94","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"95","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","C","Hybrid 05"
+"96","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","C","Hybrid 08"
+"97","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 03","B","Hybrid 08"
+"98","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 05","B","Hybrid 01"
+"99","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 05","B","Hybrid 08"
+"100","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 05"
+"101","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 06"
+"102","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"103","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 02"
+"104","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"105","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"106","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","C","Hybrid 03"
+"107","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"108","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"109","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 03"
+"110","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"111","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 07"
+"112","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 02","B","Hybrid 08"
+"113","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"114","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 06","B","Hybrid 03"
+"115","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"116","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","B","Hybrid 05"
+"117","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 01","B","Hybrid 06"
+"118","Marketability [Agronomic Performance]",FALSE,FALSE,,,,
+"119","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 03","B","Hybrid 04"
+"120","Marketability [Agronomic Performance]",FALSE,TRUE,"C","Hybrid 08","A","Hybrid 06"
+"121","Marketability [Agronomic Performance]",FALSE,TRUE,"A","Hybrid 07","B","Hybrid 01"
+"1","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"2","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 05","B","Hybrid 08"
+"3","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"4","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"5","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 02","C","Hybrid 01"
+"6","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 03","B","Hybrid 01"
+"7","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 04","A","Hybrid 02"
+"8","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 03","A","Hybrid 08"
+"9","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 08","C","Hybrid 03"
+"10","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 03","A","Hybrid 06"
+"11","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 03","B","Hybrid 06"
+"12","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 07","B","Hybrid 05"
+"13","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"14","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"15","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 06","A","Hybrid 05"
+"16","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 06","C","Hybrid 04"
+"17","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"18","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"19","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 05","A","Hybrid 07"
+"20","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 05","B","Hybrid 04"
+"21","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 04","A","Hybrid 05"
+"22","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 07","A","Hybrid 08"
+"23","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"24","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 03","C","Hybrid 01"
+"25","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"26","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 02","A","Hybrid 07"
+"27","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 08","B","Hybrid 02"
+"28","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"29","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"30","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"31","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"32","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 02","A","Hybrid 07"
+"33","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 01","C","Hybrid 07"
+"34","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"35","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 08","B","Hybrid 07"
+"36","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"37","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"38","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 05","C","Hybrid 04"
+"39","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 07","C","Hybrid 06"
+"40","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"41","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"42","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 06","A","Hybrid 08"
+"43","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"44","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 06","B","Hybrid 08"
+"45","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"46","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"47","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"48","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 02","C","Hybrid 04"
+"49","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"50","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"51","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"52","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 04","C","Hybrid 05"
+"53","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 05","A","Hybrid 01"
+"54","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 05","C","Hybrid 07"
+"55","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"56","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 06","C","Hybrid 05"
+"57","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 07","A","Hybrid 08"
+"58","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 02","B","Hybrid 05"
+"59","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 08","B","Hybrid 05"
+"60","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"61","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 03","B","Hybrid 02"
+"62","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"63","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"64","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 04","B","Hybrid 08"
+"65","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 01","A","Hybrid 02"
+"66","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 03","B","Hybrid 07"
+"67","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 06","B","Hybrid 07"
+"68","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 01","C","Hybrid 04"
+"69","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 06","C","Hybrid 03"
+"70","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 08","B","Hybrid 03"
+"71","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 08","B","Hybrid 04"
+"72","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 05","B","Hybrid 02"
+"73","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"74","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 05","B","Hybrid 04"
+"75","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 06","C","Hybrid 07"
+"76","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 02","C","Hybrid 04"
+"77","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"78","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"79","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 04","C","Hybrid 06"
+"80","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 06","A","Hybrid 04"
+"81","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"82","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 05","B","Hybrid 07"
+"83","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"84","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 03","B","Hybrid 04"
+"85","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"86","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 03","A","Hybrid 02"
+"87","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"88","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 07","B","Hybrid 04"
+"89","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"90","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 03","C","Hybrid 05"
+"91","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 04","C","Hybrid 01"
+"92","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"93","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 02","A","Hybrid 04"
+"94","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"95","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 06","B","Hybrid 04"
+"96","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"97","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 08","C","Hybrid 05"
+"98","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 05","B","Hybrid 01"
+"99","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 07","A","Hybrid 05"
+"100","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 05","A","Hybrid 04"
+"101","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"102","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 03","B","Hybrid 01"
+"103","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 04","A","Hybrid 02"
+"104","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"105","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"106","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 03","B","Hybrid 05"
+"107","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"108","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"109","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 03","A","Hybrid 05"
+"110","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 03","A","Hybrid 01"
+"111","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 01","A","Hybrid 07"
+"112","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 02","C","Hybrid 01"
+"113","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"114","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 03","C","Hybrid 04"
+"115","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"116","Overall preference [Agronomic Performance]",TRUE,TRUE,"C","Hybrid 08","B","Hybrid 05"
+"117","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 07","B","Hybrid 06"
+"118","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"119","Overall preference [Agronomic Performance]",TRUE,TRUE,"B","Hybrid 04","A","Hybrid 05"
+"120","Overall preference [Agronomic Performance]",TRUE,FALSE,,,,
+"121","Overall preference [Agronomic Performance]",TRUE,TRUE,"A","Hybrid 07","B","Hybrid 01"

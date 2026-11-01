@@ -1,0 +1,17 @@
+"trait","moment","valid","not_answered","not_observed","tie","same_best_worst","invalid"
+"Germination","Vegetative",101,10,5,4,1,0
+"Diseases resistance","Vegetative",61,10,48,0,2,0
+"Drought tolerance","Vegetative",62,10,49,0,0,0
+"Flood tolerance","Vegetative",5,10,106,0,0,0
+"Fall armyworm resistance","Vegetative",82,10,26,2,1,0
+"Diseases resistance","Reproductive",55,15,51,0,0,0
+"Drought tolerance","Reproductive",46,15,58,1,1,0
+"Flood tolerance","Reproductive",9,15,96,1,0,0
+"Fall armyworm resistance","Reproductive",81,15,24,1,0,0
+"Maturity","Agronomic performance",78,39,1,2,1,0
+"Yield","Agronomic performance",79,39,1,2,0,0
+"Grain size","Agronomic performance",77,39,2,1,2,0
+"Grain colour","Agronomic performance",78,39,2,2,0,0
+"Taste","Agronomic performance",77,39,3,1,1,0
+"Marketability","Agronomic performance",72,39,5,3,2,0
+"Overall preference","Agronomic performance",75,39,3,2,2,0
