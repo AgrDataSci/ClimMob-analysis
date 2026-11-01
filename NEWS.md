@@ -16,7 +16,7 @@ ClimMob-analysis v4.0.0 (2026-10-31)
 * Continuous integration that runs the whole workflow on a simulated project (issue #35), and `dev/release.R` with a release workflow.
 * `ggchicklet` is no longer needed. It was not on CRAN and only drew rounded bars in the Kendall chart, which now uses standard bars.
 
-* The licence changes from CC BY-SA 4.0 to MIT, which suits code and lets others reuse any part of the workflow with attribution. Hugo Dorado-Betancourt joins the authors.
+* The licence changes from CC BY-SA 4.0 to MIT, which suits code and lets others reuse any part of the workflow with attribution. Hugo Dorado-Betancourt joins the authors. The README and `CITATION.cff` use the permanent Zenodo DOI 10.5281/zenodo.3976631.
 
 ### Structure
 
