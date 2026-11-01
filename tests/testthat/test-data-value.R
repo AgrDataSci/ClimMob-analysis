@@ -1,4 +1,19 @@
+# The simulation, the map and the bootstrap need PlackettLuce, gosset
+# and ggplot2. They are skipped in the base R job and required in the
+# full CI job, as in test-pipeline-fixture.R.
+need_analysis_packages = function(pkgs = c("PlackettLuce", "gosset", "ggplot2")) {
+  ok = vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)
+  if (!all(ok)) {
+    if (identical(Sys.getenv("CLIMMOB_FULL_TESTS"), "true")) {
+      stop("Packages missing in CI: ", paste(pkgs[!ok], collapse = ", "))
+    }
+    skip("analysis packages not installed")
+  }
+  load_climmob_packages(pkgs)
+}
+
 test_that("simulated tricot rankings have three items per participant", {
+  need_analysis_packages()
   R = with_seed(1, simulate_tricot_rankings(c(a = 0, b = 1, c = -1, d = 0.5), n = 25))
   m = unclass(R)
   expect_equal(nrow(m), 25)
@@ -7,6 +22,7 @@ test_that("simulated tricot rankings have three items per participant", {
 })
 
 test_that("simulated rankings follow the worth of the items", {
+  need_analysis_packages()
   lw = c(a = 3, b = 0, c = 0, d = -3)
   R = with_seed(2, simulate_tricot_rankings(lw, n = 400))
   est = stats::coef(PlackettLuce::PlackettLuce(R), log = TRUE)
@@ -21,6 +37,7 @@ test_that("the numbers of participants to simulate are sensible", {
 })
 
 test_that("more participants give a more accurate ranking", {
+  need_analysis_packages()
   set_language("en", root_path())
   lw = c(a = 1, b = 0.5, c = 0, d = -0.5, e = -1)
   m = PlackettLuce::PlackettLuce(with_seed(3, simulate_tricot_rankings(lw, n = 60)))
@@ -37,6 +54,7 @@ test_that("more participants give a more accurate ranking", {
 })
 
 test_that("the participation map uses the latest moment with answers", {
+  need_analysis_packages()
   set_language("en", root_path())
   xy = data.frame(longitude = c(10, 11, 12, NA), latitude = c(60, 61, 62, 63))
   r = cbind(Registration = rep(TRUE, 4),
@@ -53,6 +71,7 @@ test_that("the participation map uses the latest moment with answers", {
 })
 
 test_that("the Kendall bootstrap interval contains the estimate", {
+  need_analysis_packages()
   d = make_tricot_data(n = 60)
   rk = function(s) rank_tricot(d, items = paste0("package_item_", LETTERS[1:3]),
                                input = s, validate.rankings = TRUE)
