@@ -172,7 +172,7 @@ make_reliability = function(mod, rank_dat) {
 #' # kendall_boot_interval(r_overall, r_yield, nboot = 200)
 kendall_boot_interval = function(r1, r2, nboot = 200, level = 0.95, seed = 1L) {
 
-  n = length(r1)
+  n = nrow(unclass(r1))
 
   taus = with_seed(seed, vapply(seq_len(nboot), function(b) {
     i = sample.int(n, n, replace = TRUE)
