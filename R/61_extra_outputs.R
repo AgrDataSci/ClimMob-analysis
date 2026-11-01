@@ -66,6 +66,16 @@ write_extra_outputs = function(state, settings) {
   }
 
   save_figure(PL$kendall$kendall_plot, f("kendall-tau.pdf"), 15, 18)
+  save_table(PL$kendall$kendall, f("kendall-tau.csv"))
+
+  if (isTRUE(state$participation_map$available)) {
+    save_figure(state$participation_map$map, f("participation-map.pdf"), 18, 18)
+  }
+
+  if (isTRUE(state$data_value$available)) {
+    save_figure(state$data_value$plot, f("data-value.pdf"), 20, 13)
+    save_table(state$data_value$table, f("data-value.csv"))
+  }
 
   save_figure(PL$worthmap, f("worth-map.pdf"), 25, 25)
 
