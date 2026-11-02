@@ -158,8 +158,38 @@ make_reliability = function(mod, rank_dat) {
 
 }
 
+#' Bootstrap interval of Kendall tau between two traits
+#'
+#' Participants are resampled with replacement, which keeps the
+#' dependence between the traits ranked by the same person.
+#'
+#' @param r1,r2 rankings of the same participants for two traits
+#' @param nboot number of bootstrap resamples
+#' @param level coverage of the interval
+#' @param seed random seed
+#' @return a numeric vector with the lower and upper limits
+#' @examples
+#' # kendall_boot_interval(r_overall, r_yield, nboot = 200)
+kendall_boot_interval = function(r1, r2, nboot = 200, level = 0.95, seed = 1L) {
+
+  n = nrow(unclass(r1))
+
+  taus = with_seed(seed, vapply(seq_len(nboot), function(b) {
+    i = sample.int(n, n, replace = TRUE)
+    tryCatch(kendallTau(r1[i, ], r2[i, ], na.omit = FALSE)$kendallTau[1],
+             error = function(e) NA_real_)
+  }, numeric(1)))
+
+  a = (1 - level) / 2
+  unname(stats::quantile(taus, c(a, 1 - a), na.rm = TRUE))
+
+}
+
 #' Kendall tau between the reference trait and the other traits
-make_kendall = function(cmdata, rank_dat) {
+#'
+#' @param nboot bootstrap resamples of participants for the 95%
+#'  intervals, 0 to skip them
+make_kendall = function(cmdata, rank_dat, nboot = 200) {
 
   trait_list = rank_dat$trait_list
   ref_i = rank_dat$reference_trait_index
@@ -182,7 +212,12 @@ make_kendall = function(cmdata, rank_dat) {
   others = trait_list[-ref_i]
 
   kendall = do.call("rbind", lapply(others, function(x) {
-    kendallTau(r1, rank_of(x$strings), na.omit = FALSE)
+    r2 = rank_of(x$strings)
+    k = kendallTau(r1, r2, na.omit = FALSE)
+    ci = if (nboot > 0) kendall_boot_interval(r1, r2, nboot = nboot) else c(NA_real_, NA_real_)
+    k$lower = ci[1]
+    k$upper = ci[2]
+    k
   }))
 
   kendall$trait = vapply(others, function(x) paste0(x$name, " [", x$assessment, "]"),
@@ -193,8 +228,10 @@ make_kendall = function(cmdata, rank_dat) {
   strongest_link = c(kendall$trait[1], round(kendall$kendallTau[1], 2))
   weakest_link = c(kendall$trait[nrow(kendall)], round(kendall$kendallTau[nrow(kendall)], 2))
 
-  kendall = kendall[, c("trait", "kendallTau", "Zvalue", "Pr(>|z|)")]
+  kendall = kendall[, c("trait", "kendallTau", "lower", "upper", "Zvalue", "Pr(>|z|)")]
   kendall$kendallTau = round(kendall$kendallTau, 3)
+  kendall$lower = round(kendall$lower, 3)
+  kendall$upper = round(kendall$upper, 3)
   kendall$Zvalue = round(kendall$Zvalue, 3)
   stars = stars.pval(kendall[, "Pr(>|z|)"])
   kendall[, "Pr(>|z|)"] = paste(format(kendall[, "Pr(>|z|)"], scientific = TRUE, digits = 3), stars)
@@ -202,6 +239,9 @@ make_kendall = function(cmdata, rank_dat) {
 
   kendall_plot = ggplot(data = kendall, aes(y = kendallTau, x = trait, fill = trait)) +
     geom_col(show.legend = FALSE, width = 0.7) +
+    geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.25,
+                  colour = "grey25", na.rm = TRUE) +
+    geom_hline(yintercept = 0, colour = "grey40") +
     coord_flip() +
     scale_fill_manual(values = col_pallet(nrow(kendall))) +
     theme_classic() +
@@ -212,13 +252,14 @@ make_kendall = function(cmdata, rank_dat) {
           axis.text.x = element_text(size = 12, vjust = 1, hjust = 1, color = "grey20")) +
     labs(x = tr("col_trait"), y = tr("col_kendall"))
 
-  names(kendall) = c("Trait", "Kendall tau", "Z value", "Pr(>|z|)")
+  names(kendall) = c("Trait", "Kendall tau", "Lower 95%", "Upper 95%", "Z value", "Pr(>|z|)")
   row.names(kendall) = seq_len(nrow(kendall))
 
   list(kendall = kendall,
        strongest_link = strongest_link,
        weakest_link = weakest_link,
-       kendall_plot = kendall_plot)
+       kendall_plot = kendall_plot,
+       nboot = nboot)
 
 }
 
@@ -242,4 +283,4 @@ assemble_PL_models = function(mod, logworth, worthmap, anova_tbl,
 error_data_logworth = list(logworth_overall = NULL, logworth_plot = list())
 error_data_reliability = list(reliability_plot = list(), reliability_data = data.frame())
 error_data_kendall = list(kendall = data.frame(), strongest_link = "",
-                          weakest_link = "", kendall_plot = NULL)
+                          weakest_link = "", kendall_plot = NULL, nboot = 0)

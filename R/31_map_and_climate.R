@@ -58,14 +58,95 @@ get_testing_sites_map = function(coords, country, path = tempdir()) {
 
   list(geoTRUE = TRUE,
        map = trial_map,
-       coords = coords)
+       coords = coords,
+       adm = adm)
 
 }
 
 #' Placeholder used when the map could not be produced
 error_data_trial_map = list(geoTRUE = FALSE,
                             map = NULL,
-                            coords = data.frame())
+                            coords = data.frame(),
+                            adm = NULL)
+
+#' Map of who answered the latest data collection moment
+#'
+#' Points are filled when the participant answered the last moment
+#' that has any answer, and open when the answer is still missing.
+#' Teams use it to plan visits and reminders.
+#'
+#' @param coords output of get_trial_coordinates(), one row per participant
+#' @param responses the logical matrix in get_monitoring()$responses,
+#'  participants in rows and data collection moments in columns
+#' @param adm optional sf object with administrative boundaries, the one
+#'  downloaded for the trial map. Without it the points are drawn alone
+#' @return a list with the map, the moment shown and the counts
+#' @examples
+#' xy = data.frame(longitude = c(10, 11, 12), latitude = c(60, 61, 62))
+#' r = cbind(Registration = TRUE, Harvest = c(TRUE, FALSE, TRUE))
+#' get_participation_map(xy, r)$n_answered
+get_participation_map = function(coords, responses, adm = NULL) {
+
+  if (is.null(responses) || ncol(responses) < 2) {
+    stop("There is no data collection moment after the registration")
+  }
+
+  if (nrow(coords) != nrow(responses)) {
+    stop("Coordinates (", nrow(coords), " rows) and answers (", nrow(responses),
+         " rows) do not match")
+  }
+
+  n_answers = colSums(responses, na.rm = TRUE)
+  after_reg = which(n_answers > 0 & seq_along(n_answers) > 1)
+
+  if (length(after_reg) == 0) {
+    stop("No participant has answered after the registration yet")
+  }
+
+  last = max(after_reg)
+
+  lab = c(tr("lab_answered"), tr("lab_not_answered"))
+  answered = responses[, last] %in% TRUE
+
+  d = data.frame(longitude = coords$longitude,
+                 latitude = coords$latitude,
+                 status = factor(ifelse(answered, lab[1], lab[2]), levels = lab))
+  d = d[stats::complete.cases(d[c("longitude", "latitude")]), , drop = FALSE]
+
+  if (nrow(d) == 0) {
+    stop("No GPS coordinates to draw the participation map")
+  }
+
+  p = ggplot()
+
+  if (!is.null(adm)) {
+    p = p + geom_sf(data = adm, fill = "#f4f5f0", colour = "grey60", linewidth = 0.2)
+  }
+
+  p = p +
+    geom_point(data = d, aes(x = longitude, y = latitude, fill = status),
+               shape = 21, size = 2.4, colour = "#1E4532", stroke = 0.8) +
+    scale_fill_manual(values = c("#1E4532", "white"), name = "", drop = FALSE) +
+    theme_minimal() +
+    theme(legend.position = "top",
+          text = element_text(size = 13, colour = "grey20")) +
+    labs(x = "", y = "")
+
+  if (is.null(adm)) {
+    p = p + coord_quickmap()
+  }
+
+  list(available = TRUE,
+       map = p,
+       moment = colnames(responses)[last],
+       n_answered = sum(d$status == lab[1]),
+       n_total = nrow(d))
+
+}
+
+#' Placeholder used when the participation map could not be produced
+error_data_participation_map = list(available = FALSE, map = NULL, moment = NA,
+                                    n_answered = NA, n_total = NA)
 
 #' Weekly agroclimatic indices during the season
 #'

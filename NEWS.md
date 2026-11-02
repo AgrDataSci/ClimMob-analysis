@@ -1,3 +1,14 @@
+ClimMob-analysis v4.1.0 (development)
+=========================
+
+### New
+
+* Participation map. The trial plots are drawn by whether the participant answered the latest data collection moment, so teams can plan visits and reminders (`participation-map.pdf`). It uses the boundaries already downloaded for the trial map and draws the points alone when they are not available.
+* Value of more answers. The model of the reference trait is taken as the truth and trials with fewer and more participants are simulated from it. The report shows the expected accuracy of the ranking and the chance of finding the best item with the answers available now and if all registered participants answered (`data-value.pdf`, `data-value.csv`). The number of simulations is set with `data_value_nsim` (50 by default).
+* Kendall tau between the reference trait and the other traits now has 95% intervals from a bootstrap of participants, in the chart, the appendix table and `kendall-tau.csv`. The number of resamples is set with `kendall_nboot` (200 by default, 0 to skip).
+* New report texts in English, Spanish, French, Portuguese, Swahili and Norwegian. The Spanish, French, Portuguese and Swahili texts were machine-drafted and need review by the team.
+* `get_monitoring()` returns the matrix of answers by participant and moment (`responses`), and `get_testing_sites_map()` returns the boundaries it downloaded (`adm`).
+
 ClimMob-analysis v4.0.0 (2026-10-31)
 =========================
 

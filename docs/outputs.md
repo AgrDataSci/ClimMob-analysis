@@ -21,7 +21,10 @@ Figures are vector PDF files. Tables are CSV files in UTF-8.
 |---|---|
 | **`trial-map.pdf`** | Location of the trial plots. |
 | **`<k>-logworth.pdf`** | Log-worth of the items for trait number k, relative to the checks. |
-| **`kendall-tau.pdf`** | Kendall tau between the reference trait and the other traits. |
+| **`kendall-tau.pdf`** | Kendall tau between the reference trait and the other traits, with 95% bootstrap intervals. |
+| `kendall-tau.csv` | The same values as a table, with the bootstrap limits, Z value and p-value. |
+| `participation-map.pdf` | Trial plots by whether the participant answered the latest data collection moment with answers. |
+| `data-value.pdf`, `data-value.csv` | Expected accuracy of the ranking of the reference trait by number of participants who answer (see below). |
 | **`worth-map.pdf`** | Log-worth of every item in every trait. |
 | **`reliability<k>.pdf`**, **`reliability-data.csv`** | Probability of outperforming check number k. The table has a column `check`. |
 | **`netwinning-data.csv`** | Favourability of every item in every trait (see below). |
@@ -48,6 +51,16 @@ Figures are vector PDF files. Tables are CSV files in UTF-8.
 | `n` | Number of rankings that included the item. |
 | `top`, `bottom` | Probability (%) that the item is ranked first or last in the sets where it was tested, from the Plackett-Luce model. |
 | `net_winning` | `top` minus `bottom`, the favourability score. |
+
+### data-value.csv
+
+The Plackett-Luce model of the reference trait is taken as the truth. Tricot trials with `n` participants, each testing three items drawn at random, are simulated from it and the model is refitted (`data_value_nsim` times, 50 by default).
+
+| Column | Meaning |
+|---|---|
+| `n` | Number of participants simulated: half, the same, twice and three times those who answered, and all registered. |
+| `tau`, `tau_lower`, `tau_upper` | Mean Kendall tau between the estimated and the true order of the items, and its 10th and 90th percentiles. |
+| `p_winner` | Share of simulations that find the same best item as the truth. |
 
 ### variety-release-summary.csv
 

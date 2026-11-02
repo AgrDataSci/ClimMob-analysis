@@ -223,6 +223,7 @@ get_monitoring = function(cmdata, pars, group = NULL) {
   quality = answer_quality_table(cmdata, pars)
 
   list(moments = moments,
+       responses = responses,
        registered = sum(responses[, 1], na.rm = TRUE),
        packages = nrow(cmdata),
        attrition = attrition,
@@ -262,6 +263,6 @@ attrition_plot = function(attrition) {
 }
 
 #' Placeholder used when the monitoring step fails
-error_data_monitoring = list(moments = data.frame(), registered = NA, packages = NA,
+error_data_monitoring = list(moments = data.frame(), responses = NULL, registered = NA, packages = NA,
                              attrition = data.frame(), answer_quality = data.frame(),
                              enumerators = data.frame(), attrition_plot = NULL)

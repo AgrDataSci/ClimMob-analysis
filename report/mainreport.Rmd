@@ -131,6 +131,20 @@ if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) {
 if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) plot(trial_map$map)
 ```
 
+```{r participation_map_text, results='asis'}
+pm = participation_map
+if (isTRUE(pm$available) && is_plot(pm$map)) {
+  heading(tr("h_participation_map"), 2)
+  para(tr("participation_map_text", f = cap$next_fig(), moment = pm$moment,
+          n_yes = pm$n_answered, n_all = pm$n_total,
+          participant = participant, participants = participants))
+}
+```
+
+```{r participation_map, dpi=dpi, out.width='70%', fig.cap=if (isTRUE(participation_map$available) && is_plot(participation_map$map)) cap$fig(tr("fig_participation_map", moment = participation_map$moment)) else NULL}
+if (isTRUE(participation_map$available) && is_plot(participation_map$map)) plot(participation_map$map)
+```
+
 ```{r climate_text, results='asis'}
 if (isTRUE(agroclimate$agroclimate)) {
   heading(tr("h_climate"), 2)
@@ -146,6 +160,25 @@ if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$temperature_plot)) pl
 
 ```{r rainfall_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (isTRUE(agroclimate$agroclimate)) cap$fig(tr("fig_rainfall", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
 if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$rain_plot)) plot(agroclimate$rain_plot)
+```
+
+```{r data_value_text, results='asis'}
+dv = data_value
+if (has_rankings && isTRUE(dv$available) && is_plot(dv$plot)) {
+  heading(tr("h_data_value"), 2)
+  para(tr("data_value_text", reference_trait = reference_trait, noptions = noptions,
+          nsim = dv$nsim, f = cap$next_fig(), n_now = dv$n_now,
+          p_now = round(100 * dv$p_now), option = option, options = options,
+          participant = participant, participants = participants))
+  if (!is.na(dv$p_registered) && dv$n_registered > dv$n_now) {
+    para(tr("data_value_registered", n_reg = dv$n_registered, p_reg = round(100 * dv$p_registered),
+            participants = participants))
+  }
+}
+```
+
+```{r data_value, dpi=dpi, fig.height=5, fig.width=8, fig.cap=if (has_rankings && isTRUE(data_value$available) && is_plot(data_value$plot)) cap$fig(tr("fig_data_value", reference_trait = reference_trait, participants = participants)) else NULL}
+if (has_rankings && isTRUE(data_value$available) && is_plot(data_value$plot)) plot(data_value$plot)
 ```
 
 \pagebreak
@@ -218,6 +251,7 @@ if (has_rankings) {
     para(tr("kendall_text", f = cap$next_fig(), reference_trait = reference_trait,
             strong = PL_models$kendall$strongest_link[1], strong_tau = PL_models$kendall$strongest_link[2],
             weak = PL_models$kendall$weakest_link[1], weak_tau = PL_models$kendall$weakest_link[2]))
+    if (isTRUE(PL_models$kendall$nboot > 0)) para(tr("kendall_boot_text", nboot = PL_models$kendall$nboot, participants = participants))
   }
 }
 ```
@@ -417,7 +451,7 @@ heading(tr("h_appendix"))
 
 if (has_rankings && nrow(PL_models$kendall$kendall) > 0) {
   heading(tr("h_kendall_table"), 2)
-  print(kable_tr(PL_models$kendall$kendall, c("col_trait", "col_kendall", "col_z", NA),
+  print(kable_tr(PL_models$kendall$kendall, c("col_trait", "col_kendall", "col_lower", "col_upper", "col_z", NA),
                  cap$tab(tr("tab_kendall", reference_trait = reference_trait))))
 }
 
