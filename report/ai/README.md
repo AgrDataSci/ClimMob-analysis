@@ -28,12 +28,19 @@ Follow these rules when you write material for participants. They come from the 
 8. Add advice, contacts or seed sources only when the user provides them.
 9. Keep one page per participant. Plan for black and white printing and for sharing on phones.
 10. Treat names and locations as personal data. Use them only in material for that participant, and leave them out of anything shared more widely.
+11. Write for the participant's situation. Sort participants by what they sent, using the submission columns of the data: those who answered most data collection moments, those who answered some, and those who answered none. Thank the first group and invite them to the next season. Show the second group which moments are missing and ask for the next one. Show the third group what other participants in their area said about their own three options, and invite them to answer. Never shame anyone for missing answers.
+12. Use one way to answer per sheet. Print the participant's package QR code and, if the user gives one, the address of the website or app where answers are sent. Two codes on one sheet confuse readers.
+13. Make one file per participant, named with the project, package number and name, so each person receives only their own sheet. Keep combined print files and status lists for the team.
+14. Check every comparison on a flyer against a test. A sentence such as "the best option in the north is not the best in the south" needs a significant group test (see `groups-test-by-trait.csv`). When the test is not significant, write that the results look different but there are not yet enough answers to be sure.
+15. When the number of answers is small, say so on the sheet and say that more answers make the advice more reliable. `extra-outputs/data-value.csv` gives the expected accuracy with the answers available now and if every registered participant answered, when the report has it.
+16. Before sending, decode every QR code and compare the answers printed for a sample of participants with the raw data. Use a fictional name in any example sheet shown outside the team.
 
 ## Example requests
 
 - "Write a one-page feedback sheet in Norwegian for each participant in `participants.csv`."
 - "Make a flyer for a village meeting with the overall results, for participants who did not send their answers."
 - "Summarise which items beat the check and on which traits, for the breeding team."
+- "Make a personal sheet for every registered participant, with a different message for those who answered all, some or none of the data collection moments, to bring the missing ones back."
 
 ## References
 
