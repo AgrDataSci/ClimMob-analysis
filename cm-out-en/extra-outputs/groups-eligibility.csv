@@ -1,0 +1,3 @@
+"group","n_valid","share","eligible","reason"
+"Man",63,0.84,TRUE,"ok"
+"Woman",12,0.16,FALSE,"too_few"

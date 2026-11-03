@@ -1,0 +1,7 @@
+"trait","moment","plots","farms","missing_plots","zeros","farms_with_missing","outliers","lower_bound","upper_bound"
+"Plant population","Vegetative",363,121,30,0,10,1,31.5,67.5
+"Disease severity","Vegetative",363,121,35,5,15,3,-6.5,53.5
+"Plant population","Reproductive",363,121,45,0,15,3,33,65
+"Disease severity","Reproductive",363,121,50,5,20,1,-6.5,53.5
+"Number of cobs","Agronomic performance",363,121,117,0,39,2,16,64
+"Yield (quantitative)","Agronomic performance",363,121,145,28,62,4,0.095,18.062
