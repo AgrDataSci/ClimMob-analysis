@@ -6,6 +6,14 @@
 # agroclimatic analysis, and the other way around.
 # ................................................................
 
+#' Projection of every map in the report
+#'
+#' Equal Earth (EPSG:8857), the equal-area world projection endorsed by the
+#' UN General Assembly in September 2026 and the standard of the AgrDataSci
+#' AI-ready suite. Areas keep their true relative size. Coordinates stay in
+#' WGS84 (EPSG:4326) for every calculation; only the drawing is projected.
+MAP_CRS = "EPSG:8857"
+
 #' Get the trial coordinates from the ClimMob data
 #'
 #' @param x the CM_list sent by ClimMob, or a data.frame with
@@ -51,6 +59,7 @@ get_testing_sites_map = function(coords, country, path = tempdir()) {
   trial_map = ggplot() +
     geom_sf(data = adm, fill = "#ffffe5", color = "black", alpha = 1) +
     geom_sf(data = xy, color = "blue", size = 1.5, shape = 21, fill = "red", stroke = 1) +
+    coord_sf(crs = sf::st_crs(MAP_CRS)) +
     theme_minimal() +
     annotation_north_arrow(location = "tl", which_north = "true",
                            style = north_arrow_fancy_orienteering) +
@@ -130,11 +139,9 @@ get_participation_map = function(coords, responses, adm = NULL) {
     theme_minimal() +
     theme(legend.position = "top",
           text = element_text(size = 13, colour = "grey20")) +
-    labs(x = "", y = "")
-
-  if (is.null(adm)) {
-    p = p + coord_quickmap()
-  }
+    labs(x = "", y = "") +
+    # points are given in longitude and latitude, the map is drawn in Equal Earth
+    coord_sf(crs = sf::st_crs(MAP_CRS), default_crs = sf::st_crs(4326))
 
   list(available = TRUE,
        map = p,

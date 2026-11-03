@@ -66,6 +66,8 @@ test_that("the participation map uses the latest moment with answers", {
   expect_equal(pm$n_total, 3)
   expect_equal(pm$n_answered, 2)
   expect_true(is_plot(pm$map))
+  # maps are drawn in the Equal Earth projection (EPSG:8857)
+  expect_equal(sf::st_crs(pm$map$coordinates$crs)$epsg, 8857L)
   expect_error(get_participation_map(xy[1:2, ], r))
   expect_error(get_participation_map(xy, r[, "Registration", drop = FALSE]))
 })
