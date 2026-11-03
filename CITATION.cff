@@ -9,17 +9,16 @@ authors:
     given-names: Kauê
     orcid: https://orcid.org/0000-0002-7571-7845
     affiliation: Bioversity International
-  - family-names: Müller
-    given-names: Anna
-    orcid: https://orcid.org/0000-0003-3120-8560
-    affiliation: Bioversity International
   - family-names: Madriz
     given-names: Brandon
     affiliation: Mr Bot Software Solutions
   - family-names: Dorado-Betancourt
     given-names: Hugo
     affiliation: Wageningen University & Research
-    orcid: https://orcid.org/0000-0002-0103-7505
+    orcid: https://orcid.org/0000-0002-0103-7505- family-names: Müller
+    given-names: Anna
+    orcid: https://orcid.org/0000-0003-3120-8560
+    affiliation: Bioversity International
   - family-names: van Etten
     given-names: Jacob
     orcid: https://orcid.org/0000-0001-7554-2558
@@ -27,7 +26,7 @@ authors:
 repository-code: https://github.com/AgrDataSci/climmob-analysis
 license: MIT
 keywords:
-  - agriculture
+  - product testing
   - digital innovation
   - FAIR data
   - partnerships for the goals
