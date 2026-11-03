@@ -3,6 +3,7 @@ ClimMob-analysis v4.1.0 (development)
 
 ### New
 
+* Maps are drawn in the Equal Earth projection (EPSG:8857), the equal-area world map endorsed by the UN General Assembly in September 2026 and the standard across the AgrDataSci AI-ready suite. Areas keep their true relative size. The projection is set once in `MAP_CRS` (`R/31_map_and_climate.R`); coordinates stay in WGS84 for every calculation.
 * Participation map. The trial plots are drawn by whether the participant answered the latest data collection moment, so teams can plan visits and reminders (`participation-map.pdf`). It uses the boundaries already downloaded for the trial map and draws the points alone when they are not available.
 * Value of more answers. The model of the reference trait is taken as the truth and trials with fewer and more participants are simulated from it. The report shows the expected accuracy of the ranking and the chance of finding the best item with the answers available now and if all registered participants answered (`data-value.pdf`, `data-value.csv`). The number of simulations is set with `data_value_nsim` (50 by default).
 * Kendall tau between the reference trait and the other traits now has 95% intervals from a bootstrap of participants, in the chart, the appendix table and `kendall-tau.csv`. The number of resamples is set with `kendall_nboot` (200 by default, 0 to skip).
