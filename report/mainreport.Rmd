@@ -463,7 +463,7 @@ if (isTRUE(sk$available)) {
   if (nrow(sk$topics) > 0) {
     heading(tr("h_sikia_topics"), 2)
     para(tr("sikia_topics_text", k = cap$next_tab(), n_topics = nrow(sk$topics),
-            n_categories = length(unique(sk$topics$category))))
+            n_categories = length(unique(sk$topics$category)), participants = participants))
     tp = sk$topics[, c("category", "topic", "mentions", "phrases")]
     print(kable_tr(tp, c("col_category", "col_topic", "col_mentions", "col_phrases"), cap$tab(tr("tab_sikia_topics"))))
   }
