@@ -68,6 +68,7 @@ main_report_env = function(state, settings) {
     quanti_dat = state$quanti_dat %||% error_data_quanti_dat,
     metric = state$metric %||% error_data_metric,
     release = state$release %||% error_data_release,
+    sikia = state$sikia %||% error_data_sikia,
     error = if (length(state$log$errors) > 0) state$log$errors else NULL,
     dpi = 400,
     worthmap_h = worthmap_h,

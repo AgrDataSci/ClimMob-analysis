@@ -77,6 +77,16 @@ write_extra_outputs = function(state, settings) {
     save_table(state$data_value$table, f("data-value.csv"))
   }
 
+  if (isTRUE(state$sikia$available)) {
+    sk = state$sikia
+    save_figure(sk$sentiment_plot, f("sikia-sentiment.pdf"), 20, 4 + 0.8 * nrow(sk$labels))
+    save_figure(sk$variety_plot, f("sikia-variety-sentiment.pdf"), 20, 16)
+    save_table(sk$labels, f("sikia-labels.csv"))
+    save_table(sk$variety_labels, f("sikia-variety-labels.csv"))
+    save_table(sk$topics, f("sikia-topics.csv"))
+    save_table(sk$mentions, f("sikia-mentions.csv"))
+  }
+
   save_figure(PL$worthmap, f("worth-map.pdf"), 25, 25)
 
   for (r in seq_along(PL$reliability_plot)) {

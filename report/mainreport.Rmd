@@ -437,6 +437,40 @@ if (has_rankings && is.data.frame(rel$summary) && nrow(rel$summary) > 0) {
 }
 ```
 
+```{r sikia, results='asis', dpi=dpi, fig.width=8, fig.height=6}
+sk = sikia
+if (isTRUE(sk$available)) {
+  heading(tr("h_sikia"))
+  para(tr("sikia_intro", participants = participants, n_responses = sk$totals$responses,
+          n_mentions = sk$totals$mentions, n_labels = sk$totals$labels))
+  para(tr("sikia_labels_text", f = cap$next_fig(), n_shown = nrow(sk$labels)))
+  cat("\n\n")
+  print(sk$sentiment_plot)
+  cat("\n\n", cap$fig(tr("fig_sikia_sentiment", participants = participants)), "\n\n")
+  if (is_plot(sk$variety_plot)) {
+    para(tr("sikia_variety_text", f = cap$next_fig(), options = options))
+    cat("\n\n")
+    print(sk$variety_plot)
+    cat("\n\n", cap$fig(tr("fig_sikia_variety", option = title_case(option))), "\n\n")
+  }
+  if (nrow(sk$quotes) > 0) {
+    heading(tr("h_sikia_quotes"), 2)
+    para(tr("sikia_quotes_text", participants = participants))
+    q = sk$quotes
+    q$sentiment = ifelse(q$sentiment == "positive", tr("lab_positive"), tr("lab_negative"))
+    print(kable_tr(q, c("col_label", "col_sentiment", "col_quote"), cap$tab(tr("tab_sikia_quotes"))))
+  }
+  if (nrow(sk$topics) > 0) {
+    heading(tr("h_sikia_topics"), 2)
+    para(tr("sikia_topics_text", k = cap$next_tab(), n_topics = nrow(sk$topics),
+            n_categories = length(unique(sk$topics$category))))
+    tp = sk$topics[, c("category", "topic", "mentions", "phrases")]
+    print(kable_tr(tp, c("col_category", "col_topic", "col_mentions", "col_phrases"), cap$tab(tr("tab_sikia_topics"))))
+  }
+  para(tr("sikia_note", built_at = sk$built_at))
+}
+```
+
 \pagebreak
 
 ```{r refs_heading, results='asis'}

@@ -187,6 +187,11 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
                               nsim = settings$data_value_nsim %||% 50),
     fallback = error_data_data_value, needs = "models")
 
+  s$sikia = run_step(log, "sikia", "Free-text answers (Sikia)",
+    function() get_sikia(if (is.null(cmdatajson)) list() else cmdatajson,
+                         top_labels = settings$sikia_top_labels %||% 15),
+    fallback = error_data_sikia)
+
   # 5. Groups of participants ----
   s$group_analysis = run_step(log, "groups", "Analysis by group",
     function() get_group_analysis(rd, s$rankings,
