@@ -181,6 +181,66 @@ sikia_quotes = function(mentions, labels, n_labels = 5) {
 
 }
 
+#' What participants said about each item
+#'
+#' For every item, the labels with mostly positive mentions (praise) and
+#' mostly negative mentions (complaints), with their counts.
+#'
+#' @param vl output of sikia_variety_labels()
+#' @param min_mentions ignore item and label pairs with fewer mentions
+#' @param max_labels labels to list on each side
+#' @return a data.frame with item, praise, complaints, mentions
+sikia_item_words = function(vl, min_mentions = 2, max_labels = 3) {
+
+  if (nrow(vl) == 0) return(data.frame())
+
+  one = function(d, sign) {
+    d = d[sign * d$net > 0 & d$mentions >= min_mentions, , drop = FALSE]
+    d = d[order(-d$mentions, -abs(d$net)), , drop = FALSE]
+    d = utils::head(d, max_labels)
+    if (nrow(d) == 0) "" else paste0(d$label, " (", d$mentions, ")", collapse = ", ")
+  }
+
+  items = unique(vl$variety)
+  out = data.frame(item = items,
+                   praise = vapply(items, function(i) one(vl[vl$variety == i, ], 1), character(1)),
+                   complaints = vapply(items, function(i) one(vl[vl$variety == i, ], -1), character(1)),
+                   mentions = vapply(items, function(i) sum(vl$mentions[vl$variety == i]), numeric(1)),
+                   stringsAsFactors = FALSE)
+  rownames(out) = NULL
+  out
+
+}
+
+#' Headline facts for the summary of the report
+#'
+#' @param labels output of sikia_labels()
+#' @param quotes output of sikia_quotes()
+#' @return a list with most_mentioned (two labels), praised and complained
+#'  (label, mentions, share) and one positive quote, or NULL
+sikia_headline = function(labels, quotes) {
+
+  if (nrow(labels) == 0) return(NULL)
+
+  share = function(x, col) round(100 * x[[col]] / x$mentions)
+  pr = labels[labels$net > 0, , drop = FALSE]; pr = pr[order(-pr$positive), , drop = FALSE]
+  co = labels[labels$net < 0, , drop = FALSE]; co = co[order(-co$negative), , drop = FALSE]
+
+  q = NULL
+  if (nrow(quotes) > 0) {
+    lab = if (nrow(pr) > 0) pr$label[1] else labels$label[1]
+    k = which(quotes$label == lab & quotes$sentiment == "positive")
+    if (length(k) == 0) k = which(quotes$sentiment == "positive")
+    if (length(k) > 0) q = quotes$quote[k[1]]
+  }
+
+  list(most_mentioned = utils::head(labels$label, 2),
+       praised = if (nrow(pr) > 0) list(label = pr$label[1], mentions = pr$mentions[1], share = share(pr[1, ], "positive")) else NULL,
+       complained = if (nrow(co) > 0) list(label = co$label[1], mentions = co$mentions[1], share = share(co[1, ], "negative")) else NULL,
+       quote = q)
+
+}
+
 #' Diverging chart of mentions by label and sentiment
 sikia_sentiment_plot = function(labels) {
 
@@ -262,6 +322,8 @@ get_sikia = function(cmdatajson, top_labels = 15, n_quotes = 5) {
        topics = topics,
        mentions = mentions,
        quotes = quotes,
+       item_words = sikia_item_words(vl),
+       headline = sikia_headline(labels, quotes),
        sentiment_plot = sikia_sentiment_plot(labels),
        variety_plot = if (nrow(vl) > 0) sikia_variety_plot(vl) else NULL,
        built_at = substr(as.character(summary$built_at %||% ""), 1, 10))
@@ -272,4 +334,5 @@ get_sikia = function(cmdatajson, top_labels = 15, n_quotes = 5) {
 error_data_sikia = list(available = FALSE, totals = list(), labels = data.frame(),
                         variety_labels = data.frame(), topics = data.frame(),
                         mentions = data.frame(), quotes = data.frame(),
+                        item_words = data.frame(), headline = NULL,
                         sentiment_plot = NULL, variety_plot = NULL, built_at = "")

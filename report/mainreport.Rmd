@@ -59,6 +59,22 @@ if (!has_rankings) {
             traits = join_words(rank_dat$trait_dropped)))
   }
 
+  hl = sikia$headline
+  if (isTRUE(sikia$available) && !is.null(hl)) {
+    txt = tr("sum_sikia", participants = participants, n_responses = sikia$totals$responses,
+             topics = join_words(hl$most_mentioned))
+    if (!is.null(hl$praised)) {
+      txt = paste(txt, tr("sum_sikia_praised", label = hl$praised$label, n = hl$praised$mentions, share = hl$praised$share))
+    }
+    if (!is.null(hl$complained)) {
+      txt = paste(txt, tr("sum_sikia_complained", label = hl$complained$label, n = hl$complained$mentions, share = hl$complained$share))
+    }
+    para(txt)
+    if (!is.null(hl$quote)) {
+      cat("> \u201c", hl$quote, "\u201d\n\n", sep = "")
+    }
+  }
+
   if (isTRUE(group_analysis$requested)) {
     para(tr("sum_groups", section = tr("h_groups")))
   }
@@ -292,6 +308,32 @@ if (has_rankings && is_plot(PL_models$logworth_overall)) {
 
 ```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=if (has_rankings && is_plot(PL_models$logworth_overall)) cap$fig(tr("fig_logworth", options = options, reference_trait = reference_trait)) else NULL}
 if (has_rankings && is_plot(PL_models$logworth_overall)) plot(PL_models$logworth_overall)
+```
+
+```{r sikia_why, results='asis'}
+sk = sikia
+if (has_rankings && isTRUE(sk$available) && nrow(sk$item_words) > 0 &&
+    is.data.frame(release$summary) && nrow(release$summary) > 0) {
+  heading(tr("h_sikia_why"), 2)
+  ord = release$summary$item[order(-release$summary$prob_beats_check, na.last = TRUE)]
+  iw = sk$item_words
+  say = function(it, what) {
+    x = iw[iw$item == it, , drop = FALSE]
+    if (nrow(x) == 0) return(NULL)
+    tr(what, option = option, item = it,
+       praise = if (nzchar(x$praise)) x$praise else tr("sikia_nothing"),
+       complaints = if (nzchar(x$complaints)) x$complaints else tr("sikia_nothing"))
+  }
+  best = say(ord[1], "sikia_why_best")
+  worst = say(ord[length(ord)], "sikia_why_worst")
+  para(tr("sikia_why_text", reference_trait = reference_trait, participants = participants, k = cap$next_tab()))
+  if (!is.null(best)) para(best)
+  if (!is.null(worst)) para(worst)
+  iw = iw[match(ord, iw$item), , drop = FALSE]
+  iw = iw[!is.na(iw$item), c("item", "praise", "complaints", "mentions")]
+  print(kable_tr(iw, c("col_option", "col_praise", "col_complaints", "col_mentions"),
+                 cap$tab(tr("tab_sikia_items", options = options, reference_trait = reference_trait))))
+}
 ```
 
 ```{r groups, results='asis'}
