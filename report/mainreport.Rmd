@@ -71,7 +71,7 @@ if (!has_rankings) {
     }
     para(txt)
     if (!is.null(hl$quote)) {
-      cat("> \u201c", hl$quote, "\u201d\n\n", sep = "")
+      para(paste0("*\u201c", hl$quote, "\u201d*"))
     }
   }
 
@@ -331,8 +331,9 @@ if (has_rankings && isTRUE(sk$available) && nrow(sk$item_words) > 0 &&
   if (!is.null(worst)) para(worst)
   iw = iw[match(ord, iw$item), , drop = FALSE]
   iw = iw[!is.na(iw$item), c("item", "praise", "complaints", "mentions")]
-  print(kable_tr(iw, c("col_option", "col_praise", "col_complaints", "col_mentions"),
-                 cap$tab(tr("tab_sikia_items", options = options, reference_trait = reference_trait))))
+  print(set_col_widths(kable_tr(iw, c("col_option", "col_praise", "col_complaints", "col_mentions"),
+                                cap$tab(tr("tab_sikia_items", options = options, reference_trait = reference_trait))),
+                       c(3, 5, 5, 2)))
 }
 ```
 
@@ -500,14 +501,14 @@ if (isTRUE(sk$available)) {
     para(tr("sikia_quotes_text", participants = participants))
     q = sk$quotes
     q$sentiment = ifelse(q$sentiment == "positive", tr("lab_positive"), tr("lab_negative"))
-    print(kable_tr(q, c("col_label", "col_sentiment", "col_quote"), cap$tab(tr("tab_sikia_quotes"))))
+    print(set_col_widths(kable_tr(q, c("col_label", "col_sentiment", "col_quote"), cap$tab(tr("tab_sikia_quotes"))), c(3, 2, 8)))
   }
   if (nrow(sk$topics) > 0) {
     heading(tr("h_sikia_topics"), 2)
     para(tr("sikia_topics_text", k = cap$next_tab(), n_topics = nrow(sk$topics),
             n_categories = length(unique(sk$topics$category)), participants = participants))
     tp = sk$topics[, c("category", "topic", "mentions", "phrases")]
-    print(kable_tr(tp, c("col_category", "col_topic", "col_mentions", "col_phrases"), cap$tab(tr("tab_sikia_topics"))))
+    print(set_col_widths(kable_tr(tp, c("col_category", "col_topic", "col_mentions", "col_phrases"), cap$tab(tr("tab_sikia_topics"))), c(3, 4, 2, 7)))
   }
   para(tr("sikia_note", built_at = sk$built_at))
 }

@@ -40,3 +40,13 @@ test_that("with_seed is reproducible and does not change the global seed", {
   expect_equal(a, b)
   expect_equal(runif(1), before)
 })
+
+test_that("set_col_widths rewrites the separator of a pipe table", {
+  k = knitr::kable(data.frame(a = c("x", "y"), bb = 1:2, ccc = 3:4), format = "pipe")
+  w = set_col_widths(k, c(3, 1, 2))
+  sep = as.character(w)[2]
+  expect_true(grepl("^\\|:?-+:?\\|:?-+:?\\|:?-+:?\\|$", sep))
+  d = nchar(gsub("[^-]", "", strsplit(gsub("^\\||\\|$", "", sep), "|", fixed = TRUE)[[1]]))
+  expect_equal(d, c(30, 10, 20))
+  expect_equal(as.character(w)[-2], as.character(k)[-2])
+})
