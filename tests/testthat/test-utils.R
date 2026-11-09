@@ -42,6 +42,7 @@ test_that("with_seed is reproducible and does not change the global seed", {
 })
 
 test_that("set_col_widths rewrites the separator of a pipe table", {
+  skip_if_not_installed("knitr")
   k = knitr::kable(data.frame(a = c("x", "y"), bb = 1:2, ccc = 3:4), format = "pipe")
   w = set_col_widths(k, c(3, 1, 2))
   sep = as.character(w)[2]
