@@ -27,6 +27,8 @@ The folder `extra-outputs/ai-ready/` of each report holds plain tables and a `RE
 - give participants who answered all, some or none of the moments a different message, with one QR code and one file per person (rules 11 to 16 of that README);
 - treat names and locations as personal data.
 
+Ready-made templates for this material are in `feedback/` (participant sheet, items page, community flyer, certificate, workshop guide). Read `feedback/AGENTS.md` first. It says what to show the user, what to ask for, and how to build and check the PDFs. Do not design feedback material from scratch when these templates fit.
+
 ## 3. Changing the code
 
 - Read `README.md` for the layout. The analysis is a list of named steps in `R/90_pipeline.R`, each a plain function in `R/`.
