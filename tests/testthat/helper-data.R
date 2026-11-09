@@ -57,3 +57,17 @@ make_pars = function() {
        linear = character(0))
 
 }
+
+# Steps that need the analysis packages (PlackettLuce, gosset, ggplot2)
+# are skipped in the base R job and required in the full CI job.
+need_analysis_packages = function(pkgs = c("PlackettLuce", "gosset", "ggplot2")) {
+  ok = vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)
+  if (!all(ok)) {
+    if (identical(Sys.getenv("CLIMMOB_FULL_TESTS"), "true")) {
+      stop("Packages missing in CI: ", paste(pkgs[!ok], collapse = ", "))
+    }
+    skip("analysis packages not installed")
+  }
+  load_climmob_packages(pkgs)
+}
+
