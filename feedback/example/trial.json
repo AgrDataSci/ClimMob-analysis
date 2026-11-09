@@ -1,0 +1,131 @@
+{
+  "name": "Cassava tricot Abia",
+  "year": "2025",
+  "season_label": "Season 2025",
+  "language": "en",
+  "contact": "Jane Doe, NRCRI Umudike · jane.doe@example.org",
+  "partners": "NRCRI · IITA · Alliance of Bioversity International and CIAT",
+  "website": "https://climmob.net",
+  "qr_url_template": "https://climmob.net/register/{package}",
+  "optional_moments": [],
+  "moment_labels": {
+    "Vegetative": "6 weeks after planting",
+    "Harvest": "12 months after planting"
+  },
+  "signatories": [
+    {
+      "name": "Jane Doe",
+      "role": "Trial coordinator",
+      "org": "NRCRI"
+    },
+    {
+      "name": "John Smith",
+      "role": "Head of the institute",
+      "org": "NRCRI"
+    }
+  ],
+  "cert_place_date": "Umudike, 15 November 2025",
+  "items_table": {
+    "row_label": "About the variety",
+    "columns": [
+      {
+        "item": "Baba-70",
+        "label": "Baba-70"
+      },
+      {
+        "item": "Biggie",
+        "label": "Biggie"
+      },
+      {
+        "item": "Game Changer",
+        "label": "Game Changer"
+      },
+      {
+        "item": "Obasanjo-2",
+        "label": "Obasanjo-2"
+      },
+      {
+        "item": "TME 419",
+        "label": "TME 419",
+        "tag": "check"
+      },
+      {
+        "item": "Poundable",
+        "label": "Poundable"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Released",
+        "values": {
+          "Baba-70": "2020",
+          "Biggie": "2020",
+          "Game Changer": "2020",
+          "Obasanjo-2": "2020",
+          "TME 419": "2005",
+          "Poundable": "2021"
+        }
+      },
+      {
+        "label": "Maturity (months)",
+        "values": {
+          "Baba-70": "12",
+          "Biggie": "12",
+          "Game Changer": "12",
+          "Obasanjo-2": "9 to 12",
+          "TME 419": "12",
+          "Poundable": "12"
+        }
+      },
+      {
+        "label": "Dry matter",
+        "values": {
+          "Baba-70": "high",
+          "Biggie": "high",
+          "Game Changer": "high",
+          "Obasanjo-2": "medium",
+          "TME 419": "high",
+          "Poundable": "medium"
+        }
+      },
+      {
+        "label": "Good for",
+        "values": {
+          "Baba-70": "gari, fufu",
+          "Biggie": "gari, fufu",
+          "Game Changer": "gari, starch",
+          "Obasanjo-2": "gari",
+          "TME 419": "gari, starch",
+          "Poundable": "pounded cassava"
+        }
+      }
+    ]
+  },
+  "items_note": "Information from the breeders. Release does not mean that planting material is available in every area. Ask your extension agent.",
+  "flyer": {
+    "kicker": "Results 2025",
+    "headline": "First harvest. This is what farmers said.",
+    "lead": "18 farms in Abia State tested 6 cassava varieties on their own land in 2025. Each farm grew three of them, A, B and C, and said which was best and worst.",
+    "kpis": [
+      {
+        "value": 18,
+        "label": "farms in the network"
+      },
+      {
+        "value": 11,
+        "label": "farms sent their harvest answers"
+      },
+      {
+        "value": 6,
+        "label": "varieties tested"
+      }
+    ],
+    "callout_title": "Which variety should you plant?",
+    "callout": "Biggie and Baba-70 were liked best by most farmers, on yield and overall. Poundable was liked for taste but gave less. The order is still preliminary, so answers from the 7 farms we have not heard from count double.",
+    "basis_note": "Based on 11 farms with harvest answers. The order is preliminary and gets more reliable with more answers.",
+    "page2_kicker": "Trait by trait 2025",
+    "page2_title": "Every trait counts",
+    "page2_intro": "How the varieties did on each trait through the season, compared with the others.",
+    "audience": "all"
+  }
+}

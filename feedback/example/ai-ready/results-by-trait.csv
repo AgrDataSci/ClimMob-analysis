@@ -1,0 +1,31 @@
+trait,is_reference_trait,item,worth_percent,rank,n_answers
+Germination [Vegetative],False,Baba-70,24.4,1,15
+Germination [Vegetative],False,Biggie,18.1,3,15
+Germination [Vegetative],False,Game Changer,16.4,4,15
+Germination [Vegetative],False,Obasanjo-2,9.0,6,15
+Germination [Vegetative],False,TME 419,12.1,5,15
+Germination [Vegetative],False,Poundable,20.0,2,15
+Vigour [Vegetative],False,Baba-70,24.2,2,15
+Vigour [Vegetative],False,Biggie,32.7,1,15
+Vigour [Vegetative],False,Game Changer,16.2,3,15
+Vigour [Vegetative],False,Obasanjo-2,8.9,5,15
+Vigour [Vegetative],False,TME 419,12.0,4,15
+Vigour [Vegetative],False,Poundable,6.0,6,15
+Yield [Harvest],False,Baba-70,24.2,2,11
+Yield [Harvest],False,Biggie,32.7,1,11
+Yield [Harvest],False,Game Changer,16.2,3,11
+Yield [Harvest],False,Obasanjo-2,8.9,5,11
+Yield [Harvest],False,TME 419,12.0,4,11
+Yield [Harvest],False,Poundable,6.0,6,11
+Taste [Harvest],False,Baba-70,19.9,3,11
+Taste [Harvest],False,Biggie,26.8,1,11
+Taste [Harvest],False,Game Changer,8.1,6,11
+Taste [Harvest],False,Obasanjo-2,13.3,4,11
+Taste [Harvest],False,TME 419,9.9,5,11
+Taste [Harvest],False,Poundable,22.0,2,11
+Overall preference [Harvest],True,Baba-70,24.2,2,11
+Overall preference [Harvest],True,Biggie,32.7,1,11
+Overall preference [Harvest],True,Game Changer,16.2,3,11
+Overall preference [Harvest],True,Obasanjo-2,8.9,5,11
+Overall preference [Harvest],True,TME 419,12.0,4,11
+Overall preference [Harvest],True,Poundable,6.0,6,11

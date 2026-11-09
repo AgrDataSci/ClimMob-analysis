@@ -1,0 +1,95 @@
+{
+ "title": "Tilbakemeldingsmøte",
+ "duration": "75 til 110 minutter",
+ "audience": "deltakere fra ett område, 10 til 25 personer",
+ "priority": "utdeling av gårdsrapporter og deltakerbevis, deretter samtalene i grupper.",
+ "rules": [
+  "Bytt på rollene hvis dere er få. Observatører kan også stille spørsmål i gruppene.",
+  "Det finnes ingen gale svar.",
+  "Oppmuntre de stille til å delta.",
+  "Hold tiden, men gi rom for ærlig refleksjon når gruppen er engasjert."
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "title": "Velkommen",
+   "minutes": "5 til 10",
+   "intro": "Kort velkomst. Hvem vi er, hvorfor vi er her, hvor lenge det varer."
+  },
+  {
+   "n": 2,
+   "title": "Forsøket som er avsluttet",
+   "minutes": "5 til 10",
+   "intro": "Forklar mål, prosess og omfang. Minn om at hver gård testet tre av {n_items} blandinger, trukket tilfeldig."
+  },
+  {
+   "n": 3,
+   "title": "Gjennomgang og utdeling av gårdsrapporten",
+   "minutes": "20 til 25",
+   "intro": "Forklar oppbyggingen og hensikten med gårdsrapporten og del ut én til hver.",
+   "bullets": [
+    "Gå gjennom ett ark del for del. De tre blandingene, egen rangering ved siden av alles rangering, plasseringen i hele rangeringen.",
+    "Be deltakerne finne sin egen beste blanding på arket og lese den høyt.",
+    "Forklar at resultatene er bøndenes egne vurderinger, ikke målt avling."
+   ]
+  },
+  {
+   "n": 4,
+   "title": "Gruppesamtale etter preferanse",
+   "minutes": "5 til 10",
+   "intro": "Del inn i små grupper etter hvilken blanding de rangerte først.",
+   "bullets": [
+    "Hvorfor valgte du denne blandingen? Hva skilte seg ut?",
+    "Hvordan stemte resultatene med forventningene dine?",
+    "Hva blir neste steg for deg?",
+    "Sørg for at alle i gruppen får ordet."
+   ]
+  },
+  {
+   "n": 5,
+   "title": "Gruppene presenterer",
+   "minutes": "15 til 20",
+   "bullets": [
+    "Hver gruppe presenterer sine favoritter og begrunnelsen.",
+    "Inviter til spørsmål og kommentarer fra de andre gruppene."
+   ]
+  },
+  {
+   "n": 6,
+   "title": "Samlede resultater",
+   "minutes": "10 til 15",
+   "intro": "Presenter resultatene for hele forsøket enkelt og visuelt, med flyeren.",
+   "bullets": [
+    "Forklar hvorfor hver gård testet et ulikt sett på tre, og hvorfor det gir gyldige resultater for alle blandingene samlet.",
+    "Understrek at {n_registered} gårder deltok. Dette er et felles løft.",
+    "Si tydelig at de testede blandingene ikke nødvendigvis blir tilgjengelige med det første."
+   ]
+  },
+  {
+   "n": 7,
+   "title": "Utdeling av deltakerbevis",
+   "minutes": "5",
+   "intro": "Del ut beviset til hver deltaker. Nevn dem ved navn."
+  },
+  {
+   "n": 8,
+   "title": "Anbefalingsscore",
+   "minutes": "5 til 10",
+   "intro": "Spør: hvor sannsynlig er det at du vil anbefale denne rapporten og dette møtet til en annen bonde, fra 0 til 10? Samle svarene ved håndsopprekning eller på papir."
+  },
+  {
+   "n": 9,
+   "title": "Avslutning",
+   "minutes": "5",
+   "intro": "Takk for tiden og bidragene. Si hva som skjer videre og når de hører fra prosjektet igjen."
+  }
+ ],
+ "materials": [
+  "Én gårdsrapport per deltaker, pluss noen blanke",
+  "Ett deltakerbevis per deltaker",
+  "Flyere, én per husstand",
+  "Flippover eller utskrift av resultatene til punkt 6",
+  "Deltakerliste",
+  "Penn og papir til anbefalingsscoren"
+ ]
+}
