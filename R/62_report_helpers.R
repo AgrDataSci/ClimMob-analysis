@@ -90,10 +90,13 @@ content_widths = function(x, digits = 3) {
   vapply(seq_along(x), function(j) {
     v = x[[j]]
     v = if (is.numeric(v)) format(round(v, digits), trim = TRUE) else as.character(v)
-    v = v[!is.na(v)]
-    cells = if (length(v) == 0) 0 else stats::quantile(nchar(v), 0.9, names = FALSE)
+    v = v[!is.na(v) & nzchar(trimws(v))]
+    n = nchar(v)
+    # the typical cell, but never far below the longest one, so a column
+    # with a few long entries still gets room for them
+    cells = if (length(n) == 0) 0 else max(stats::quantile(n, 0.9, names = FALSE), 0.6 * max(n))
     header = max(nchar(strsplit(names(x)[j], "[[:space:]]+")[[1]]), 0)
-    min(40, max(4, cells, header))
+    min(40, max(7, cells, header))
   }, numeric(1))
 }
 

@@ -82,5 +82,7 @@ test_that("content_widths weighs long text columns more", {
   w = content_widths(d)
   expect_length(w, 3)
   expect_true(w[3] > w[1] && w[1] > w[2])
-  expect_true(all(w >= 4 & w <= 40))
+  expect_true(all(w >= 7 & w <= 40))
+  e = content_widths(data.frame(a = c("", "", "Drought tolerance"), b = 1:3))
+  expect_true(e[1] >= 10)
 })

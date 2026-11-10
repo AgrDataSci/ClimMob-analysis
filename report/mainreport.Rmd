@@ -24,8 +24,8 @@ reference_check = rank_dat$reference_tech[1]
 lab = list(option = option, options = options, participant = participant,
            participants = participants, reference_trait = reference_trait)
 # maps are sized from the shape of the country so tall countries are not squeezed
-map_w = 6
-map_h = round(map_w * (trial_map$aspect %||% 1), 1)
+map_w = 5.5
+map_h = min(6.5, round(map_w * (trial_map$aspect %||% 1), 1))
 ```
 
 ```{r summary, results='asis'}
