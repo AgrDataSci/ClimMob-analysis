@@ -51,3 +51,36 @@ test_that("set_col_widths rewrites the separator of a pipe table", {
   expect_equal(d, c(30, 10, 20))
   expect_equal(as.character(w)[-2], as.character(k)[-2])
 })
+
+test_that("palettes return the requested number of colours", {
+  expect_length(pal_diverging(7), 7)
+  expect_length(pal_sequential(3), 3)
+  expect_equal(pal_qualitative(2), BREWER$Paired[1:2])
+  expect_length(pal_qualitative(15), 15)
+  expect_true(all(grepl("^#[0-9A-Fa-f]{6}$", c(pal_diverging(5), pal_sequential(5), pal_qualitative(5)))))
+  expect_equal(pal_one("dark"), BREWER$Greens[8])
+  expect_error(pal_one("pink"))
+})
+
+test_that("main_traits keeps the reference trait and yield", {
+  tr = c("Germination [Vegetative]", "Yield [Harvest]", "Taste [Harvest]", "Overall preference [Harvest]")
+  expect_equal(main_traits(tr, "Overall Preference"), c("Yield [Harvest]", "Overall preference [Harvest]"))
+  expect_equal(main_traits(tr, "taste [Harvest]"), c("Yield [Harvest]", "Taste [Harvest]"))
+  expect_equal(main_traits(c("Rendimiento [Cosecha]", "Sabor"), "Sabor"), c("Rendimiento [Cosecha]", "Sabor"))
+})
+
+test_that("short_trait_list drops the moment when names stay unique", {
+  x = c("Yield [Harvest]; Taste [Harvest]", "", "Taste [Harvest]")
+  expect_equal(short_trait_list(x), c("Yield; Taste", "", "Taste"))
+  y = c("Vigour [Vegetative]; Vigour [Harvest]")
+  expect_equal(short_trait_list(y), y)
+})
+
+test_that("content_widths weighs long text columns more", {
+  d = data.frame(item = c("Hybrid 01", "Hybrid 02"), n = c(10, 12),
+                 note = c("a long sentence that needs room", "short"))
+  w = content_widths(d)
+  expect_length(w, 3)
+  expect_true(w[3] > w[1] && w[1] > w[2])
+  expect_true(all(w >= 4 & w <= 40))
+})

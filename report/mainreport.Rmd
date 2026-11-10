@@ -23,6 +23,9 @@ has_rankings = length(rank_dat$trait_list) > 0
 reference_check = rank_dat$reference_tech[1]
 lab = list(option = option, options = options, participant = participant,
            participants = participants, reference_trait = reference_trait)
+# maps are sized from the shape of the country so tall countries are not squeezed
+map_w = 6
+map_h = round(map_w * (trial_map$aspect %||% 1), 1)
 ```
 
 ```{r summary, results='asis'}
@@ -106,13 +109,7 @@ if (is.data.frame(att) && nrow(att) > 0) {
   last = all[nrow(all), ]
   para(tr("mon_attrition_text", n_reg = monitoring$registered, participants = participants,
           n_last = last$n, pct_last = last$percent_of_registered, last = last$moment,
-          k = cap$next_tab(), f = cap$next_fig()))
-  tb = att[, c("group", "moment", "day", "n", "percent_of_registered", "lost_since_previous")]
-  tb$group[tb$group == "all"] = tr("whole_group")
-  if (length(unique(tb$group)) == 1) tb$group = NULL
-  keys = c(if (!is.null(tb$group)) "col_group", "col_moment", "col_day", "col_n",
-           "col_percent_registered", "col_lost")
-  print(kable_tr(tb, keys, cap$tab(tr("tab_attrition", participants = participants))))
+          f = cap$next_fig()))
 }
 ```
 
@@ -133,9 +130,7 @@ if (length(rank_dat$trait_dropped) > 0) {
 }
 en = monitoring$enumerators
 if (is.data.frame(en) && nrow(en) > 0) {
-  para(tr("mon_enumerators_text", k = cap$next_tab()))
-  print(kable_tr(en, c("col_moment", "col_enumerator", "col_submissions"),
-                 cap$tab(tr("tab_enumerators"))))
+  para(tr("mon_enumerators_text"))
 }
 if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) {
   heading(tr("h_map"), 2)
@@ -143,7 +138,7 @@ if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) {
 }
 ```
 
-```{r map, dpi=dpi, out.width='70%', fig.cap=if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) cap$fig(tr("fig_map")) else NULL}
+```{r map, dpi=dpi, fig.width=map_w, fig.height=map_h, fig.cap=if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) cap$fig(tr("fig_map")) else NULL}
 if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) plot(trial_map$map)
 ```
 
@@ -157,7 +152,7 @@ if (isTRUE(pm$available) && is_plot(pm$map)) {
 }
 ```
 
-```{r participation_map, dpi=dpi, out.width='70%', fig.cap=if (isTRUE(participation_map$available) && is_plot(participation_map$map)) cap$fig(tr("fig_participation_map", moment = participation_map$moment)) else NULL}
+```{r participation_map, dpi=dpi, fig.width=map_w, fig.height=map_h + 0.6, fig.cap=if (isTRUE(participation_map$available) && is_plot(participation_map$map)) cap$fig(tr("fig_participation_map", moment = participation_map$moment)) else NULL}
 if (isTRUE(participation_map$available) && is_plot(participation_map$map)) plot(participation_map$map)
 ```
 
@@ -219,12 +214,7 @@ if (has_rankings) {
 if (has_rankings) {
   heading(tr("h_design"))
   para(tr("design_text", n = nparticipants, participants = participants, noptions = noptions,
-          options = options, ntraits = ntraits, k = cap$next_tab()))
-  if (nrow(overview_and_summaries$summary_table_trait) > 0) {
-    print(kable_tr(overview_and_summaries$summary_table_trait,
-                   c("col_trait", "col_moment", "col_question", "col_valid_answers"),
-                   cap$tab(tr("tab_traits"))))
-  }
+          options = options, ntraits = ntraits))
   para(tr("network_text", options = options, noptions = noptions, reference_trait = reference_trait,
           f = cap$next_fig()))
 }
@@ -259,9 +249,10 @@ if (has_rankings) {
   nw = PL_models$netwinning
   if (is.data.frame(nw) && nrow(nw) > 0) {
     para(tr("favourability_text", k = cap$next_tab(), option = option, options = options))
-    nw$trait[duplicated(nw$trait)] = ""
-    print(kable_tr(nw, c("col_trait", "col_option", "col_n", "col_top", "col_bottom", "col_favourability"),
-                   cap$tab(tr("tab_favourability", options = options)), digits = 1))
+    main = nw[nw$trait %in% main_traits(nw$trait, reference_trait), , drop = FALSE]
+    main$trait[duplicated(main$trait)] = ""
+    print(kable_tr(main, c("col_trait", "col_option", "col_n", "col_top", "col_bottom", "col_favourability"),
+                   cap$tab(tr("tab_favourability_main", options = options)), digits = 1))
   }
   if (nrow(PL_models$kendall$kendall) > 0) {
     para(tr("kendall_text", f = cap$next_fig(), reference_trait = reference_trait,
@@ -331,9 +322,9 @@ if (has_rankings && isTRUE(sk$available) && nrow(sk$item_words) > 0 &&
   if (!is.null(worst)) para(worst)
   iw = iw[match(ord, iw$item), , drop = FALSE]
   iw = iw[!is.na(iw$item), c("item", "praise", "complaints", "mentions")]
-  print(set_col_widths(kable_tr(iw, c("col_option", "col_praise", "col_complaints", "col_mentions"),
-                                cap$tab(tr("tab_sikia_items", options = options, reference_trait = reference_trait))),
-                       c(3, 5, 5, 2)))
+  print(kable_tr(iw, c("col_option", "col_praise", "col_complaints", "col_mentions"),
+                 cap$tab(tr("tab_sikia_items", options = options, reference_trait = reference_trait)),
+                 widths = c(3, 5, 5, 2)))
 }
 ```
 
@@ -471,6 +462,7 @@ if (has_rankings && is.data.frame(rel$summary) && nrow(rel$summary) > 0) {
   r$prob_beats_check = ifelse(r$item_is_check, "", paste0(round(100 * r$prob_beats_check), "%"))
   r$p_value = format_p(r$p_value)
   r$item_is_check = NULL
+  for (col in intersect(c("better_than_check", "worse_than_check"), names(r))) r[[col]] = short_trait_list(r[[col]])
   keys = c(item = "col_option", n_tested = "col_n_tested", prob_beats_check = "col_prob_check",
            p_value = "col_p", favourability = "col_favourability",
            better_than_check = "col_better", worse_than_check = "col_worse",
@@ -501,14 +493,14 @@ if (isTRUE(sk$available)) {
     para(tr("sikia_quotes_text", participants = participants))
     q = sk$quotes
     q$sentiment = ifelse(q$sentiment == "positive", tr("lab_positive"), tr("lab_negative"))
-    print(set_col_widths(kable_tr(q, c("col_label", "col_sentiment", "col_quote"), cap$tab(tr("tab_sikia_quotes"))), c(3, 2, 8)))
+    print(kable_tr(q, c("col_label", "col_sentiment", "col_quote"), cap$tab(tr("tab_sikia_quotes")), widths = c(3, 2, 8)))
   }
   if (nrow(sk$topics) > 0) {
     heading(tr("h_sikia_topics"), 2)
     para(tr("sikia_topics_text", k = cap$next_tab(), n_topics = nrow(sk$topics),
             n_categories = length(unique(sk$topics$category)), participants = participants))
     tp = sk$topics[, c("category", "topic", "mentions", "phrases")]
-    print(set_col_widths(kable_tr(tp, c("col_category", "col_topic", "col_mentions", "col_phrases"), cap$tab(tr("tab_sikia_topics"))), c(3, 4, 2, 7)))
+    print(kable_tr(tp, c("col_category", "col_topic", "col_mentions", "col_phrases"), cap$tab(tr("tab_sikia_topics")), widths = c(3, 4, 2, 7)))
   }
   para(tr("sikia_note", built_at = sk$built_at))
 }
@@ -525,6 +517,39 @@ heading(tr("h_references"))
 
 ```{r appendix, results='asis'}
 heading(tr("h_appendix"))
+
+att = monitoring$attrition
+en = monitoring$enumerators
+if ((is.data.frame(att) && nrow(att) > 0) || (is.data.frame(en) && nrow(en) > 0)) {
+  heading(tr("h_app_monitoring"), 2)
+}
+if (is.data.frame(att) && nrow(att) > 0) {
+  tb = att[, c("group", "moment", "day", "n", "percent_of_registered", "lost_since_previous")]
+  tb$group[tb$group == "all"] = tr("whole_group")
+  if (length(unique(tb$group)) == 1) tb$group = NULL
+  keys = c(if (!is.null(tb$group)) "col_group", "col_moment", "col_day", "col_n",
+           "col_percent_registered", "col_lost")
+  print(kable_tr(tb, keys, cap$tab(tr("tab_attrition", participants = participants))))
+}
+if (is.data.frame(en) && nrow(en) > 0) {
+  print(kable_tr(en, c("col_moment", "col_enumerator", "col_submissions"),
+                 cap$tab(tr("tab_enumerators"))))
+}
+
+if (has_rankings && nrow(overview_and_summaries$summary_table_trait) > 0) {
+  heading(tr("h_app_traits"), 2)
+  print(kable_tr(overview_and_summaries$summary_table_trait,
+                 c("col_trait", "col_moment", "col_question", "col_valid_answers"),
+                 cap$tab(tr("tab_traits"))))
+}
+
+nw = PL_models$netwinning
+if (has_rankings && is.data.frame(nw) && nrow(nw) > 0) {
+  heading(tr("h_app_favourability"), 2)
+  nw$trait[duplicated(nw$trait)] = ""
+  print(kable_tr(nw, c("col_trait", "col_option", "col_n", "col_top", "col_bottom", "col_favourability"),
+                 cap$tab(tr("tab_favourability", options = options)), digits = 1))
+}
 
 if (has_rankings && nrow(PL_models$kendall$kendall) > 0) {
   heading(tr("h_kendall_table"), 2)

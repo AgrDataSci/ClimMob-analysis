@@ -36,6 +36,8 @@ Ready-made templates for this material are in `feedback/` (participant sheet, it
 - Keep the contract with ClimMob. The server calls `Rscript ClimMob.R <parameters.json> <data.json>` and expects `climmob_main_report.<Format>`, `participant-report/participant_report_package_<i>.<Format>` and the files in `extra-outputs/` listed in `docs/outputs.md`. Do not rename them.
 - Put user-facing text in `report/i18n/*.csv` and use `tr("key", name = value)` in code and templates. Never hard-code report text in one language. Add the English text, and the other languages when you can, otherwise leave them empty (they fall back to English).
 - Code style. Use `=` for assignment, not `<-`. Use base R where possible. New functions get a short roxygen-style comment with an example.
+- Colours. Charts take their colours from `pal_diverging()`, `pal_sequential()`, `pal_qualitative()` and `pal_one()` in `R/01_utils.R` (ColorBrewer BrBG, Greens and Paired). Do not hard-code colours.
+- Report structure. The order of sections, tables and figures in the main report, and the step that feeds each one, is in `docs/report-structure.md`. Update it when something moves. Detail tables go to the appendix, the main body keeps what a reader needs for a decision.
 - Add or update tests in `tests/testthat/` and run `Rscript tests/testthat.R`. The test `test-pipeline-fixture.R` runs the whole workflow on simulated data in `tests/testdata/simulated-maize`.
 - Never commit real trial data. Tricot data hold names, phone numbers and locations of participants, and some projects belong to partners. Use the simulated fixture or simulate new data.
 - Record changes in `NEWS.md`. Releases are made with `dev/release.R` (see `README.md`).

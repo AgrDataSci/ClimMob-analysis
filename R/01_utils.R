@@ -100,10 +100,53 @@ reduce = function(x, nchars = 8, ...) {
 
 }
 
-#' Colour palette used in some charts
-col_pallet = grDevices::colorRampPalette(c("#ccece6", "#99d8c9", "#66c2a4",
-                                           "#41ae76", "#238b45", "#006d2c",
-                                           "#00441b"))
+# ................................................................
+# Colours
+#
+# All charts use three ColorBrewer palettes, chosen to be readable by
+# people with colour vision deficiency and in black and white:
+#   diverging    BrBG    (worth maps, sentiment, anything around zero)
+#   sequential   Greens  (ordered values, single-series bars, maps)
+#   qualitative  Paired  (groups, series with no order)
+# The hex codes are copied from RColorBrewer so no extra package is
+# needed. Use these helpers, never a hard-coded colour, in new charts.
+# ................................................................
+
+BREWER = list(
+  BrBG = c("#8c510a", "#bf812d", "#dfc27d", "#f6e8c3", "#f5f5f5",
+           "#c7eae5", "#80cdc1", "#35978f", "#01665e"),
+  Greens = c("#f7fcf5", "#e5f5e0", "#c7e9c0", "#a1d99b", "#74c476",
+             "#41ab5d", "#238b45", "#006d2c", "#00441b"),
+  Paired = c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99",
+             "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a",
+             "#ffff99", "#b15928"))
+
+#' Diverging palette (BrBG), n colours from brown through grey to teal
+#' @examples
+#' pal_diverging(5)
+pal_diverging = function(n) grDevices::colorRampPalette(BREWER$BrBG)(n)
+
+#' Sequential palette (Greens), n colours from light to dark green.
+#' The two lightest tones are left out so bars stay visible on white.
+pal_sequential = function(n) grDevices::colorRampPalette(BREWER$Greens[3:9])(n)
+
+#' Qualitative palette (Paired), n colours for groups without an order
+pal_qualitative = function(n) {
+  if (n <= length(BREWER$Paired)) BREWER$Paired[seq_len(n)]
+  else grDevices::colorRampPalette(BREWER$Paired)(n)
+}
+
+#' Named colours for single elements, from the same palettes
+#' @examples
+#' pal_one("dark")
+pal_one = function(what = c("dark", "mid", "light", "negative", "positive", "neutral")) {
+  what = match.arg(what)
+  c(dark = BREWER$Greens[8], mid = BREWER$Greens[6], light = BREWER$Greens[4],
+    negative = BREWER$BrBG[2], positive = BREWER$BrBG[8], neutral = "#bababa")[[what]]
+}
+
+#' Kept for older code, same as pal_sequential()
+col_pallet = pal_sequential
 
 #' Find the column names that match a set of patterns
 #'

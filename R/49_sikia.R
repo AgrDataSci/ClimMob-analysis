@@ -259,8 +259,7 @@ sikia_sentiment_plot = function(labels) {
     geom_vline(xintercept = 0, colour = "grey30") +
     geom_text(data = tot, aes(x = x, y = label, label = n), inherit.aes = FALSE,
               hjust = -0.4, size = 3.3, colour = "grey30") +
-    # ColorBrewer RdBu, safe for colour-blind readers
-    scale_fill_manual(values = c("#B2182B", "#BABABA", "#2166AC"), name = "") +
+    scale_fill_manual(values = c(pal_one("negative"), pal_one("neutral"), pal_one("positive")), name = "") +
     scale_x_continuous(labels = abs, expand = expansion(mult = c(0.08, 0.15))) +
     theme_classic() +
     theme(legend.position = "bottom", text = element_text(size = 13, colour = "grey20"),
@@ -276,8 +275,7 @@ sikia_variety_plot = function(vl) {
   ggplot(vl, aes(x = variety, y = label, fill = net)) +
     geom_tile(colour = "white") +
     geom_text(aes(label = mentions), size = 3.3, colour = "grey15") +
-    # ColorBrewer RdBu, safe for colour-blind readers
-    scale_fill_gradient2(low = "#B2182B", mid = "#F7F7F7", high = "#2166AC", midpoint = 0,
+    scale_fill_gradient2(low = BREWER$BrBG[1], mid = BREWER$BrBG[5], high = BREWER$BrBG[9], midpoint = 0,
                          limits = c(-1, 1), name = tr("lab_net_sentiment")) +
     theme_classic() +
     theme(legend.position = "bottom", text = element_text(size = 13, colour = "grey20"),

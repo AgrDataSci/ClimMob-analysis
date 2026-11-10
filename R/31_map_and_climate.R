@@ -57,8 +57,8 @@ get_testing_sites_map = function(coords, country, path = tempdir()) {
                     crs = 4326)
 
   trial_map = ggplot() +
-    geom_sf(data = adm, fill = "#ffffe5", color = "black", alpha = 1) +
-    geom_sf(data = xy, color = "blue", size = 1.5, shape = 21, fill = "red", stroke = 1) +
+    geom_sf(data = adm, fill = "#f4f5f0", colour = "grey40", linewidth = 0.25) +
+    geom_sf(data = xy, colour = "white", size = 2.2, shape = 21, fill = pal_one("dark"), stroke = 0.5) +
     coord_sf(crs = sf::st_crs(MAP_CRS)) +
     theme_minimal() +
     annotation_north_arrow(location = "tl", which_north = "true",
@@ -67,14 +67,29 @@ get_testing_sites_map = function(coords, country, path = tempdir()) {
 
   list(geoTRUE = TRUE,
        map = trial_map,
+       aspect = map_aspect(adm),
        coords = coords,
        adm = adm)
 
 }
 
+#' Height to width ratio of a map, from the bounding box in the map CRS
+#'
+#' Used to size the figure in the report so a tall country is not
+#' squeezed into a landscape frame.
+#' @param x an sf object
+#' @return a number between 0.5 and 1.6
+map_aspect = function(x) {
+  b = tryCatch(sf::st_bbox(sf::st_transform(x, sf::st_crs(MAP_CRS))), error = function(e) NULL)
+  if (is.null(b)) return(1)
+  a = unname((b["ymax"] - b["ymin"]) / (b["xmax"] - b["xmin"]))
+  if (!is.finite(a)) 1 else min(1.6, max(0.5, a))
+}
+
 #' Placeholder used when the map could not be produced
 error_data_trial_map = list(geoTRUE = FALSE,
                             map = NULL,
+                            aspect = 1,
                             coords = data.frame(),
                             adm = NULL)
 
@@ -134,8 +149,8 @@ get_participation_map = function(coords, responses, adm = NULL) {
 
   p = p +
     geom_point(data = d, aes(x = longitude, y = latitude, fill = status),
-               shape = 21, size = 2.4, colour = "#1E4532", stroke = 0.8) +
-    scale_fill_manual(values = c("#1E4532", "white"), name = "", drop = FALSE) +
+               shape = 21, size = 2.4, colour = pal_one("dark"), stroke = 0.8) +
+    scale_fill_manual(values = c(pal_one("dark"), "white"), name = "", drop = FALSE) +
     theme_minimal() +
     theme(legend.position = "top",
           text = element_text(size = 13, colour = "grey20")) +
@@ -203,8 +218,8 @@ get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
     d = dat[dat$index %in% sel, ]
     d$index = factor(d$index, levels = sel)
     ggplot(d) +
-      geom_line(aes(y = value, x = date, group = id)) +
-      geom_smooth(aes(y = value, x = date)) +
+      geom_line(aes(y = value, x = date, group = id), colour = "grey70", linewidth = 0.3) +
+      geom_smooth(aes(y = value, x = date), colour = pal_one("dark"), fill = pal_one("light")) +
       facet_wrap(~ index, ...) +
       labs(x = xlab, y = ylab) +
       climate_theme

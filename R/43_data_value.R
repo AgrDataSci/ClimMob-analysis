@@ -154,13 +154,13 @@ data_value_plot = function(tab, n_now, n_registered = NA) {
 
   ggplot(d, aes(x = n, y = value)) +
     geom_ribbon(data = tab, aes(x = n, ymin = tau_lower, ymax = tau_upper),
-                inherit.aes = FALSE, fill = "#1E4532", alpha = 0.15) +
+                inherit.aes = FALSE, fill = pal_qualitative(2)[1], alpha = 0.2) +
     geom_vline(data = marks, aes(xintercept = n), linetype = "dotted", colour = "grey40") +
     geom_text(data = marks, aes(x = n, y = 0.02, label = label), angle = 90,
               hjust = 0, vjust = -0.4, size = 3.5, colour = "grey30", inherit.aes = FALSE) +
     geom_line(aes(colour = what), linewidth = 1.2) +
     geom_point(aes(colour = what, shape = what), size = 2.5) +
-    scale_colour_manual(values = c("#1E4532", "#D9952B"), name = "") +
+    scale_colour_manual(values = pal_qualitative(4)[c(2, 4)], name = "") +
     scale_shape_manual(values = c(16, 15), name = "") +
     scale_y_continuous(limits = c(0, 1)) +
     theme_classic() +
