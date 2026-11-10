@@ -4,7 +4,7 @@ Rendered examples of the ClimMob report, to show partners what the workflow prod
 
 | File | What it shows |
 |---|---|
-| `climmob-report-simulated-maize-en.pdf` | The full main report in English, as rendered by the CI job of this repository. |
+| `climmob-report-simulated-maize-en.pdf` | The full main report in English, as rendered by the CI job of this repository. The Word original of the same render is `climmob-report-simulated-maize-en.docx`. |
 | `sikia-section-simulated-maize.pdf` | The pages that use the simulated Sikia Analytics results: the headline in the Summary, "Why they preferred it" after the ranking, and the section "What participants said in their own words". |
 
 The CI job renders the report in Spanish, English and Norwegian on every pull request and publishes the outputs to the branch `ci-report-output`, together with the participant sheets and the files in `extra-outputs/`. That branch is always the most recent example. The PDFs here are updated by hand at releases.
