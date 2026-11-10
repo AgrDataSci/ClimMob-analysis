@@ -202,11 +202,11 @@ get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
     stop("No rows with both coordinates and ", date_used)
   }
 
-  rain = rainfall(coords[ok, ], day.one = dates[ok], span = ndays,
-                  timeseries = TRUE, intervals = 7)
+  rain = climate_by_region(rainfall, coords[ok, ], dates[ok], span = ndays,
+                           timeseries = TRUE, intervals = 7)
 
-  temp = temperature(coords[ok, ], day.one = dates[ok], span = ndays,
-                     timeseries = TRUE, intervals = 7)
+  temp = climate_by_region(temperature, coords[ok, ], dates[ok], span = ndays,
+                           timeseries = TRUE, intervals = 7)
 
   climate_theme = theme_bw() +
     theme(panel.grid = element_blank(),
@@ -233,8 +233,8 @@ get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
 
   # indices for the whole window, one row per participant, used as
   # covariates in the Plackett-Luce trees (issue #105)
-  rain1 = as.data.frame(rainfall(coords[ok, ], day.one = dates[ok], span = ndays))
-  temp1 = as.data.frame(temperature(coords[ok, ], day.one = dates[ok], span = ndays))
+  rain1 = as.data.frame(climate_by_region(rainfall, coords[ok, ], dates[ok], span = ndays))
+  temp1 = as.data.frame(climate_by_region(temperature, coords[ok, ], dates[ok], span = ndays))
 
   covariates = climate_covariates(rain1, temp1, ok)
 
@@ -251,6 +251,56 @@ get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
        ndays = ndays,
        covariates = covariates,
        date_used = date_used)
+
+}
+
+#' Call a climatrends function by regions of at most two degrees
+#'
+#' NASA POWER serves regions of at most 5 x 5 degrees. climatrends groups
+#' the points in regions of about three degrees and pads the box by two
+#' degrees, so a trial that spans more than two degrees can ask for a box
+#' that is too large and the request fails. Splitting the points here, in
+#' groups of at most two degrees across, keeps every box within the limit.
+#'
+#' @param fun rainfall or temperature from climatrends
+#' @param coords data.frame with longitude and latitude, complete cases
+#' @param dates vector of Date, one per row of coords
+#' @param timeseries passed on to fun, TRUE for the weekly series
+#' @param ... other arguments of fun (span, intervals)
+#' @return as fun, rows in the order of coords; the ids of the time
+#'  series are the row numbers of coords
+climate_by_region = function(fun, coords, dates, timeseries = FALSE, ...) {
+
+  coords = as.data.frame(coords)
+
+  regions = if (nrow(coords) > 1) {
+    stats::cutree(stats::hclust(stats::dist(coords)), h = 2)
+  } else {
+    1L
+  }
+
+  parts = lapply(sort(unique(regions)), function(r) {
+    i = which(regions == r)
+    x = fun(coords[i, , drop = FALSE], day.one = dates[i],
+            timeseries = timeseries, ...)
+    if (isTRUE(timeseries)) {
+      x$id = as.character(i[as.integer(x$id)])
+    } else {
+      x = cbind(.row = i, as.data.frame(x))
+    }
+    x
+  })
+
+  out = do.call(rbind, parts)
+
+  if (isFALSE(timeseries)) {
+    out = out[order(out$.row), setdiff(names(out), ".row"), drop = FALSE]
+    rownames(out) = NULL
+  }
+
+  class(out) = union("clima_df", class(out))
+
+  out
 
 }
 

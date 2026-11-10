@@ -86,3 +86,34 @@ test_that("content_widths weighs long text columns more", {
   e = content_widths(data.frame(a = c("", "", "Drought tolerance"), b = 1:3))
   expect_true(e[1] >= 10)
 })
+
+test_that("climate_by_region keeps every request within two degrees", {
+  # fields from western Kenya to the coast, six degrees across
+  xy = data.frame(longitude = c(34.5, 35.2, 36.9, 37.4, 39.6, 40.1),
+                  latitude = c(0.8, -0.3, -0.2, -1.5, -3.9, -3.2))
+  dates = as.Date("2023-03-01") + 0:5
+  boxes = list()
+  fake = function(object, day.one, span, timeseries = FALSE, ...) {
+    boxes[[length(boxes) + 1]] <<- c(diff(range(object$longitude)),
+                                      diff(range(object$latitude)))
+    if (isTRUE(timeseries)) {
+      return(data.frame(id = rep(as.character(seq_len(nrow(object))), each = 2),
+                        index = rep(c("Rtotal", "SDII"), nrow(object)),
+                        value = rep(object$longitude, each = 2)))
+    }
+    data.frame(Rtotal = object$longitude, SDII = as.numeric(day.one))
+  }
+  r = climate_by_region(fake, xy, dates, span = 10)
+  expect_true(all(unlist(boxes) <= 2))
+  expect_true(length(boxes) >= 2)
+  expect_equal(r$Rtotal, xy$longitude)
+  expect_equal(r$SDII, as.numeric(dates))
+  expect_true(inherits(r, "clima_df"))
+  ts = climate_by_region(fake, xy, dates, span = 10, timeseries = TRUE)
+  # ids are the row numbers of the input, the values follow them
+  expect_equal(sort(unique(ts$id)), sort(as.character(1:6)))
+  expect_equal(ts$value, xy$longitude[as.integer(ts$id)])
+  # one field needs no clustering
+  one = climate_by_region(fake, xy[1, ], dates[1], span = 10)
+  expect_equal(one$Rtotal, xy$longitude[1])
+})
