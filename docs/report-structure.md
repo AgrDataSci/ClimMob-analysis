@@ -18,7 +18,7 @@ What `report/mainreport.Rmd` prints, in order, and the pipeline step (`R/90_pipe
 | Differences between groups | Eligibility, balanced ranking, heterogeneity test, agreement, worth map by group | `group_analysis` |
 | Covariates (tree) | Node table, tree figure, regret table | `PL_tree` |
 | Measured traits | One subsection per trait, means against the check, heritability, box plot | `metric` |
-| Release summary | One **table**, trait lists without the moment when unambiguous | `release` |
+| Release summary | Two **tables**, the numbers per option and the traits better or worse than the check (without the moment when unambiguous) | `release` |
 | What participants said in their own words | Sentiment chart, item by topic heatmap, quotes, topic tree | `sikia` |
 | References | | |
 | Appendix | Monitoring tables (attrition, forms by data collector); traits analysed; favourability by trait; Kendall table; outliers in measured traits; errors | as above |

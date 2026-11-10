@@ -456,18 +456,25 @@ if (isTRUE(mt$available)) {
 rel = release
 if (has_rankings && is.data.frame(rel$summary) && nrow(rel$summary) > 0) {
   heading(tr("h_release"))
+  k1 = cap$next_tab()
   para(tr("release_text", option = option, options = options, check = rel$check,
-          reference_trait = reference_trait, k = cap$next_tab()))
+          reference_trait = reference_trait, k = k1, k2 = k1 + 1))
   r = rel$summary
   r$prob_beats_check = ifelse(r$item_is_check, "", paste0(round(100 * r$prob_beats_check), "%"))
   r$p_value = format_p(r$p_value)
   r$item_is_check = NULL
-  for (col in intersect(c("better_than_check", "worse_than_check"), names(r))) r[[col]] = short_trait_list(r[[col]])
+  trait_cols = intersect(c("better_than_check", "worse_than_check"), names(r))
+  num = r[, setdiff(names(r), trait_cols), drop = FALSE]
   keys = c(item = "col_option", n_tested = "col_n_tested", prob_beats_check = "col_prob_check",
            p_value = "col_p", favourability = "col_favourability",
-           better_than_check = "col_better", worse_than_check = "col_worse",
-           yield_mean = "col_yield_mean", yield_percent_of_check = "col_yield_percent")[names(r)]
-  print(kable_tr(r, unname(keys), cap$tab(tr("tab_release", check = rel$check)), digits = 1))
+           yield_mean = "col_yield_mean", yield_percent_of_check = "col_yield_percent")[names(num)]
+  print(kable_tr(num, unname(keys), cap$tab(tr("tab_release", check = rel$check)), digits = 1))
+  if (length(trait_cols) > 0) {
+    tl = r[, c("item", trait_cols), drop = FALSE]
+    for (col in trait_cols) tl[[col]] = short_trait_list(tl[[col]])
+    print(kable_tr(tl, c("col_option", "col_better", "col_worse")[seq_len(ncol(tl))],
+                   cap$tab(tr("tab_release_traits", check = rel$check)), widths = c(2, 5, 5)))
+  }
   para(tr("release_files"))
 }
 ```
