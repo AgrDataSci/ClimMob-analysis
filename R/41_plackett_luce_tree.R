@@ -325,7 +325,9 @@ tree_splits = function(tree_f) {
 #' @param tree_f the pltree
 #' @param Gdata the data used in the tree, rankings in G and covariates
 #' @param nodes integer vector, the terminal node of each row of Gdata
-#' @param node_summary from summarise_tree_nodes()
+#' @param node_summary from summarise_tree_nodes(), the rules of each node
+#'  are in the table printed before the figure, so the legend keeps the
+#'  node numbers only
 #' @param xy data.frame with longitude and latitude, one row per row of
 #'  Gdata, or NULL
 #' @param adm optional sf boundaries
@@ -333,9 +335,7 @@ tree_splits = function(tree_f) {
 tree_nodes_plot = function(tree_f, Gdata, nodes, node_summary, xy = NULL, adm = NULL) {
 
   ids = sort(unique(nodes))
-  rules = node_summary[match(ids, node_summary[[1]]), 5]
-  lab = paste0(tr("col_node"), " ", ids, ", ", gsub("climate_", "", rules))
-  node_f = factor(nodes, levels = ids, labels = lab)
+  node_f = factor(nodes, levels = ids, labels = paste(tr("col_node"), ids))
   cols = pal_qualitative(length(ids))
 
   theme_small = theme_bw() +
@@ -354,11 +354,11 @@ tree_nodes_plot = function(tree_f, Gdata, nodes, node_summary, xy = NULL, adm = 
       geom_point(data = d, aes(x = longitude, y = latitude, fill = node),
                  shape = 21, size = 2.6, colour = "grey20", stroke = 0.4) +
       scale_fill_manual(values = cols, drop = FALSE) +
-      guides(fill = guide_legend(ncol = 1)) +
+      guides(fill = guide_legend(nrow = 1)) +
       labs(x = NULL, y = NULL) +
       coord_sf(crs = sf::st_crs(MAP_CRS), default_crs = sf::st_crs(4326)) +
       theme_minimal() +
-      theme(legend.position = "bottom", legend.title = element_blank(),
+      theme(legend.position = "top", legend.title = element_blank(),
             text = element_text(size = 13, colour = "grey20"))
   }
 

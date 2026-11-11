@@ -142,7 +142,7 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
   s$agroclimate = run_step(log, "agroclimate", "Agroclimatic data",
     function() get_agroclimatic_data(cm, coords = s$coords, ndays = season_length(pars),
                                      moments = collection_moments(pars, cm),
-                                     group = build_groups(cm, settings$groups, min_per_group = 0)),
+                                     group = build_groups(cm, settings$climate_groups, min_per_group = 0)),
     fallback = error_data_agroclimate,
     needs = "coords")
 
