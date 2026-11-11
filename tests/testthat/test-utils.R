@@ -40,3 +40,126 @@ test_that("with_seed is reproducible and does not change the global seed", {
   expect_equal(a, b)
   expect_equal(runif(1), before)
 })
+
+test_that("set_col_widths rewrites the separator of a pipe table", {
+  skip_if_not_installed("knitr")
+  k = knitr::kable(data.frame(a = c("x", "y"), bb = 1:2, ccc = 3:4), format = "pipe")
+  w = set_col_widths(k, c(3, 1, 2))
+  sep = as.character(w)[2]
+  expect_true(grepl("^\\|:?-+:?\\|:?-+:?\\|:?-+:?\\|$", sep))
+  d = nchar(gsub("[^-]", "", strsplit(gsub("^\\||\\|$", "", sep), "|", fixed = TRUE)[[1]]))
+  expect_equal(d, c(30, 10, 20))
+  expect_equal(as.character(w)[-2], as.character(k)[-2])
+})
+
+test_that("palettes return the requested number of colours", {
+  expect_length(pal_diverging(7), 7)
+  expect_length(pal_sequential(3), 3)
+  expect_equal(pal_qualitative(2), BREWER$Paired[1:2])
+  expect_length(pal_qualitative(15), 15)
+  expect_true(all(grepl("^#[0-9A-Fa-f]{6}$", c(pal_diverging(5), pal_sequential(5), pal_qualitative(5)))))
+  expect_equal(pal_one("dark"), BREWER$Greens[8])
+  expect_error(pal_one("pink"))
+})
+
+test_that("main_traits keeps the reference trait and yield", {
+  tr = c("Germination [Vegetative]", "Yield [Harvest]", "Taste [Harvest]", "Overall preference [Harvest]")
+  expect_equal(main_traits(tr, "Overall Preference"), c("Yield [Harvest]", "Overall preference [Harvest]"))
+  expect_equal(main_traits(tr, "taste [Harvest]"), c("Yield [Harvest]", "Taste [Harvest]"))
+  expect_equal(main_traits(c("Rendimiento [Cosecha]", "Sabor"), "Sabor"), c("Rendimiento [Cosecha]", "Sabor"))
+})
+
+test_that("short_trait_list drops the moment when names stay unique", {
+  x = c("Yield [Harvest]; Taste [Harvest]", "", "Taste [Harvest]")
+  expect_equal(short_trait_list(x), c("Yield; Taste", "", "Taste"))
+  y = c("Vigour [Vegetative]; Vigour [Harvest]")
+  expect_equal(short_trait_list(y), y)
+})
+
+test_that("content_widths weighs long text columns more", {
+  d = data.frame(item = c("Hybrid 01", "Hybrid 02"), n = c(10, 12),
+                 note = c("a long sentence that needs room", "short"))
+  w = content_widths(d)
+  expect_length(w, 3)
+  expect_true(w[3] > w[1] && w[1] > w[2])
+  expect_true(all(w >= 7 & w <= 40))
+  e = content_widths(data.frame(a = c("", "", "Drought tolerance"), b = 1:3))
+  expect_true(e[1] >= 10)
+})
+
+test_that("climate_by_region keeps every request within two degrees", {
+  # fields from western Kenya to the coast, six degrees across
+  xy = data.frame(longitude = c(34.5, 35.2, 36.9, 37.4, 39.6, 40.1),
+                  latitude = c(0.8, -0.3, -0.2, -1.5, -3.9, -3.2))
+  dates = as.Date("2023-03-01") + 0:5
+  boxes = list()
+  fake = function(object, day.one, span, timeseries = FALSE, ...) {
+    boxes[[length(boxes) + 1]] <<- c(diff(range(object$longitude)),
+                                      diff(range(object$latitude)))
+    if (isTRUE(timeseries)) {
+      return(data.frame(id = rep(as.character(seq_len(nrow(object))), each = 2),
+                        index = rep(c("Rtotal", "SDII"), nrow(object)),
+                        value = rep(object$longitude, each = 2)))
+    }
+    data.frame(Rtotal = object$longitude, SDII = as.numeric(day.one))
+  }
+  r = climate_by_region(fake, xy, dates, span = 10)
+  expect_true(all(unlist(boxes) <= 2))
+  expect_true(length(boxes) >= 2)
+  expect_equal(r$Rtotal, xy$longitude)
+  expect_equal(r$SDII, as.numeric(dates))
+  expect_true(inherits(r, "clima_df"))
+  ts = climate_by_region(fake, xy, dates, span = 10, timeseries = TRUE)
+  # ids are the row numbers of the input, the values follow them
+  expect_equal(sort(unique(ts$id)), sort(as.character(1:6)))
+  expect_equal(ts$value, xy$longitude[as.integer(ts$id)])
+  # one field needs no clustering
+  one = climate_by_region(fake, xy[1, ], dates[1], span = 10)
+  expect_equal(one$Rtotal, xy$longitude[1])
+})
+
+test_that("season_summary gives the numbers for the climate text", {
+  rain1 = data.frame(Rtotal = c(100, 200, 300, 400, 500), MLDS = c(3, 5, 7, 9, 11))
+  temp1 = data.frame(maxDT = c(28.1, 29.2, 30.3, 31.4, 32.5), minNT = c(12, 13, 14, 15, 16))
+  ss = season_summary(rain1, temp1)
+  expect_equal(unname(ss$rain), 300)
+  expect_true(ss$rain_lo < ss$rain && ss$rain < ss$rain_hi)
+  expect_equal(unname(ss$dry), 7)
+  expect_equal(ss$tmax, 30.3)
+  expect_equal(ss$tmin, 14)
+})
+
+test_that("tree_splits reads the variable and threshold of each split", {
+  need_analysis_packages()
+  skip_if_not_installed("partykit")
+  d = data.frame(y = c(rnorm(40, 0), rnorm(40, 5)), x = rep(c(1, 10), each = 40))
+  tree = partykit::lmtree(y ~ 1 | x, data = d, minsize = 10)
+  sp = tree_splits(tree)
+  expect_equal(nrow(sp), 1)
+  expect_equal(sp$variable, "x")
+  expect_true(sp$threshold >= 1 && sp$threshold < 10)
+})
+
+test_that("the season chart is drawn from the weekly series", {
+  need_analysis_packages(c("PlackettLuce", "gosset", "ggplot2", "patchwork"))
+  set_language("en", root_path())
+  planting = as.Date(c("2023-03-01", "2023-03-08"))
+  weeks = 0:5
+  weekly = function(index, value) {
+    do.call(rbind, lapply(1:2, function(i) {
+      data.frame(id = as.character(i), date = as.character(planting[i] + weeks * 7),
+                 index = index, value = value + i, stringsAsFactors = FALSE)
+    }))
+  }
+  rain = rbind(weekly("Rtotal", 10), weekly("SDII", 2))
+  temp = rbind(weekly("maxDT", 28), weekly("minNT", 12))
+  moments = data.frame(name = c("Registration", "Harvest"), day = c(0, 30))
+  p = season_plot(rain, temp, planting, ndays = 42, moments = moments)
+  expect_true(is_plot(p))
+  pg = season_plot(rain, temp, planting, ndays = 42, moments = moments, group = c("a", "b"))
+  expect_true(is_plot(pg))
+  rain1 = data.frame(Rtotal = c(300, 400), MLDS = c(5, 6))
+  temp1 = data.frame(maxDT = c(29, 31), minNT = c(13, 14))
+  expect_true(is_plot(climate_envelope_plot(rain1, temp1)))
+  expect_true(is_plot(climate_envelope_plot(rain1, temp1, group = c("a", "b"))))
+})

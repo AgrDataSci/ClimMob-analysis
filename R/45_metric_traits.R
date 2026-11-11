@@ -282,13 +282,13 @@ metric_plots = function(res) {
   }
 
   density = ggplot2::ggplot(d, ggplot2::aes(x = value_used)) +
-    ggplot2::geom_density(fill = "steelblue", alpha = 0.4) +
+    ggplot2::geom_density(fill = pal_one("light"), alpha = 0.6) +
     ggplot2::theme_bw() +
     ggplot2::labs(x = res$trait, y = tr("lab_density"))
 
   box = ggplot2::ggplot(d, ggplot2::aes(x = value_used,
                                         y = stats::reorder(genotype, value_used, FUN = stats::median))) +
-    ggplot2::geom_boxplot(fill = "steelblue", alpha = 0.4) +
+    ggplot2::geom_boxplot(fill = pal_one("light"), alpha = 0.6) +
     ggplot2::theme_bw() +
     ggplot2::labs(x = res$trait, y = "")
 

@@ -35,6 +35,10 @@ Follow these rules when you write material for participants. They come from the 
 15. When the number of answers is small, say so on the sheet and say that more answers make the advice more reliable. `extra-outputs/data-value.csv` gives the expected accuracy with the answers available now and if every registered participant answered, when the report has it.
 16. Before sending, decode every QR code and compare the answers printed for a sample of participants with the raw data. Use a fictional name in any example sheet shown outside the team.
 
+## Templates
+
+The `feedback/` folder of the ClimMob-analysis repository holds print-ready templates that take these tables as input: a participant sheet, an optional items page, a community flyer, a certificate and a facilitator guide for a feedback workshop. Start there. Its `README.md` lists what the trial manager has to provide, and `feedback/AGENTS.md` the steps for an AI assistant.
+
 ## Example requests
 
 - "Write a one-page feedback sheet in Norwegian for each participant in `participants.csv`."

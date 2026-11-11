@@ -29,6 +29,9 @@ Figures are vector PDF files. Tables are CSV files in UTF-8.
 | **`reliability<k>.pdf`**, **`reliability-data.csv`** | Probability of outperforming check number k. The table has a column `check`. |
 | **`netwinning-data.csv`** | Favourability of every item in every trait (see below). |
 | **`plackettluce-tree.pdf`** | Plackett-Luce tree, when covariates split the data. |
+| **`plackettluce-tree-nodes-map.pdf`**, **`plackettluce-tree-splits.csv`** | Trial plots by node of the tree with the split distributions, and the split variables and thresholds. |
+| **`season-climate.pdf`** | Cumulative rainfall and day and night temperature along the season, with the data collection moments. |
+| **`climate-envelope.pdf`** | Every trial plot by total rainfall and maximum day temperature over the window. |
 | **`weekly-precipitation-indices.csv/.pdf`**, **`weekly-temperature-indices.csv/.pdf`** | Weekly climate indices during the season. |
 | **`possible-outliers-quantitative-data.csv`** | Values of measured traits outside 1.5 times the interquartile range. |
 | `monitoring-attrition.csv/.pdf` | Participants who answered each data collection moment. |
@@ -39,6 +42,10 @@ Figures are vector PDF files. Tables are CSV files in UTF-8.
 | `groups-*.csv`, `groups-worth-map.pdf` | Results by group when `Split` is used. |
 | `measured-traits-means.csv`, `measured-traits-heritability.csv`, `measured-traits-quality.csv`, `measured-*-boxplot.pdf` | Analysis of measured traits. |
 | `ai-ready/` | Tables and a guide to write material for participants with an AI assistant. |
+| `sikia-sentiment.pdf`, `sikia-labels.csv` | Topics mentioned in the open answers and the sentiment of each mention, as read by Sikia Analytics (see below). Only when ClimMob sends `SIKIA_results` with the data. |
+| `sikia-variety-sentiment.pdf`, `sikia-variety-labels.csv` | Mentions and net sentiment by item and topic, when Sikia linked mentions to items. |
+| `sikia-topics.csv` | Topics and categories found across all open answers, with keywords and representative phrases. |
+| `sikia-mentions.csv` | One row per mention, with the words that produced it, its label, sentiment and confidence. |
 
 ## Column definitions
 
@@ -51,6 +58,17 @@ Figures are vector PDF files. Tables are CSV files in UTF-8.
 | `n` | Number of rankings that included the item. |
 | `top`, `bottom` | Probability (%) that the item is ranked first or last in the sets where it was tested, from the Plackett-Luce model. |
 | `net_winning` | `top` minus `bottom`, the favourability score. |
+
+### sikia-labels.csv
+
+| Column | Content |
+|---|---|
+| `label` | Topic named by Sikia, for example a trait, a pest or a quality. |
+| `mentions` | Number of mentions of the topic across all open answers. One answer can hold several mentions. |
+| `positive`, `neutral`, `negative` | Mentions by sentiment. |
+| `net` | Share of positive minus share of negative mentions, from -1 to 1. |
+
+`sikia-variety-labels.csv` has `variety`, `label`, `mentions` and `net` per item and topic. `sikia-topics.csv` has `category`, `topic`, `mentions`, `keywords` and `phrases`. `sikia-mentions.csv` keeps the columns of the Sikia export that the report uses: `response_id`, `target_entity_label`, `entity_type`, `canonical_label`, `phrase_en`, `evidence_en`, `extraction_type`, `sentiment_polarity`, `sentiment_strength`, `sentiment_confidence`, `emotion_primary` and `evidence_grounded`. The labels and sentiments are Sikia's automatic reading of free text and are reported as received.
 
 ### data-value.csv
 

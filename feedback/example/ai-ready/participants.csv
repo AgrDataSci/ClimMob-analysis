@@ -1,0 +1,19 @@
+participant_id,name,location,package_id,item_A,item_B,item_C,group,answered_reference_trait,first,second,third,points_A,points_B,points_C
+1,Amina Yusuf,Umuahia,1,Game Changer,Biggie,Obasanjo-2,North,True,C,B,A,28,57,15
+2,Chidi Okafor,Umuahia,2,TME 419,Poundable,Obasanjo-2,South,True,A,C,B,45,22,33
+3,Fatima Bello,Bende,3,Biggie,Obasanjo-2,TME 419,North,True,B,A,C,61,17,22
+4,Emeka Nwosu,Ohafia,4,Game Changer,Biggie,Obasanjo-2,South,True,B,A,C,28,57,15
+5,Ngozi Eze,Bende,5,Poundable,Game Changer,Obasanjo-2,North,True,C,B,A,19,52,29
+6,Ibrahim Musa,Isuikwuato,6,Game Changer,Biggie,Obasanjo-2,South,True,B,C,A,28,57,15
+7,Grace Adeyemi,Isuikwuato,7,TME 419,Game Changer,Biggie,North,True,B,C,A,20,27,54
+8,Tunde Bakare,Umuahia,8,Baba-70,Game Changer,Poundable,South,True,B,A,C,52,35,13
+9,Halima Abdullahi,Ikwuano,9,Obasanjo-2,Game Changer,Baba-70,North,True,A,B,C,18,33,49
+10,Kelechi Obi,Ikwuano,10,Game Changer,TME 419,Poundable,South,True,C,B,A,47,35,17
+11,Aisha Lawal,Bende,11,Baba-70,Game Changer,Obasanjo-2,North,True,A,B,C,49,33,18
+12,Segun Ojo,Umuahia,12,Poundable,Game Changer,Baba-70,South,False,,,,13,35,52
+13,Blessing Umeh,Ohafia,13,Game Changer,Baba-70,Obasanjo-2,North,False,,,,33,49,18
+14,Yakubu Danjuma,Bende,14,Obasanjo-2,Biggie,Poundable,South,False,,,,19,69,13
+15,Funmi Alabi,Ikwuano,15,Poundable,Biggie,Obasanjo-2,North,False,,,,13,69,19
+16,Uche Okoro,Ikwuano,16,Game Changer,TME 419,Obasanjo-2,South,False,,,,44,32,24
+17,Zainab Garba,Isuikwuato,17,Baba-70,Game Changer,Obasanjo-2,North,False,,,,49,33,18
+18,Femi Adewale,Isuikwuato,18,TME 419,Obasanjo-2,Biggie,South,False,,,,22,17,61

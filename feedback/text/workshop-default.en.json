@@ -1,0 +1,95 @@
+{
+ "title": "Feedback workshop",
+ "duration": "75 to 110 minutes",
+ "audience": "participants of one village or cluster, 10 to 25 people",
+ "priority": "the handover of the sheets and certificates, then the peer interviews.",
+ "rules": [
+  "Rotate roles if short on staff. Observers can also prompt during peer interviews.",
+  "There are no wrong answers, especially in the read-aloud and pictogram parts.",
+  "Encourage participation from quieter people.",
+  "Keep time, but allow space for honest reflection when the group is engaged."
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "title": "Kick-off",
+   "minutes": "5 to 10",
+   "intro": "Short welcome. Who we are, why we are here, how long it takes."
+  },
+  {
+   "n": 2,
+   "title": "The concluded trial",
+   "minutes": "5 to 10",
+   "intro": "Explain the objective, the process and the scope of the trial. Remind everyone that each farm tested three options out of {n_items}, assigned at random."
+  },
+  {
+   "n": 3,
+   "title": "Feedback sheet explanation and handover",
+   "minutes": "20 to 25",
+   "intro": "Explain the structure and purpose of the farmer feedback sheet and hand one to each participant.",
+   "bullets": [
+    "Go through one sheet section by section. The three options, the own ranking next to the ranking of everyone, the position of the options in the full ranking.",
+    "Ask participants to find their own best option on the sheet and read it aloud.",
+    "Explain that the results are the farmers' own judgements, not measured yield."
+   ]
+  },
+  {
+   "n": 4,
+   "title": "Group discussion by preference",
+   "minutes": "5 to 10",
+   "intro": "Divide participants into small groups by the option they ranked first.",
+   "bullets": [
+    "Why did you choose this option? What stood out in its performance?",
+    "How did the trial results match your expectations?",
+    "What are your next steps with what you learned?",
+    "Make sure each group member has a chance to speak."
+   ]
+  },
+  {
+   "n": 5,
+   "title": "Group presentations",
+   "minutes": "15 to 20",
+   "bullets": [
+    "Each group presents its top preferences and the reasoning behind them.",
+    "Invite questions and comments from the other groups."
+   ]
+  },
+  {
+   "n": 6,
+   "title": "Overall results",
+   "minutes": "10 to 15",
+   "intro": "Present the results of the whole trial in a simple visual format, using the community flyer.",
+   "bullets": [
+    "Explain why every farm tested a different set of three, and why that gives valid results for all options together.",
+    "Emphasise that the trial involved {n_registered} farms. It is a community effort.",
+    "State clearly that the tested options may not be released or available for some time."
+   ]
+  },
+  {
+   "n": 7,
+   "title": "Certificate handover",
+   "minutes": "5",
+   "intro": "Hand the certificate of participation to each farmer. Call them by name."
+  },
+  {
+   "n": 8,
+   "title": "Net promoter score",
+   "minutes": "5 to 10",
+   "intro": "Ask: how likely are you to recommend this feedback sheet and session to another farmer, from 0 to 10? Collect the answers on a show of hands or on paper."
+  },
+  {
+   "n": 9,
+   "title": "Closing",
+   "minutes": "5",
+   "intro": "Thank participants for their time and contributions. Say what happens next and when they hear from the project again."
+  }
+ ],
+ "materials": [
+  "One feedback sheet per participant, plus a few blank copies",
+  "One certificate per participant",
+  "Community flyers, one per household",
+  "Flip chart or printed results for step 6",
+  "Attendance list",
+  "Pens and paper for the net promoter score"
+ ]
+}

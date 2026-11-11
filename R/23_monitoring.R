@@ -252,7 +252,7 @@ attrition_plot = function(attrition) {
     ggplot2::geom_line(linewidth = 1.2, show.legend = show_legend) +
     ggplot2::geom_point(size = 2.5, show.legend = show_legend) +
     ggplot2::scale_y_continuous(limits = c(0, 100)) +
-    ggplot2::scale_color_brewer(palette = "Dark2", name = "") +
+    ggplot2::scale_color_manual(values = pal_qualitative(nlevels(d$group)), name = "") +
     ggplot2::theme_bw() +
     ggplot2::theme(panel.grid = ggplot2::element_blank(),
                    axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),

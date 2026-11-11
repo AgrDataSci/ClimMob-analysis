@@ -145,7 +145,7 @@ make_reliability = function(mod, rank_dat) {
     reliability_plot[[length(reliability_plot) + 1]] =
       ggplot(data = rel, aes(x = improvement, y = trait, fill = "white")) +
       geom_bar(stat = "identity", width = 0.7, position = "dodge", show.legend = FALSE) +
-      scale_fill_manual(values = "#5aae61") +
+      scale_fill_manual(values = pal_one("mid")) +
       facet_wrap(~ item, strip.position = "bottom") +
       geom_vline(xintercept = 0, colour = "grey40", linewidth = 1) +
       theme_classic() +
@@ -243,7 +243,7 @@ make_kendall = function(cmdata, rank_dat, nboot = 200) {
                   colour = "grey25", na.rm = TRUE) +
     geom_hline(yintercept = 0, colour = "grey40") +
     coord_flip() +
-    scale_fill_manual(values = col_pallet(nrow(kendall))) +
+    scale_fill_manual(values = pal_sequential(nrow(kendall))) +
     theme_classic() +
     theme(legend.position = "bottom",
           legend.text = element_text(size = 12, color = "grey20"),

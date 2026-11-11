@@ -13,6 +13,7 @@ This repository holds the R workflow that analyses tricot trials and writes the 
 - The user needs R 4.1 or newer and the packages in `R/00_packages.R` (`Rscript dev/install-packages.R`). They also need their ClimMob API key. Ask them to store it in the environment variable `CLIMMOB_KEY` and never write it in a script or a message.
 - Run `run_climmob_analysis()` first and show `print_run_summary(res$log)`. Explain any failed step in plain words before writing outputs.
 - Every output is described in `docs/outputs.md`. Use it to explain results. Do not invent columns or results.
+- When the data file carries `SIKIA_results`, the step `sikia` reports what participants said in their open answers as read by Sikia Analytics (topics, sentiment, quotes, topic tree). Report these as Sikia's automatic reading, with their counts, never as measured facts, and do not infer sentiment yourself from the quotes.
 - Check the reference trait before trusting a report. `pick_reference_trait()` takes the last trait whose code contains "overall". When the same question is asked at several moments, that can be a moment with no answers yet (a fifth cut, a late harvest), and the report then falls back to the last trait with enough answers, which may be an unrelated trait. Set `traitOrder` to `"referenceTrait"` for the overall question with the most valid answers, as in `run-local/analyse-one-project.R`, and tell the user which one you chose.
 - When combining projects whose item lists differ (for example items tested in only one region), a trait is dropped unless every item has at least two valid answers in it (`minitem`). Items tested by few participants in one project can remove a trait from the combined report that works in each project alone. Compare the traits kept in each project with those kept in the combined run, tell the user what was lost, and offer one report per project next to the combined one.
 - With few answers per group, differences between groups seen in worth plots are often not significant. Report the test in `groups-test-by-trait.csv` before saying that groups differ.
@@ -27,12 +28,16 @@ The folder `extra-outputs/ai-ready/` of each report holds plain tables and a `RE
 - give participants who answered all, some or none of the moments a different message, with one QR code and one file per person (rules 11 to 16 of that README);
 - treat names and locations as personal data.
 
+Ready-made templates for this material are in `feedback/` (participant sheet, items page, community flyer, certificate, workshop guide). Read `feedback/AGENTS.md` first. It says what to show the user, what to ask for, and how to build and check the PDFs. Do not design feedback material from scratch when these templates fit.
+
 ## 3. Changing the code
 
 - Read `README.md` for the layout. The analysis is a list of named steps in `R/90_pipeline.R`, each a plain function in `R/`.
 - Keep the contract with ClimMob. The server calls `Rscript ClimMob.R <parameters.json> <data.json>` and expects `climmob_main_report.<Format>`, `participant-report/participant_report_package_<i>.<Format>` and the files in `extra-outputs/` listed in `docs/outputs.md`. Do not rename them.
 - Put user-facing text in `report/i18n/*.csv` and use `tr("key", name = value)` in code and templates. Never hard-code report text in one language. Add the English text, and the other languages when you can, otherwise leave them empty (they fall back to English).
 - Code style. Use `=` for assignment, not `<-`. Use base R where possible. New functions get a short roxygen-style comment with an example.
+- Colours. Charts take their colours from `pal_diverging()`, `pal_sequential()`, `pal_qualitative()` and `pal_one()` in `R/01_utils.R` (ColorBrewer BrBG, Greens and Paired). Do not hard-code colours.
+- Report structure. The order of sections, tables and figures in the main report, and the step that feeds each one, is in `docs/report-structure.md`. Update it when something moves. Detail tables go to the appendix, the main body keeps what a reader needs for a decision.
 - Add or update tests in `tests/testthat/` and run `Rscript tests/testthat.R`. The test `test-pipeline-fixture.R` runs the whole workflow on simulated data in `tests/testdata/simulated-maize`.
 - Never commit real trial data. Tricot data hold names, phone numbers and locations of participants, and some projects belong to partners. Use the simulated fixture or simulate new data.
 - Record changes in `NEWS.md`. Releases are made with `dev/release.R` (see `README.md`).

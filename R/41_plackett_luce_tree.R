@@ -9,6 +9,8 @@ empty_PL_tree = function(reason = "") {
        nobservations_used_tree = 0,
        PLtree = list(),
        PLtree_plot = NULL,
+       nodes_plot = NULL,
+       splits = data.frame(),
        node_summary = data.frame(),
        regret_table = data.frame(),
        reason = reason)
@@ -184,7 +186,11 @@ forward_selection = function(data, ...) {
 #' @param rank_dat output of organize_ranking_data()
 #' @param agroclimate output of get_agroclimatic_data()
 #' @param use_climate logical, add the climate indices as covariates
-get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL, use_climate = TRUE) {
+#' @param coords output of get_trial_coordinates(), one row per row of
+#'  cmdata, to draw the nodes of the tree on the map
+#' @param adm optional sf object with the boundaries from the trial map
+get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL, use_climate = TRUE,
+                                 coords = NULL, adm = NULL) {
 
   climate = NULL
   if (isTRUE(use_climate) && isTRUE(agroclimate$agroclimate)) {
@@ -256,14 +262,136 @@ get_PlackettLuce_tree = function(cmdata, rank_dat, agroclimate = NULL, use_clima
   regret_tbl[2:4] = lapply(regret_tbl[2:4], function(x) round(x, 3))
   regret_tbl = regret_tbl[1:4]
 
+  node_summary = summarise_tree_nodes(tree_f, tree_mod, nobs_tree, reference_tech)
+
+  xy = if (!is.null(coords) && nrow(coords) == nrow(cmdata)) coords[rows, , drop = FALSE] else NULL
+
+  nodes_plot = tryCatch(tree_nodes_plot(tree_f, Gdata, nodes_tree, node_summary, xy, adm),
+                        error = function(e) {
+                          message("Nodes plot not drawn: ", conditionMessage(e))
+                          NULL
+                        })
+
   list(isTREE = TRUE,
        tree_formula = treeformula,
        nobservations_used_tree = nrow(Gdata),
        PLtree = tree_f,
        PLtree_plot = plottree,
-       node_summary = summarise_tree_nodes(tree_f, tree_mod, nobs_tree, reference_tech),
+       node_summary = node_summary,
+       nodes_plot = nodes_plot,
+       splits = tryCatch(tree_splits(tree_f), error = function(e) data.frame()),
        regret_table = regret_tbl,
        reason = "")
+
+}
+
+#' The splits of the tree
+#'
+#' @param tree_f a pltree
+#' @return a data.frame with one row per inner node, the variable, the
+#'  threshold (NA for a factor) and the levels of the two branches
+tree_splits = function(tree_f) {
+
+  ids = partykit::nodeids(tree_f, terminal = FALSE)
+  ids = setdiff(ids, partykit::nodeids(tree_f, terminal = TRUE))
+
+  if (length(ids) == 0) {
+    return(data.frame(node = integer(0), variable = character(0), threshold = numeric(0),
+                      stringsAsFactors = FALSE))
+  }
+
+  nodes = partykit::nodeapply(tree_f, ids = ids, FUN = function(n) n)
+
+  do.call(rbind, lapply(seq_along(ids), function(i) {
+    sp = partykit::split_node(nodes[[i]])
+    ch = partykit::character_split(sp, data = tree_f$data)
+    br = partykit::breaks_split(sp)
+    data.frame(node = ids[i],
+               variable = ch$name,
+               threshold = if (is.null(br)) NA_real_ else br[1],
+               stringsAsFactors = FALSE)
+  }))
+
+}
+
+#' The nodes of the tree on the map and the split variables
+#'
+#' Left, the trial plots coloured by the terminal node they fall in, so
+#' the reader sees where each group of the tree is. Right, one panel per
+#' numeric split variable with the distribution across participants and
+#' the threshold of the split. Without coordinates only the split panels
+#' are drawn.
+#'
+#' @param tree_f the pltree
+#' @param Gdata the data used in the tree, rankings in G and covariates
+#' @param nodes integer vector, the terminal node of each row of Gdata
+#' @param node_summary from summarise_tree_nodes(), the rules of each node
+#'  are in the table printed before the figure, so the legend keeps the
+#'  node numbers only
+#' @param xy data.frame with longitude and latitude, one row per row of
+#'  Gdata, or NULL
+#' @param adm optional sf boundaries
+#' @return a ggplot or patchwork, NULL when there is nothing to draw
+tree_nodes_plot = function(tree_f, Gdata, nodes, node_summary, xy = NULL, adm = NULL) {
+
+  ids = sort(unique(nodes))
+  node_f = factor(nodes, levels = ids, labels = paste(tr("col_node"), ids))
+  cols = pal_qualitative(length(ids))
+
+  theme_small = theme_bw() +
+    theme(panel.grid = element_blank(), text = element_text(size = 13),
+          legend.position = "bottom", legend.title = element_blank())
+
+  map = NULL
+  if (!is.null(xy) && any(stats::complete.cases(xy[c("longitude", "latitude")]))) {
+    d = data.frame(longitude = xy$longitude, latitude = xy$latitude, node = node_f)
+    d = d[stats::complete.cases(d[c("longitude", "latitude")]), ]
+    map = ggplot()
+    if (!is.null(adm)) {
+      map = map + geom_sf(data = adm, fill = "#f4f5f0", colour = "grey60", linewidth = 0.2)
+    }
+    map = map +
+      geom_point(data = d, aes(x = longitude, y = latitude, fill = node),
+                 shape = 21, size = 2.6, colour = "grey20", stroke = 0.4) +
+      scale_fill_manual(values = cols, drop = FALSE) +
+      guides(fill = guide_legend(nrow = 1)) +
+      labs(x = NULL, y = NULL) +
+      coord_sf(crs = sf::st_crs(MAP_CRS), default_crs = sf::st_crs(4326)) +
+      theme_minimal() +
+      theme(legend.position = "top", legend.title = element_blank(),
+            text = element_text(size = 13, colour = "grey20"))
+  }
+
+  splits = tree_splits(tree_f)
+  splits = splits[!is.na(splits$threshold) & splits$variable %in% names(Gdata), ]
+  splits = splits[!duplicated(splits$variable), ]
+
+  panels = lapply(seq_len(nrow(splits)), function(i) {
+    v = splits$variable[i]
+    d = data.frame(x = as.numeric(Gdata[[v]]), node = node_f)
+    ggplot(d, aes(x = x)) +
+      geom_histogram(aes(fill = node), bins = 20, colour = "white", linewidth = 0.2) +
+      geom_vline(xintercept = splits$threshold[i], linetype = "dashed", colour = "grey20") +
+      scale_fill_manual(values = cols, drop = FALSE) +
+      labs(x = gsub("climate_", "", v), y = tr("lab_participants")) +
+      theme_small +
+      theme(legend.position = "none")
+  })
+
+  if (is.null(map) && length(panels) == 0) {
+    return(NULL)
+  }
+
+  if (is.null(map)) {
+    return(patchwork::wrap_plots(panels, ncol = min(2, length(panels))))
+  }
+
+  if (length(panels) == 0) {
+    return(map)
+  }
+
+  right = patchwork::wrap_plots(panels, ncol = 1)
+  map + right + plot_layout(widths = c(1.4, 1))
 
 }
 

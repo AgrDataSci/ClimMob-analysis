@@ -1,0 +1,91 @@
+participant_id,trait,is_reference_trait,answered,best_option,best_item,worst_option,worst_item
+1,Germination [Vegetative],False,True,B,Biggie,A,Game Changer
+1,Vigour [Vegetative],False,True,B,Biggie,C,Obasanjo-2
+1,Yield [Harvest],False,True,A,Game Changer,C,Obasanjo-2
+1,Taste [Harvest],False,True,B,Biggie,C,Obasanjo-2
+1,Overall preference [Harvest],True,True,C,Obasanjo-2,A,Game Changer
+2,Germination [Vegetative],False,True,A,TME 419,B,Poundable
+2,Vigour [Vegetative],False,True,A,TME 419,B,Poundable
+2,Yield [Harvest],False,True,B,Poundable,C,Obasanjo-2
+2,Taste [Harvest],False,True,B,Poundable,C,Obasanjo-2
+2,Overall preference [Harvest],True,True,A,TME 419,B,Poundable
+3,Germination [Vegetative],False,True,B,Obasanjo-2,C,TME 419
+3,Vigour [Vegetative],False,True,C,TME 419,B,Obasanjo-2
+3,Yield [Harvest],False,True,C,TME 419,B,Obasanjo-2
+3,Taste [Harvest],False,True,A,Biggie,B,Obasanjo-2
+3,Overall preference [Harvest],True,True,B,Obasanjo-2,C,TME 419
+4,Germination [Vegetative],False,True,B,Biggie,A,Game Changer
+4,Vigour [Vegetative],False,True,B,Biggie,C,Obasanjo-2
+4,Yield [Harvest],False,True,B,Biggie,C,Obasanjo-2
+4,Taste [Harvest],False,True,C,Obasanjo-2,A,Game Changer
+4,Overall preference [Harvest],True,True,B,Biggie,C,Obasanjo-2
+5,Germination [Vegetative],False,True,B,Game Changer,C,Obasanjo-2
+5,Vigour [Vegetative],False,True,A,Poundable,B,Game Changer
+5,Yield [Harvest],False,True,B,Game Changer,C,Obasanjo-2
+5,Taste [Harvest],False,True,C,Obasanjo-2,B,Game Changer
+5,Overall preference [Harvest],True,True,C,Obasanjo-2,A,Poundable
+6,Germination [Vegetative],False,True,B,Biggie,C,Obasanjo-2
+6,Vigour [Vegetative],False,True,B,Biggie,C,Obasanjo-2
+6,Yield [Harvest],False,True,B,Biggie,C,Obasanjo-2
+6,Taste [Harvest],False,True,B,Biggie,C,Obasanjo-2
+6,Overall preference [Harvest],True,True,B,Biggie,A,Game Changer
+7,Germination [Vegetative],False,True,A,TME 419,B,Game Changer
+7,Vigour [Vegetative],False,True,C,Biggie,A,TME 419
+7,Yield [Harvest],False,True,C,Biggie,B,Game Changer
+7,Taste [Harvest],False,True,C,Biggie,A,TME 419
+7,Overall preference [Harvest],True,True,B,Game Changer,A,TME 419
+8,Germination [Vegetative],False,True,C,Poundable,A,Baba-70
+8,Vigour [Vegetative],False,True,C,Poundable,B,Game Changer
+8,Yield [Harvest],False,True,A,Baba-70,C,Poundable
+8,Taste [Harvest],False,True,A,Baba-70,B,Game Changer
+8,Overall preference [Harvest],True,True,B,Game Changer,C,Poundable
+9,Germination [Vegetative],False,True,C,Baba-70,A,Obasanjo-2
+9,Vigour [Vegetative],False,True,A,Obasanjo-2,C,Baba-70
+9,Yield [Harvest],False,True,A,Obasanjo-2,C,Baba-70
+9,Taste [Harvest],False,True,C,Baba-70,B,Game Changer
+9,Overall preference [Harvest],True,True,A,Obasanjo-2,C,Baba-70
+10,Germination [Vegetative],False,True,C,Poundable,B,TME 419
+10,Vigour [Vegetative],False,True,B,TME 419,C,Poundable
+10,Yield [Harvest],False,True,A,Game Changer,C,Poundable
+10,Taste [Harvest],False,True,C,Poundable,A,Game Changer
+10,Overall preference [Harvest],True,True,C,Poundable,A,Game Changer
+11,Germination [Vegetative],False,True,B,Game Changer,C,Obasanjo-2
+11,Vigour [Vegetative],False,True,A,Baba-70,C,Obasanjo-2
+11,Yield [Harvest],False,True,A,Baba-70,C,Obasanjo-2
+11,Taste [Harvest],False,True,A,Baba-70,B,Game Changer
+11,Overall preference [Harvest],True,True,A,Baba-70,C,Obasanjo-2
+12,Germination [Vegetative],False,True,A,Poundable,B,Game Changer
+12,Vigour [Vegetative],False,True,C,Baba-70,A,Poundable
+12,Yield [Harvest],False,False,,,,
+12,Taste [Harvest],False,False,,,,
+12,Overall preference [Harvest],True,False,,,,
+13,Germination [Vegetative],False,True,B,Baba-70,A,Game Changer
+13,Vigour [Vegetative],False,True,B,Baba-70,C,Obasanjo-2
+13,Yield [Harvest],False,False,,,,
+13,Taste [Harvest],False,False,,,,
+13,Overall preference [Harvest],True,False,,,,
+14,Germination [Vegetative],False,True,B,Biggie,A,Obasanjo-2
+14,Vigour [Vegetative],False,True,B,Biggie,C,Poundable
+14,Yield [Harvest],False,False,,,,
+14,Taste [Harvest],False,False,,,,
+14,Overall preference [Harvest],True,False,,,,
+15,Germination [Vegetative],False,True,A,Poundable,C,Obasanjo-2
+15,Vigour [Vegetative],False,True,B,Biggie,A,Poundable
+15,Yield [Harvest],False,False,,,,
+15,Taste [Harvest],False,False,,,,
+15,Overall preference [Harvest],True,False,,,,
+16,Germination [Vegetative],False,False,,,,
+16,Vigour [Vegetative],False,False,,,,
+16,Yield [Harvest],False,False,,,,
+16,Taste [Harvest],False,False,,,,
+16,Overall preference [Harvest],True,False,,,,
+17,Germination [Vegetative],False,False,,,,
+17,Vigour [Vegetative],False,False,,,,
+17,Yield [Harvest],False,False,,,,
+17,Taste [Harvest],False,False,,,,
+17,Overall preference [Harvest],True,False,,,,
+18,Germination [Vegetative],False,False,,,,
+18,Vigour [Vegetative],False,False,,,,
+18,Yield [Harvest],False,False,,,,
+18,Taste [Harvest],False,False,,,,
+18,Overall preference [Harvest],True,False,,,,

@@ -23,6 +23,9 @@ has_rankings = length(rank_dat$trait_list) > 0
 reference_check = rank_dat$reference_tech[1]
 lab = list(option = option, options = options, participant = participant,
            participants = participants, reference_trait = reference_trait)
+# maps are sized from the shape of the country so tall countries are not squeezed
+map_w = 5.5
+map_h = min(6.5, round(map_w * (trial_map$aspect %||% 1), 1))
 ```
 
 ```{r summary, results='asis'}
@@ -59,6 +62,22 @@ if (!has_rankings) {
             traits = join_words(rank_dat$trait_dropped)))
   }
 
+  hl = sikia$headline
+  if (isTRUE(sikia$available) && !is.null(hl)) {
+    txt = tr("sum_sikia", participants = participants, n_responses = sikia$totals$responses,
+             topics = join_words(hl$most_mentioned))
+    if (!is.null(hl$praised)) {
+      txt = paste(txt, tr("sum_sikia_praised", label = hl$praised$label, n = hl$praised$mentions, share = hl$praised$share))
+    }
+    if (!is.null(hl$complained)) {
+      txt = paste(txt, tr("sum_sikia_complained", label = hl$complained$label, n = hl$complained$mentions, share = hl$complained$share))
+    }
+    para(txt)
+    if (!is.null(hl$quote)) {
+      para(paste0("*\u201c", hl$quote, "\u201d*"))
+    }
+  }
+
   if (isTRUE(group_analysis$requested)) {
     para(tr("sum_groups", section = tr("h_groups")))
   }
@@ -90,13 +109,7 @@ if (is.data.frame(att) && nrow(att) > 0) {
   last = all[nrow(all), ]
   para(tr("mon_attrition_text", n_reg = monitoring$registered, participants = participants,
           n_last = last$n, pct_last = last$percent_of_registered, last = last$moment,
-          k = cap$next_tab(), f = cap$next_fig()))
-  tb = att[, c("group", "moment", "day", "n", "percent_of_registered", "lost_since_previous")]
-  tb$group[tb$group == "all"] = tr("whole_group")
-  if (length(unique(tb$group)) == 1) tb$group = NULL
-  keys = c(if (!is.null(tb$group)) "col_group", "col_moment", "col_day", "col_n",
-           "col_percent_registered", "col_lost")
-  print(kable_tr(tb, keys, cap$tab(tr("tab_attrition", participants = participants))))
+          f = cap$next_fig()))
 }
 ```
 
@@ -117,9 +130,7 @@ if (length(rank_dat$trait_dropped) > 0) {
 }
 en = monitoring$enumerators
 if (is.data.frame(en) && nrow(en) > 0) {
-  para(tr("mon_enumerators_text", k = cap$next_tab()))
-  print(kable_tr(en, c("col_moment", "col_enumerator", "col_submissions"),
-                 cap$tab(tr("tab_enumerators"))))
+  para(tr("mon_enumerators_text"))
 }
 if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) {
   heading(tr("h_map"), 2)
@@ -127,7 +138,7 @@ if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) {
 }
 ```
 
-```{r map, dpi=dpi, out.width='70%', fig.cap=if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) cap$fig(tr("fig_map")) else NULL}
+```{r map, dpi=dpi, fig.width=map_w, fig.height=map_h, fig.cap=if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) cap$fig(tr("fig_map")) else NULL}
 if (isTRUE(trial_map$geoTRUE) && is_plot(trial_map$map)) plot(trial_map$map)
 ```
 
@@ -141,25 +152,26 @@ if (isTRUE(pm$available) && is_plot(pm$map)) {
 }
 ```
 
-```{r participation_map, dpi=dpi, out.width='70%', fig.cap=if (isTRUE(participation_map$available) && is_plot(participation_map$map)) cap$fig(tr("fig_participation_map", moment = participation_map$moment)) else NULL}
+```{r participation_map, dpi=dpi, fig.width=map_w, fig.height=map_h + 0.6, fig.cap=if (isTRUE(participation_map$available) && is_plot(participation_map$map)) cap$fig(tr("fig_participation_map", moment = participation_map$moment)) else NULL}
 if (isTRUE(participation_map$available) && is_plot(participation_map$map)) plot(participation_map$map)
 ```
 
 ```{r climate_text, results='asis'}
-if (isTRUE(agroclimate$agroclimate)) {
+has_climate = isTRUE(agroclimate$agroclimate)
+climate_date_used = if (has_climate) tr(paste0("date_used_", gsub(" ", "_", agroclimate$date_used))) else ""
+if (has_climate) {
   heading(tr("h_climate"), 2)
-  para(tr("climate_text", start = agroclimate$window[1], end = agroclimate$window[2],
-          ndays = agroclimate$ndays, date_used = tr(paste0("date_used_", gsub(" ", "_", agroclimate$date_used))),
-          f1 = cap$next_fig(), f2 = cap$next_fig() + 1))
+  ss = agroclimate$season_summary
+  para(tr("climate_text", f = cap$next_fig(),
+          start = agroclimate$window[1], end = agroclimate$window[2],
+          ndays = agroclimate$ndays, date_used = climate_date_used,
+          rain = ss$rain, rain_lo = ss$rain_lo, rain_hi = ss$rain_hi, dry = ss$dry,
+          tmax = ss$tmax, tmin = ss$tmin))
 }
 ```
 
-```{r temperature_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (isTRUE(agroclimate$agroclimate)) cap$fig(tr("fig_temperature", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
-if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$temperature_plot)) plot(agroclimate$temperature_plot)
-```
-
-```{r rainfall_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (isTRUE(agroclimate$agroclimate)) cap$fig(tr("fig_rainfall", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
-if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$rain_plot)) plot(agroclimate$rain_plot)
+```{r season_plot, dpi=dpi, fig.height=7.5, fig.width=8, fig.cap=if (has_climate && is_plot(agroclimate$season_plot)) cap$fig(tr(if (isTRUE(agroclimate$season_groups)) "fig_season_groups" else "fig_season", start = agroclimate$window[1], end = agroclimate$window[2], date_used = climate_date_used)) else NULL}
+if (has_climate && is_plot(agroclimate$season_plot)) plot(agroclimate$season_plot)
 ```
 
 ```{r data_value_text, results='asis'}
@@ -203,12 +215,7 @@ if (has_rankings) {
 if (has_rankings) {
   heading(tr("h_design"))
   para(tr("design_text", n = nparticipants, participants = participants, noptions = noptions,
-          options = options, ntraits = ntraits, k = cap$next_tab()))
-  if (nrow(overview_and_summaries$summary_table_trait) > 0) {
-    print(kable_tr(overview_and_summaries$summary_table_trait,
-                   c("col_trait", "col_moment", "col_question", "col_valid_answers"),
-                   cap$tab(tr("tab_traits"))))
-  }
+          options = options, ntraits = ntraits))
   para(tr("network_text", options = options, noptions = noptions, reference_trait = reference_trait,
           f = cap$next_fig()))
 }
@@ -243,9 +250,10 @@ if (has_rankings) {
   nw = PL_models$netwinning
   if (is.data.frame(nw) && nrow(nw) > 0) {
     para(tr("favourability_text", k = cap$next_tab(), option = option, options = options))
-    nw$trait[duplicated(nw$trait)] = ""
-    print(kable_tr(nw, c("col_trait", "col_option", "col_n", "col_top", "col_bottom", "col_favourability"),
-                   cap$tab(tr("tab_favourability", options = options)), digits = 1))
+    main = nw[nw$trait %in% main_traits(nw$trait, reference_trait), , drop = FALSE]
+    main$trait[duplicated(main$trait)] = ""
+    print(kable_tr(main, c("col_trait", "col_option", "col_n", "col_top", "col_bottom", "col_favourability"),
+                   cap$tab(tr("tab_favourability_main", options = options)), digits = 1))
   }
   if (nrow(PL_models$kendall$kendall) > 0) {
     para(tr("kendall_text", f = cap$next_fig(), reference_trait = reference_trait,
@@ -292,6 +300,33 @@ if (has_rankings && is_plot(PL_models$logworth_overall)) {
 
 ```{r est_plot, dpi=dpi, fig.height=5, fig.width=6, fig.cap=if (has_rankings && is_plot(PL_models$logworth_overall)) cap$fig(tr("fig_logworth", options = options, reference_trait = reference_trait)) else NULL}
 if (has_rankings && is_plot(PL_models$logworth_overall)) plot(PL_models$logworth_overall)
+```
+
+```{r sikia_why, results='asis'}
+sk = sikia
+if (has_rankings && isTRUE(sk$available) && nrow(sk$item_words) > 0 &&
+    is.data.frame(release$summary) && nrow(release$summary) > 0) {
+  heading(tr("h_sikia_why"), 2)
+  ord = release$summary$item[order(-release$summary$prob_beats_check, na.last = TRUE)]
+  iw = sk$item_words
+  say = function(it, what) {
+    x = iw[iw$item == it, , drop = FALSE]
+    if (nrow(x) == 0) return(NULL)
+    tr(what, option = option, item = it,
+       praise = if (nzchar(x$praise)) x$praise else tr("sikia_nothing"),
+       complaints = if (nzchar(x$complaints)) x$complaints else tr("sikia_nothing"))
+  }
+  best = say(ord[1], "sikia_why_best")
+  worst = say(ord[length(ord)], "sikia_why_worst")
+  para(tr("sikia_why_text", reference_trait = reference_trait, participants = participants, k = cap$next_tab()))
+  if (!is.null(best)) para(best)
+  if (!is.null(worst)) para(worst)
+  iw = iw[match(ord, iw$item), , drop = FALSE]
+  iw = iw[!is.na(iw$item), c("item", "praise", "complaints", "mentions")]
+  print(kable_tr(iw, c("col_option", "col_praise", "col_complaints", "col_mentions"),
+                 cap$tab(tr("tab_sikia_items", options = options, reference_trait = reference_trait)),
+                 widths = c(3, 5, 5, 2)))
+}
 ```
 
 ```{r groups, results='asis'}
@@ -370,6 +405,15 @@ if (has_rankings) {
 if (has_rankings && isTRUE(PL_tree$isTREE) && is_plot(PL_tree$PLtree_plot)) plot(PL_tree$PLtree_plot)
 ```
 
+```{r tree_nodes_text, results='asis'}
+has_nodes_plot = has_rankings && isTRUE(PL_tree$isTREE) && is_plot(PL_tree$nodes_plot)
+if (has_nodes_plot) para(tr("tree_nodes_map_text", f = cap$next_fig()))
+```
+
+```{r tree_nodes_map, dpi=dpi, fig.height=6, fig.width=10, fig.cap=if (has_nodes_plot) cap$fig(tr("fig_tree_nodes")) else NULL}
+if (has_nodes_plot) plot(PL_tree$nodes_plot)
+```
+
 ```{r regret, results='asis'}
 if (has_rankings && isTRUE(PL_tree$isTREE)) {
   para(tr("regret_text", k = cap$next_tab(), options = options))
@@ -422,18 +466,60 @@ if (isTRUE(mt$available)) {
 rel = release
 if (has_rankings && is.data.frame(rel$summary) && nrow(rel$summary) > 0) {
   heading(tr("h_release"))
+  k1 = cap$next_tab()
   para(tr("release_text", option = option, options = options, check = rel$check,
-          reference_trait = reference_trait, k = cap$next_tab()))
+          reference_trait = reference_trait, k = k1, k2 = k1 + 1))
   r = rel$summary
   r$prob_beats_check = ifelse(r$item_is_check, "", paste0(round(100 * r$prob_beats_check), "%"))
   r$p_value = format_p(r$p_value)
   r$item_is_check = NULL
+  trait_cols = intersect(c("better_than_check", "worse_than_check"), names(r))
+  num = r[, setdiff(names(r), trait_cols), drop = FALSE]
   keys = c(item = "col_option", n_tested = "col_n_tested", prob_beats_check = "col_prob_check",
            p_value = "col_p", favourability = "col_favourability",
-           better_than_check = "col_better", worse_than_check = "col_worse",
-           yield_mean = "col_yield_mean", yield_percent_of_check = "col_yield_percent")[names(r)]
-  print(kable_tr(r, unname(keys), cap$tab(tr("tab_release", check = rel$check)), digits = 1))
+           yield_mean = "col_yield_mean", yield_percent_of_check = "col_yield_percent")[names(num)]
+  print(kable_tr(num, unname(keys), cap$tab(tr("tab_release", check = rel$check)), digits = 1))
+  if (length(trait_cols) > 0) {
+    tl = r[, c("item", trait_cols), drop = FALSE]
+    for (col in trait_cols) tl[[col]] = short_trait_list(tl[[col]])
+    print(kable_tr(tl, c("col_option", "col_better", "col_worse")[seq_len(ncol(tl))],
+                   cap$tab(tr("tab_release_traits", check = rel$check)), widths = c(2, 5, 5)))
+  }
   para(tr("release_files"))
+}
+```
+
+```{r sikia, results='asis', dpi=dpi, fig.width=8, fig.height=6}
+sk = sikia
+if (isTRUE(sk$available)) {
+  heading(tr("h_sikia"))
+  para(tr("sikia_intro", participants = participants, n_responses = sk$totals$responses,
+          n_mentions = sk$totals$mentions, n_labels = sk$totals$labels))
+  para(tr("sikia_labels_text", f = cap$next_fig(), n_shown = nrow(sk$labels)))
+  cat("\n\n")
+  print(sk$sentiment_plot)
+  cat("\n\n", cap$fig(tr("fig_sikia_sentiment", participants = participants)), "\n\n")
+  if (is_plot(sk$variety_plot)) {
+    para(tr("sikia_variety_text", f = cap$next_fig(), options = options))
+    cat("\n\n")
+    print(sk$variety_plot)
+    cat("\n\n", cap$fig(tr("fig_sikia_variety", option = title_case(option))), "\n\n")
+  }
+  if (nrow(sk$quotes) > 0) {
+    heading(tr("h_sikia_quotes"), 2)
+    para(tr("sikia_quotes_text", participants = participants))
+    q = sk$quotes
+    q$sentiment = ifelse(q$sentiment == "positive", tr("lab_positive"), tr("lab_negative"))
+    print(kable_tr(q, c("col_label", "col_sentiment", "col_quote"), cap$tab(tr("tab_sikia_quotes")), widths = c(3, 2, 8)))
+  }
+  if (nrow(sk$topics) > 0) {
+    heading(tr("h_sikia_topics"), 2)
+    para(tr("sikia_topics_text", k = cap$next_tab(), n_topics = nrow(sk$topics),
+            n_categories = length(unique(sk$topics$category)), participants = participants))
+    tp = sk$topics[, c("category", "topic", "mentions", "phrases")]
+    print(kable_tr(tp, c("col_category", "col_topic", "col_mentions", "col_phrases"), cap$tab(tr("tab_sikia_topics")), widths = c(3, 4, 2, 7)))
+  }
+  para(tr("sikia_note", built_at = sk$built_at))
 }
 ```
 
@@ -449,6 +535,39 @@ heading(tr("h_references"))
 ```{r appendix, results='asis'}
 heading(tr("h_appendix"))
 
+att = monitoring$attrition
+en = monitoring$enumerators
+if ((is.data.frame(att) && nrow(att) > 0) || (is.data.frame(en) && nrow(en) > 0)) {
+  heading(tr("h_app_monitoring"), 2)
+}
+if (is.data.frame(att) && nrow(att) > 0) {
+  tb = att[, c("group", "moment", "day", "n", "percent_of_registered", "lost_since_previous")]
+  tb$group[tb$group == "all"] = tr("whole_group")
+  if (length(unique(tb$group)) == 1) tb$group = NULL
+  keys = c(if (!is.null(tb$group)) "col_group", "col_moment", "col_day", "col_n",
+           "col_percent_registered", "col_lost")
+  print(kable_tr(tb, keys, cap$tab(tr("tab_attrition", participants = participants))))
+}
+if (is.data.frame(en) && nrow(en) > 0) {
+  print(kable_tr(en, c("col_moment", "col_enumerator", "col_submissions"),
+                 cap$tab(tr("tab_enumerators"))))
+}
+
+if (has_rankings && nrow(overview_and_summaries$summary_table_trait) > 0) {
+  heading(tr("h_app_traits"), 2)
+  print(kable_tr(overview_and_summaries$summary_table_trait,
+                 c("col_trait", "col_moment", "col_question", "col_valid_answers"),
+                 cap$tab(tr("tab_traits"))))
+}
+
+nw = PL_models$netwinning
+if (has_rankings && is.data.frame(nw) && nrow(nw) > 0) {
+  heading(tr("h_app_favourability"), 2)
+  nw$trait[duplicated(nw$trait)] = ""
+  print(kable_tr(nw, c("col_trait", "col_option", "col_n", "col_top", "col_bottom", "col_favourability"),
+                 cap$tab(tr("tab_favourability", options = options)), digits = 1))
+}
+
 if (has_rankings && nrow(PL_models$kendall$kendall) > 0) {
   heading(tr("h_kendall_table"), 2)
   print(kable_tr(PL_models$kendall$kendall, c("col_trait", "col_kendall", "col_lower", "col_upper", "col_z", NA),
@@ -462,6 +581,28 @@ if (isTRUE(quanti_dat$quantitative) && is.data.frame(quanti_dat$outliers) && nro
   print(kable_tr(o, NULL, cap$tab(tr("tab_outliers"))))
 }
 
+```
+
+```{r appendix_climate_text, results='asis'}
+if (has_climate) {
+  heading(tr("h_app_climate"), 2)
+  para(tr("app_climate_text", f1 = cap$next_fig(), f2 = cap$next_fig() + 1, f3 = cap$next_fig() + 2))
+}
+```
+
+```{r temperature_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (has_climate) cap$fig(tr("fig_temperature", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
+if (has_climate && is_plot(agroclimate$temperature_plot)) plot(agroclimate$temperature_plot)
+```
+
+```{r rainfall_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (has_climate) cap$fig(tr("fig_rainfall", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
+if (has_climate && is_plot(agroclimate$rain_plot)) plot(agroclimate$rain_plot)
+```
+
+```{r climate_envelope, dpi=dpi, fig.height=5.5, fig.width=6.5, fig.cap=if (has_climate && is_plot(agroclimate$envelope_plot)) cap$fig(tr("fig_envelope", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
+if (has_climate && is_plot(agroclimate$envelope_plot)) plot(agroclimate$envelope_plot)
+```
+
+```{r appendix_errors, results='asis'}
 if (!is.null(error)) {
   heading(tr("h_errors"), 2)
   para(tr("errors_text"))
