@@ -29,6 +29,9 @@ Figures are vector PDF files. Tables are CSV files in UTF-8.
 | **`reliability<k>.pdf`**, **`reliability-data.csv`** | Probability of outperforming check number k. The table has a column `check`. |
 | **`netwinning-data.csv`** | Favourability of every item in every trait (see below). |
 | **`plackettluce-tree.pdf`** | Plackett-Luce tree, when covariates split the data. |
+| **`plackettluce-tree-nodes-map.pdf`**, **`plackettluce-tree-splits.csv`** | Trial plots by node of the tree with the split distributions, and the split variables and thresholds. |
+| **`season-climate.pdf`** | Cumulative rainfall and day and night temperature along the season, with the data collection moments. |
+| **`climate-envelope.pdf`** | Every trial plot by total rainfall and maximum day temperature over the window. |
 | **`weekly-precipitation-indices.csv/.pdf`**, **`weekly-temperature-indices.csv/.pdf`** | Weekly climate indices during the season. |
 | **`possible-outliers-quantitative-data.csv`** | Values of measured traits outside 1.5 times the interquartile range. |
 | `monitoring-attrition.csv/.pdf` | Participants who answered each data collection moment. |

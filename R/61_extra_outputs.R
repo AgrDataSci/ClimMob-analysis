@@ -98,6 +98,8 @@ write_extra_outputs = function(state, settings) {
 
   if (isTRUE(state$PL_tree$isTREE)) {
     save_figure(state$PL_tree$PLtree_plot, f("plackettluce-tree.pdf"), 18, 25)
+    save_figure(state$PL_tree$nodes_plot, f("plackettluce-tree-nodes-map.pdf"), 24, 16)
+    save_table(state$PL_tree$splits, f("plackettluce-tree-splits.csv"))
   }
 
   if (isTRUE(state$agroclimate$agroclimate)) {
@@ -105,6 +107,8 @@ write_extra_outputs = function(state, settings) {
     save_table(state$agroclimate$temperature_weekly, f("weekly-temperature-indices.csv"))
     save_figure(state$agroclimate$rain_plot, f("weekly-precipitation-indices.pdf"), 20, 20)
     save_figure(state$agroclimate$temperature_plot, f("weekly-temperature-indices.pdf"), 20, 20)
+    save_figure(state$agroclimate$season_plot, f("season-climate.pdf"), 20, 18)
+    save_figure(state$agroclimate$envelope_plot, f("climate-envelope.pdf"), 16, 14)
   }
 
   if (isTRUE(state$quanti_dat$quantitative)) {

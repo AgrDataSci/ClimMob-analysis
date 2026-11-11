@@ -117,3 +117,49 @@ test_that("climate_by_region keeps every request within two degrees", {
   one = climate_by_region(fake, xy[1, ], dates[1], span = 10)
   expect_equal(one$Rtotal, xy$longitude[1])
 })
+
+test_that("season_summary gives the numbers for the climate text", {
+  rain1 = data.frame(Rtotal = c(100, 200, 300, 400, 500), MLDS = c(3, 5, 7, 9, 11))
+  temp1 = data.frame(maxDT = c(28.1, 29.2, 30.3, 31.4, 32.5), minNT = c(12, 13, 14, 15, 16))
+  ss = season_summary(rain1, temp1)
+  expect_equal(unname(ss$rain), 300)
+  expect_true(ss$rain_lo < ss$rain && ss$rain < ss$rain_hi)
+  expect_equal(unname(ss$dry), 7)
+  expect_equal(ss$tmax, 30.3)
+  expect_equal(ss$tmin, 14)
+})
+
+test_that("tree_splits reads the variable and threshold of each split", {
+  need_analysis_packages()
+  skip_if_not_installed("partykit")
+  d = data.frame(y = c(rnorm(40, 0), rnorm(40, 5)), x = rep(c(1, 10), each = 40))
+  tree = partykit::lmtree(y ~ 1 | x, data = d, minsize = 10)
+  sp = tree_splits(tree)
+  expect_equal(nrow(sp), 1)
+  expect_equal(sp$variable, "x")
+  expect_true(sp$threshold >= 1 && sp$threshold < 10)
+})
+
+test_that("the season chart is drawn from the weekly series", {
+  need_analysis_packages(c("PlackettLuce", "gosset", "ggplot2", "patchwork"))
+  set_language("en", root_path())
+  planting = as.Date(c("2023-03-01", "2023-03-08"))
+  weeks = 0:5
+  weekly = function(index, value) {
+    do.call(rbind, lapply(1:2, function(i) {
+      data.frame(id = as.character(i), date = as.character(planting[i] + weeks * 7),
+                 index = index, value = value + i, stringsAsFactors = FALSE)
+    }))
+  }
+  rain = rbind(weekly("Rtotal", 10), weekly("SDII", 2))
+  temp = rbind(weekly("maxDT", 28), weekly("minNT", 12))
+  moments = data.frame(name = c("Registration", "Harvest"), day = c(0, 30))
+  p = season_plot(rain, temp, planting, ndays = 42, moments = moments)
+  expect_true(is_plot(p))
+  pg = season_plot(rain, temp, planting, ndays = 42, moments = moments, group = c("a", "b"))
+  expect_true(is_plot(pg))
+  rain1 = data.frame(Rtotal = c(300, 400), MLDS = c(5, 6))
+  temp1 = data.frame(maxDT = c(29, 31), minNT = c(13, 14))
+  expect_true(is_plot(climate_envelope_plot(rain1, temp1)))
+  expect_true(is_plot(climate_envelope_plot(rain1, temp1, group = c("a", "b"))))
+})

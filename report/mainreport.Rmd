@@ -157,20 +157,21 @@ if (isTRUE(participation_map$available) && is_plot(participation_map$map)) plot(
 ```
 
 ```{r climate_text, results='asis'}
-if (isTRUE(agroclimate$agroclimate)) {
+has_climate = isTRUE(agroclimate$agroclimate)
+climate_date_used = if (has_climate) tr(paste0("date_used_", gsub(" ", "_", agroclimate$date_used))) else ""
+if (has_climate) {
   heading(tr("h_climate"), 2)
-  para(tr("climate_text", start = agroclimate$window[1], end = agroclimate$window[2],
-          ndays = agroclimate$ndays, date_used = tr(paste0("date_used_", gsub(" ", "_", agroclimate$date_used))),
-          f1 = cap$next_fig(), f2 = cap$next_fig() + 1))
+  ss = agroclimate$season_summary
+  para(tr("climate_text", f = cap$next_fig(),
+          start = agroclimate$window[1], end = agroclimate$window[2],
+          ndays = agroclimate$ndays, date_used = climate_date_used,
+          rain = ss$rain, rain_lo = ss$rain_lo, rain_hi = ss$rain_hi, dry = ss$dry,
+          tmax = ss$tmax, tmin = ss$tmin))
 }
 ```
 
-```{r temperature_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (isTRUE(agroclimate$agroclimate)) cap$fig(tr("fig_temperature", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
-if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$temperature_plot)) plot(agroclimate$temperature_plot)
-```
-
-```{r rainfall_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (isTRUE(agroclimate$agroclimate)) cap$fig(tr("fig_rainfall", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
-if (isTRUE(agroclimate$agroclimate) && is_plot(agroclimate$rain_plot)) plot(agroclimate$rain_plot)
+```{r season_plot, dpi=dpi, fig.height=7.5, fig.width=8, fig.cap=if (has_climate && is_plot(agroclimate$season_plot)) cap$fig(tr(if (isTRUE(agroclimate$season_groups)) "fig_season_groups" else "fig_season", start = agroclimate$window[1], end = agroclimate$window[2], date_used = climate_date_used)) else NULL}
+if (has_climate && is_plot(agroclimate$season_plot)) plot(agroclimate$season_plot)
 ```
 
 ```{r data_value_text, results='asis'}
@@ -404,6 +405,15 @@ if (has_rankings) {
 if (has_rankings && isTRUE(PL_tree$isTREE) && is_plot(PL_tree$PLtree_plot)) plot(PL_tree$PLtree_plot)
 ```
 
+```{r tree_nodes_text, results='asis'}
+has_nodes_plot = has_rankings && isTRUE(PL_tree$isTREE) && is_plot(PL_tree$nodes_plot)
+if (has_nodes_plot) para(tr("tree_nodes_map_text", f = cap$next_fig()))
+```
+
+```{r tree_nodes_map, dpi=dpi, fig.height=6, fig.width=10, fig.cap=if (has_nodes_plot) cap$fig(tr("fig_tree_nodes")) else NULL}
+if (has_nodes_plot) plot(PL_tree$nodes_plot)
+```
+
 ```{r regret, results='asis'}
 if (has_rankings && isTRUE(PL_tree$isTREE)) {
   para(tr("regret_text", k = cap$next_tab(), options = options))
@@ -571,6 +581,28 @@ if (isTRUE(quanti_dat$quantitative) && is.data.frame(quanti_dat$outliers) && nro
   print(kable_tr(o, NULL, cap$tab(tr("tab_outliers"))))
 }
 
+```
+
+```{r appendix_climate_text, results='asis'}
+if (has_climate) {
+  heading(tr("h_app_climate"), 2)
+  para(tr("app_climate_text", f1 = cap$next_fig(), f2 = cap$next_fig() + 1, f3 = cap$next_fig() + 2))
+}
+```
+
+```{r temperature_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (has_climate) cap$fig(tr("fig_temperature", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
+if (has_climate && is_plot(agroclimate$temperature_plot)) plot(agroclimate$temperature_plot)
+```
+
+```{r rainfall_indices, dpi=dpi, fig.height=9, fig.width=9, fig.cap=if (has_climate) cap$fig(tr("fig_rainfall", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
+if (has_climate && is_plot(agroclimate$rain_plot)) plot(agroclimate$rain_plot)
+```
+
+```{r climate_envelope, dpi=dpi, fig.height=5.5, fig.width=6.5, fig.cap=if (has_climate && is_plot(agroclimate$envelope_plot)) cap$fig(tr("fig_envelope", start = agroclimate$window[1], end = agroclimate$window[2])) else NULL}
+if (has_climate && is_plot(agroclimate$envelope_plot)) plot(agroclimate$envelope_plot)
+```
+
+```{r appendix_errors, results='asis'}
 if (!is.null(error)) {
   heading(tr("h_errors"), 2)
   para(tr("errors_text"))

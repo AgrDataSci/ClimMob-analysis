@@ -175,7 +175,12 @@ error_data_participation_map = list(available = FALSE, map = NULL, moment = NA,
 #' @param cmdata the trial data as data.frame
 #' @param coords output of get_trial_coordinates()
 #' @param ndays number of days from the planting date, see season_length()
-get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
+#' @param moments data.frame from collection_moments(), to mark the data
+#'  collection moments in the season chart
+#' @param group optional character vector with one group per row of cmdata
+#'  (from build_groups()), to draw one line per group
+get_agroclimatic_data = function(cmdata, coords, ndays = 60, moments = NULL,
+                                 group = NULL) {
 
   if (is.null(coords) || nrow(coords) == 0) {
     return(list(agroclimate = FALSE))
@@ -238,7 +243,19 @@ get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
 
   covariates = climate_covariates(rain1, temp1, ok)
 
+  grp = if (is.null(group) || length(group) != nrow(cmdata)) NULL else group[ok]
+
+  xlab = tr("lab_days_from", date_used = tr(paste0("date_used_", gsub(" ", "_", date_used))))
+
+  season = season_plot(rain, temp, dates[ok], ndays, moments = moments, group = grp, xlab = xlab)
+
+  envelope = climate_envelope_plot(rain1, temp1, group = grp)
+
   list(agroclimate = TRUE,
+       season_plot = season,
+       season_groups = !is.null(grp) && length(unique(grp)) > 1 && length(unique(grp)) <= 8,
+       season_summary = season_summary(rain1, temp1),
+       envelope_plot = envelope,
        rain_plot = rain_plot,
        temperature_plot = temperature_plot,
        rainfall_weekly = rain,
@@ -251,6 +268,162 @@ get_agroclimatic_data = function(cmdata, coords, ndays = 60) {
        ndays = ndays,
        covariates = covariates,
        date_used = date_used)
+
+}
+
+#' The season in one chart
+#'
+#' Cumulative rainfall and the day and night temperatures along the
+#' season, as the median across the trial plots with the 10th to 90th
+#' percentile band, or one line per group. The data collection moments
+#' are marked. The x axis counts days from planting, so plots planted on
+#' different dates line up.
+#'
+#' @param rain,temp the weekly time series from climatrends, with columns
+#'  id, date, index and value
+#' @param planting Date vector, one per id (in the order of the ids)
+#' @param ndays length of the window in days
+#' @param moments data.frame with name and day, from collection_moments()
+#' @param group optional character vector, one per id
+#' @param xlab label of the x axis
+#' @return a patchwork of two ggplots
+season_plot = function(rain, temp, planting, ndays, moments = NULL, group = NULL,
+                       xlab = "Days from planting") {
+
+  weekly = function(x, index) {
+    d = x[x$index == index, c("id", "date", "value")]
+    d$id = as.integer(d$id)
+    d = d[order(d$id, d$date), ]
+    d$day = as.numeric(as.Date(d$date) - planting[d$id])
+    d
+  }
+
+  r = weekly(rain, "Rtotal")
+  r = do.call(rbind, lapply(split(r, r$id), function(x) {
+    x$value = cumsum(x$value)
+    x$day = x$day + 7
+    rbind(data.frame(id = x$id[1], date = x$date[1], value = 0, day = 0), x)
+  }))
+
+  t_day = weekly(temp, "maxDT")
+  t_night = weekly(temp, "minNT")
+  t_day$day = t_day$day + 3.5
+  t_night$day = t_night$day + 3.5
+
+  use_groups = !is.null(group) && length(unique(group)) > 1 && length(unique(group)) <= 8
+
+  summarise = function(d) {
+    d$group = if (use_groups) group[d$id] else "all"
+    out = stats::aggregate(value ~ day + group, data = d, FUN = function(v) {
+      c(median = stats::median(v), lo = stats::quantile(v, 0.1), hi = stats::quantile(v, 0.9))
+    })
+    out = cbind(out[c("day", "group")], as.data.frame(out$value))
+    names(out) = c("day", "group", "median", "lo", "hi")
+    out
+  }
+
+  rs = summarise(r)
+  ts = rbind(cbind(summarise(t_day), what = tr("lab_day_max")),
+             cbind(summarise(t_night), what = tr("lab_night_min")))
+  ts$what = factor(ts$what, levels = c(tr("lab_day_max"), tr("lab_night_min")))
+
+  climate_theme = theme_bw() +
+    theme(panel.grid = element_blank(),
+          text = element_text(size = 14),
+          legend.position = "top",
+          legend.title = element_blank())
+
+  # the data collection moments
+  mk = NULL
+  if (!is.null(moments) && nrow(moments) > 0) {
+    mk = moments[!is.na(moments$day) & moments$day > 0 & moments$day <= ndays, c("name", "day")]
+  }
+
+  add_moments = function(p, ymax) {
+    if (is.null(mk) || nrow(mk) == 0) return(p)
+    p +
+      geom_vline(data = mk, aes(xintercept = day), linetype = "dashed",
+                 colour = "grey50", inherit.aes = FALSE) +
+      geom_text(data = mk, aes(x = day, y = ymax, label = name), angle = 90,
+                hjust = 1, vjust = -0.4, size = 3.5, colour = "grey30",
+                inherit.aes = FALSE)
+  }
+
+  if (use_groups) {
+    p1 = ggplot(rs, aes(x = day, y = median, colour = group)) +
+      geom_line(linewidth = 1) +
+      scale_colour_manual(values = pal_qualitative(length(unique(rs$group))))
+    p2 = ggplot(ts, aes(x = day, y = median, colour = group, linetype = what)) +
+      geom_line(linewidth = 0.9) +
+      scale_colour_manual(values = pal_qualitative(length(unique(ts$group)))) +
+      scale_linetype_manual(values = c("solid", "dashed"))
+  } else {
+    p1 = ggplot(rs, aes(x = day, y = median)) +
+      geom_ribbon(aes(ymin = lo, ymax = hi), fill = pal_one("light"), alpha = 0.6) +
+      geom_line(colour = pal_one("dark"), linewidth = 1.1)
+    p2 = ggplot(ts, aes(x = day, y = median, colour = what, fill = what)) +
+      geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.25, colour = NA) +
+      geom_line(linewidth = 1) +
+      scale_colour_manual(values = c(BREWER$BrBG[2], BREWER$BrBG[8])) +
+      scale_fill_manual(values = c(BREWER$BrBG[2], BREWER$BrBG[8]))
+  }
+
+  p1 = add_moments(p1, max(rs$hi, rs$median) * 1.05) +
+    labs(x = NULL, y = tr("lab_cum_rain")) +
+    climate_theme
+
+  p2 = add_moments(p2, max(ts$hi, ts$median) + 2) +
+    labs(x = xlab, y = tr("lab_temperature_c")) +
+    climate_theme
+
+  p1 / p2 + plot_layout(heights = c(1.1, 1))
+
+}
+
+#' Numbers for the climate text, from the season indices
+#'
+#' @param rain1,temp1 indices for the whole window, one row per plot
+#' @return a list with the median and the 10th and 90th percentiles of
+#'  total rainfall, the median longest dry spell, and the median of the
+#'  maximum day and minimum night temperature
+season_summary = function(rain1, temp1) {
+  q = function(v, p) round(stats::quantile(v, p, na.rm = TRUE))
+  list(rain = q(rain1$Rtotal, 0.5),
+       rain_lo = q(rain1$Rtotal, 0.1),
+       rain_hi = q(rain1$Rtotal, 0.9),
+       dry = q(rain1$MLDS, 0.5),
+       tmax = round(stats::median(temp1$maxDT, na.rm = TRUE), 1),
+       tmin = round(stats::median(temp1$minNT, na.rm = TRUE), 1))
+}
+
+#' The climate envelope of the trial
+#'
+#' Every plot as a point in the space of total rainfall and maximum day
+#' temperature over the window, coloured by group when there are groups.
+#'
+#' @inheritParams season_summary
+#' @param group optional character vector, one per plot
+climate_envelope_plot = function(rain1, temp1, group = NULL) {
+
+  d = data.frame(rain = rain1$Rtotal, tmax = temp1$maxDT)
+  use_groups = !is.null(group) && length(unique(group)) > 1 && length(unique(group)) <= 8
+
+  p = ggplot(d, aes(x = rain, y = tmax))
+
+  if (use_groups) {
+    d$group = group
+    p = ggplot(d, aes(x = rain, y = tmax, fill = group)) +
+      geom_point(shape = 21, size = 2.6, colour = "grey30", alpha = 0.8) +
+      scale_fill_manual(values = pal_qualitative(length(unique(group))), name = NULL)
+  } else {
+    p = p + geom_point(shape = 21, size = 2.6, colour = "grey30", fill = pal_one("mid"), alpha = 0.8)
+  }
+
+  p +
+    labs(x = tr("lab_total_rain"), y = tr("lab_max_day_temp")) +
+    theme_bw() +
+    theme(panel.grid = element_blank(), text = element_text(size = 14),
+          legend.position = "top")
 
 }
 

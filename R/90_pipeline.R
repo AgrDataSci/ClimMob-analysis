@@ -140,7 +140,9 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
     needs = c("coords", "monitoring"))
 
   s$agroclimate = run_step(log, "agroclimate", "Agroclimatic data",
-    function() get_agroclimatic_data(cm, coords = s$coords, ndays = season_length(pars)),
+    function() get_agroclimatic_data(cm, coords = s$coords, ndays = season_length(pars),
+                                     moments = collection_moments(pars, cm),
+                                     group = build_groups(cm, settings$groups, min_per_group = 0)),
     fallback = error_data_agroclimate,
     needs = "coords")
 
@@ -202,7 +204,8 @@ run_climmob_analysis = function(cmdata, pars, settings, cmdatajson = NULL,
   # 6. Trees ----
   s$PL_tree = run_step(log, "pl_tree", "Plackett-Luce Tree",
     function() get_PlackettLuce_tree(cm, rd, s$agroclimate,
-                                     use_climate = settings$use_climate %||% TRUE),
+                                     use_climate = settings$use_climate %||% TRUE,
+                                     coords = s$coords, adm = s$trial_map$adm),
     fallback = error_data_PL_tree, needs = "rank_dat")
 
   # 7. Measured traits ----
