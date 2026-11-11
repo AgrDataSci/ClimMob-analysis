@@ -1,0 +1,54 @@
+"variety","label","net","mentions"
+"Hybrid 01","early maturity",0.64,11
+"Hybrid 02","early maturity",-0.5,12
+"Hybrid 03","early maturity",-0.08,13
+"Hybrid 04","early maturity",0,5
+"Hybrid 05","early maturity",1,7
+"Hybrid 06","early maturity",0,6
+"Hybrid 01","fall armyworm damage",0.25,4
+"Hybrid 02","fall armyworm damage",-0.67,6
+"Hybrid 03","fall armyworm damage",-0.67,3
+"Hybrid 04","fall armyworm damage",0.44,9
+"Hybrid 05","fall armyworm damage",-0.67,6
+"Hybrid 06","fall armyworm damage",0.11,9
+"Hybrid 01","cob size",0,2
+"Hybrid 02","cob size",0.71,7
+"Hybrid 03","cob size",0,4
+"Hybrid 04","cob size",-0.83,6
+"Hybrid 05","cob size",0,2
+"Hybrid 06","cob size",0.4,5
+"Hybrid 01","drought tolerance",0.2,5
+"Hybrid 02","drought tolerance",-0.83,6
+"Hybrid 03","drought tolerance",1,4
+"Hybrid 04","drought tolerance",1,4
+"Hybrid 05","drought tolerance",0.33,3
+"Hybrid 06","drought tolerance",-0.33,3
+"Hybrid 01","taste",-0.33,3
+"Hybrid 03","taste",1,1
+"Hybrid 04","taste",0.33,9
+"Hybrid 05","taste",-0.88,8
+"Hybrid 06","taste",0,7
+"Hybrid 01","lodging",-0.29,7
+"Hybrid 02","lodging",0.5,4
+"Hybrid 03","lodging",-1,4
+"Hybrid 04","lodging",-1,1
+"Hybrid 05","lodging",0.67,6
+"Hybrid 06","lodging",0.33,3
+"Hybrid 01","storage weevils",0.75,4
+"Hybrid 02","storage weevils",-0.33,6
+"Hybrid 03","storage weevils",0.4,5
+"Hybrid 04","storage weevils",-1,2
+"Hybrid 05","storage weevils",0.33,3
+"Hybrid 06","storage weevils",-1,2
+"Hybrid 01","seed cost",-1,1
+"Hybrid 02","seed cost",-1,1
+"Hybrid 03","seed cost",1,1
+"Hybrid 04","seed cost",0.43,7
+"Hybrid 05","seed cost",-0.67,6
+"Hybrid 06","seed cost",0,6
+"Hybrid 01","market price",0,5
+"Hybrid 02","market price",1,1
+"Hybrid 03","market price",-1,2
+"Hybrid 04","market price",0.5,4
+"Hybrid 05","market price",0,2
+"Hybrid 06","market price",1,1

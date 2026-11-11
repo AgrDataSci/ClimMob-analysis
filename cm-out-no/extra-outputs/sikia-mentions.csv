@@ -1,0 +1,255 @@
+"response_id","target_entity_label","entity_type","canonical_label","phrase_en","evidence_en","extraction_type","sentiment_polarity","sentiment_strength","sentiment_confidence","emotion_primary","evidence_grounded"
+"row-0","Hybrid 04","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 04","explicit","negative",0.86,0.64,"worried",TRUE
+"row-0","Hybrid 04","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 04","explicit_trait","positive",0.77,0.75,"satisfied",TRUE
+"row-0","Hybrid 04","economics","seed cost","worth the price","worth the price with Hybrid 04","explicit","positive",0.52,0.93,"happy",TRUE
+"row-1","Hybrid 05","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 05","explicit","negative",0.68,0.81,"frustrated",TRUE
+"row-1","Hybrid 05","quality","taste","sweet when roasted","sweet when roasted with Hybrid 05","explicit","positive",0.75,0.64,"happy",TRUE
+"row-2","Hybrid 01","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 01","explicit_trait","positive",0.68,0.63,"proud",TRUE
+"row-2","Hybrid 01","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 01","explicit","positive",0.84,0.64,"proud",TRUE
+"row-2","Hybrid 01","quality","taste","soft and tasty","soft and tasty with Hybrid 01","explicit","positive",0.75,0.77,"proud",TRUE
+"row-3","Hybrid 04","climate_event","drought tolerance","could not handle the dry weeks","could not handle the dry weeks with Hybrid 04","explicit","negative",0.95,0.61,"frustrated",TRUE
+"row-3","Hybrid 04","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 04","explicit","negative",0.52,0.66,"worried",TRUE
+"row-3","Hybrid 04","trait","cob size","many empty tips","many empty tips with Hybrid 04","explicit_trait","negative",0.67,0.63,"frustrated",TRUE
+"row-3","Hybrid 04","trait","lodging","stems too weak","stems too weak with Hybrid 04","explicit_trait","negative",0.56,0.82,"disappointed",TRUE
+"row-3","Hybrid 04","economics","seed cost","cannot afford to buy again","cannot afford to buy again with Hybrid 04","explicit","negative",0.91,0.91,"frustrated",TRUE
+"row-3","Hybrid 04","economics","market price","buyers asked for this one","buyers asked for this one with Hybrid 04","explicit","positive",0.9,0.83,"satisfied",TRUE
+"row-4","Hybrid 01","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 01","explicit_trait","positive",0.82,0.7,"satisfied",TRUE
+"row-4","Hybrid 01","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 01","explicit","positive",0.56,0.78,"happy",TRUE
+"row-4","Hybrid 01","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 01","explicit","negative",0.53,0.76,"frustrated",TRUE
+"row-4","Hybrid 01","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 01","explicit_trait","positive",0.54,0.65,"satisfied",TRUE
+"row-4","Hybrid 01","economics","market price","buyers asked for this one","buyers asked for this one with Hybrid 01","explicit","neutral",0,0.97,NA,TRUE
+"row-5","Hybrid 01","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 01","explicit","neutral",0,0.94,NA,TRUE
+"row-6","Hybrid 01","climate_event","drought tolerance","kept green with little rain","kept green with little rain with Hybrid 01","explicit","neutral",0,0.6,NA,TRUE
+"row-6","Hybrid 01","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 01","explicit","positive",0.9,0.88,"satisfied",TRUE
+"row-7","Hybrid 05","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 05","explicit_trait","neutral",0,0.9,NA,TRUE
+"row-7","Hybrid 05","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 05","explicit","negative",0.81,0.68,"frustrated",TRUE
+"row-7","Hybrid 05","quality","taste","bland taste","bland taste with Hybrid 05","explicit","negative",0.65,0.85,"frustrated",TRUE
+"row-8","Hybrid 02","trait","early maturity","took too long to mature","took too long to mature with Hybrid 02","explicit_trait","negative",0.72,0.92,"frustrated",TRUE
+"row-8","Hybrid 02","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 02","explicit_trait","positive",0.92,0.92,"satisfied",TRUE
+"row-9","Hybrid 04","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 04","explicit_trait","positive",0.81,0.71,"relieved",TRUE
+"row-9","Hybrid 04","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 04","explicit","neutral",0,0.67,NA,TRUE
+"row-9","Hybrid 04","trait","cob size","small cobs","small cobs with Hybrid 04","explicit_trait","negative",0.7,0.84,"disappointed",TRUE
+"row-9","Hybrid 04","economics","seed cost","worth the price","worth the price with Hybrid 04","explicit","positive",0.58,0.6,"satisfied",TRUE
+"row-9","Hybrid 04","economics","market price","sold at a good price","sold at a good price with Hybrid 04","explicit","positive",0.68,0.9,"proud",TRUE
+"row-10","Hybrid 01","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 01","explicit","negative",0.67,0.82,"disappointed",TRUE
+"row-11","Hybrid 06","trait","early maturity","still green when the others were dry","still green when the others were dry with Hybrid 06","explicit_trait","negative",0.74,0.9,"worried",TRUE
+"row-11","Hybrid 06","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 06","explicit","neutral",0,0.73,NA,TRUE
+"row-11","Hybrid 06","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 06","explicit","negative",0.86,0.62,"frustrated",TRUE
+"row-11","Hybrid 06","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 06","explicit_trait","positive",0.71,0.98,"satisfied",TRUE
+"row-11","Hybrid 06","pest_disease","storage weevils","stored for months without weevils","stored for months without weevils with Hybrid 06","explicit","positive",0.87,0.81,"proud",TRUE
+"row-12","Hybrid 05","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 05","explicit_trait","positive",0.59,0.92,"relieved",TRUE
+"row-12","Hybrid 05","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 05","explicit","negative",0.67,0.8,"frustrated",TRUE
+"row-13","Hybrid 01","trait","early maturity","still green when the others were dry","still green when the others were dry with Hybrid 01","explicit_trait","negative",0.61,0.79,"worried",TRUE
+"row-13","Hybrid 01","economics","seed cost","seed too expensive for next season","seed too expensive for next season with Hybrid 01","explicit","negative",0.82,0.97,"frustrated",TRUE
+"row-13","Hybrid 01","pest_disease","storage weevils","stored for months without weevils","stored for months without weevils with Hybrid 01","explicit","positive",0.83,0.69,"satisfied",TRUE
+"row-13","Hybrid 01","economics","market price","buyers did not want the colour","buyers did not want the colour with Hybrid 01","explicit","negative",0.82,0.87,"worried",TRUE
+"row-15","Hybrid 05","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 05","explicit_trait","positive",0.64,0.72,"proud",TRUE
+"row-15","Hybrid 05","climate_event","drought tolerance","wilted when the rains failed","wilted when the rains failed with Hybrid 05","explicit","negative",0.9,0.65,"frustrated",TRUE
+"row-15","Hybrid 05","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 05","explicit","positive",0.74,0.87,"proud",TRUE
+"row-15","Hybrid 05","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 05","explicit_trait","neutral",0,0.74,NA,TRUE
+"row-16","Hybrid 06","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 06","explicit","negative",0.72,0.67,"frustrated",TRUE
+"row-16","Hybrid 06","trait","cob size","small cobs","small cobs with Hybrid 06","explicit_trait","negative",0.76,0.65,"disappointed",TRUE
+"row-17","Hybrid 04","climate_event","drought tolerance","wilted when the rains failed","wilted when the rains failed with Hybrid 04","explicit","negative",0.68,0.74,"worried",TRUE
+"row-17","Hybrid 04","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 04","explicit","negative",0.86,0.72,"frustrated",TRUE
+"row-18","Hybrid 05","climate_event","drought tolerance","wilted when the rains failed","wilted when the rains failed with Hybrid 05","explicit","negative",0.87,0.75,"worried",TRUE
+"row-18","Hybrid 05","economics","market price","sold at a good price","sold at a good price with Hybrid 05","explicit","positive",0.9,0.98,"happy",TRUE
+"row-19","Hybrid 02","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 02","explicit","negative",0.53,0.8,"worried",TRUE
+"row-19","Hybrid 02","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 02","explicit","negative",0.7,0.79,"frustrated",TRUE
+"row-20","Hybrid 01","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 01","explicit_trait","positive",0.73,0.97,"happy",TRUE
+"row-20","Hybrid 01","trait","cob size","small cobs","small cobs with Hybrid 01","explicit_trait","negative",0.67,0.96,"worried",TRUE
+"row-20","Hybrid 01","trait","lodging","fell over after the storm","fell over after the storm with Hybrid 01","explicit_trait","negative",0.69,0.79,"worried",TRUE
+"row-21","Hybrid 03","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 03","explicit","negative",0.85,0.82,"disappointed",TRUE
+"row-21","Hybrid 03","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 03","explicit_trait","positive",0.84,0.62,"relieved",TRUE
+"row-21","Hybrid 03","quality","taste","hard to chew","hard to chew with Hybrid 03","explicit","negative",0.61,0.89,"frustrated",TRUE
+"row-22","Hybrid 02","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 02","explicit_trait","positive",0.66,0.66,"relieved",TRUE
+"row-22","Hybrid 02","quality","taste","soft and tasty","soft and tasty with Hybrid 02","explicit","positive",0.74,0.98,"relieved",TRUE
+"row-22","Hybrid 02","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 02","explicit","negative",0.62,0.83,"disappointed",TRUE
+"row-23","Hybrid 05","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 05","explicit","negative",0.9,0.62,"frustrated",TRUE
+"row-23","Hybrid 05","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 05","explicit_trait","neutral",0,0.81,NA,TRUE
+"row-23","Hybrid 05","quality","taste","soft and tasty","soft and tasty with Hybrid 05","explicit","positive",0.61,0.97,"satisfied",TRUE
+"row-24","Hybrid 01","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 01","explicit_trait","positive",0.7,0.88,"satisfied",TRUE
+"row-24","Hybrid 01","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 01","explicit","negative",0.63,0.89,"frustrated",TRUE
+"row-24","Hybrid 01","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 01","explicit_trait","positive",0.54,0.63,"satisfied",TRUE
+"row-24","Hybrid 01","pest_disease","storage weevils","stored for months without weevils","stored for months without weevils with Hybrid 01","explicit","positive",0.81,0.79,"relieved",TRUE
+"row-25","Hybrid 02","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 02","explicit_trait","positive",0.65,0.77,"relieved",TRUE
+"row-25","Hybrid 02","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 02","explicit_trait","positive",0.54,0.91,"happy",TRUE
+"row-25","Hybrid 02","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 02","explicit","negative",0.88,0.81,"frustrated",TRUE
+"row-25","Hybrid 02","economics","market price","sold at a good price","sold at a good price with Hybrid 02","explicit","positive",0.6,0.62,"proud",TRUE
+"row-26","Hybrid 05","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 05","explicit_trait","positive",0.65,0.7,"happy",TRUE
+"row-26","Hybrid 05","trait","lodging","stems too weak","stems too weak with Hybrid 05","explicit_trait","negative",0.61,0.68,"disappointed",TRUE
+"row-28","Hybrid 04","economics","market price","buyers did not want the colour","buyers did not want the colour with Hybrid 04","explicit","negative",0.81,0.72,"worried",TRUE
+"row-29","Hybrid 04","trait","early maturity","took too long to mature","took too long to mature with Hybrid 04","explicit_trait","negative",0.64,0.66,"frustrated",TRUE
+"row-29","Hybrid 04","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 04","explicit_trait","positive",0.55,0.67,"proud",TRUE
+"row-30","Hybrid 03","trait","early maturity","still green when the others were dry","still green when the others were dry with Hybrid 03","explicit_trait","negative",0.88,0.78,"worried",TRUE
+"row-30","Hybrid 03","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 03","explicit","negative",0.89,0.75,"frustrated",TRUE
+"row-31","Hybrid 01","quality","taste","children liked the ugali from it","children liked the ugali from it with Hybrid 01","explicit","positive",0.57,0.72,"relieved",TRUE
+"row-31","Hybrid 01","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 01","explicit","negative",0.57,0.89,"frustrated",TRUE
+"row-32","Hybrid 02","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 02","explicit_trait","positive",0.9,0.86,"happy",TRUE
+"row-32","Hybrid 02","quality","taste","soft and tasty","soft and tasty with Hybrid 02","explicit","positive",0.54,0.91,"proud",TRUE
+"row-32","Hybrid 02","trait","lodging","stems too weak","stems too weak with Hybrid 02","explicit_trait","negative",0.64,0.75,"disappointed",TRUE
+"row-33","Hybrid 03","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 03","explicit","positive",0.79,0.6,"satisfied",TRUE
+"row-33","Hybrid 03","quality","taste","soft and tasty","soft and tasty with Hybrid 03","explicit","positive",0.59,0.83,"relieved",TRUE
+"row-34","Hybrid 04","trait","early maturity","matured in three months","matured in three months with Hybrid 04","explicit_trait","positive",0.64,0.7,"satisfied",TRUE
+"row-34","Hybrid 04","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 04","explicit","negative",0.78,0.65,"disappointed",TRUE
+"row-34","Hybrid 04","quality","taste","soft and tasty","soft and tasty with Hybrid 04","explicit","positive",0.82,0.64,"happy",TRUE
+"row-34","Hybrid 04","trait","lodging","fell over after the storm","fell over after the storm with Hybrid 04","explicit_trait","negative",0.65,0.91,"disappointed",TRUE
+"row-34","Hybrid 04","economics","seed cost","worth the price","worth the price with Hybrid 04","explicit","positive",0.72,0.95,"happy",TRUE
+"row-35","Hybrid 03","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 03","explicit","negative",0.7,0.81,"frustrated",TRUE
+"row-35","Hybrid 03","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 03","explicit","negative",0.66,0.79,"frustrated",TRUE
+"row-36","Hybrid 02","climate_event","drought tolerance","wilted when the rains failed","wilted when the rains failed with Hybrid 02","explicit","negative",0.61,0.82,"disappointed",TRUE
+"row-36","Hybrid 02","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 02","explicit","negative",0.71,0.65,"disappointed",TRUE
+"row-36","Hybrid 02","trait","cob size","small cobs","small cobs with Hybrid 02","explicit_trait","negative",0.75,0.7,"disappointed",TRUE
+"row-36","Hybrid 02","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 02","explicit","negative",0.61,0.82,"frustrated",TRUE
+"row-36","Hybrid 02","economics","market price","sold at a good price","sold at a good price with Hybrid 02","explicit","neutral",0,0.9,NA,TRUE
+"row-37","Hybrid 06","trait","early maturity","matured in three months","matured in three months with Hybrid 06","explicit_trait","positive",0.78,0.84,"happy",TRUE
+"row-37","Hybrid 06","climate_event","drought tolerance","kept green with little rain","kept green with little rain with Hybrid 06","explicit","neutral",0,0.75,NA,TRUE
+"row-37","Hybrid 06","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 06","explicit","positive",0.52,0.9,"proud",TRUE
+"row-37","Hybrid 06","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 06","explicit_trait","positive",0.69,0.84,"satisfied",TRUE
+"row-38","Hybrid 04","trait","early maturity","matured in three months","matured in three months with Hybrid 04","explicit_trait","positive",0.74,0.76,"happy",TRUE
+"row-38","Hybrid 04","climate_event","drought tolerance","kept green with little rain","kept green with little rain with Hybrid 04","explicit","positive",0.83,0.83,"relieved",TRUE
+"row-38","Hybrid 04","quality","taste","hard to chew","hard to chew with Hybrid 04","explicit","negative",0.94,0.78,"frustrated",TRUE
+"row-39","Hybrid 02","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 02","explicit_trait","positive",0.6,0.88,"happy",TRUE
+"row-39","Hybrid 02","trait","lodging","stems too weak","stems too weak with Hybrid 02","explicit_trait","negative",0.5,0.69,"worried",TRUE
+"row-39","Hybrid 02","economics","seed cost","worth the price","worth the price with Hybrid 02","explicit","positive",0.87,0.75,"relieved",TRUE
+"row-40","Hybrid 03","climate_event","drought tolerance","kept green with little rain","kept green with little rain with Hybrid 03","explicit","positive",0.9,0.68,"happy",TRUE
+"row-40","Hybrid 03","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 03","explicit","negative",0.51,0.84,"disappointed",TRUE
+"row-40","Hybrid 03","quality","taste","sweet when roasted","sweet when roasted with Hybrid 03","explicit","positive",0.79,0.72,"relieved",TRUE
+"row-41","Hybrid 03","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 03","explicit_trait","positive",0.82,0.67,"proud",TRUE
+"row-41","Hybrid 03","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 03","explicit_trait","positive",0.77,0.69,"relieved",TRUE
+"row-41","Hybrid 03","trait","lodging","stood well in the wind","stood well in the wind with Hybrid 03","explicit_trait","positive",0.71,0.63,"happy",TRUE
+"row-41","Hybrid 03","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 03","explicit","negative",0.69,0.82,"frustrated",TRUE
+"row-42","Hybrid 02","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 02","explicit_trait","neutral",0,0.61,NA,TRUE
+"row-42","Hybrid 02","trait","cob size","small cobs","small cobs with Hybrid 02","explicit_trait","negative",0.53,0.9,"worried",TRUE
+"row-42","Hybrid 02","quality","taste","children liked the ugali from it","children liked the ugali from it with Hybrid 02","explicit","neutral",0,0.92,NA,TRUE
+"row-42","Hybrid 02","economics","market price","buyers did not want the colour","buyers did not want the colour with Hybrid 02","explicit","negative",0.61,0.77,"worried",TRUE
+"row-43","Hybrid 06","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 06","explicit_trait","positive",0.72,0.61,"happy",TRUE
+"row-43","Hybrid 06","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 06","explicit_trait","neutral",0,0.79,NA,TRUE
+"row-43","Hybrid 06","economics","seed cost","worth the price","worth the price with Hybrid 06","explicit","positive",0.78,0.62,"satisfied",TRUE
+"row-43","Hybrid 06","pest_disease","storage weevils","stored for months without weevils","stored for months without weevils with Hybrid 06","explicit","positive",0.84,0.79,"proud",TRUE
+"row-44","Hybrid 02","quality","taste","soft and tasty","soft and tasty with Hybrid 02","explicit","positive",0.94,0.62,"satisfied",TRUE
+"row-44","Hybrid 02","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 02","explicit","negative",0.5,0.76,"disappointed",TRUE
+"row-44","Hybrid 02","economics","market price","buyers asked for this one","buyers asked for this one with Hybrid 02","explicit","positive",0.92,0.97,"proud",TRUE
+"row-45","Hybrid 03","trait","early maturity","took too long to mature","took too long to mature with Hybrid 03","explicit_trait","negative",0.92,0.74,"worried",TRUE
+"row-45","Hybrid 03","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 03","explicit_trait","positive",0.83,0.82,"proud",TRUE
+"row-46","Hybrid 02","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 02","explicit_trait","positive",0.72,0.75,"satisfied",TRUE
+"row-46","Hybrid 02","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 02","explicit","negative",0.89,0.68,"worried",TRUE
+"row-46","Hybrid 02","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 02","explicit_trait","positive",0.78,0.8,"relieved",TRUE
+"row-46","Hybrid 02","economics","market price","buyers asked for this one","buyers asked for this one with Hybrid 02","explicit","positive",0.56,0.69,"happy",TRUE
+"row-47","Hybrid 01","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 01","explicit_trait","positive",0.64,0.83,"satisfied",TRUE
+"row-47","Hybrid 01","quality","taste","sweet when roasted","sweet when roasted with Hybrid 01","explicit","positive",0.59,0.76,"satisfied",TRUE
+"row-47","Hybrid 01","economics","seed cost","cannot afford to buy again","cannot afford to buy again with Hybrid 01","explicit","negative",0.8,0.66,"frustrated",TRUE
+"row-48","Hybrid 04","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 04","explicit_trait","positive",0.63,0.73,"proud",TRUE
+"row-48","Hybrid 04","climate_event","drought tolerance","could not handle the dry weeks","could not handle the dry weeks with Hybrid 04","explicit","negative",0.75,0.91,"disappointed",TRUE
+"row-48","Hybrid 04","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 04","explicit","negative",0.75,0.73,"frustrated",TRUE
+"row-48","Hybrid 04","trait","lodging","stems too weak","stems too weak with Hybrid 04","explicit_trait","negative",0.55,0.79,"worried",TRUE
+"row-49","Hybrid 03","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 03","explicit_trait","positive",0.66,0.87,"happy",TRUE
+"row-50","Hybrid 04","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 04","explicit_trait","positive",0.67,0.92,"relieved",TRUE
+"row-50","Hybrid 04","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 04","explicit","neutral",0,0.74,NA,TRUE
+"row-50","Hybrid 04","trait","cob size","many empty tips","many empty tips with Hybrid 04","explicit_trait","negative",0.67,0.73,"worried",TRUE
+"row-50","Hybrid 04","quality","taste","sweet when roasted","sweet when roasted with Hybrid 04","explicit","positive",0.78,0.84,"satisfied",TRUE
+"row-50","Hybrid 04","economics","seed cost","worth the price","worth the price with Hybrid 04","explicit","positive",0.67,0.95,"happy",TRUE
+"row-51","Hybrid 03","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 03","explicit","negative",0.81,0.69,"frustrated",TRUE
+"row-51","Hybrid 03","trait","lodging","fell over after the storm","fell over after the storm with Hybrid 03","explicit_trait","negative",0.78,0.81,"disappointed",TRUE
+"row-52","Hybrid 01","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 01","explicit","positive",0.87,0.66,"satisfied",TRUE
+"row-52","Hybrid 01","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 01","explicit_trait","positive",0.61,0.69,"relieved",TRUE
+"row-53","Hybrid 01","trait","early maturity","matured in three months","matured in three months with Hybrid 01","explicit_trait","positive",0.52,0.84,"satisfied",TRUE
+"row-53","Hybrid 01","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 01","explicit","negative",0.68,0.87,"worried",TRUE
+"row-53","Hybrid 01","trait","cob size","small cobs","small cobs with Hybrid 01","explicit_trait","negative",0.88,0.91,"disappointed",TRUE
+"row-53","Hybrid 01","economics","seed cost","seed too expensive for next season","seed too expensive for next season with Hybrid 01","explicit","negative",0.56,0.74,"disappointed",TRUE
+"row-54","Hybrid 01","trait","cob size","many empty tips","many empty tips with Hybrid 01","explicit_trait","negative",0.67,0.86,"frustrated",TRUE
+"row-54","Hybrid 01","quality","taste","sweet when roasted","sweet when roasted with Hybrid 01","explicit","positive",0.59,0.74,"happy",TRUE
+"row-55","Hybrid 02","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 02","explicit_trait","positive",0.63,0.75,"satisfied",TRUE
+"row-55","Hybrid 02","trait","cob size","small cobs","small cobs with Hybrid 02","explicit_trait","negative",0.7,0.92,"disappointed",TRUE
+"row-55","Hybrid 02","pest_disease","storage weevils","stored for months without weevils","stored for months without weevils with Hybrid 02","explicit","neutral",0,0.75,NA,TRUE
+"row-56","Hybrid 01","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 01","explicit_trait","positive",0.53,0.94,"relieved",TRUE
+"row-56","Hybrid 01","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 01","explicit","negative",0.95,0.76,"frustrated",TRUE
+"row-56","Hybrid 01","trait","cob size","small cobs","small cobs with Hybrid 01","explicit_trait","negative",0.6,0.83,"disappointed",TRUE
+"row-56","Hybrid 01","quality","taste","sweet when roasted","sweet when roasted with Hybrid 01","explicit","positive",0.95,0.77,"happy",TRUE
+"row-56","Hybrid 01","trait","lodging","stood well in the wind","stood well in the wind with Hybrid 01","explicit_trait","positive",0.8,0.7,"happy",TRUE
+"row-57","Hybrid 01","trait","early maturity","matured in three months","matured in three months with Hybrid 01","explicit_trait","positive",0.86,0.9,"satisfied",TRUE
+"row-57","Hybrid 01","climate_event","drought tolerance","wilted when the rains failed","wilted when the rains failed with Hybrid 01","explicit","negative",0.92,0.78,"disappointed",TRUE
+"row-57","Hybrid 01","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 01","explicit","negative",0.76,0.69,"worried",TRUE
+"row-58","Hybrid 03","trait","early maturity","matured in three months","matured in three months with Hybrid 03","explicit_trait","positive",0.65,0.88,"proud",TRUE
+"row-58","Hybrid 03","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 03","explicit","positive",0.58,0.64,"proud",TRUE
+"row-58","Hybrid 03","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 03","explicit","neutral",0,0.75,NA,TRUE
+"row-58","Hybrid 03","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 03","explicit_trait","positive",0.51,0.67,"happy",TRUE
+"row-58","Hybrid 03","trait","lodging","fell over after the storm","fell over after the storm with Hybrid 03","explicit_trait","negative",0.72,0.9,"frustrated",TRUE
+"row-58","Hybrid 03","pest_disease","storage weevils","stored for months without weevils","stored for months without weevils with Hybrid 03","explicit","positive",0.85,0.8,"happy",TRUE
+"row-58","Hybrid 03","economics","market price","sold at a good price","sold at a good price with Hybrid 03","explicit","positive",0.6,0.83,"satisfied",TRUE
+"row-59","Hybrid 06","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 06","explicit","negative",0.7,0.78,"worried",TRUE
+"row-59","Hybrid 06","economics","seed cost","cannot afford to buy again","cannot afford to buy again with Hybrid 06","explicit","negative",0.7,0.83,"disappointed",TRUE
+"row-59","Hybrid 06","pest_disease","storage weevils","stored for months without weevils","stored for months without weevils with Hybrid 06","explicit","positive",0.95,0.88,"relieved",TRUE
+"row-59","Hybrid 06","economics","market price","sold at a good price","sold at a good price with Hybrid 06","explicit","positive",0.89,0.65,"satisfied",TRUE
+"row-60","Hybrid 01","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 01","explicit_trait","positive",0.87,0.9,"relieved",TRUE
+"row-60","Hybrid 01","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 01","explicit","negative",0.73,0.73,"frustrated",TRUE
+"row-60","Hybrid 01","trait","lodging","stood well in the wind","stood well in the wind with Hybrid 01","explicit_trait","positive",0.55,0.77,"satisfied",TRUE
+"row-60","Hybrid 01","pest_disease","storage weevils","stored for months without weevils","stored for months without weevils with Hybrid 01","explicit","neutral",0,0.66,NA,TRUE
+"row-61","Hybrid 01","trait","early maturity","matured in three months","matured in three months with Hybrid 01","explicit_trait","positive",0.55,0.67,"satisfied",TRUE
+"row-61","Hybrid 01","climate_event","drought tolerance","could not handle the dry weeks","could not handle the dry weeks with Hybrid 01","explicit","negative",0.53,0.98,"frustrated",TRUE
+"row-61","Hybrid 01","trait","cob size","many empty tips","many empty tips with Hybrid 01","explicit_trait","negative",0.67,0.91,"disappointed",TRUE
+"row-61","Hybrid 01","quality","taste","soft and tasty","soft and tasty with Hybrid 01","explicit","positive",0.59,0.68,"proud",TRUE
+"row-61","Hybrid 01","trait","lodging","stood well in the wind","stood well in the wind with Hybrid 01","explicit_trait","neutral",0,0.96,NA,TRUE
+"row-61","Hybrid 01","economics","market price","buyers did not want the colour","buyers did not want the colour with Hybrid 01","explicit","negative",0.89,0.89,"frustrated",TRUE
+"row-62","Hybrid 02","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 02","explicit_trait","positive",0.66,0.87,"proud",TRUE
+"row-62","Hybrid 02","trait","lodging","stood well in the wind","stood well in the wind with Hybrid 02","explicit_trait","positive",0.8,0.77,"satisfied",TRUE
+"row-63","Hybrid 04","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 04","explicit_trait","positive",0.93,0.71,"happy",TRUE
+"row-63","Hybrid 04","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 04","explicit","negative",0.67,0.71,"frustrated",TRUE
+"row-63","Hybrid 04","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 04","explicit","negative",0.51,0.61,"disappointed",TRUE
+"row-64","Hybrid 03","climate_event","drought tolerance","kept green with little rain","kept green with little rain with Hybrid 03","explicit","positive",0.72,0.85,"happy",TRUE
+"row-66","Hybrid 01","trait","early maturity","still green when the others were dry","still green when the others were dry with Hybrid 01","explicit_trait","negative",0.8,0.97,"worried",TRUE
+"row-66","Hybrid 01","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 01","explicit","neutral",0,0.94,NA,TRUE
+"row-66","Hybrid 01","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 01","explicit_trait","positive",0.85,0.64,"happy",TRUE
+"row-66","Hybrid 01","quality","taste","soft and tasty","soft and tasty with Hybrid 01","explicit","positive",0.73,0.71,"proud",TRUE
+"row-66","Hybrid 01","trait","lodging","stood well in the wind","stood well in the wind with Hybrid 01","explicit_trait","neutral",0,0.66,NA,TRUE
+"row-66","Hybrid 01","economics","seed cost","worth the price","worth the price with Hybrid 01","explicit","positive",0.56,0.81,"proud",TRUE
+"row-67","Hybrid 06","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 06","explicit_trait","positive",0.83,0.87,"proud",TRUE
+"row-67","Hybrid 06","climate_event","drought tolerance","could not handle the dry weeks","could not handle the dry weeks with Hybrid 06","explicit","negative",0.64,0.97,"disappointed",TRUE
+"row-68","Hybrid 04","climate_event","drought tolerance","wilted when the rains failed","wilted when the rains failed with Hybrid 04","explicit","negative",0.76,0.79,"frustrated",TRUE
+"row-68","Hybrid 04","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 04","explicit","negative",0.6,0.63,"worried",TRUE
+"row-68","Hybrid 04","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 04","explicit_trait","positive",0.52,0.92,"happy",TRUE
+"row-68","Hybrid 04","quality","taste","sweet when roasted","sweet when roasted with Hybrid 04","explicit","positive",0.8,0.87,"happy",TRUE
+"row-69","Hybrid 04","trait","early maturity","still green when the others were dry","still green when the others were dry with Hybrid 04","explicit_trait","negative",0.93,0.74,"disappointed",TRUE
+"row-69","Hybrid 04","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 04","explicit_trait","neutral",0,0.8,NA,TRUE
+"row-69","Hybrid 04","trait","lodging","stems too weak","stems too weak with Hybrid 04","explicit_trait","negative",0.86,0.96,"disappointed",TRUE
+"row-70","Hybrid 06","trait","early maturity","still green when the others were dry","still green when the others were dry with Hybrid 06","explicit_trait","negative",0.51,0.66,"frustrated",TRUE
+"row-70","Hybrid 06","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 06","explicit_trait","neutral",0,0.95,NA,TRUE
+"row-70","Hybrid 06","trait","lodging","fell over after the storm","fell over after the storm with Hybrid 06","explicit_trait","negative",0.87,0.78,"worried",TRUE
+"row-71","Hybrid 01","trait","cob size","big cobs with full rows","big cobs with full rows with Hybrid 01","explicit_trait","positive",0.7,0.94,"happy",TRUE
+"row-72","Hybrid 06","trait","early maturity","ready before the rains stopped","ready before the rains stopped with Hybrid 06","explicit_trait","positive",0.92,0.68,"satisfied",TRUE
+"row-72","Hybrid 06","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 06","explicit","positive",0.89,0.78,"happy",TRUE
+"row-72","Hybrid 06","quality","taste","children liked the ugali from it","children liked the ugali from it with Hybrid 06","explicit","positive",0.81,0.75,"satisfied",TRUE
+"row-72","Hybrid 06","trait","lodging","stems too weak","stems too weak with Hybrid 06","explicit_trait","negative",0.59,0.73,"frustrated",TRUE
+"row-73","Hybrid 06","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 06","explicit","negative",0.94,0.72,"disappointed",TRUE
+"row-73","Hybrid 06","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 06","explicit","negative",0.67,0.87,"worried",TRUE
+"row-74","Hybrid 01","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 01","explicit","negative",0.55,0.72,"frustrated",TRUE
+"row-74","Hybrid 01","trait","cob size","many empty tips","many empty tips with Hybrid 01","explicit_trait","negative",0.65,0.66,"worried",TRUE
+"row-74","Hybrid 01","trait","lodging","fell over after the storm","fell over after the storm with Hybrid 01","explicit_trait","negative",0.89,0.88,"worried",TRUE
+"row-74","Hybrid 01","economics","seed cost","cannot afford to buy again","cannot afford to buy again with Hybrid 01","explicit","negative",0.81,0.74,"disappointed",TRUE
+"row-75","Hybrid 06","trait","early maturity","matured in three months","matured in three months with Hybrid 06","explicit_trait","positive",0.8,0.71,"proud",TRUE
+"row-75","Hybrid 06","climate_event","drought tolerance","kept green with little rain","kept green with little rain with Hybrid 06","explicit","neutral",0,0.66,NA,TRUE
+"row-75","Hybrid 06","pest_disease","fall armyworm damage","armyworm ate the leaves","armyworm ate the leaves with Hybrid 06","explicit","negative",0.77,0.81,"disappointed",TRUE
+"row-75","Hybrid 06","trait","cob size","many empty tips","many empty tips with Hybrid 06","explicit_trait","negative",0.64,0.76,"worried",TRUE
+"row-76","Hybrid 02","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 02","explicit","positive",0.76,0.95,"happy",TRUE
+"row-76","Hybrid 02","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 02","explicit","positive",0.59,0.74,"relieved",TRUE
+"row-76","Hybrid 02","quality","taste","sweet when roasted","sweet when roasted with Hybrid 02","explicit","neutral",0,0.65,NA,TRUE
+"row-77","Hybrid 05","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 05","explicit_trait","positive",0.66,0.79,"proud",TRUE
+"row-77","Hybrid 05","pest_disease","fall armyworm damage","few worms on this one","few worms on this one with Hybrid 05","explicit","positive",0.51,0.96,"happy",TRUE
+"row-77","Hybrid 05","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 05","explicit_trait","positive",0.92,0.97,"proud",TRUE
+"row-77","Hybrid 05","economics","seed cost","cannot afford to buy again","cannot afford to buy again with Hybrid 05","explicit","negative",0.92,0.63,"disappointed",TRUE
+"row-77","Hybrid 05","pest_disease","storage weevils","weevils came within weeks","weevils came within weeks with Hybrid 05","explicit","negative",0.89,0.96,"frustrated",TRUE
+"row-78","Hybrid 02","trait","lodging","stood well in the wind","stood well in the wind with Hybrid 02","explicit_trait","positive",0.88,0.75,"relieved",TRUE
+"row-79","Hybrid 02","trait","early maturity","harvested earliest of the three","harvested earliest of the three with Hybrid 02","explicit_trait","positive",0.8,0.77,"proud",TRUE
+"row-79","Hybrid 02","pest_disease","fall armyworm damage","lost many plants to armyworm","lost many plants to armyworm with Hybrid 02","explicit","negative",0.72,0.9,"worried",TRUE
+"row-79","Hybrid 02","trait","cob size","many empty tips","many empty tips with Hybrid 02","explicit_trait","negative",0.76,0.61,"worried",TRUE
+"row-79","Hybrid 02","quality","taste","soft and tasty","soft and tasty with Hybrid 02","explicit","positive",0.59,0.61,"proud",TRUE
+"row-79","Hybrid 02","economics","seed cost","seed too expensive for next season","seed too expensive for next season with Hybrid 02","explicit","negative",0.52,0.81,"frustrated",TRUE
+"row-80","Hybrid 01","trait","cob size","many empty tips","many empty tips with Hybrid 01","explicit_trait","negative",0.75,0.96,"frustrated",TRUE
+"row-80","Hybrid 01","economics","seed cost","seed too expensive for next season","seed too expensive for next season with Hybrid 01","explicit","negative",0.69,0.66,"frustrated",TRUE
+"row-81","Hybrid 02","trait","early maturity","still green when the others were dry","still green when the others were dry with Hybrid 02","explicit_trait","negative",0.93,0.67,"frustrated",TRUE
+"row-81","Hybrid 02","pest_disease","fall armyworm damage","had to spray twice","had to spray twice with Hybrid 02","explicit","negative",0.7,0.74,"frustrated",TRUE
+"row-81","Hybrid 02","quality","taste","soft and tasty","soft and tasty with Hybrid 02","explicit","positive",0.66,0.62,"relieved",TRUE
+"row-82","Hybrid 05","trait","cob size","cobs filled to the tip","cobs filled to the tip with Hybrid 05","explicit_trait","neutral",0,0.95,NA,TRUE
+"row-82","Hybrid 05","trait","lodging","fell over after the storm","fell over after the storm with Hybrid 05","explicit_trait","negative",0.63,0.9,"disappointed",TRUE
+"row-83","Hybrid 04","trait","early maturity","took too long to mature","took too long to mature with Hybrid 04","explicit_trait","negative",0.7,0.82,"disappointed",TRUE
+"row-83","Hybrid 04","climate_event","drought tolerance","survived the dry spell in February","survived the dry spell in February with Hybrid 04","explicit","positive",0.93,0.61,"satisfied",TRUE
+"row-83","Hybrid 04","economics","seed cost","worth the price","worth the price with Hybrid 04","explicit","positive",0.65,0.92,"relieved",TRUE
