@@ -1,0 +1,68 @@
+combine-feedback: ........................
+data-value: .........................
+i18n: ..................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+inputs: ....................
+metric: ..............
+monitoring-groups: ................
+pipeline-fixture: trying URL 'https://geodata.ucdavis.edu/gadm/gadm4.1/pck/gadm41_KEN_1_pk.rds'
+Content type 'unknown' length 3143577 bytes (3.0 MB)
+==================================================
+downloaded 3.0 MB
+
+1....[WARNING] Could not load translations for sw
+  data file translations/sw.yaml not found
+[WARNING] The term Abstract has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Table has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+[WARNING] The term Figure has no translation defined.
+......
+prepare-data: ........................
+runner: ................
+sikia: ..................................
+utils: .........................................................
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-pipeline-fixture.R:36:3'): the full analysis runs on the si
+Expected `nrow(failed)` to equal 0.
+Differences:
+1/1 mismatches
+[1] 1 - 0 == 1
+pl_tree `mapping` must be created by `aes()`.
+✖ You've supplied an <uneval> object.
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+Error:
+! Test failures.
+Execution halted
