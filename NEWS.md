@@ -1,4 +1,4 @@
-ClimMob-analysis v4.1.0 (development)
+ClimMob-analysis v4.1.0 (2026-11-19)
 =========================
 
 ### New
