@@ -15,6 +15,7 @@ ClimMob-analysis v4.1.0 (2026-11-19)
 * The tree on the map. After the Plackett-Luce tree, a figure shows the trial plots coloured by the node they fall in, next to the distribution of each numeric split variable with its threshold (`tree_nodes_plot()`, `tree_splits()`, `plackettluce-tree-nodes-map.pdf`, `plackettluce-tree-splits.csv`).
 * Climate data for trials that span more than two degrees. NASA POWER serves regions of at most 5 x 5 degrees and climatrends pads its regions by two degrees, so wide trials failed with "Please provide correct bounding box values". `climate_by_region()` now splits the fields into groups of at most two degrees before calling `rainfall()` and `temperature()`. The simulated maize fixture spreads its fields across the maize areas of Kenya (`dev/simulate-trial-locations.py`), which exercises this.
 * `get_monitoring()` returns the matrix of answers by participant and moment (`responses`), and `get_testing_sites_map()` returns the boundaries it downloaded (`adm`).
+* The README has a citation block to copy, as plain text and BibTeX. `dev/release.R` keeps its version and year in step with `CITATION.cff`.
 
 ClimMob-analysis v4.0.0 (2026-10-31)
 =========================
