@@ -9,7 +9,7 @@
 
 ## Overview
 
-This repository contains the code that analyses tricot data and writes the reports of the [ClimMob](https://climmob.net/) platform. It also lets anyone analyse one or several ClimMob projects on their own computer. Read the latest changes [here](NEWS.md).
+This repository contains the code that analyses tricot data and writes the reports of the [ClimMob](https://climmob.net/) platform. It also lets anyone analyse one or several ClimMob projects on their own computer. The current version is v4.1.0. Read the latest changes [here](NEWS.md).
 
 The reports serve three uses.
 
@@ -104,14 +104,35 @@ All report text is in `report/i18n/`. See [report/i18n/README.md](report/i18n/RE
 ```
 Rscript dev/install-packages.R
 Rscript tests/testthat.R
-Rscript dev/release.R 4.0.0
+Rscript dev/release.R 4.1.0
 ```
 
-The tests run on every push (`.github/workflows/tests.yml`), including the whole workflow on a simulated project. `dev/release.R` checks `NEWS.md`, updates `CITATION.cff` and runs the tests. Pushing the version tag publishes the GitHub release, which Zenodo archives.
+The tests run on every push (`.github/workflows/tests.yml`), including the whole workflow on a simulated project. `dev/release.R` checks `NEWS.md`, updates `CITATION.cff` and the citation block below, and runs the tests. Pushing the version tag publishes the GitHub release, which Zenodo archives.
+
+## Citation
+
+If you use this workflow, please cite it as below. Both blocks have a copy button on GitHub.
+
+```text
+de Sousa, K., Madriz, B., Dorado-Betancourt, H., Müller, A., & van Etten, J. (2026). Workflow for automated analysis and report of decentralized experiments with the tricot approach (Version 4.1.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.3976631
+```
+
+```bibtex
+@software{deSousa_climmob_analysis,
+  author    = {de Sousa, Kauê and Madriz, Brandon and Dorado-Betancourt, Hugo and Müller, Anna and van Etten, Jacob},
+  title     = {Workflow for automated analysis and report of decentralized experiments with the tricot approach},
+  version   = {v4.1.0},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.3976631},
+  url       = {https://github.com/AgrDataSci/ClimMob-analysis}
+}
+```
+
+The DOI is permanent and always resolves to the latest release. `CITATION.cff` holds the same information, and GitHub shows it under "Cite this repository".
 
 ## Meta
 
--   Cite with the permanent DOI [10.5281/zenodo.3976631](https://doi.org/10.5281/zenodo.3976631), which always resolves to the latest release
 -   Please [click here to report issues or bugs](https://github.com/agrdatasci/ClimMob-analysis/issues)
 -   License: [MIT](https://github.com/AgrDataSci/ClimMob-analysis/blob/master/LICENSE). Code, report templates and documentation are all under MIT
 -   The [Tricot user guide](https://hdl.handle.net/10568/109942) presents the experimental approach used by the ClimMob platform

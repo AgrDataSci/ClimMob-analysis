@@ -1,4 +1,4 @@
-# Publishes a GitHub release when a version tag is pushed (for example v4.0.0).
+# Publishes a GitHub release when a version tag is pushed (for example v4.1.0).
 # The notes are the section of NEWS.md for that version. Zenodo archives
 # every GitHub release and gives it a DOI.
 # Prepare the release with dev/release.R first.
